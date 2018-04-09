@@ -8,7 +8,7 @@ using Prototype.Core.Interfaces.GasPanel;
 
 namespace Prototype.Core.Models.GasPanel
 {
-    public sealed class PipeScheme : IDisposable, IEnumerable
+    public sealed class PipeScheme : IDisposable
     {
         #region Fields
 
@@ -21,7 +21,7 @@ namespace Prototype.Core.Models.GasPanel
 
         #region Constructors
 
-        public PipeScheme(params VertexPair[] vertices)
+        public PipeScheme(params VerticesPair[] vertices)
         {
             _vertices = new HashSet<IVertex>();
             _edges = new List<Edge>();
@@ -187,15 +187,6 @@ namespace Prototype.Core.Models.GasPanel
             {
                 vertex.ValveVm.PropertyChanged -= _propertyChangedEventHandler;
             }
-        }
-
-        #endregion
-
-        #region Implementation of IDisposable
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _vertices.GetEnumerator();
         }
 
         #endregion

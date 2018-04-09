@@ -40,24 +40,24 @@ namespace Prototype.ViewModels.Pipes
             ConnectionVertex4 = new Vertex();
 
             Scheme = new PipeScheme(
-                new VertexPair(SourceVertex1, ValveVertex1),
-                new VertexPair(ValveVertex1, ConnectionVertex1),
-                new VertexPair(ConnectionVertex1, ValveVertex7),
-                new VertexPair(ValveVertex7, DestinationVertex1),
-                new VertexPair(SourceVertex2, ConnectionVertex2),
-                new VertexPair(ConnectionVertex2, ValveVertex2),
-                new VertexPair(ConnectionVertex2, ValveVertex3),
-                new VertexPair(ValveVertex2, ConnectionVertex1),
-                new VertexPair(ValveVertex3, ConnectionVertex1),
-                new VertexPair(ConnectionVertex2, ConnectionVertex3),
-                new VertexPair(ConnectionVertex3, ValveVertex4),
-                new VertexPair(ConnectionVertex3, ValveVertex5),
-                new VertexPair(ValveVertex4, ConnectionVertex4),
-                new VertexPair(ValveVertex5, ConnectionVertex4),
-                new VertexPair(ConnectionVertex4, ValveVertex8),
-                new VertexPair(ValveVertex8, DestinationVertex2),
-                new VertexPair(SourceVertex3, ValveVertex6),
-                new VertexPair(ValveVertex6, ConnectionVertex4)
+                new VerticesPair(SourceVertex1, ValveVertex1),
+                new VerticesPair(ValveVertex1, ConnectionVertex1),
+                new VerticesPair(ConnectionVertex1, ValveVertex7),
+                new VerticesPair(ValveVertex7, DestinationVertex1),
+                new VerticesPair(SourceVertex2, ConnectionVertex2),
+                new VerticesPair(ConnectionVertex2, ValveVertex2),
+                new VerticesPair(ConnectionVertex2, ValveVertex3),
+                new VerticesPair(ValveVertex2, ConnectionVertex1),
+                new VerticesPair(ValveVertex3, ConnectionVertex1),
+                new VerticesPair(ConnectionVertex2, ConnectionVertex3),
+                new VerticesPair(ConnectionVertex3, ValveVertex4),
+                new VerticesPair(ConnectionVertex3, ValveVertex5),
+                new VerticesPair(ValveVertex4, ConnectionVertex4),
+                new VerticesPair(ValveVertex5, ConnectionVertex4),
+                new VerticesPair(ConnectionVertex4, ValveVertex8),
+                new VerticesPair(ValveVertex8, DestinationVertex2),
+                new VerticesPair(SourceVertex3, ValveVertex6),
+                new VerticesPair(ValveVertex6, ConnectionVertex4)
             );
         }
 

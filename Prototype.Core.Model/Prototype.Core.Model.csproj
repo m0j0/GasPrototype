@@ -54,7 +54,7 @@
     <Compile Include="Interfaces\GasPanel\IValveVm.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\GasPanel\Vertex.cs" />
-    <Compile Include="Models\GasPanel\VertexPair.cs" />
+    <Compile Include="Models\GasPanel\VerticesPair.cs" />
     <Compile Include="Models\NamedCommand.cs" />
     <Compile Include="Models\GasPanel\PipeVm.cs" />
     <Compile Include="Models\GasPanel\PipeScheme.cs" />

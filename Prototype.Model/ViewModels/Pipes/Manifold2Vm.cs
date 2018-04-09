@@ -27,14 +27,14 @@ namespace Prototype.ViewModels.Pipes
             ConnectionVertex3 = new Vertex();
 
             Scheme = new PipeScheme(
-                new VertexPair(SourceVertex1, ConnectionVertex1),
-                new VertexPair(ConnectionVertex1, ValveVertex1),
-                new VertexPair(ValveVertex1, ConnectionVertex3),
-                new VertexPair(SourceVertex2, ConnectionVertex2),
-                new VertexPair(ConnectionVertex2, ConnectionVertex1),
-                new VertexPair(ConnectionVertex2, ValveVertex2),
-                new VertexPair(ValveVertex2, ConnectionVertex3),
-                new VertexPair(ConnectionVertex3, DestinationVertex1)
+                new VerticesPair(SourceVertex1, ConnectionVertex1),
+                new VerticesPair(ConnectionVertex1, ValveVertex1),
+                new VerticesPair(ValveVertex1, ConnectionVertex3),
+                new VerticesPair(SourceVertex2, ConnectionVertex2),
+                new VerticesPair(ConnectionVertex2, ConnectionVertex1),
+                new VerticesPair(ConnectionVertex2, ValveVertex2),
+                new VerticesPair(ValveVertex2, ConnectionVertex3),
+                new VerticesPair(ConnectionVertex3, DestinationVertex1)
             );
         }
 

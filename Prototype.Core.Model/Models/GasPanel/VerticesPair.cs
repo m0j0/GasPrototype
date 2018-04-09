@@ -2,9 +2,9 @@
 
 namespace Prototype.Core.Models.GasPanel
 {
-    public struct VertexPair
+    public struct VerticesPair
     {
-        public VertexPair(IVertex startVertex, IVertex endVertex)
+        public VerticesPair(IVertex startVertex, IVertex endVertex)
         {
             StartVertex = startVertex;
             EndVertex = endVertex;

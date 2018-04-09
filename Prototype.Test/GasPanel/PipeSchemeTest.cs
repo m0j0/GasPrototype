@@ -40,7 +40,7 @@ namespace Prototype.Test.GasPanel
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var scheme = new PipeScheme(
-                    new VertexPair(sourceVertex, vertex)
+                    new VerticesPair(sourceVertex, vertex)
                 );
             });
         }
@@ -54,7 +54,7 @@ namespace Prototype.Test.GasPanel
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var scheme = new PipeScheme(
-                    new VertexPair(vertex, destinationVertex)
+                    new VerticesPair(vertex, destinationVertex)
                 );
             });
         }
@@ -68,7 +68,7 @@ namespace Prototype.Test.GasPanel
             Assert.DoesNotThrow(() =>
             {
                 var scheme = new PipeScheme(
-                    new VertexPair(sourceVertex, destinationVertex)
+                    new VerticesPair(sourceVertex, destinationVertex)
                 );
             });
         }
@@ -80,13 +80,13 @@ namespace Prototype.Test.GasPanel
             var vertex2 = new DestinationVertex();
 
             var scheme1 = new PipeScheme(
-                new VertexPair(vertex1, vertex2)
+                new VerticesPair(vertex1, vertex2)
             );
 
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var scheme2 = new PipeScheme(
-                    new VertexPair(vertex1, vertex2)
+                    new VerticesPair(vertex1, vertex2)
                 );
             });
         }
@@ -102,8 +102,8 @@ namespace Prototype.Test.GasPanel
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var scheme = new PipeScheme(
-                    new VertexPair(sourceVertex1, destinationVertex1),
-                    new VertexPair(sourceVertex2, destinationVertex2)
+                    new VerticesPair(sourceVertex1, destinationVertex1),
+                    new VerticesPair(sourceVertex2, destinationVertex2)
                 );
             });
         }
@@ -129,9 +129,9 @@ namespace Prototype.Test.GasPanel
             var count2 = GetPropertyChangedSubscribersCount(valveVm2);
 
             var scheme = new PipeScheme(
-                new VertexPair(sourceVertex, valveVertex1),
-                new VertexPair(valveVertex1, valveVertex2),
-                new VertexPair(valveVertex2, destinationVertex)
+                new VerticesPair(sourceVertex, valveVertex1),
+                new VerticesPair(valveVertex1, valveVertex2),
+                new VerticesPair(valveVertex2, destinationVertex)
             );
 
             Assert.Greater(GetPropertyChangedSubscribersCount(valveVm1), count1);
@@ -158,7 +158,7 @@ namespace Prototype.Test.GasPanel
             var destinationVertex = new DestinationVertex();
 
             var scheme = new PipeScheme(
-                new VertexPair(sourceVertex, destinationVertex)
+                new VerticesPair(sourceVertex, destinationVertex)
             );
             scheme.Dispose();
 
