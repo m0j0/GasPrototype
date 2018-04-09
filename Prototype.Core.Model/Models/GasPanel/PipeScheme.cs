@@ -8,23 +8,10 @@ using Prototype.Core.Interfaces.GasPanel;
 
 namespace Prototype.Core.Models.GasPanel
 {
-    public struct VertexPair
-    {
-        public VertexPair(IVertex startVertex, IVertex endVertex)
-        {
-            StartVertex = startVertex;
-            EndVertex = endVertex;
-        }
-
-        public IVertex StartVertex { get; }
-
-        public IVertex EndVertex { get; }
-    }
-
     public sealed class PipeScheme : IDisposable, IEnumerable
     {
         #region Fields
-        
+
         private readonly HashSet<IVertex> _vertices;
         private readonly List<Edge> _edges;
         private readonly PropertyChangedEventHandler _propertyChangedEventHandler;
@@ -34,19 +21,17 @@ namespace Prototype.Core.Models.GasPanel
 
         #region Constructors
 
-        public PipeScheme()
+        public PipeScheme(params VertexPair[] vertices)
         {
             _vertices = new HashSet<IVertex>();
             _edges = new List<Edge>();
             _propertyChangedEventHandler = ReflectionExtensions.MakeWeakPropertyChangedHandler(this, (scheme, obj, args) => scheme.InvalidateFlows());
-        }
 
-        public PipeScheme(params VertexPair[] vertices) : this()
-        {
             foreach (var pair in vertices)
             {
-                Add(pair.StartVertex, pair.EndVertex);
+                CreateEdge(pair.StartVertex, pair.EndVertex);
             }
+
             Initialize();
         }
 
@@ -54,17 +39,17 @@ namespace Prototype.Core.Models.GasPanel
 
         #region Methods
 
-        public void Add(IVertex startVertex, IVertex endVertex)
+        internal IPipeVm FindPipeVm(IVertex startVertex, IVertex endVertex)
         {
-            CreateEdge(startVertex, endVertex);
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException($@"Cannot perform the operation, because object is disposed.");
+            }
+
+            return _edges.FirstOrDefault(edge => edge.Equals(startVertex, endVertex))?.PipeVm;
         }
 
-        public void CreatePipe(IVertex startVertex, IVertex endVertex)
-        {
-            CreateEdge(startVertex, endVertex);
-        }
-
-        public void Initialize()
+        private void Initialize()
         {
             if (_vertices.Count(vertex => vertex is SourceVertex) == 0)
             {
@@ -76,23 +61,14 @@ namespace Prototype.Core.Models.GasPanel
                 throw new InvalidOperationException("Should be at least one destination");
             }
 
+            ValidateVertices();
+
             foreach (var vertex in _vertices.OfType<ValveVertex>())
             {
                 vertex.ValveVm.PropertyChanged += _propertyChangedEventHandler;
             }
 
-            ValidateVertices();
             InvalidateFlows();
-        }
-
-        internal IPipeVm FindPipeVm(IVertex startVertex, IVertex endVertex)
-        {
-            if (_isDisposed)
-            {
-                throw new ObjectDisposedException($@"Cannot perform the operation, because object is disposed.");
-            }
-
-            return _edges.FirstOrDefault(edge => edge.Equals(startVertex, endVertex))?.PipeVm;
         }
 
         private void ValidateVertices()
@@ -110,7 +86,7 @@ namespace Prototype.Core.Models.GasPanel
             var destinationVertices = _vertices
                 .OfType<DestinationVertex>()
                 .ToArray();
-            
+
             var sourceVertices = _vertices
                 .OfType<SourceVertex>();
 
@@ -144,18 +120,19 @@ namespace Prototype.Core.Models.GasPanel
             InitializeVertice(endVertex);
 
             var bidirectional = !(startVertex is SourceVertex) && !(endVertex is DestinationVertex);
-            
+
             var edge = new Edge(new PipeVm(), startVertex, endVertex, bidirectional);
             startVertex.AddAdjacentVertex(endVertex);
             if (bidirectional)
             {
                 endVertex.AddAdjacentVertex(startVertex);
             }
+
             _edges.Add(edge);
-            
+
             return edge;
         }
-        
+
         private void InitializeVertice(IVertex vertex)
         {
             if (vertex.Owner != null && vertex.Owner != this)

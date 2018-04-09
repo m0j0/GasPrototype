@@ -55,8 +55,6 @@ namespace Prototype.Test.GasPanel
                     new VertexPair(ValveVertex2, ConnectionVertex3),
                     new VertexPair(ConnectionVertex3, DestinationVertex1)
                 );
-
-                Scheme.Initialize();
             }
 
             #endregion
@@ -98,7 +96,7 @@ namespace Prototype.Test.GasPanel
         #region Pipes
 
         [Test]
-        public void TestPipes()
+        public void TestFindPipes()
         {
             var manifold = new Manifold();
 

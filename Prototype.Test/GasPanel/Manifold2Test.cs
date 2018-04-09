@@ -79,8 +79,6 @@ namespace Prototype.Test.GasPanel
                     new VertexPair(SourceVertex3, ValveVertex6),
                     new VertexPair(ValveVertex6, ConnectionVertex4)
                 );
-
-                Scheme.Initialize();
             }
 
             public ValveVm ValveVm1 { get; }

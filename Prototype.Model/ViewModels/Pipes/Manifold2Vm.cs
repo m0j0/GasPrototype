@@ -26,19 +26,16 @@ namespace Prototype.ViewModels.Pipes
             ConnectionVertex2 = new Vertex();
             ConnectionVertex3 = new Vertex();
 
-            Scheme = new PipeScheme();
-            Scheme.CreatePipe(SourceVertex1, ConnectionVertex1);
-            Scheme.CreatePipe(ConnectionVertex1, ValveVertex1);
-            Scheme.CreatePipe(ValveVertex1, ConnectionVertex3);
-
-            Scheme.CreatePipe(SourceVertex2, ConnectionVertex2);
-            Scheme.CreatePipe(ConnectionVertex2, ConnectionVertex1);
-            Scheme.CreatePipe(ConnectionVertex2, ValveVertex2);
-            Scheme.CreatePipe(ValveVertex2, ConnectionVertex3);
-
-            Scheme.CreatePipe(ConnectionVertex3, DestinationVertex1);
-
-            Scheme.Initialize();
+            Scheme = new PipeScheme(
+                new VertexPair(SourceVertex1, ConnectionVertex1),
+                new VertexPair(ConnectionVertex1, ValveVertex1),
+                new VertexPair(ValveVertex1, ConnectionVertex3),
+                new VertexPair(SourceVertex2, ConnectionVertex2),
+                new VertexPair(ConnectionVertex2, ConnectionVertex1),
+                new VertexPair(ConnectionVertex2, ValveVertex2),
+                new VertexPair(ValveVertex2, ConnectionVertex3),
+                new VertexPair(ConnectionVertex3, DestinationVertex1)
+            );
         }
 
         #endregion

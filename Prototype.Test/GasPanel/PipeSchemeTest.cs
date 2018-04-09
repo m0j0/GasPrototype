@@ -23,56 +23,72 @@ namespace Prototype.Test.GasPanel
         #region Initialization
 
         [Test]
-        public void TestPipeSchemeInitialization1()
+        public void TestPipeSchemeInitializationWithoutVertices()
         {
-            var scheme = new PipeScheme();
-
-            Assert.Throws<InvalidOperationException>(() => scheme.Initialize());
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme = new PipeScheme();
+            });
         }
 
         [Test]
-        public void TestPipeSchemeInitialization2()
+        public void TestPipeSchemeInitializationWithoutDestinations()
         {
-            var scheme = new PipeScheme();
             var sourceVertex = new SourceVertex();
             var vertex = new Vertex();
-            scheme.CreatePipe(sourceVertex, vertex);
 
-            Assert.Throws<InvalidOperationException>(() => scheme.Initialize());
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme = new PipeScheme(
+                    new VertexPair(sourceVertex, vertex)
+                );
+            });
         }
 
         [Test]
-        public void TestPipeSchemeInitialization3()
+        public void TestPipeSchemeInitializationWithoutSources()
         {
-            var scheme = new PipeScheme();
             var destinationVertex = new DestinationVertex();
             var vertex = new Vertex();
-            scheme.CreatePipe(vertex, destinationVertex);
-
-            Assert.Throws<InvalidOperationException>(() => scheme.Initialize());
+            
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme = new PipeScheme(
+                    new VertexPair(vertex, destinationVertex)
+                );
+            });
         }
 
         [Test]
-        public void TestPipeSchemeInitialization4()
+        public void TestPipeSchemeProperInitialization()
         {
-            var scheme = new PipeScheme();
             var sourceVertex = new SourceVertex();
             var destinationVertex = new DestinationVertex();
-            scheme.CreatePipe(sourceVertex, destinationVertex);
 
-            Assert.DoesNotThrow(() => scheme.Initialize());
+            Assert.DoesNotThrow(() =>
+            {
+                var scheme = new PipeScheme(
+                    new VertexPair(sourceVertex, destinationVertex)
+                );
+            });
         }
 
         [Test]
         public void TestPipeSchemeTwiceInitialization()
         {
-            var scheme1 = new PipeScheme();
-            var scheme2 = new PipeScheme();
-            var vertex1 = new Vertex();
-            var vertex2 = new Vertex();
-            scheme1.CreatePipe(vertex1, vertex2);
+            var vertex1 = new SourceVertex();
+            var vertex2 = new DestinationVertex();
 
-            Assert.Throws<InvalidOperationException>(() => scheme2.CreatePipe(vertex1, vertex2));
+            var scheme1 = new PipeScheme(
+                new VertexPair(vertex1, vertex2)
+            );
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme2 = new PipeScheme(
+                    new VertexPair(vertex1, vertex2)
+                );
+            });
         }
 
         #endregion
@@ -95,11 +111,11 @@ namespace Prototype.Test.GasPanel
             var count1 = GetPropertyChangedSubscribersCount(valveVm1);
             var count2 = GetPropertyChangedSubscribersCount(valveVm2);
 
-            var scheme = new PipeScheme();
-            scheme.CreatePipe(sourceVertex, valveVertex1);
-            scheme.CreatePipe(valveVertex1, valveVertex2);
-            scheme.CreatePipe(valveVertex2, destinationVertex);
-            scheme.Initialize();
+            var scheme = new PipeScheme(
+                new VertexPair(sourceVertex, valveVertex1),
+                new VertexPair(valveVertex1, valveVertex2),
+                new VertexPair(valveVertex2, destinationVertex)
+            );
 
             Assert.Greater(GetPropertyChangedSubscribersCount(valveVm1), count1);
             Assert.Greater(GetPropertyChangedSubscribersCount(valveVm2), count2);
@@ -119,13 +135,14 @@ namespace Prototype.Test.GasPanel
         }
 
         [Test]
-        public void TestDisposed2()
+        public void TestUsingDisposedPipeScheme()
         {
-            var scheme = new PipeScheme();
             var sourceVertex = new SourceVertex();
             var destinationVertex = new DestinationVertex();
-            scheme.CreatePipe(sourceVertex, destinationVertex);
-            scheme.Initialize();
+
+            var scheme = new PipeScheme(
+                new VertexPair(sourceVertex, destinationVertex)
+            );
             scheme.Dispose();
 
             Assert.Throws<ObjectDisposedException>(() => scheme.FindPipeVm(sourceVertex, destinationVertex));
