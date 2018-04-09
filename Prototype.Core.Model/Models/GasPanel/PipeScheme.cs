@@ -14,6 +14,7 @@ namespace Prototype.Core.Models.GasPanel
         private readonly HashSet<IVertex> _vertices;
         private readonly List<Edge> _edges;
         private readonly PropertyChangedEventHandler _propertyChangedEventHandler;
+        private bool _isDisposed;
 
         #endregion
 
@@ -59,6 +60,11 @@ namespace Prototype.Core.Models.GasPanel
 
         internal IPipeVm FindPipeVm(IVertex startVertex, IVertex endVertex)
         {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException($@"Cannot perform the operation, because object is disposed.");
+            }
+
             return _edges.FirstOrDefault(edge => edge.Equals(startVertex, endVertex))?.PipeVm;
         }
 
@@ -143,6 +149,12 @@ namespace Prototype.Core.Models.GasPanel
 
         public void Dispose()
         {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            _isDisposed = true;
             foreach (var vertex in _vertices.OfType<ValveVertex>())
             {
                 vertex.ValveVm.PropertyChanged -= _propertyChangedEventHandler;

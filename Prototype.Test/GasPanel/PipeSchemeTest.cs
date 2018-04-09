@@ -118,6 +118,19 @@ namespace Prototype.Test.GasPanel
             return eventDelegate.GetInvocationList().Length;
         }
 
+        [Test]
+        public void TestDisposed2()
+        {
+            var scheme = new PipeScheme();
+            var sourceVertex = new SourceVertex();
+            var destinationVertex = new DestinationVertex();
+            scheme.CreatePipe(sourceVertex, destinationVertex);
+            scheme.Initialize();
+            scheme.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => scheme.FindPipeVm(sourceVertex, destinationVertex));
+        }
+
         #endregion
     }
 }
