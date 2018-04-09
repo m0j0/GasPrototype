@@ -1,0 +1,158 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Prototype.Core.Controls"
+                    xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model"
+                    xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <gasPanel:ValveState x:Key="ValveStateOpened">Opened</gasPanel:ValveState>
+    <gasPanel:ValveState x:Key="ValveStateClosed">Closed</gasPanel:ValveState>
+    <gasPanel:ValveState x:Key="ValveStateUnknown">Unknown</gasPanel:ValveState>
+
+    <DataTemplate x:Key="OpenValveTemplate">
+        <Viewbox Stretch="Uniform">
+            <Canvas Width="37" Height="43">
+                <Canvas.RenderTransform>
+                    <TranslateTransform X="-513.000000" Y="-71.000000" />
+                </Canvas.RenderTransform>
+                <Path Fill="#FF8B8D8E" StrokeThickness="1">
+                    <Path.Data>
+                        <PathGeometry
+                            Figures="M529 71 L527 71 L527 74.5511256 C518.957476 76.5610217 513 83.8347893 513 92.5 C513 101.165211 518.957476 108.438978 527 110.448874 L527 114 L529 114 L529 71 Z M534 71 L536 71 L536 74.5511256 C544.042524 76.5610217 550 83.8347893 550 92.5 C550 101.165211 544.042524 108.438978 536 110.448874 L536 114 L534 114 L534 71 Z"
+                            FillRule="evenodd" />
+                    </Path.Data>
+                </Path>
+                <Path StrokeThickness="1" Stroke="#FFC3C5C2">
+                    <Path.Data>
+                        <PathGeometry
+                            Figures="M528.5 109.236277 L528.5 75.763723 C520.46911 77.1917761 514.5 84.2106903 514.5 92.5 C514.5 100.78931 520.46911 107.808224 528.5 109.236277 Z M534.5 75.763723 L534.5 109.236277 C542.53089 107.808224 548.5 100.78931 548.5 92.5 C548.5 84.2106903 542.53089 77.1917761 534.5 75.763723 Z"
+                            FillRule="evenodd" />
+                    </Path.Data>
+                </Path>
+                <Rectangle Canvas.Left="527" Canvas.Top="75" Width="2" Height="35" Fill="#FFC3C5C1"
+                           StrokeThickness="1" />
+                <Rectangle Canvas.Left="534" Canvas.Top="75" Width="2" Height="35" Fill="#FFC3C5C1"
+                           StrokeThickness="1" />
+            </Canvas>
+        </Viewbox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ClosedValveTemplate">
+        <Viewbox Stretch="Uniform">
+            <Canvas Width="37" Height="43">
+                <Canvas.RenderTransform>
+                    <TranslateTransform X="-463.000000" Y="-71.000000" />
+                </Canvas.RenderTransform>
+                <Path Fill="#FF8B8D8E" StrokeThickness="1">
+                    <Path.Data>
+                        <PathGeometry
+                            Figures="M477 110.448874 C468.957476 108.438978 463 101.165211 463 92.5 C463 83.8347893 468.957476 76.5610217 477 74.5511256 L477 71 L486 71 L486 74.5511256 C494.042524 76.5610217 500 83.8347893 500 92.5 C500 101.165211 494.042524 108.438978 486 110.448874 L486 114 L477 114 L477 110.448874 Z"
+                            FillRule="evenodd" />
+                    </Path.Data>
+                </Path>
+                <Ellipse Canvas.Left="464.5" Canvas.Top="75.5" Width="34" Height="34"
+                         StrokeThickness="1" Stroke="#FFC3C5C2" />
+                <Rectangle Canvas.Left="465" Canvas.Top="88" Width="33" Height="9" Fill="#FFC3C5C2"
+                           StrokeThickness="1" />
+            </Canvas>
+        </Viewbox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="UnknownValveTemplate">
+        <Viewbox Stretch="Uniform" Opacity="0.25">
+            <Canvas Width="37" Height="43">
+                <Canvas.RenderTransform>
+                    <TranslateTransform X="-463.000000" Y="-71.000000" />
+                </Canvas.RenderTransform>
+                <Path Fill="Red" StrokeThickness="1">
+                    <Path.Data>
+                        <PathGeometry
+                            Figures="M477 110.448874 C468.957476 108.438978 463 101.165211 463 92.5 C463 83.8347893 468.957476 76.5610217 477 74.5511256 L477 71 L486 71 L486 74.5511256 C494.042524 76.5610217 500 83.8347893 500 92.5 C500 101.165211 494.042524 108.438978 486 110.448874 L486 114 L477 114 L477 110.448874 Z"
+                            FillRule="evenodd" />
+                    </Path.Data>
+                </Path>
+                <Ellipse Canvas.Left="464.5" Canvas.Top="75.5" Width="34" Height="34"
+                         StrokeThickness="1" Stroke="#FFC3C5C2" />
+                <Rectangle Canvas.Left="465" Canvas.Top="88" Width="33" Height="9" Fill="#FFC3C5C2"
+                           StrokeThickness="1" />
+            </Canvas>
+        </Viewbox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="InvisibleValveTemplate" />
+
+    <Style TargetType="controls:Valve">
+        <Setter Property="Width" Value="37" />
+        <Setter Property="Height" Value="43" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:Valve">
+                    <Grid>
+                        <ContentControl Name="MainControl" />
+
+                        <Popup Name="PopupControl"
+                               PlacementTarget="{Binding ElementName=MainControl}"
+                               StaysOpen="False">
+                            <ListBox Width="100"
+                                     MinWidth="{TemplateBinding ActualWidth}"
+                                     ItemsSource="{TemplateBinding MenuCommands}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="models:NamedCommand">
+                                        <Button Command="{Binding Command}"
+                                                Content="{Binding DisplayName}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Popup>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter TargetName="MainControl" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90" />
+                                </Setter.Value>
+                            </Setter>
+
+                            <Setter Property="Width" Value="43" />
+                            <Setter Property="Height" Value="37" />
+                        </Trigger>
+
+                        <Trigger Property="State" Value="{StaticResource ValveStateOpened}">
+                            <Setter TargetName="MainControl" Property="ContentTemplate"
+                                    Value="{StaticResource OpenValveTemplate}" />
+                        </Trigger>
+
+                        <Trigger Property="State" Value="{StaticResource ValveStateClosed}">
+                            <Setter TargetName="MainControl" Property="ContentTemplate"
+                                    Value="{StaticResource ClosedValveTemplate}" />
+                        </Trigger>
+
+                        <Trigger Property="State" Value="{StaticResource ValveStateUnknown}">
+                            <Setter TargetName="MainControl" Property="ContentTemplate"
+                                    Value="{StaticResource UnknownValveTemplate}" />
+                        </Trigger>
+
+                        <EventTrigger RoutedEvent="UIElement.MouseUp">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames
+                                            Storyboard.TargetName="PopupControl"
+                                            Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

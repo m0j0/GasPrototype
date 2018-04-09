@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Prototype.Views.SelectorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:Prototype.ViewModels;assembly=Prototype.Model"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:SelectorVm}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <ContentPresenter Grid.Row="0"
+                          Content="{ViewModelToViewBinding Path=SelectedVm}"
+                          View.Visible="{DataBinding 'SelectedVm != null'}" />
+
+        <StackPanel Grid.Row="0"
+                    View.Visible="{DataBinding 'SelectedVm == null'}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Parameter:" VerticalAlignment="Center" />
+                <TextBox Text="{DataBinding Parameter, Mode=TwoWay}" Width="200" />
+            </StackPanel>
+            <Button Content="Open composite view model"
+                    Command="{Binding SelectCompositeVmCommand}" />
+
+            <Separator Margin="5" />
+            
+            <Button Content="Open navigation log view model"
+                    Command="{Binding SelectNavigationLogVmCommand}" />
+
+            <Separator Margin="5" />
+
+            <Button Content="Open restricted view model" 
+                    Command="{Binding SelectRestrictedVmCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

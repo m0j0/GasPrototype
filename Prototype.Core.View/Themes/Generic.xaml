@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Valve.xaml" />
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Wafer.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
