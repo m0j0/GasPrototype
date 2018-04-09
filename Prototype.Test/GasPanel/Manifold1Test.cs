@@ -45,17 +45,16 @@ namespace Prototype.Test.GasPanel
                 ConnectionVertex2 = new Vertex();
                 ConnectionVertex3 = new Vertex();
 
-                Scheme = new PipeScheme
-                {
-                    {SourceVertex1, ConnectionVertex1},
-                    {ConnectionVertex1, ValveVertex1},
-                    {ValveVertex1, ConnectionVertex3},
-                    {SourceVertex2, ConnectionVertex2},
-                    {ConnectionVertex2, ConnectionVertex1},
-                    {ConnectionVertex2, ValveVertex2},
-                    {ValveVertex2, ConnectionVertex3},
-                    {ConnectionVertex3, DestinationVertex1}
-                };
+                Scheme = new PipeScheme(
+                    new VertexPair(SourceVertex1, ConnectionVertex1),
+                    new VertexPair(ConnectionVertex1, ValveVertex1),
+                    new VertexPair(ValveVertex1, ConnectionVertex3),
+                    new VertexPair(SourceVertex2, ConnectionVertex2),
+                    new VertexPair(ConnectionVertex2, ConnectionVertex1),
+                    new VertexPair(ConnectionVertex2, ValveVertex2),
+                    new VertexPair(ValveVertex2, ConnectionVertex3),
+                    new VertexPair(ConnectionVertex3, DestinationVertex1)
+                );
 
                 Scheme.Initialize();
             }

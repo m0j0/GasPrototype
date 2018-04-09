@@ -8,6 +8,19 @@ using Prototype.Core.Interfaces.GasPanel;
 
 namespace Prototype.Core.Models.GasPanel
 {
+    public struct VertexPair
+    {
+        public VertexPair(IVertex startVertex, IVertex endVertex)
+        {
+            StartVertex = startVertex;
+            EndVertex = endVertex;
+        }
+
+        public IVertex StartVertex { get; }
+
+        public IVertex EndVertex { get; }
+    }
+
     public sealed class PipeScheme : IDisposable, IEnumerable
     {
         #region Fields
@@ -21,12 +34,20 @@ namespace Prototype.Core.Models.GasPanel
 
         #region Constructors
 
-        public PipeScheme(/* , TODO params Tuple<IVertex, IVertex>[] verticesPair */)
+        public PipeScheme()
         {
             _vertices = new HashSet<IVertex>();
             _edges = new List<Edge>();
-
             _propertyChangedEventHandler = ReflectionExtensions.MakeWeakPropertyChangedHandler(this, (scheme, obj, args) => scheme.InvalidateFlows());
+        }
+
+        public PipeScheme(params VertexPair[] vertices) : this()
+        {
+            foreach (var pair in vertices)
+            {
+                Add(pair.StartVertex, pair.EndVertex);
+            }
+            Initialize();
         }
 
         #endregion

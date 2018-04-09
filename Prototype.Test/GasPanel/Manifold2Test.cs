@@ -59,28 +59,26 @@ namespace Prototype.Test.GasPanel
                 ConnectionVertex3 = new Vertex();
                 ConnectionVertex4 = new Vertex();
 
-                Scheme = new PipeScheme();
-                Scheme.CreatePipe(SourceVertex1, ValveVertex1);
-                Scheme.CreatePipe(ValveVertex1, ConnectionVertex1);
-                Scheme.CreatePipe(ConnectionVertex1, ValveVertex7);
-                Scheme.CreatePipe(ValveVertex7, DestinationVertex1);
-
-                Scheme.CreatePipe(SourceVertex2, ConnectionVertex2);
-                Scheme.CreatePipe(ConnectionVertex2, ValveVertex2);
-                Scheme.CreatePipe(ConnectionVertex2, ValveVertex3);
-                Scheme.CreatePipe(ValveVertex2, ConnectionVertex1);
-                Scheme.CreatePipe(ValveVertex3, ConnectionVertex1);
-
-                Scheme.CreatePipe(ConnectionVertex2, ConnectionVertex3);
-                Scheme.CreatePipe(ConnectionVertex3, ValveVertex4);
-                Scheme.CreatePipe(ConnectionVertex3, ValveVertex5);
-                Scheme.CreatePipe(ValveVertex4, ConnectionVertex4);
-                Scheme.CreatePipe(ValveVertex5, ConnectionVertex4);
-                Scheme.CreatePipe(ConnectionVertex4, ValveVertex8);
-                Scheme.CreatePipe(ValveVertex8, DestinationVertex2);
-
-                Scheme.CreatePipe(SourceVertex3, ValveVertex6);
-                Scheme.CreatePipe(ValveVertex6, ConnectionVertex4);
+                Scheme = new PipeScheme(
+                    new VertexPair(SourceVertex1, ValveVertex1),
+                    new VertexPair(ValveVertex1, ConnectionVertex1),
+                    new VertexPair(ConnectionVertex1, ValveVertex7),
+                    new VertexPair(ValveVertex7, DestinationVertex1),
+                    new VertexPair(SourceVertex2, ConnectionVertex2),
+                    new VertexPair(ConnectionVertex2, ValveVertex2),
+                    new VertexPair(ConnectionVertex2, ValveVertex3),
+                    new VertexPair(ValveVertex2, ConnectionVertex1),
+                    new VertexPair(ValveVertex3, ConnectionVertex1),
+                    new VertexPair(ConnectionVertex2, ConnectionVertex3),
+                    new VertexPair(ConnectionVertex3, ValveVertex4),
+                    new VertexPair(ConnectionVertex3, ValveVertex5),
+                    new VertexPair(ValveVertex4, ConnectionVertex4),
+                    new VertexPair(ValveVertex5, ConnectionVertex4),
+                    new VertexPair(ConnectionVertex4, ValveVertex8),
+                    new VertexPair(ValveVertex8, DestinationVertex2),
+                    new VertexPair(SourceVertex3, ValveVertex6),
+                    new VertexPair(ValveVertex6, ConnectionVertex4)
+                );
 
                 Scheme.Initialize();
             }
