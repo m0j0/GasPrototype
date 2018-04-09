@@ -45,17 +45,17 @@ namespace Prototype.Test.GasPanel
                 ConnectionVertex2 = new Vertex();
                 ConnectionVertex3 = new Vertex();
 
-                Scheme = new PipeScheme();
-                Scheme.CreatePipe(SourceVertex1, ConnectionVertex1);
-                Scheme.CreatePipe(ConnectionVertex1, ValveVertex1);
-                Scheme.CreatePipe(ValveVertex1, ConnectionVertex3);
-
-                Scheme.CreatePipe(SourceVertex2, ConnectionVertex2);
-                Scheme.CreatePipe(ConnectionVertex2, ConnectionVertex1);
-                Scheme.CreatePipe(ConnectionVertex2, ValveVertex2);
-                Scheme.CreatePipe(ValveVertex2, ConnectionVertex3);
-
-                Scheme.CreatePipe(ConnectionVertex3, DestinationVertex1);
+                Scheme = new PipeScheme
+                {
+                    {SourceVertex1, ConnectionVertex1},
+                    {ConnectionVertex1, ValveVertex1},
+                    {ValveVertex1, ConnectionVertex3},
+                    {SourceVertex2, ConnectionVertex2},
+                    {ConnectionVertex2, ConnectionVertex1},
+                    {ConnectionVertex2, ValveVertex2},
+                    {ValveVertex2, ConnectionVertex3},
+                    {ConnectionVertex3, DestinationVertex1}
+                };
 
                 Scheme.Initialize();
             }
@@ -95,7 +95,7 @@ namespace Prototype.Test.GasPanel
         }
 
         #endregion
-        
+
         #region Pipes
 
         [Test]

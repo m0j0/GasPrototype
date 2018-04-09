@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using Prototype.Core.Interfaces.GasPanel;
 
 namespace Prototype.Core.Models.GasPanel
 {
-    public sealed class PipeScheme : IDisposable
+    public sealed class PipeScheme : IDisposable, IEnumerable
     {
         #region Fields
         
@@ -31,6 +32,11 @@ namespace Prototype.Core.Models.GasPanel
         #endregion
 
         #region Methods
+
+        public void Add(IVertex startVertex, IVertex endVertex)
+        {
+            CreateEdge(startVertex, endVertex);
+        }
 
         public void CreatePipe(IVertex startVertex, IVertex endVertex)
         {
@@ -159,6 +165,15 @@ namespace Prototype.Core.Models.GasPanel
             {
                 vertex.ValveVm.PropertyChanged -= _propertyChangedEventHandler;
             }
+        }
+
+        #endregion
+
+        #region Implementation of IDisposable
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _vertices.GetEnumerator();
         }
 
         #endregion
