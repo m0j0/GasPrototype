@@ -91,6 +91,23 @@ namespace Prototype.Test.GasPanel
             });
         }
 
+        [Test]
+        public void TestPipeSchemeUnreachableVertices()
+        {
+            var sourceVertex1 = new SourceVertex();
+            var destinationVertex1 = new DestinationVertex();
+            var sourceVertex2 = new SourceVertex();
+            var destinationVertex2 = new DestinationVertex();
+            
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme = new PipeScheme(
+                    new VertexPair(sourceVertex1, destinationVertex1),
+                    new VertexPair(sourceVertex2, destinationVertex2)
+                );
+            });
+        }
+
         #endregion
 
         #region Dispose

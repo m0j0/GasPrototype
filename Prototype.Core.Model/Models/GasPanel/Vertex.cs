@@ -13,10 +13,6 @@ namespace Prototype.Core.Models.GasPanel
     {
         protected readonly List<IVertex> AdjacentVertices = new List<IVertex>();
 
-        protected VertexBase()
-        {
-        }
-
         public PipeScheme Owner { get; set; }
 
         public virtual IReadOnlyList<IVertex> GetAdjacentVertices()
@@ -24,9 +20,18 @@ namespace Prototype.Core.Models.GasPanel
             return AdjacentVertices;
         }
 
+        public IReadOnlyList<IVertex> GetAllAdjacentVertices()
+        {
+            return AdjacentVertices;
+        }
+
         public void AddAdjacentVertex(IVertex vertex)
         {
             AdjacentVertices.Add(vertex);
+        }
+
+        public virtual void Validate()
+        {
         }
     }
 

@@ -9,6 +9,10 @@ namespace Prototype.Core.Interfaces.GasPanel
 
         IReadOnlyList<IVertex> GetAdjacentVertices();
 
+        IReadOnlyList<IVertex> GetAllAdjacentVertices();
+
         void AddAdjacentVertex(IVertex vertex);
+
+        void Validate();
     }
 }

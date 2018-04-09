@@ -43,7 +43,7 @@ namespace Prototype.Core.Models.GasPanel
         {
             if (_isDisposed)
             {
-                throw new ObjectDisposedException($@"Cannot perform the operation, because object is disposed.");
+                throw new ObjectDisposedException("Cannot perform the operation, because object is disposed.");
             }
 
             return _edges.FirstOrDefault(edge => edge.Equals(startVertex, endVertex))?.PipeVm;
@@ -51,16 +51,6 @@ namespace Prototype.Core.Models.GasPanel
 
         private void Initialize()
         {
-            if (_vertices.Count(vertex => vertex is SourceVertex) == 0)
-            {
-                throw new InvalidOperationException("Should be at least one source");
-            }
-
-            if (_vertices.Count(vertex => vertex is DestinationVertex) == 0)
-            {
-                throw new InvalidOperationException("Should be at least one destination");
-            }
-
             ValidateVertices();
 
             foreach (var vertex in _vertices.OfType<ValveVertex>())
@@ -73,7 +63,41 @@ namespace Prototype.Core.Models.GasPanel
 
         private void ValidateVertices()
         {
-            // TODO add checks
+            if (_vertices.Count(vertex => vertex is SourceVertex) == 0)
+            {
+                throw new InvalidOperationException("Should be at least one source");
+            }
+
+            if (_vertices.Count(vertex => vertex is DestinationVertex) == 0)
+            {
+                throw new InvalidOperationException("Should be at least one destination");
+            }
+
+            foreach (var vertex in _vertices)
+            {
+                vertex.Validate();
+            }
+            
+            var destinationVertices = _vertices
+                .OfType<DestinationVertex>()
+                .ToArray();
+
+            var sourceVertices = _vertices
+                .OfType<SourceVertex>();
+
+            foreach (var sourceVertex in sourceVertices)
+            {
+                var algo = new DepthFirstDirectedPaths(sourceVertex, vertex => vertex.GetAllAdjacentVertices());
+
+                foreach (var destinationVertex in destinationVertices)
+                {
+                    var paths = algo.PathsTo(destinationVertex);
+                    if (paths == null || paths.Count == 0)
+                    {
+                        throw new InvalidOperationException("Unreachable vertices detected");
+                    }
+                }
+            }
         }
 
         private void InvalidateFlows()
@@ -92,7 +116,7 @@ namespace Prototype.Core.Models.GasPanel
 
             foreach (var sourceVertex in sourceVertices)
             {
-                var algo = new DepthFirstDirectedPaths(sourceVertex);
+                var algo = new DepthFirstDirectedPaths(sourceVertex, vertex => vertex.GetAdjacentVertices());
 
                 foreach (var destinationVertex in destinationVertices)
                 {

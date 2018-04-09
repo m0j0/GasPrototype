@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Prototype.Core.Interfaces.GasPanel;
 
@@ -6,10 +7,12 @@ namespace Prototype.Core.Models.GasPanel
 {
     internal class DepthFirstDirectedPaths
     {
+        private readonly Func<IVertex, IReadOnlyCollection<IVertex>> _getAdjacentVertices;
         private readonly Dictionary<IVertex, List<IReadOnlyList<IVertex>>> _paths;
 
-        public DepthFirstDirectedPaths(SourceVertex sourceVertex)
+        public DepthFirstDirectedPaths(SourceVertex sourceVertex, Func<IVertex, IReadOnlyCollection<IVertex>> getAdjacentVertices)
         {
+            _getAdjacentVertices = getAdjacentVertices;
             _paths = new Dictionary<IVertex, List<IReadOnlyList<IVertex>>>();
 
             var vertices = new Stack<IVertex>();
@@ -24,7 +27,7 @@ namespace Prototype.Core.Models.GasPanel
 
         private void DepthFirstSearch(Stack<IVertex> visited)
         {
-            var vertices = visited.Peek().GetAdjacentVertices();
+            var vertices = _getAdjacentVertices(visited.Peek());
 
             foreach (var vertex in vertices)
             {
