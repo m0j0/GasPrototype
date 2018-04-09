@@ -37,10 +37,24 @@ namespace Prototype.Core.Models.GasPanel
 
     public sealed class SourceVertex : VertexBase
     {
+        public override void Validate()
+        {
+            if (AdjacentVertices.Count != 1)
+            {
+                throw new InvalidOperationException("SourceVertex can have only one adjacent vertices");
+            }
+        }
     }
 
     public sealed class DestinationVertex : VertexBase
     {
+        public override void Validate()
+        {
+            if (AdjacentVertices.Count > 0)
+            {
+                throw new InvalidOperationException("DestinationVertex can't have adjacent vertices");
+            }
+        }
     }
 
     public sealed class Vertex : VertexBase

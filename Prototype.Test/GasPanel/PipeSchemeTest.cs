@@ -108,6 +108,36 @@ namespace Prototype.Test.GasPanel
             });
         }
 
+        [Test]
+        public void TestSourceVerticeOneAdjacentVertice()
+        {
+            var sourceVertex = new SourceVertex();
+            var destinationVertex1 = new DestinationVertex();
+            var destinationVertex2 = new DestinationVertex();
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme = new PipeScheme(
+                    new VerticesPair(sourceVertex, destinationVertex1),
+                    new VerticesPair(sourceVertex, destinationVertex2)
+                );
+            });
+        }
+
+        [Test]
+        public void TestDestinationVertexCannotHaveAdjacentVerices()
+        {
+            var sourceVertex = new SourceVertex();
+            var destinationVertex = new DestinationVertex();
+
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var scheme = new PipeScheme(
+                    new VerticesPair(destinationVertex, sourceVertex)
+                );
+            });
+        }
+
         #endregion
 
         #region Dispose
