@@ -118,37 +118,37 @@ namespace Prototype.Core.Controls
                 .OrderBy(intersection => intersection.GetComparePoint())
                 .ToList();
             
-            if (visibleIntersections.Count > 0)
-            {
-                var firstPoint = visibleIntersections.First();
+            //if (visibleIntersections.Count > 0)
+            //{
+            //    var firstPoint = visibleIntersections.First();
 
-                if (GetRectPoint(currentPipe.Pipe, currentPipe.RelativeRectangle) != firstPoint.GetComparePoint())
-                {
-                    segments.Add(currentPipe.CreateSegmentFromStart(firstPoint));
-                }
+            //    if (GetRectPoint(currentPipe.Pipe, currentPipe.RelativeRectangle) != firstPoint.GetComparePoint())
+            //    {
+            //        segments.Add(currentPipe.CreateSegmentFromStart(firstPoint));
+            //    }
 
-                for (int i = 0; i < visibleIntersections.Count - 1; i++)
-                {
-                    segments.Add(visibleIntersections[i]);
-                    segments.Add(currentPipe.CreateMiddleSegment(visibleIntersections[i], visibleIntersections[i + 1]));
-                }
+            //    for (int i = 0; i < visibleIntersections.Count - 1; i++)
+            //    {
+            //        segments.Add(visibleIntersections[i]);
+            //        segments.Add(currentPipe.CreateMiddleSegment(visibleIntersections[i], visibleIntersections[i + 1]));
+            //    }
 
 
-                var lastPoint = visibleIntersections.Last();
-                segments.Add(lastPoint);
+            //    var lastPoint = visibleIntersections.Last();
+            //    segments.Add(lastPoint);
 
-                if (GetRectLastPoint(currentPipe.Pipe, currentPipe.RelativeRectangle) != lastPoint.GetComparePoint())
-                {
-                    segments.Add(currentPipe.CreateSegmentToEnd(lastPoint));
-                }
-            }
-            else
-            {
+            //    if (GetRectLastPoint(currentPipe.Pipe, currentPipe.RelativeRectangle) != lastPoint.GetComparePoint())
+            //    {
+            //        segments.Add(currentPipe.CreateSegmentToEnd(lastPoint));
+            //    }
+            //}
+            //else
+            //{
                 segments.Add(new PipeSegment(
                     GetSegmentLength(currentPipe.Pipe.Orientation, currentPipe.RelativeRectangle), 
                     currentPipe.Pipe.Orientation,
                     currentPipe.RelativeRectangle.Location));
-            }
+            //}
 
             return segments;
         }

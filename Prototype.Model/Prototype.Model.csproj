@@ -64,6 +64,7 @@
     <Compile Include="ViewModels\MainVm.cs" />
     <Compile Include="ViewModels\NavigationLogVm.cs" />
     <Compile Include="ViewModels\Pipes\Manifold2Vm.cs" />
+    <Compile Include="ViewModels\Pipes\Manifold3Vm.cs" />
     <Compile Include="ViewModels\Pipes\ManifoldVm.cs" />
     <Compile Include="ViewModels\Pipes\PipesConnectionsVm.cs" />
     <Compile Include="ViewModels\Pipes\PipesPerformanceVm.cs" />

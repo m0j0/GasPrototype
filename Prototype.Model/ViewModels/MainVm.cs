@@ -62,6 +62,7 @@ namespace Prototype.ViewModels
                     new MenuItemModel("Pipes connections", _screenManager.ShowScreenAsync<PipesConnectionsVm>),
                     new MenuItemModel("Manifold", _screenManager.ShowScreenAsync<ManifoldVm>),
                     new MenuItemModel("Manifold 2", _screenManager.ShowScreenAsync<Manifold2Vm>),
+                    new MenuItemModel("Manifold 3", _screenManager.ShowScreenAsync<Manifold3Vm>),
                     new MenuItemModel("Wafer statuses", _screenManager.ShowScreenAsync<WaferStatusesVm>),
                 }),
                 new MenuItemModel("Popups", new List<MenuItemModel>
@@ -238,7 +239,7 @@ namespace Prototype.ViewModels
                 return;
             }
 
-            _screenManager.ShowScreenAsync<ManifoldVm>();
+            _screenManager.ShowScreenAsync<Manifold3Vm>();
         }
 
         Task<bool> INavigableViewModel.OnNavigatingFromAsync(INavigationContext context)

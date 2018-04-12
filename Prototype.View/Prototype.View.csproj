@@ -96,6 +96,9 @@
     <Compile Include="Views\Pipes\Manifold2View.xaml.cs">
       <DependentUpon>Manifold2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Pipes\Manifold3View.xaml.cs">
+      <DependentUpon>Manifold3View.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Pipes\ManifoldView.xaml.cs">
       <DependentUpon>ManifoldView.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pipes\Manifold2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pipes\Manifold3View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

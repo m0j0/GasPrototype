@@ -114,6 +114,11 @@ namespace Prototype
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Manifold2Vm>()); }
         }
 
+        public static Manifold3Vm Manifold3Vm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Manifold3Vm>()); }
+        }
+
         public static WaferStatusesVm WaferStatusesVm
         {
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<WaferStatusesVm>()); }
