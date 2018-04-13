@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="GasPanel\Manifold2Test.cs" />
     <Compile Include="GasPanel\Manifold1Test.cs" />
+    <Compile Include="GasPanel\Manifold3Test.cs" />
     <Compile Include="GasPanel\PipeSchemeTest.cs" />
   </ItemGroup>
   <ItemGroup>
