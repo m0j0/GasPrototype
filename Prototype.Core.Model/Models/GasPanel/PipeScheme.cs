@@ -16,6 +16,8 @@ namespace Prototype.Core.Models.GasPanel
         private readonly List<Edge> _edges;
         private readonly PropertyChangedEventHandler _propertyChangedEventHandler;
         private bool _isDisposed;
+        private DestinationVertex[] _destinationVertices;
+        private SourceVertex[] _sourceVertices;
 
         #endregion
 
@@ -25,7 +27,10 @@ namespace Prototype.Core.Models.GasPanel
         {
             _vertices = new HashSet<IVertex>();
             _edges = new List<Edge>();
-            _propertyChangedEventHandler = ReflectionExtensions.MakeWeakPropertyChangedHandler(this, (scheme, obj, args) => scheme.InvalidateFlows());
+            _propertyChangedEventHandler = ReflectionExtensions.MakeWeakPropertyChangedHandler(this, (scheme, obj, args) =>
+            {
+                scheme.InvalidatePaths();
+            });
 
             foreach (var pair in vertices)
             {
@@ -34,6 +39,16 @@ namespace Prototype.Core.Models.GasPanel
 
             Initialize();
         }
+
+        #endregion
+
+        #region Properties
+
+        public bool HideAbsentPaths { get; set; } = true;
+
+        public int PipesCount => _edges.Count;
+
+        public int VerticesCount => _vertices.Count;
 
         #endregion
 
@@ -53,12 +68,18 @@ namespace Prototype.Core.Models.GasPanel
         {
             ValidateVertices();
 
-            foreach (var vertex in _vertices.OfType<ValveVertex>())
+            foreach (var vertex in _vertices)
             {
-                vertex.ValveVm.PropertyChanged += _propertyChangedEventHandler;
+                // TODO
+                vertex.PropertyChanged += _propertyChangedEventHandler;
+
+                if (vertex is ValveVertex valveVertex)
+                {
+                    valveVertex.ValveVm.PropertyChanged += _propertyChangedEventHandler;
+                }
             }
 
-            InvalidateFlows();
+            InvalidatePaths();
         }
 
         private void ValidateVertices()
@@ -78,18 +99,19 @@ namespace Prototype.Core.Models.GasPanel
                 vertex.Validate();
             }
             
-            var destinationVertices = _vertices
+            _destinationVertices = _vertices
                 .OfType<DestinationVertex>()
                 .ToArray();
 
-            var sourceVertices = _vertices
-                .OfType<SourceVertex>();
+            _sourceVertices = _vertices
+                .OfType<SourceVertex>()
+                .ToArray();
 
-            foreach (var sourceVertex in sourceVertices)
+            foreach (var sourceVertex in _sourceVertices)
             {
                 var algo = new DepthFirstDirectedPaths(sourceVertex, vertex => vertex.GetAllAdjacentVertices());
 
-                foreach (var destinationVertex in destinationVertices)
+                foreach (var destinationVertex in _destinationVertices)
                 {
                     var paths = algo.PathsTo(destinationVertex);
                     if (paths == null || paths.Count == 0)
@@ -100,25 +122,62 @@ namespace Prototype.Core.Models.GasPanel
             }
         }
 
+        private void InvalidatePaths()
+        {
+            if (!HideAbsentPaths)
+            {
+                foreach (var edge in _edges)
+                {
+                    edge.PipeVm.IsPresent = true;
+                }
+
+                InvalidateFlows();
+                return;
+            }
+
+            foreach (var edge in _edges)
+            {
+                edge.PipeVm.IsPresent = false;
+            }
+
+            foreach (var sourceVertex in _sourceVertices.Where(vertex => vertex.IsPresent))
+            {
+                var algo = new DepthFirstDirectedPaths(sourceVertex, vertex => vertex.GetAllAdjacentVertices().Where(vertex1 => vertex1.IsPresent).ToArray());
+
+                foreach (var destinationVertex in _destinationVertices.Where(vertex => vertex.IsPresent))
+                {
+                    var paths = algo.PathsTo(destinationVertex);
+                    if (paths == null || paths.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var path in paths)
+                    {
+                        for (var i = 0; i < path.Count - 1; i++)
+                        {
+                            var edge = _edges.Find(pathEdge => pathEdge.Equals(path[i], path[i + 1]));
+                            edge.PipeVm.IsPresent = true;
+                        }
+                    }
+                }
+            }
+
+            InvalidateFlows();
+        }
+
         private void InvalidateFlows()
         {
             foreach (var edge in _edges)
             {
                 edge.PipeVm.HasFlow = false;
             }
-
-            var destinationVertices = _vertices
-                .OfType<DestinationVertex>()
-                .ToArray();
-
-            var sourceVertices = _vertices
-                .OfType<SourceVertex>();
-
-            foreach (var sourceVertex in sourceVertices)
+            
+            foreach (var sourceVertex in _sourceVertices)
             {
                 var algo = new DepthFirstDirectedPaths(sourceVertex, vertex => vertex.GetAdjacentVertices());
 
-                foreach (var destinationVertex in destinationVertices)
+                foreach (var destinationVertex in _destinationVertices)
                 {
                     var paths = algo.PathsTo(destinationVertex);
                     if (paths == null || paths.Count == 0)

@@ -11,8 +11,6 @@ namespace Prototype.Core.Models.GasPanel
         #region Fields
 
         private readonly NamedCommand[] _commands;
-        private readonly ICommand _openCommand;
-        private readonly ICommand _closeCommand;
         private readonly string _name;
         private bool _isPresent = true;
         private ValveState _state = ValveState.Unknown;
@@ -25,13 +23,15 @@ namespace Prototype.Core.Models.GasPanel
         {
             _name = name;
 
-            _openCommand = new RelayCommand(Open, CanOpen, this);
-            _closeCommand = new RelayCommand(Close, CanClose, this);
+            OpenCommand = new RelayCommand(Open, CanOpen, this);
+            CloseCommand = new RelayCommand(Close, CanClose, this);
+            HideCommand = new RelayCommand(Hide, CanHide, this);
 
             _commands = new[]
             {
                 new NamedCommand("Open", OpenCommand),
-                new NamedCommand("Close", CloseCommand)
+                new NamedCommand("Close", CloseCommand),
+                new NamedCommand("Hide", HideCommand),
             };
         }
 
@@ -39,10 +39,7 @@ namespace Prototype.Core.Models.GasPanel
 
         #region Commands
 
-        public ICommand OpenCommand
-        {
-            get { return _openCommand; }
-        }
+        public ICommand OpenCommand { get; }
 
         private void Open()
         {
@@ -54,10 +51,7 @@ namespace Prototype.Core.Models.GasPanel
             return State != ValveState.Opened;
         }
 
-        public ICommand CloseCommand
-        {
-            get { return _closeCommand; }
-        }
+        public ICommand CloseCommand { get; }
 
         private void Close()
         {
@@ -67,6 +61,18 @@ namespace Prototype.Core.Models.GasPanel
         private bool CanClose()
         {
             return State != ValveState.Closed;
+        }
+
+        public ICommand HideCommand { get; }
+
+        private void Hide()
+        {
+            IsPresent = false;
+        }
+
+        private bool CanHide()
+        {
+            return IsPresent;
         }
 
         #endregion

@@ -9,10 +9,25 @@ namespace Prototype.Core.Models.GasPanel
 
         private bool _hasFlow;
         private SubstanceType _substanceType;
+        private bool _isPresent = true;
 
         #endregion
 
         #region Properties
+
+        public bool IsPresent
+        {
+            get => _isPresent;
+            set
+            {
+                if (_isPresent == value)
+                {
+                    return;
+                }
+                _isPresent = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool HasFlow
         {

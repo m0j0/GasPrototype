@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Interfaces.GasPanel
 {
-    public interface IVertex
+    public interface IVertex : INotifyPropertyChanged
     {
         PipeScheme Owner { get; set; }
+
+        bool IsPresent { get; set; }
 
         IReadOnlyList<IVertex> GetAdjacentVertices();
 

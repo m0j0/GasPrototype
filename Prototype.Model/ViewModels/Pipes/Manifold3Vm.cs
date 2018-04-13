@@ -1,4 +1,8 @@
-﻿using MugenMvvmToolkit.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using MugenMvvmToolkit.Collections;
+using MugenMvvmToolkit.ViewModels;
+using Prototype.Core.Interfaces.GasPanel;
 using Prototype.Core.Models.GasPanel;
 using Prototype.Interfaces;
 
@@ -63,6 +67,25 @@ namespace Prototype.ViewModels.Pipes
                 new VerticesPair(ValveVertex6, ConnectionVertex5),
                 new VerticesPair(ValveVertex7, ConnectionVertex5)
             );
+
+            Vertices = new SynchronizedNotifiableCollection<Tuple<string, IVertex>>
+            {
+                new Tuple<string, IVertex>(nameof(SourceVertex1), SourceVertex1),
+                new Tuple<string, IVertex>(nameof(SourceVertex2), SourceVertex2),
+                new Tuple<string, IVertex>(nameof(SourceVertex3), SourceVertex3),
+                new Tuple<string, IVertex>(nameof(SourceVertex4), SourceVertex4),
+                new Tuple<string, IVertex>(nameof(SourceVertex5), SourceVertex5),
+                new Tuple<string, IVertex>(nameof(SourceVertex6), SourceVertex6),
+                new Tuple<string, IVertex>(nameof(SourceVertex7), SourceVertex7),
+                new Tuple<string, IVertex>(nameof(ValveVertex1), ValveVertex1),
+                new Tuple<string, IVertex>(nameof(ValveVertex2), ValveVertex2),
+                new Tuple<string, IVertex>(nameof(ValveVertex3), ValveVertex3),
+                new Tuple<string, IVertex>(nameof(ValveVertex4), ValveVertex4),
+                new Tuple<string, IVertex>(nameof(ValveVertex5), ValveVertex5),
+                new Tuple<string, IVertex>(nameof(ValveVertex6), ValveVertex6),
+                new Tuple<string, IVertex>(nameof(ValveVertex7), ValveVertex7),
+                new Tuple<string, IVertex>(nameof(DestinationVertex1), DestinationVertex1),
+            };
         }
 
         #endregion
@@ -104,6 +127,8 @@ namespace Prototype.ViewModels.Pipes
         public Vertex ConnectionVertex3 { get; }
         public Vertex ConnectionVertex4 { get; }
         public Vertex ConnectionVertex5 { get; }
+
+        public SynchronizedNotifiableCollection<Tuple<string, IVertex>> Vertices { get; }
 
         #endregion
 

@@ -2,22 +2,36 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MugenMvvmToolkit;
+using MugenMvvmToolkit.Models;
 using Prototype.Core.Interfaces.GasPanel;
 
 namespace Prototype.Core.Models.GasPanel
 {
-    public abstract class VertexBase : IVertex
+    public abstract class VertexBase : NotifyPropertyChangedBase, IVertex
     {
         protected readonly List<IVertex> AdjacentVertices = new List<IVertex>();
+        private bool _isPresent = true;
 
         public PipeScheme Owner { get; set; }
 
+        public virtual bool IsPresent
+        {
+            get => _isPresent;
+            set
+            {
+                if (value == _isPresent)
+                {
+                    return;
+                }
+                _isPresent = value;
+                OnPropertyChanged();
+            }
+        }
+
         public virtual IReadOnlyList<IVertex> GetAdjacentVertices()
         {
-            return AdjacentVertices;
+            return AdjacentVertices.Where(vertex => vertex.IsPresent).ToArray();
         }
 
         public IReadOnlyList<IVertex> GetAllAdjacentVertices()
@@ -75,7 +89,7 @@ namespace Prototype.Core.Models.GasPanel
         {
             if (ValveVm.State == ValveState.Opened)
             {
-                return AdjacentVertices;
+                return base.GetAdjacentVertices();
             }
 
             return Empty.Array<IVertex>();

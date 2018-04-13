@@ -170,6 +170,7 @@ namespace Prototype.Core.Controls
             }
             pipe.Bind(() => v => v.HasFlow).To(model, () => (m, ctx) => m.HasFlow).Build();
             pipe.Bind(() => v => v.SubstanceType).To(model, () => (m, ctx) => m.SubstanceType).Build();
+            pipe.Bind(() => v => v.Visibility).To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
         }
 
         private static void VisualPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)

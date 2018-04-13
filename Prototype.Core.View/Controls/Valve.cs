@@ -82,6 +82,7 @@ namespace Prototype.Core.Controls
             }
             valve.Bind(() => v => v.State).To(model, () => (m, ctx) => m.State).Build();
             valve.Bind(() => v => v.MenuCommands).To(model, () => (m, ctx) => m.Commands).Build();
+            valve.Bind(() => v => v.Visibility).To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
         }
 
         #endregion
