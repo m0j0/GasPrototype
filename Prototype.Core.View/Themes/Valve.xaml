@@ -4,7 +4,8 @@
                     xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model"
                     xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
+        <ResourceDictionary Source="Common.xaml" />
+        <ResourceDictionary Source="Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
     <gasPanel:ValveState x:Key="ValveStateOpened">Opened</gasPanel:ValveState>
@@ -91,21 +92,40 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:Valve">
                     <Grid>
-                        <ContentControl Name="MainControl" />
+                        <ContentControl x:Name="MainControl" />
 
-                        <Popup Name="PopupControl"
+                        <Popup x:Name="PopupControl"
                                PlacementTarget="{Binding ElementName=MainControl}"
                                StaysOpen="False">
-                            <ListBox Width="100"
-                                     MinWidth="{TemplateBinding ActualWidth}"
-                                     ItemsSource="{TemplateBinding MenuCommands}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate DataType="models:NamedCommand">
-                                        <Button Command="{Binding Command}"
-                                                Content="{Binding DisplayName}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                            <Border BorderThickness="1"
+                                    BorderBrush="{StaticResource SolidColorBrushAmatDarkBlue}"
+                                    Background="{StaticResource SolidColorBrushAmatMediumBlue2}">
+
+                                <StackPanel Orientation="Vertical">
+                                    <Border Height="31">
+                                        <TextBlock Text="Commands" 
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" 
+                                                   Foreground="White"/>
+                                    </Border>
+
+                                    <ItemsControl Grid.Row="1"
+                                        ItemsSource="{TemplateBinding MenuCommands}" Margin="2">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="models:NamedCommand">
+                                                <Button Style="{StaticResource ButtonIconStyleBase}"
+                                                        MinWidth="186" Height="36" Margin="2"
+                                                        Command="{Binding Command}"
+                                                        Content="{Binding DisplayName}" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
                         </Popup>
                     </Grid>
 
