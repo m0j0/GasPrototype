@@ -10,7 +10,6 @@
 
     <FontFamily x:Key="DefaultFontFamily">Segoe UI</FontFamily>
     <system:Double x:Key="DefaultFontSize">14</system:Double>
-    <Thickness x:Key="DefaultMargin">4</Thickness>
 
     <Color x:Key="AmatColorDarkBlue">#255B7F</Color>
     <Color x:Key="AmatColorBlue">#1140E5</Color>

@@ -5,35 +5,41 @@
         <ResourceDictionary Source="Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-
-    <Style TargetType="Button" x:Key="ButtonIconStyleBase">
+    <Style TargetType="Button" x:Key="DropdownButtonStyle">
         <Style.Resources>
-            <SolidColorBrush x:Key="IconBrush" Color="{StaticResource AmatColorMediumBlue}" />
-            <SolidColorBrush x:Key="IconBrushDisabled" Color="{markupExtensions:TransparentColor {StaticResource AmatColorMediumBlue}, 0.5}" />
-            <SolidColorBrush x:Key="MouseOverBackgroundBrush" Color="{markupExtensions:TransparentColor {StaticResource AmatColorDarkBlue}, 0.2}" />
-            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{StaticResource AmatColorDarkBlue}" />
+            <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource AmatColorDarkBlue}" />
+            <SolidColorBrush x:Key="BackgroundBrushDisabled" Color="{StaticResource AmatColorMediumBlue}" />
+            <SolidColorBrush x:Key="BackgroundBrushMouseOver" Color="{markupExtensions:TransparentColor {StaticResource AmatColorDarkBlue}, 0.8}" />
+            <SolidColorBrush x:Key="BackgroundBrushPressed" Color="White" />
+            <SolidColorBrush x:Key="ForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="ForegroundBrushDisabled" Color="{markupExtensions:TransparentColor White, 0.5}" />
+            <SolidColorBrush x:Key="ForegroundBrushPressed" Color="Black" />
         </Style.Resources>
 
-        <Setter Property="Foreground" Value="{StaticResource IconBrush}" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Margin" Value="2" />
+
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="Border"
-                          Background="Transparent">
+                          Background="{StaticResource SolidColorBrushAmatDarkBlue}">
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center" />
                     </Grid>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource IconBrushDisabled}" />
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundBrushDisabled}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundBrushDisabled}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource MouseOverBackgroundBrush}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundBrushMouseOver}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedBackgroundBrush}" />
-                            <Setter Property="Foreground" Value="White" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundBrushPressed}" />
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundBrushPressed}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -41,9 +47,4 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="ButtonIconRegularStyle" BasedOn="{StaticResource ButtonIconStyleBase}">
-        <Setter Property="Height" Value="30" />
-        <Setter Property="Width" Value="30" />
-        <Setter Property="Margin" Value="4" />
-    </Style>
 </ResourceDictionary>

@@ -7,7 +7,7 @@
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
+
     <gasPanel:ValveState x:Key="ValveStateOpened">Opened</gasPanel:ValveState>
     <gasPanel:ValveState x:Key="ValveStateClosed">Closed</gasPanel:ValveState>
     <gasPanel:ValveState x:Key="ValveStateUnknown">Unknown</gasPanel:ValveState>
@@ -95,6 +95,7 @@
                         <ContentControl x:Name="MainControl" />
 
                         <Popup x:Name="PopupControl"
+                               Width="200"
                                PlacementTarget="{Binding ElementName=MainControl}"
                                StaysOpen="False">
                             <Border BorderThickness="1"
@@ -102,14 +103,13 @@
                                     Background="{StaticResource SolidColorBrushAmatMediumBlue2}">
 
                                 <StackPanel Orientation="Vertical">
-                                    <Border Height="31">
-                                        <TextBlock Text="Commands" 
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" 
-                                                   Foreground="White"/>
+                                    <Border Height="31" HorizontalAlignment="Stretch">
+                                        <TextBlock Text="Commands"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                                   Foreground="White" />
                                     </Border>
 
-                                    <ItemsControl Grid.Row="1"
-                                        ItemsSource="{TemplateBinding MenuCommands}" Margin="2">
+                                    <ItemsControl ItemsSource="{TemplateBinding MenuCommands}" Margin="2">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical" />
@@ -117,8 +117,7 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="models:NamedCommand">
-                                                <Button Style="{StaticResource ButtonIconStyleBase}"
-                                                        MinWidth="186" Height="36" Margin="2"
+                                                <Button Style="{StaticResource DropdownButtonStyle}"
                                                         Command="{Binding Command}"
                                                         Content="{Binding DisplayName}" />
                                             </DataTemplate>
