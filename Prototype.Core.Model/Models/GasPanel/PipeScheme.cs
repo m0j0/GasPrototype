@@ -44,8 +44,6 @@ namespace Prototype.Core.Models.GasPanel
 
         #region Properties
 
-        public bool HideAbsentPaths { get; set; } = true;
-
         public int PipesCount => _edges.Count;
 
         public int VerticesCount => _vertices.Count;
@@ -53,6 +51,45 @@ namespace Prototype.Core.Models.GasPanel
         #endregion
 
         #region Methods
+
+        internal Edge CreateEdge(IVertex startVertex, IVertex endVertex)
+        {
+            InitializeVertice(startVertex);
+            InitializeVertice(endVertex);
+
+            var edge = FindEdge(startVertex, endVertex);
+            if (edge != null)
+            {
+                return edge;
+            }
+
+            var bidirectional = !(startVertex is SourceVertex) && !(endVertex is DestinationVertex);
+            edge = new Edge(new PipeVm(), startVertex, endVertex, bidirectional);
+            startVertex.AddAdjacentVertex(endVertex);
+            if (bidirectional)
+            {
+                endVertex.AddAdjacentVertex(startVertex);
+            }
+
+            _edges.Add(edge);
+
+            return edge;
+        }
+
+        public void AddVertices(params IVertex[] vertices)
+        {
+            if (vertices.Length < 2)
+            {
+                throw new ArgumentException("Should be at least two vertices");
+            }
+
+            for (var i = 0; i < vertices.Length -1; i++)
+            {
+                CreateEdge(vertices[i], vertices[i + 1]);
+            }
+
+            Initialize();
+        }
 
         internal IPipeVm FindPipeVm(IVertex startVertex, IVertex endVertex)
         {
@@ -64,9 +101,19 @@ namespace Prototype.Core.Models.GasPanel
             return _edges.FirstOrDefault(edge => edge.Equals(startVertex, endVertex))?.PipeVm;
         }
 
+        internal Edge FindEdge(IVertex startVertex, IVertex endVertex)
+        {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException("Cannot perform the operation, because object is disposed.");
+            }
+
+            return _edges.FirstOrDefault(edge => edge.Equals(startVertex, endVertex));
+        }
+
         private void Initialize()
         {
-            ValidateVertices();
+            //ValidateVertices();
 
             foreach (var vertex in _vertices)
             {
@@ -124,16 +171,13 @@ namespace Prototype.Core.Models.GasPanel
 
         private void InvalidatePaths()
         {
-            if (!HideAbsentPaths)
-            {
-                foreach (var edge in _edges)
-                {
-                    edge.PipeVm.IsPresent = true;
-                }
+            _destinationVertices = _vertices
+                .OfType<DestinationVertex>()
+                .ToArray();
 
-                InvalidateFlows();
-                return;
-            }
+            _sourceVertices = _vertices
+                .OfType<SourceVertex>()
+                .ToArray();
 
             foreach (var edge in _edges)
             {
@@ -195,25 +239,6 @@ namespace Prototype.Core.Models.GasPanel
                     }
                 }
             }
-        }
-
-        private Edge CreateEdge(IVertex startVertex, IVertex endVertex)
-        {
-            InitializeVertice(startVertex);
-            InitializeVertice(endVertex);
-
-            var bidirectional = !(startVertex is SourceVertex) && !(endVertex is DestinationVertex);
-
-            var edge = new Edge(new PipeVm(), startVertex, endVertex, bidirectional);
-            startVertex.AddAdjacentVertex(endVertex);
-            if (bidirectional)
-            {
-                endVertex.AddAdjacentVertex(startVertex);
-            }
-
-            _edges.Add(edge);
-
-            return edge;
         }
 
         private void InitializeVertice(IVertex vertex)

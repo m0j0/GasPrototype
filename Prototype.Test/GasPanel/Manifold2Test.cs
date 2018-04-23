@@ -59,26 +59,13 @@ namespace Prototype.Test.GasPanel
                 ConnectionVertex3 = new Vertex();
                 ConnectionVertex4 = new Vertex();
 
-                Scheme = new PipeScheme(
-                    new VerticesPair(SourceVertex1, ValveVertex1),
-                    new VerticesPair(ValveVertex1, ConnectionVertex1),
-                    new VerticesPair(ConnectionVertex1, ValveVertex7),
-                    new VerticesPair(ValveVertex7, DestinationVertex1),
-                    new VerticesPair(SourceVertex2, ConnectionVertex2),
-                    new VerticesPair(ConnectionVertex2, ValveVertex2),
-                    new VerticesPair(ConnectionVertex2, ValveVertex3),
-                    new VerticesPair(ValveVertex2, ConnectionVertex1),
-                    new VerticesPair(ValveVertex3, ConnectionVertex1),
-                    new VerticesPair(ConnectionVertex2, ConnectionVertex3),
-                    new VerticesPair(ConnectionVertex3, ValveVertex4),
-                    new VerticesPair(ConnectionVertex3, ValveVertex5),
-                    new VerticesPair(ValveVertex4, ConnectionVertex4),
-                    new VerticesPair(ValveVertex5, ConnectionVertex4),
-                    new VerticesPair(ConnectionVertex4, ValveVertex8),
-                    new VerticesPair(ValveVertex8, DestinationVertex2),
-                    new VerticesPair(SourceVertex3, ValveVertex6),
-                    new VerticesPair(ValveVertex6, ConnectionVertex4)
-                );
+                Scheme = new PipeScheme();
+                Scheme.AddVertices(SourceVertex1, ValveVertex1, ConnectionVertex1, ValveVertex7, DestinationVertex1);
+                Scheme.AddVertices(SourceVertex2, ConnectionVertex2, ValveVertex2, ConnectionVertex1);
+                Scheme.AddVertices(ConnectionVertex2, ValveVertex3, ConnectionVertex1);
+                Scheme.AddVertices(ConnectionVertex2, ConnectionVertex3, ValveVertex4, ConnectionVertex4, ValveVertex8, DestinationVertex2);
+                Scheme.AddVertices(ConnectionVertex3, ValveVertex5, ConnectionVertex4);
+                Scheme.AddVertices(SourceVertex3, ValveVertex6, ConnectionVertex4);
             }
 
             public ValveVm ValveVm1 { get; }
