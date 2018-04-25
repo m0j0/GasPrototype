@@ -93,7 +93,7 @@ namespace Prototype.Core.Controls
                 .OfType<Pipe>()
                 .Select(pipe => new PipeControlModel(pipe))
                 .ToArray();
-            PipeEx.FindAllIntersections(allPipes);
+            //PipeEx.FindAllIntersections(allPipes);
             
             var segments = PipeEx.SplitPipeToSegments(this, allPipes);
 
