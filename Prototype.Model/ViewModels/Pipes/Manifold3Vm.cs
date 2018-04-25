@@ -14,121 +14,88 @@ namespace Prototype.ViewModels.Pipes
 
         public Manifold3Vm()
         {
-            ValveVm1 = new ValveVm("Valve1") { State = ValveState.Opened };
-            ValveVm2 = new ValveVm("Valve2") { State = ValveState.Opened };
-            ValveVm3 = new ValveVm("Valve3") { State = ValveState.Opened };
-            ValveVm4 = new ValveVm("Valve4") { State = ValveState.Opened };
-            ValveVm5 = new ValveVm("Valve5") { State = ValveState.Opened };
-            ValveVm6 = new ValveVm("Valve6") { State = ValveState.Opened };
-            ValveVm7 = new ValveVm("Valve7") { State = ValveState.Opened };
+            Scheme = new PipeScheme();
 
-            ValveVertex1 = new ValveVertex(ValveVm1);
-            ValveVertex2 = new ValveVertex(ValveVm2);
-            ValveVertex3 = new ValveVertex(ValveVm3);
-            ValveVertex4 = new ValveVertex(ValveVm4);
-            ValveVertex5 = new ValveVertex(ValveVm5);
-            ValveVertex6 = new ValveVertex(ValveVm6);
-            ValveVertex7 = new ValveVertex(ValveVm7);
+            ValveFinal1Vm = new ValveVm("ValveFinal1") { State = ValveState.Opened };
+            ValveFinal2Vm = new ValveVm("ValveFinal2") { State = ValveState.Opened };
+            ValveFinal3Vm = new ValveVm("ValveFinal3") { State = ValveState.Opened };
+            ValveFinal4Vm = new ValveVm("ValveFinal4") { State = ValveState.Opened };
+            ValveFinal5Vm = new ValveVm("ValveFinal5") { State = ValveState.Opened };
+            ValveFinal6Vm = new ValveVm("ValveFinal6") { State = ValveState.Opened };
+            ValveFinal7Vm = new ValveVm("ValveFinal7") { State = ValveState.Opened };
 
-            SourceVertex1 = new SourceVertex();
-            SourceVertex2 = new SourceVertex();
-            SourceVertex3 = new SourceVertex();
-            SourceVertex4 = new SourceVertex();
-            SourceVertex5 = new SourceVertex();
-            SourceVertex6 = new SourceVertex();
-            SourceVertex7 = new SourceVertex();
+            ValveFinal1Vertex = new ValveVertex(ValveFinal1Vm);
+            ValveFinal2Vertex = new ValveVertex(ValveFinal2Vm);
+            ValveFinal3Vertex = new ValveVertex(ValveFinal3Vm);
+            ValveFinal4Vertex = new ValveVertex(ValveFinal4Vm);
+            ValveFinal5Vertex = new ValveVertex(ValveFinal5Vm);
+            ValveFinal6Vertex = new ValveVertex(ValveFinal6Vm);
+            ValveFinal7Vertex = new ValveVertex(ValveFinal7Vm);
 
-            DestinationVertex1 = new DestinationVertex();
+            SourceFinal1Vertex = new SourceVertex();
+            SourceFinal2Vertex = new SourceVertex();
+            SourceFinal3Vertex = new SourceVertex();
+            SourceFinal4Vertex = new SourceVertex();
+            SourceFinal5Vertex = new SourceVertex();
+            SourceFinal6Vertex = new SourceVertex();
+            SourceFinal7Vertex = new SourceVertex();
 
-            ConnectionVertex1 = new Vertex();
-            ConnectionVertex2 = new Vertex();
-            ConnectionVertex3 = new Vertex();
-            ConnectionVertex4 = new Vertex();
-            ConnectionVertex5 = new Vertex();
+            ChamberDestinationVertex = new DestinationVertex();
 
-            Scheme = new PipeScheme(
-                new VerticesPair(SourceVertex1, ValveVertex1),
-                new VerticesPair(SourceVertex2, ValveVertex2),
-                new VerticesPair(SourceVertex3, ValveVertex3),
-                new VerticesPair(SourceVertex4, ValveVertex4),
-                new VerticesPair(SourceVertex5, ValveVertex5),
-                new VerticesPair(SourceVertex6, ValveVertex6),
-                new VerticesPair(SourceVertex7, ValveVertex7),
-                new VerticesPair(ValveVertex1, ConnectionVertex1),
-                new VerticesPair(ValveVertex2, ConnectionVertex1),
-                new VerticesPair(ConnectionVertex1, ConnectionVertex2),
-                new VerticesPair(ValveVertex3, ConnectionVertex2),
-                new VerticesPair(ConnectionVertex2, DestinationVertex1),
-                new VerticesPair(ConnectionVertex2, ConnectionVertex3),
-                new VerticesPair(ValveVertex4, ConnectionVertex3),
-                new VerticesPair(ConnectionVertex3, ConnectionVertex4),
-                new VerticesPair(ValveVertex5, ConnectionVertex4),
-                new VerticesPair(ConnectionVertex4, ConnectionVertex5),
-                new VerticesPair(ValveVertex6, ConnectionVertex5),
-                new VerticesPair(ValveVertex7, ConnectionVertex5)
-            );
+            Connection_V1V2_Vertex = new Vertex();
+            Connection_V2Dst_Vertex = new Vertex();
+            Connection_V4_Vertex = new Vertex();
+            Connection_V5_Vertex = new Vertex();
+            Connection_V6_Vertex = new Vertex();
 
-            Vertices = new SynchronizedNotifiableCollection<Tuple<string, IVertex>>
-            {
-                new Tuple<string, IVertex>(nameof(SourceVertex1), SourceVertex1),
-                new Tuple<string, IVertex>(nameof(SourceVertex2), SourceVertex2),
-                new Tuple<string, IVertex>(nameof(SourceVertex3), SourceVertex3),
-                new Tuple<string, IVertex>(nameof(SourceVertex4), SourceVertex4),
-                new Tuple<string, IVertex>(nameof(SourceVertex5), SourceVertex5),
-                new Tuple<string, IVertex>(nameof(SourceVertex6), SourceVertex6),
-                new Tuple<string, IVertex>(nameof(SourceVertex7), SourceVertex7),
-                new Tuple<string, IVertex>(nameof(ValveVertex1), ValveVertex1),
-                new Tuple<string, IVertex>(nameof(ValveVertex2), ValveVertex2),
-                new Tuple<string, IVertex>(nameof(ValveVertex3), ValveVertex3),
-                new Tuple<string, IVertex>(nameof(ValveVertex4), ValveVertex4),
-                new Tuple<string, IVertex>(nameof(ValveVertex5), ValveVertex5),
-                new Tuple<string, IVertex>(nameof(ValveVertex6), ValveVertex6),
-                new Tuple<string, IVertex>(nameof(ValveVertex7), ValveVertex7),
-                new Tuple<string, IVertex>(nameof(DestinationVertex1), DestinationVertex1),
-            };
+            Scheme.AddVertices(SourceFinal1Vertex, ValveFinal1Vertex, Connection_V1V2_Vertex, Connection_V2Dst_Vertex, ChamberDestinationVertex);
+            Scheme.AddVertices(SourceFinal2Vertex, ValveFinal2Vertex, Connection_V1V2_Vertex);
+            Scheme.AddVertices(SourceFinal3Vertex, ValveFinal3Vertex, Connection_V2Dst_Vertex);
+            Scheme.AddVertices(SourceFinal4Vertex, ValveFinal4Vertex, Connection_V4_Vertex, Connection_V2Dst_Vertex);
+            Scheme.AddVertices(SourceFinal5Vertex, ValveFinal5Vertex, Connection_V5_Vertex, Connection_V4_Vertex);
+            Scheme.AddVertices(SourceFinal6Vertex, ValveFinal6Vertex, Connection_V6_Vertex, Connection_V5_Vertex);
+            Scheme.AddVertices(SourceFinal7Vertex, ValveFinal7Vertex, Connection_V6_Vertex);
         }
 
         #endregion
 
         #region Properties
 
-        public string DisplayName => "Manifold 3";
+        public string DisplayName => "Manifold XZ";
 
-        public ValveVm ValveVm1 { get; }
-        public ValveVm ValveVm2 { get; }
-        public ValveVm ValveVm3 { get; }
-        public ValveVm ValveVm4 { get; }
-        public ValveVm ValveVm5 { get; }
-        public ValveVm ValveVm6 { get; }
-        public ValveVm ValveVm7 { get; }
+        public ValveVm ValveFinal1Vm { get; }
+        public ValveVm ValveFinal2Vm { get; }
+        public ValveVm ValveFinal3Vm { get; }
+        public ValveVm ValveFinal4Vm { get; }
+        public ValveVm ValveFinal5Vm { get; }
+        public ValveVm ValveFinal6Vm { get; }
+        public ValveVm ValveFinal7Vm { get; }
 
         public PipeScheme Scheme { get; }
 
-        public ValveVertex ValveVertex1 { get; }
-        public ValveVertex ValveVertex2 { get; }
-        public ValveVertex ValveVertex3 { get; }
-        public ValveVertex ValveVertex4 { get; }
-        public ValveVertex ValveVertex5 { get; }
-        public ValveVertex ValveVertex6 { get; }
-        public ValveVertex ValveVertex7 { get; }
+        public ValveVertex ValveFinal1Vertex { get; }
+        public ValveVertex ValveFinal2Vertex { get; }
+        public ValveVertex ValveFinal3Vertex { get; }
+        public ValveVertex ValveFinal4Vertex { get; }
+        public ValveVertex ValveFinal5Vertex { get; }
+        public ValveVertex ValveFinal6Vertex { get; }
+        public ValveVertex ValveFinal7Vertex { get; }
 
-        public SourceVertex SourceVertex1 { get; }
-        public SourceVertex SourceVertex2 { get; }
-        public SourceVertex SourceVertex3 { get; }
-        public SourceVertex SourceVertex4 { get; }
-        public SourceVertex SourceVertex5 { get; }
-        public SourceVertex SourceVertex6 { get; }
-        public SourceVertex SourceVertex7 { get; }
+        public SourceVertex SourceFinal1Vertex { get; }
+        public SourceVertex SourceFinal2Vertex { get; }
+        public SourceVertex SourceFinal3Vertex { get; }
+        public SourceVertex SourceFinal4Vertex { get; }
+        public SourceVertex SourceFinal5Vertex { get; }
+        public SourceVertex SourceFinal6Vertex { get; }
+        public SourceVertex SourceFinal7Vertex { get; }
 
-        public DestinationVertex DestinationVertex1 { get; }
+        public DestinationVertex ChamberDestinationVertex { get; }
 
-        public Vertex ConnectionVertex1 { get; }
-        public Vertex ConnectionVertex2 { get; }
-        public Vertex ConnectionVertex3 { get; }
-        public Vertex ConnectionVertex4 { get; }
-        public Vertex ConnectionVertex5 { get; }
-
-        public SynchronizedNotifiableCollection<Tuple<string, IVertex>> Vertices { get; }
+        public Vertex Connection_V1V2_Vertex { get; }
+        public Vertex Connection_V2Dst_Vertex { get; }
+        public Vertex Connection_V4_Vertex { get; }
+        public Vertex Connection_V5_Vertex { get; }
+        public Vertex Connection_V6_Vertex { get; }
 
         #endregion
 

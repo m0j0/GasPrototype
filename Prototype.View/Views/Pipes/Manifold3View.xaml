@@ -9,72 +9,63 @@
              d:DesignHeight="500" d:DesignWidth="800">
     <Canvas>
 
-        <ItemsControl ItemsSource="{Binding Vertices}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox IsChecked="{DataBinding Item2.IsPresent, Mode=TwoWay}"
-                              Content="{DataBinding Item1}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Pipe Canvas.Left="206" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal1Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal1Vertex}" />
+        <Pipe Canvas.Left="206" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal1Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V1V2_Vertex}" />
+        <Pipe Canvas.Left="206" Canvas.Top="131" Width="67"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal1Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V1V2_Vertex}" />
+        <Pipe Canvas.Left="276" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal2Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal2Vertex}" />
+        <Pipe Canvas.Left="276" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal2Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V1V2_Vertex}" />
+        <Pipe Canvas.Left="276" Canvas.Top="131" Width="67"
+              PipeSchemeEx.StartVertex="{Binding Connection_V1V2_Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V2Dst_Vertex}" />
+        <Pipe Canvas.Left="348" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal3Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal3Vertex}" />
+        <Pipe Canvas.Left="348" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal3Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V2Dst_Vertex}" />
+        <Pipe Canvas.Left="348" Canvas.Top="131" Width="67"
+              PipeSchemeEx.StartVertex="{Binding Connection_V2Dst_Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V4_Vertex}" />
+        <Pipe Canvas.Left="420" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal4Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal4Vertex}" />
+        <Pipe Canvas.Left="420" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal4Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V4_Vertex}" />
+        <Pipe Canvas.Left="420" Canvas.Top="131" Width="67"
+              PipeSchemeEx.StartVertex="{Binding Connection_V4_Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V5_Vertex}" />
+        <Pipe Canvas.Left="491" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal5Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal5Vertex}" />
+        <Pipe Canvas.Left="491" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal5Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V5_Vertex}" />
+        <Pipe Canvas.Left="491" Canvas.Top="131" Width="67"
+              PipeSchemeEx.StartVertex="{Binding Connection_V5_Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V6_Vertex}" />
+        <Pipe Canvas.Left="563" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal6Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal6Vertex}" />
+        <Pipe Canvas.Left="563" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal6Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V6_Vertex}" />
+        <Pipe Canvas.Left="563" Canvas.Top="131" Width="67"
+              PipeSchemeEx.StartVertex="{Binding Connection_V6_Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal7Vertex}" />
+        <Pipe Canvas.Left="635" Canvas.Top="14" Orientation="Vertical" Height="57"
+              PipeSchemeEx.StartVertex="{Binding SourceFinal7Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal7Vertex}" />
+        <Pipe Canvas.Left="635" Canvas.Top="76" Orientation="Vertical" Height="50"
+              PipeSchemeEx.StartVertex="{Binding ValveFinal7Vertex}" PipeSchemeEx.EndVertex="{Binding Connection_V6_Vertex}" />
+        <Pipe Canvas.Left="348" Canvas.Top="141" Orientation="Vertical"
+              PipeSchemeEx.StartVertex="{Binding Connection_V2Dst_Vertex}" PipeSchemeEx.EndVertex="{Binding ChamberDestinationVertex}" />
 
-        <Pipe Canvas.Left="233" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex1}" PipeSchemeEx.EndVertex="{Binding ValveVertex1}" />
-        <Pipe Canvas.Left="233" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex1}" />
-        <Pipe Canvas.Left="233" Canvas.Top="203" Width="67"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex1}" />
-        <Pipe Canvas.Left="303" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex2}" PipeSchemeEx.EndVertex="{Binding ValveVertex2}" />
-        <Pipe Canvas.Left="303" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex2}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex1}" />
-        <Pipe Canvas.Left="303" Canvas.Top="203" Width="67"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex2}" />
-        <Pipe Canvas.Left="375" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex3}" PipeSchemeEx.EndVertex="{Binding ValveVertex3}" />
-        <Pipe Canvas.Left="375" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex3}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex2}" />
-        <Pipe Canvas.Left="375" Canvas.Top="203" Width="67"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex2}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex3}" />
-        <Pipe Canvas.Left="447" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex4}" PipeSchemeEx.EndVertex="{Binding ValveVertex4}" />
-        <Pipe Canvas.Left="447" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex4}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex3}" />
-        <Pipe Canvas.Left="447" Canvas.Top="203" Width="67"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex3}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex4}" />
-        <Pipe Canvas.Left="518" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex5}" PipeSchemeEx.EndVertex="{Binding ValveVertex5}" />
-        <Pipe Canvas.Left="518" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex5}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex4}" />
-        <Pipe Canvas.Left="518" Canvas.Top="203" Width="67"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex4}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex5}" />
-        <Pipe Canvas.Left="590" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex6}" PipeSchemeEx.EndVertex="{Binding ValveVertex6}" />
-        <Pipe Canvas.Left="590" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex6}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex5}" />
-        <Pipe Canvas.Left="590" Canvas.Top="203" Width="67"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex5}" PipeSchemeEx.EndVertex="{Binding ValveVertex7}" />
-        <Pipe Canvas.Left="662" Canvas.Top="86" Orientation="Vertical" Height="57"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex7}" PipeSchemeEx.EndVertex="{Binding ValveVertex7}" />
-        <Pipe Canvas.Left="662" Canvas.Top="148" Orientation="Vertical" Height="50"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex7}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex5}" />
-        <Pipe Canvas.Left="375" Canvas.Top="213" Orientation="Vertical"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex2}" PipeSchemeEx.EndVertex="{Binding DestinationVertex1}" />
-
-        <Valve Canvas.Left="217" Canvas.Top="143"
-               ValveVm="{Binding ValveVm1}" />
-        <Valve Canvas.Left="287" Canvas.Top="143"
-               ValveVm="{Binding ValveVm2}" />
-        <Valve Canvas.Left="359" Canvas.Top="143"
-               ValveVm="{Binding ValveVm3}" />
-        <Valve Canvas.Left="431" Canvas.Top="143"
-               ValveVm="{Binding ValveVm4}" />
-        <Valve Canvas.Left="502" Canvas.Top="143"
-               ValveVm="{Binding ValveVm5}" />
-        <Valve Canvas.Left="574" Canvas.Top="143"
-               ValveVm="{Binding ValveVm6}" />
-        <Valve Canvas.Left="646" Canvas.Top="143"
-               ValveVm="{Binding ValveVm7}" />
+        <Valve Canvas.Left="190" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal1Vm}" />
+        <Valve Canvas.Left="260" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal2Vm}" />
+        <Valve Canvas.Left="332" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal3Vm}" />
+        <Valve Canvas.Left="404" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal4Vm}" />
+        <Valve Canvas.Left="475" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal5Vm}" />
+        <Valve Canvas.Left="547" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal6Vm}" />
+        <Valve Canvas.Left="619" Canvas.Top="71"
+               ValveVm="{Binding ValveFinal7Vm}" />
 
     </Canvas>
 </UserControl>
