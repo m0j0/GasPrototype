@@ -18,13 +18,13 @@ namespace Prototype.ViewModels.Pipes
 
             //
 
-            ValveFinal1Vm = new ValveVm("ValveFinal1") { State = ValveState.Opened };
-            ValveFinal2Vm = new ValveVm("ValveFinal2") { State = ValveState.Opened };
-            ValveFinal3Vm = new ValveVm("ValveFinal3") { State = ValveState.Opened };
-            ValveFinal4Vm = new ValveVm("ValveFinal4") { State = ValveState.Opened };
-            ValveFinal5Vm = new ValveVm("ValveFinal5") { State = ValveState.Opened };
-            ValveFinal6Vm = new ValveVm("ValveFinal6") { State = ValveState.Opened };
-            ValveFinal7Vm = new ValveVm("ValveFinal7") { State = ValveState.Opened };
+            ValveFinal1Vm = new ValveVm("ValveFinal1") {State = ValveState.Opened};
+            ValveFinal2Vm = new ValveVm("ValveFinal2") {State = ValveState.Opened};
+            ValveFinal3Vm = new ValveVm("ValveFinal3") {State = ValveState.Opened};
+            ValveFinal4Vm = new ValveVm("ValveFinal4") {State = ValveState.Opened};
+            ValveFinal5Vm = new ValveVm("ValveFinal5") {State = ValveState.Opened};
+            ValveFinal6Vm = new ValveVm("ValveFinal6") {State = ValveState.Opened};
+            ValveFinal7Vm = new ValveVm("ValveFinal7") {State = ValveState.Opened};
 
             ValveFinal1Vertex = new ValveVertex(ValveFinal1Vm);
             ValveFinal2Vertex = new ValveVertex(ValveFinal2Vm);
@@ -64,13 +64,13 @@ namespace Prototype.ViewModels.Pipes
 
             N2BottomPurgeValveVertex = new ValveVertex(N2BottomPurgeValveVm);
             N2BottomPurgeSourceVertex = new SourceVertex();
-            N2BottomPurgeDestinationVertex =new DestinationVertex();
+            N2BottomPurgeDestinationVertex = new DestinationVertex();
 
             Scheme.AddVertices(N2BottomPurgeSourceVertex, N2BottomPurgeValveVertex, N2BottomPurgeDestinationVertex);
 
             //
 
-            UpStreamValveVm = new ValveVm("UpStream") { State = ValveState.Closed };
+            UpStreamValveVm = new ValveVm("UpStream") {State = ValveState.Closed};
 
             UpStreamValveVertex = new ValveVertex(UpStreamValveVm);
             UpStreamSourceVertex = new SourceVertex();
@@ -98,6 +98,37 @@ namespace Prototype.ViewModels.Pipes
             BallastValveVm = new ValveVm("BallastValveVm") {State = ValveState.Closed};
             TurboValveVm = new ValveVm("TurboValveVm") {State = ValveState.Closed};
             DivertValveVm = new ValveVm("DivertValveVm") {State = ValveState.Closed};
+
+            VacChuckShutOffLeftValveVertex = new ValveVertex(VacChuckShutOffLeftValveVm);
+            VacChuckShutOffRightValveVertex = new ValveVertex(VacChuckShutOffRightValveVm);
+            TurboGateValveVertex = new ValveVertex(TurboGateValveVm);
+            DownStreamInvValveVertex = new ValveVertex(DownStreamInvValveVm);
+            DownStreamValveVertex = new ValveVertex(DownStreamValveVm);
+            VacuumValveVertex = new ValveVertex(VacuumValveVm);
+            ByPassValveVertex = new ValveVertex(ByPassValveVm);
+            ByPassValve2Vertex = new ValveVertex(ByPassValve2Vm);
+            VacuumValve2Vertex = new ValveVertex(VacuumValve2Vm);
+            NdirEndpointUpValveVertex = new ValveVertex(NdirEndpointUpValveVm);
+            IsoValveVertex = new ValveVertex(IsoValveVm);
+            TurboTvValveVertex = new ValveVertex(TurboTvValveVm);
+            BksidePurgeValveVertex = new ValveVertex(BksidePurgeValveVm);
+            NdirEndpointDownValveVertex = new ValveVertex(NdirEndpointDownValveVm);
+            ThrottleValveVertex = new ValveVertex(ThrottleValveVm);
+            BallastValveVertex = new ValveVertex(BallastValveVm);
+            TurboValveVertex = new ValveVertex(TurboValveVm);
+            DivertValveVertex = new ValveVertex(DivertValveVm);
+
+            VfmSourceVertex = new SourceVertex();
+            ChamberSourceVertex = new SourceVertex();
+            TurboPumpSourceVertex = new SourceVertex();
+
+            GasLineDestinationVertex = new DestinationVertex();
+            VacChuckDestinationVertex = new DestinationVertex();
+            VacChuck2DestinationVertex = new DestinationVertex();
+            PumpDestinationVertex = new DestinationVertex();
+            TurboPumpDestinationVertex = new DestinationVertex();
+            DivertDestinationVertex = new DestinationVertex();
+            BksidePurgeDestinationVertex = new DestinationVertex();
         }
 
         #endregion
@@ -107,7 +138,7 @@ namespace Prototype.ViewModels.Pipes
         public string DisplayName => "Manifold XZ";
 
         public PipeScheme Scheme { get; }
-        
+
         #region Upper part
 
         public ValveVm ValveFinal1Vm { get; }
@@ -154,7 +185,7 @@ namespace Prototype.ViewModels.Pipes
         #endregion
 
         #region UpStream
-        
+
         public ValveVm UpStreamValveVm { get; }
         public ValveVertex UpStreamValveVertex { get; }
         public SourceVertex UpStreamSourceVertex { get; }
@@ -163,7 +194,7 @@ namespace Prototype.ViewModels.Pipes
         #endregion
 
         #region Lower part
-        
+
         public ValveVm VacChuckShutOffLeftValveVm { get; }
         public ValveVm VacChuckShutOffRightValveVm { get; }
         public ValveVm TurboGateValveVm { get; }
@@ -183,6 +214,36 @@ namespace Prototype.ViewModels.Pipes
         public ValveVm TurboValveVm { get; }
         public ValveVm DivertValveVm { get; }
 
+        public ValveVertex VacChuckShutOffLeftValveVertex { get; }
+        public ValveVertex VacChuckShutOffRightValveVertex { get; }
+        public ValveVertex TurboGateValveVertex { get; }
+        public ValveVertex DownStreamInvValveVertex { get; }
+        public ValveVertex DownStreamValveVertex { get; }
+        public ValveVertex VacuumValveVertex { get; }
+        public ValveVertex ByPassValveVertex { get; }
+        public ValveVertex ByPassValve2Vertex { get; }
+        public ValveVertex VacuumValve2Vertex { get; }
+        public ValveVertex NdirEndpointUpValveVertex { get; }
+        public ValveVertex IsoValveVertex { get; }
+        public ValveVertex TurboTvValveVertex { get; }
+        public ValveVertex BksidePurgeValveVertex { get; }
+        public ValveVertex NdirEndpointDownValveVertex { get; }
+        public ValveVertex ThrottleValveVertex { get; }
+        public ValveVertex BallastValveVertex { get; }
+        public ValveVertex TurboValveVertex { get; }
+        public ValveVertex DivertValveVertex { get; }
+
+        public SourceVertex VfmSourceVertex { get; }
+        public SourceVertex ChamberSourceVertex { get; }
+        public SourceVertex TurboPumpSourceVertex { get; }
+
+        public DestinationVertex GasLineDestinationVertex { get; }
+        public DestinationVertex VacChuckDestinationVertex { get; }
+        public DestinationVertex VacChuck2DestinationVertex { get; }
+        public DestinationVertex PumpDestinationVertex { get; }
+        public DestinationVertex TurboPumpDestinationVertex { get; }
+        public DestinationVertex DivertDestinationVertex { get; }
+        public DestinationVertex BksidePurgeDestinationVertex { get; }
 
         #endregion
 
