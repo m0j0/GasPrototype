@@ -16,6 +16,8 @@ namespace Prototype.ViewModels.Pipes
         {
             Scheme = new PipeScheme();
 
+            //
+
             ValveFinal1Vm = new ValveVm("ValveFinal1") { State = ValveState.Opened };
             ValveFinal2Vm = new ValveVm("ValveFinal2") { State = ValveState.Opened };
             ValveFinal3Vm = new ValveVm("ValveFinal3") { State = ValveState.Opened };
@@ -55,6 +57,28 @@ namespace Prototype.ViewModels.Pipes
             Scheme.AddVertices(SourceFinal5Vertex, ValveFinal5Vertex, Connection_V5_Vertex, Connection_V4_Vertex);
             Scheme.AddVertices(SourceFinal6Vertex, ValveFinal6Vertex, Connection_V6_Vertex, Connection_V5_Vertex);
             Scheme.AddVertices(SourceFinal7Vertex, ValveFinal7Vertex, Connection_V6_Vertex);
+
+            //
+
+            N2BottomPurgeValveVm = new ValveVm("N2BottomPurge") {State = ValveState.Closed};
+
+            N2BottomPurgeValveVertex = new ValveVertex(N2BottomPurgeValveVm);
+            N2BottomPurgeSourceVertex = new SourceVertex();
+            N2BottomPurgeDestinationVertex =new DestinationVertex();
+
+            Scheme.AddVertices(N2BottomPurgeSourceVertex, N2BottomPurgeValveVertex, N2BottomPurgeDestinationVertex);
+
+            //
+
+            UpStreamValveVm = new ValveVm("UpStream") { State = ValveState.Closed };
+
+            UpStreamValveVertex = new ValveVertex(UpStreamValveVm);
+            UpStreamSourceVertex = new SourceVertex();
+            UpStreamDestinationVertex = new DestinationVertex();
+
+            Scheme.AddVertices(UpStreamSourceVertex, UpStreamValveVertex, UpStreamDestinationVertex);
+
+            //
         }
 
         #endregion
@@ -63,6 +87,10 @@ namespace Prototype.ViewModels.Pipes
 
         public string DisplayName => "Manifold XZ";
 
+        public PipeScheme Scheme { get; }
+        
+        #region Upper part
+
         public ValveVm ValveFinal1Vm { get; }
         public ValveVm ValveFinal2Vm { get; }
         public ValveVm ValveFinal3Vm { get; }
@@ -70,8 +98,6 @@ namespace Prototype.ViewModels.Pipes
         public ValveVm ValveFinal5Vm { get; }
         public ValveVm ValveFinal6Vm { get; }
         public ValveVm ValveFinal7Vm { get; }
-
-        public PipeScheme Scheme { get; }
 
         public ValveVertex ValveFinal1Vertex { get; }
         public ValveVertex ValveFinal2Vertex { get; }
@@ -96,6 +122,26 @@ namespace Prototype.ViewModels.Pipes
         public Vertex Connection_V4_Vertex { get; }
         public Vertex Connection_V5_Vertex { get; }
         public Vertex Connection_V6_Vertex { get; }
+
+        #endregion
+
+        #region N2 bottom purge
+
+        public ValveVm N2BottomPurgeValveVm { get; }
+        public ValveVertex N2BottomPurgeValveVertex { get; }
+        public SourceVertex N2BottomPurgeSourceVertex { get; }
+        public DestinationVertex N2BottomPurgeDestinationVertex { get; }
+
+        #endregion
+
+        #region UpStream
+        
+        public ValveVm UpStreamValveVm { get; }
+        public ValveVertex UpStreamValveVertex { get; }
+        public SourceVertex UpStreamSourceVertex { get; }
+        public DestinationVertex UpStreamDestinationVertex { get; }
+        
+        #endregion
 
         #endregion
 
