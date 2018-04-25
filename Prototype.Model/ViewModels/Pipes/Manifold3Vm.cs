@@ -79,6 +79,25 @@ namespace Prototype.ViewModels.Pipes
             Scheme.AddVertices(UpStreamSourceVertex, UpStreamValveVertex, UpStreamDestinationVertex);
 
             //
+
+            VacChuckShutOffLeftValveVm = new ValveVm("VacChuckShutOffLeftValveVm") {State = ValveState.Closed};
+            VacChuckShutOffRightValveVm = new ValveVm("VacChuckShutOffRightValveVm") {State = ValveState.Closed};
+            TurboGateValveVm = new ValveVm("TurboGateValveVm") {State = ValveState.Closed};
+            DownStreamInvValveVm = new ValveVm("DownStreamInvValveVm") {State = ValveState.Closed};
+            DownStreamValveVm = new ValveVm("DownStreamValveVm") {State = ValveState.Closed};
+            VacuumValveVm = new ValveVm("VacuumValveVm") {State = ValveState.Closed};
+            ByPassValveVm = new ValveVm("ByPassValveVm") {State = ValveState.Closed};
+            ByPassValve2Vm = new ValveVm("ByPassValve2Vm") {State = ValveState.Closed};
+            VacuumValve2Vm = new ValveVm("VacuumValve2Vm") {State = ValveState.Closed};
+            NdirEndpointUpValveVm = new ValveVm("NdirEndpointUpValveVm") {State = ValveState.Closed};
+            IsoValveVm = new ValveVm("IsoValveVm") {State = ValveState.Closed};
+            TurboTvValveVm = new ValveVm("TurboTvValveVm") {State = ValveState.Closed};
+            BksidePurgeValveVm = new ValveVm("BksidePurgeValveVm") {State = ValveState.Closed};
+            NdirEndpointDownValveVm = new ValveVm("NdirEndpointDownValveVm") {State = ValveState.Closed};
+            ThrottleValveVm = new ValveVm("ThrottleValveVm") {State = ValveState.Closed};
+            BallastValveVm = new ValveVm("BallastValveVm") {State = ValveState.Closed};
+            TurboValveVm = new ValveVm("TurboValveVm") {State = ValveState.Closed};
+            DivertValveVm = new ValveVm("DivertValveVm") {State = ValveState.Closed};
         }
 
         #endregion
@@ -140,7 +159,31 @@ namespace Prototype.ViewModels.Pipes
         public ValveVertex UpStreamValveVertex { get; }
         public SourceVertex UpStreamSourceVertex { get; }
         public DestinationVertex UpStreamDestinationVertex { get; }
+
+        #endregion
+
+        #region Lower part
         
+        public ValveVm VacChuckShutOffLeftValveVm { get; }
+        public ValveVm VacChuckShutOffRightValveVm { get; }
+        public ValveVm TurboGateValveVm { get; }
+        public ValveVm DownStreamInvValveVm { get; } // TODO 3way valve
+        public ValveVm DownStreamValveVm { get; }
+        public ValveVm VacuumValveVm { get; }
+        public ValveVm ByPassValveVm { get; }
+        public ValveVm ByPassValve2Vm { get; }
+        public ValveVm VacuumValve2Vm { get; }
+        public ValveVm NdirEndpointUpValveVm { get; }
+        public ValveVm IsoValveVm { get; }
+        public ValveVm TurboTvValveVm { get; }
+        public ValveVm BksidePurgeValveVm { get; }
+        public ValveVm NdirEndpointDownValveVm { get; }
+        public ValveVm ThrottleValveVm { get; }
+        public ValveVm BallastValveVm { get; }
+        public ValveVm TurboValveVm { get; }
+        public ValveVm DivertValveVm { get; }
+
+
         #endregion
 
         #endregion
