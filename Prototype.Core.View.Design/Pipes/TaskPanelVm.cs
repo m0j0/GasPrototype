@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Windows.Design.Model;
 using MugenMvvmToolkit.Models;
 using Prototype.Core.Controls;
@@ -11,6 +12,11 @@ namespace Prototype.Core.Design.Pipes
         private double _length;
         private ModelItem _modelItem;
         private Orientation _orientation;
+
+        public TaskPanelVm()
+        {
+            DuplicateControlCommand = new RelayCommand(DuplicateControl);
+        }
 
         public double Length
         {
@@ -42,6 +48,8 @@ namespace Prototype.Core.Design.Pipes
                 OnPropertyChanged();
             }
         }
+
+        public ICommand DuplicateControlCommand { get; }
 
         public void Activate(ModelItem modelItem)
         {
@@ -105,6 +113,18 @@ namespace Prototype.Core.Design.Pipes
             else
             {
                 _modelItem.Properties[nameof(Pipe.Width)].SetValue(newLength);
+            }
+        }
+
+        private void DuplicateControl()
+        {
+            using (var scope = _modelItem.BeginEdit())
+            {
+                var pipe = ModelFactory.CreateItem(_modelItem.Context, typeof(Pipe));
+                //pipe.Properties[nameof(Pipe.Width)].SetValue("textBox");
+                ModelParent.Parent(_modelItem.Context, _modelItem.Parent, pipe);
+
+                scope.Complete();
             }
         }
     }

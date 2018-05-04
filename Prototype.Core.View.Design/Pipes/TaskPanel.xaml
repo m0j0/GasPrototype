@@ -9,8 +9,8 @@
     <Border BorderBrush="Black" BorderThickness="2" Background="White">
         <StackPanel>
             <TextBlock Text="Text" />
-            
-            <Button Content="Set background" />
+
+            <Button Content="Duplicate" Command="{Binding DuplicateControlCommand}" />
             
             <Grid>
                 <Grid.RowDefinitions>
