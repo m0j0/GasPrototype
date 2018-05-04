@@ -13,6 +13,8 @@ namespace Prototype.Core.Models.GasPanel
         protected readonly List<IVertex> AdjacentVertices = new List<IVertex>();
         private bool _isPresent = true;
 
+        public string Name { get; set; }
+
         public PipeScheme Owner { get; set; }
 
         public virtual bool IsPresent

@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Prototype.Core.Design.Pipes.TaskPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Prototype.Core.Design.Pipes"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:TaskPanelVm}"
              Height="300" Width="300">
@@ -11,7 +11,7 @@
             <TextBlock Text="Text" />
 
             <Button Content="Duplicate" Command="{Binding DuplicateControlCommand}" />
-            
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Current orientation:" />
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Orientation}" />
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Current length:" />
@@ -30,7 +30,32 @@
                 <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                         Minimum="1" Maximum="300" Value="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
-            
+            <Rectangle Height="2" Fill="Black" />
+
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Start vertex" />
+                <ComboBox Grid.Row="0" Grid.Column="1"
+                          ItemsSource="{Binding StartVertices}"
+                          SelectedItem="{Binding StartVertex, Mode=TwoWay}" 
+                          DisplayMemberPath="Name" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="End vertex" />
+                <ComboBox Grid.Row="1" Grid.Column="1"
+                          ItemsSource="{Binding EndVertices}" 
+                          SelectedItem="{Binding EndVertex, Mode=TwoWay}" 
+                          DisplayMemberPath="Name"/>
+            </Grid>
+
         </StackPanel>
     </Border>
 </UserControl>

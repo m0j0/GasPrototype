@@ -48,6 +48,8 @@ namespace Prototype.Core.Models.GasPanel
 
         public int VerticesCount => _vertices.Count;
 
+        public IEnumerable<IVertex> Vertices => _vertices;
+
         #endregion
 
         #region Methods

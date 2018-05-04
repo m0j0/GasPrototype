@@ -59,6 +59,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj">
+      <Project>{5cb69e89-a0c4-492d-92b2-8ec56bd0622a}</Project>
+      <Name>Prototype.Core.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Prototype.Core.View\Prototype.Core.View.csproj">
       <Project>{30d7d8bd-1946-485b-8cc1-9a68b4cf7b6f}</Project>
       <Name>Prototype.Core.View</Name>
