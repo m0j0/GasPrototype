@@ -6,7 +6,7 @@ namespace Prototype.Core.Interfaces.GasPanel
 {
     public interface IVertex : INotifyPropertyChanged
     {
-        string Name { get; set; }
+        string Name { get; }
 
         PipeScheme Owner { get; set; }
 

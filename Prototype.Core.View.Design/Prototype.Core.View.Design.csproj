@@ -55,6 +55,7 @@
       <DependentUpon>TaskPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pipes\TaskPanelVm.cs" />
+    <Compile Include="Pipes\VertexProjection.cs" />
     <Compile Include="VisualStudioMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

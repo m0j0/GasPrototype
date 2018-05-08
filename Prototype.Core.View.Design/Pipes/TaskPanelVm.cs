@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Microsoft.Windows.Design.Model;
+using Microsoft.Windows.Design.Metadata;
 using MugenMvvmToolkit;
 using MugenMvvmToolkit.Collections;
 using MugenMvvmToolkit.Models;
@@ -25,8 +26,10 @@ namespace Prototype.Core.Design.Pipes
         private double _length;
         private ModelItem _modelItem;
         private Orientation _orientation;
-        private IVertex _startVertex;
-        private IVertex _endVertex;
+        private VertexProjection _startVertex;
+        private VertexProjection _endVertex;
+
+        private Dictionary<IVertex, VertexProjection> _allVertices;
 
         #endregion
 
@@ -34,8 +37,8 @@ namespace Prototype.Core.Design.Pipes
 
         public TaskPanelVm()
         {
-            StartVertices = new SynchronizedNotifiableCollection<IVertex>();
-            EndVertices = new SynchronizedNotifiableCollection<IVertex>();
+            StartVertices = new SynchronizedNotifiableCollection<VertexProjection>();
+            EndVertices = new SynchronizedNotifiableCollection<VertexProjection>();
 
             DuplicateControlCommand = new RelayCommand(DuplicateControl);
         }
@@ -75,7 +78,7 @@ namespace Prototype.Core.Design.Pipes
             }
         }
 
-        public IVertex StartVertex
+        public VertexProjection StartVertex
         {
             get => _startVertex;
             set
@@ -86,15 +89,29 @@ namespace Prototype.Core.Design.Pipes
                 }
 
                 _startVertex = value;
-                EndVertices.Update(value.GetAllAdjacentVertices());
                 SetControlVertice(value, PipeSchemeEx.StartVertexPropertyName);
                 OnPropertyChanged();
+
+
+                if (EndVertex != null)
+                {
+                    return;
+                }
+
+                if (value == null)
+                {
+                    EndVertices.Clear();
+                }
+                else
+                {
+                    EndVertices.Update(SelectAdjacentVerticesProjections(value));
+                }
             }
         }
 
-        public SynchronizedNotifiableCollection<IVertex> StartVertices { get; }
+        public SynchronizedNotifiableCollection<VertexProjection> StartVertices { get; }
 
-        public IVertex EndVertex
+        public VertexProjection EndVertex
         {
             get => _endVertex;
             set
@@ -110,7 +127,7 @@ namespace Prototype.Core.Design.Pipes
             }
         }
 
-        public SynchronizedNotifiableCollection<IVertex> EndVertices { get; }
+        public SynchronizedNotifiableCollection<VertexProjection> EndVertices { get; }
 
         #endregion
 
@@ -139,7 +156,7 @@ namespace Prototype.Core.Design.Pipes
             _modelItem = modelItem;
             _modelItem.PropertyChanged += ModelItemOnPropertyChanged;
 
-            SynchronizeValues();
+            Initialize();
         }
 
         public void Deactivate()
@@ -150,7 +167,8 @@ namespace Prototype.Core.Design.Pipes
 
         private void ModelItemOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Pipe.Orientation) ||
+            if (string.IsNullOrEmpty(e.PropertyName) ||
+                e.PropertyName == nameof(Pipe.Orientation) ||
                 e.PropertyName == nameof(Pipe.Width) ||
                 e.PropertyName == nameof(Pipe.Height))
             {
@@ -158,49 +176,71 @@ namespace Prototype.Core.Design.Pipes
             }
         }
 
-        private void SynchronizeValues()
+        private void Initialize()
         {
-            if (_modelItem == null)
-            {
-                return;
-            }
+            var vertices = new List<VertexProjection>();
 
             var dataContext = _modelItem.Properties[nameof(FrameworkElement.DataContext)].ComputedValue;
-            var properties = dataContext.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            var schemes = new List<PipeScheme>();
-            foreach (var pi in properties)
+            if (dataContext == null)
             {
-                if (typeof(PipeScheme).IsAssignableFrom(pi.PropertyType) && pi.CanRead)
-                {
-                    var value = (PipeScheme)pi.GetValue(dataContext);
-                    schemes.Add(value);
-                }
-
-                if (typeof(IVertex).IsAssignableFrom(pi.PropertyType) && pi.CanRead)
-                {
-                    var value = (IVertex)pi.GetValue(dataContext);
-                    if (string.IsNullOrEmpty(value.Name))
-                    {
-                        value.Name = pi.Name;
-                    }
-                }
-            }
-
-            var pipeScheme = schemes.FirstOrDefault();
-            if (pipeScheme != null)
-            {
-                StartVertices.Update(pipeScheme.Vertices);
-                EndVertices.Update(pipeScheme.Vertices);
-            }
-
-            var pipe = _modelItem.View.PlatformObject as Pipe;
-            if (pipe == null)
-            {
+                SynchronizeValues();
                 return;
             }
+
+            var properties = dataContext.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+            foreach (var pi in properties)
+            {
+                if (typeof(IVertex).IsAssignableFrom(pi.PropertyType) && pi.CanRead)
+                {
+                    var vertex = (IVertex)pi.GetValue(dataContext);
+                    if (vertex.Owner == null)
+                    {
+                        continue;
+                    }
+
+                    vertices.Add(new VertexProjection(vertex, pi.Name));
+                }
+            }
+
+            _allVertices = vertices.OrderBy(vertex => vertex.Name).ToDictionary(projection => projection.Vertex, projection => projection);
+
+            SynchronizeValues();
+        }
+
+        private void SynchronizeValues()
+        {
+            SynchronizeVertices();
+
+            var pipe = (Pipe)_modelItem.View.PlatformObject;
 
             SetDisplayLength(pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height);
             Orientation = pipe.Orientation;
+        }
+
+        private void SynchronizeVertices()
+        {
+            var startVertexProperty = _modelItem.Properties[new PropertyIdentifier(typeof(PipeSchemeEx), PipeSchemeEx.StartVertexPropertyName)];
+            var startVertex = startVertexProperty.ComputedValue as IVertex;
+
+            var endVertexProperty = _modelItem.Properties[new PropertyIdentifier(typeof(PipeSchemeEx), PipeSchemeEx.EndVertexPropertyName)];
+            var endVertex = endVertexProperty.ComputedValue as IVertex;
+
+            if (startVertex != null)
+            {
+                _allVertices.TryGetValue(startVertex, out var startVertexProjection);
+                _startVertex = startVertexProjection;
+                OnPropertyChanged(nameof(StartVertex));
+            }
+            StartVertices.Update(_allVertices.Values);
+
+            if (endVertex != null)
+            {
+                _allVertices.TryGetValue(endVertex, out var endVertexProjection);
+                _endVertex = endVertexProjection;
+                OnPropertyChanged(nameof(EndVertex));
+            }
+            EndVertices.Update(_allVertices.Values);
         }
 
         private void SetDisplayLength(double newLength)
@@ -227,11 +267,23 @@ namespace Prototype.Core.Design.Pipes
             }
         }
 
-        private void SetControlVertice(IVertex vertex, string property)
+        private void SetControlVertice(VertexProjection vertex, string property)
         {
-            var propertyIdentifier = new Microsoft.Windows.Design.Metadata.PropertyIdentifier(typeof(PipeSchemeEx), property);
-            _modelItem.Properties[propertyIdentifier].SetValue(new Binding(vertex.Name /* TODO */));
+            var propertyIdentifier = new PropertyIdentifier(typeof(PipeSchemeEx), property);
+            if (vertex == null)
+            {
+                _modelItem.Properties[propertyIdentifier].ClearValue();
+            }
+            else
+            {
+                _modelItem.Properties[propertyIdentifier].SetValue(new Binding(vertex.PropertyName));
+            }
 
+        }
+
+        private IEnumerable<VertexProjection> SelectAdjacentVerticesProjections(VertexProjection value)
+        {
+            return value.Vertex.GetAllAdjacentVertices().Select(vertex => _allVertices[vertex]);
         }
 
         #endregion
