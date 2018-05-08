@@ -87,7 +87,7 @@ namespace Prototype.Core.Design.Pipes
 
                 _startVertex = value;
                 EndVertices.Update(value.GetAllAdjacentVertices());
-                SetControlVertice(value, "StartVertex");
+                SetControlVertice(value, PipeSchemeEx.StartVertexPropertyName);
                 OnPropertyChanged();
             }
         }
@@ -105,7 +105,7 @@ namespace Prototype.Core.Design.Pipes
                 }
 
                 _endVertex = value;
-                SetControlVertice(value, "EndVertex");
+                SetControlVertice(value, PipeSchemeEx.EndVertexPropertyName);
                 OnPropertyChanged();
             }
         }

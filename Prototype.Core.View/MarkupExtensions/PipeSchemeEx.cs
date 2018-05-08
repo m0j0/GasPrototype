@@ -11,10 +11,13 @@ namespace Prototype.Core.MarkupExtensions
 {
     public static class PipeSchemeEx
     {
+        internal const string StartVertexPropertyName = "StartVertex";
+        internal const string EndVertexPropertyName = "EndVertex";
+
         #region StartVertex
 
         public static readonly DependencyProperty StartVertexProperty = DependencyProperty.RegisterAttached(
-            "StartVertex", typeof(IVertex), typeof(PipeSchemeEx), new PropertyMetadata(default(IVertex), StartVertexPropertyChangedCallback));
+            StartVertexPropertyName, typeof(IVertex), typeof(PipeSchemeEx), new PropertyMetadata(default(IVertex), StartVertexPropertyChangedCallback));
         
         public static void SetStartVertex(DependencyObject element, IVertex value)
         {
@@ -31,7 +34,7 @@ namespace Prototype.Core.MarkupExtensions
         #region EndVertex
 
         public static readonly DependencyProperty EndVertexProperty = DependencyProperty.RegisterAttached(
-            "EndVertex", typeof(IVertex), typeof(PipeSchemeEx), new PropertyMetadata(default(IVertex), EndVertexPropertyChangedCallback));
+            EndVertexPropertyName, typeof(IVertex), typeof(PipeSchemeEx), new PropertyMetadata(default(IVertex), EndVertexPropertyChangedCallback));
 
         public static void SetEndVertex(DependencyObject element, IVertex value)
         {
