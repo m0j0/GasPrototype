@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -17,33 +18,34 @@ namespace Prototype.Core.Controls
         #region Constants
 
         internal const double PipeWidth = 5;
-        private const double PipeBorderWidth = 1;
-        private const double PipeSubstanceWidth = 3;
-        
+
         #endregion
 
         #region Constructors
 
-        public Pipe()
+        static Pipe()
         {
-            UpdateSizeConstraints();
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
         }
-
+        
         #endregion
 
         #region Dependency properties
 
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
-            "Orientation", typeof(Orientation), typeof(Pipe), new PropertyMetadata(Orientation.Horizontal, OrientationPropertyChangedCallback));
+            "Orientation", typeof(Orientation), typeof(Pipe), new PropertyMetadata(Orientation.Horizontal));
 
         public static readonly DependencyProperty HasFlowProperty = DependencyProperty.Register(
-            "HasFlow", typeof(bool), typeof(Pipe), new PropertyMetadata(default(bool), VisualPropertyChangedCallback));
+            "HasFlow", typeof(bool), typeof(Pipe), new PropertyMetadata(default(bool)));
 
         public static readonly DependencyProperty SubstanceTypeProperty = DependencyProperty.Register(
-            "SubstanceType", typeof(SubstanceType), typeof(Pipe), new PropertyMetadata(SubstanceType.Gas, VisualPropertyChangedCallback));
+            "SubstanceType", typeof(SubstanceType), typeof(Pipe), new PropertyMetadata(SubstanceType.Gas));
 
         internal static readonly DependencyProperty PipeModelProperty = DependencyProperty.Register(
             "PipeVm", typeof(IPipeVm), typeof(Pipe), new PropertyMetadata(default(IPipeVm), PipeVmPropertyChangedCallback));
+
+        public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
+            "Segments", typeof(IReadOnlyCollection<IPipeSegment>), typeof(Pipe), new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
 
         #endregion
 
@@ -77,11 +79,17 @@ namespace Prototype.Core.Controls
             set { SetValue(PipeModelProperty, value); }
         }
 
+        private IReadOnlyCollection<IPipeSegment> Segments
+        {
+            get { return (IReadOnlyCollection<IPipeSegment>)GetValue(SegmentsProperty); }
+            set { SetValue(SegmentsProperty, value); }
+        }
+
         #endregion
 
         #region Methods
 
-        protected override void OnRender(DrawingContext drawingContext)
+/*        protected override void OnRender(DrawingContext drawingContext)
         {
             var canvas = Parent as Canvas;
             if (canvas == null)
@@ -104,61 +112,8 @@ namespace Prototype.Core.Controls
             {
                 DrawPipeSegment(drawingContext, borderBrush, substanceBrush, segment);
             }
-        }
-
-        private static void DrawPipeSegment(DrawingContext drawingContext, Brush borderBrush, Brush substanceBrush, IPipeSegment pipeSegment)
-        {
-            //if (pipeSegment is PipeIntersectionSegment)
-            //{
-            //    borderBrush = new SolidColorBrush(Colors.Red);
-            //    substanceBrush = new SolidColorBrush(Colors.Red);
-            //}
-            switch (pipeSegment.Orientation)
-            {
-                case Orientation.Horizontal:
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y, pipeSegment.Length, PipeBorderWidth));
-                    drawingContext.DrawRectangle(substanceBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y + PipeBorderWidth, pipeSegment.Length, PipeSubstanceWidth));
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y + PipeBorderWidth + PipeSubstanceWidth, pipeSegment.Length, PipeBorderWidth));
-                    break;
-
-                case Orientation.Vertical:
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y, PipeBorderWidth, pipeSegment.Length));
-                    drawingContext.DrawRectangle(substanceBrush, null, new Rect(pipeSegment.StartPoint.X + PipeBorderWidth, pipeSegment.StartPoint.Y, PipeSubstanceWidth, pipeSegment.Length));
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X + PipeBorderWidth + PipeSubstanceWidth, pipeSegment.StartPoint.Y, PipeBorderWidth, pipeSegment.Length));
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void UpdateSizeConstraints()
-        {
-            switch (Orientation)
-            {
-                case Orientation.Horizontal:
-                    Width = 100;
-                    MinWidth = 0;
-                    MaxWidth = Double.PositiveInfinity;
-                    Height = PipeWidth;
-                    MinHeight = PipeWidth;
-                    MaxHeight = PipeWidth;
-                    break;
-
-                case Orientation.Vertical:
-                    Width = PipeWidth;
-                    MinWidth = PipeWidth;
-                    MaxWidth = PipeWidth;
-                    Height = 100;
-                    MinHeight = 0;
-                    MaxHeight = Double.PositiveInfinity;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
+        }*/
+        
         private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
             var pipe = (Pipe)dependencyObject;
@@ -171,47 +126,6 @@ namespace Prototype.Core.Controls
             pipe.Bind(() => v => v.HasFlow).To(model, () => (m, ctx) => m.HasFlow).Build();
             pipe.Bind(() => v => v.SubstanceType).To(model, () => (m, ctx) => m.SubstanceType).Build();
             pipe.Bind(() => v => v.Visibility).To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
-        }
-
-        private static void VisualPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
-        {
-            var pipe = (Pipe)dependencyObject;
-            pipe.InvalidateVisual();
-        }
-
-        private static void OrientationPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
-        {
-            var pipe = (Pipe)dependencyObject;
-            pipe.UpdateSizeConstraints();
-        }
-
-        private static SolidColorBrush GetBorderBrush(Pipe pipe)
-        {
-            return new SolidColorBrush(Color.FromRgb(77, 79, 83));
-        }
-
-        private static SolidColorBrush GetSubstanceBrush(Pipe pipe)
-        {
-            Color color;
-            switch (pipe.SubstanceType)
-            {
-                case SubstanceType.Gas:
-                    color = pipe.HasFlow ? Color.FromRgb(0, 0, 255) : Color.FromRgb(139, 141, 142);
-                    break;
-
-                case SubstanceType.Purge:
-                    color = pipe.HasFlow ? Color.FromRgb(128, 128, 128) : Color.FromRgb(255, 255, 255);
-                    break;
-
-                case SubstanceType.Chemical:
-                    color = pipe.HasFlow ? Color.FromRgb(168, 0, 168) : Color.FromRgb(255, 155, 255);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return new SolidColorBrush(color);
         }
 
         #endregion
