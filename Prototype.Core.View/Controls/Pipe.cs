@@ -27,7 +27,12 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
         }
-        
+
+        public Pipe()
+        {
+            Loaded += OnLoaded;
+        }
+
         #endregion
 
         #region Dependency properties
@@ -88,32 +93,37 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Methods
-
-/*        protected override void OnRender(DrawingContext drawingContext)
-        {
-            var canvas = Parent as Canvas;
-            if (canvas == null)
-            {
-                throw new NotSupportedException("Pipe should be located on Canvas");
-            }
-
-            var allPipes = canvas.Children
-                .OfType<Pipe>()
-                .Select(pipe => new PipeControlModel(pipe))
-                .ToArray();
-            //PipeEx.FindAllIntersections(allPipes);
-            
-            var segments = PipeEx.SplitPipeToSegments(this, allPipes);
-
-            var substanceBrush = GetSubstanceBrush(this);
-            var borderBrush = GetBorderBrush(this);
-
-            foreach (var segment in segments)
-            {
-                DrawPipeSegment(drawingContext, borderBrush, substanceBrush, segment);
-            }
-        }*/
         
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Segments = PipeEx.SplitPipeToSegments(this);
+        }
+
+        /*        protected override void OnRender(DrawingContext drawingContext)
+                {
+                    var canvas = Parent as Canvas;
+                    if (canvas == null)
+                    {
+                        throw new NotSupportedException("Pipe should be located on Canvas");
+                    }
+
+                    var allPipes = canvas.Children
+                        .OfType<Pipe>()
+                        .Select(pipe => new PipeControlModel(pipe))
+                        .ToArray();
+                    //PipeEx.FindAllIntersections(allPipes);
+
+                    var segments = PipeEx.SplitPipeToSegments(this, allPipes);
+
+                    var substanceBrush = GetSubstanceBrush(this);
+                    var borderBrush = GetBorderBrush(this);
+
+                    foreach (var segment in segments)
+                    {
+                        DrawPipeSegment(drawingContext, borderBrush, substanceBrush, segment);
+                    }
+                }*/
+
         private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
             var pipe = (Pipe)dependencyObject;

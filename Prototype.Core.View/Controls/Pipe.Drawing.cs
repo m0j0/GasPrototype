@@ -43,6 +43,15 @@ namespace Prototype.Core.Controls
                    b.Top <= a.Bottom;
         }
 
+        public static IReadOnlyCollection<IPipeSegment> SplitPipeToSegments(Pipe pipe)
+        {
+            var result = new List<IPipeSegment>();
+
+            result.Add(new LinePipeSegment(new Point(0,0), pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height, pipe.Orientation));
+
+            return result;
+        }
+
         /*public static void FindAllIntersections(IReadOnlyCollection<PipeControlModel> allPipes)
         {
             var allIntersections = new Dictionary<Rect, Intersection>();
@@ -108,5 +117,20 @@ namespace Prototype.Core.Controls
 
         Orientation Orientation { get; }
     }
-    
+
+    internal class LinePipeSegment : IPipeSegment
+    {
+        public LinePipeSegment(Point startPoint, double length, Orientation orientation)
+        {
+            StartPoint = startPoint;
+            Length = length;
+            Orientation = orientation;
+        }
+
+        public Point StartPoint { get; }
+        public double Length { get; }
+        public Orientation Orientation { get; }
+    }
+
+
 }

@@ -22,10 +22,68 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:Pipe">
-                    <Border x:Name="MainControl"
-                            BorderThickness="0,1" 
-                            BorderBrush="#4D4F52" Background="#8B8D8E"
-                            Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                    <ItemsControl ItemsSource="{TemplateBinding Segments}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="controls:LinePipeSegment">
+                                <Border x:Name="MainControl"
+                                        BorderThickness="0,1"
+                                        BorderBrush="#4D4F52" Background="#8B8D8E"
+                                        Height="5" Width="{Binding Length}" />
+
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
+                                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
+                                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                                        <Setter TargetName="MainControl" Property="BorderThickness" Value="1,0" />
+                                    </DataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition
+                                                Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                                Value="True" />
+                                            <Condition
+                                                Binding="{Binding SubstanceType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                                Value="{StaticResource SubstanceTypeGas}" />
+                                        </MultiDataTrigger.Conditions>
+
+                                        <Setter TargetName="MainControl" Property="Background" Value="#0000FF" />
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition
+                                                Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                                Value="True" />
+                                            <Condition
+                                                Binding="{Binding SubstanceType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                                Value="{StaticResource SubstanceTypePurge}" />
+                                        </MultiDataTrigger.Conditions>
+
+                                        <Setter TargetName="MainControl" Property="Background" Value="#808080" />
+                                    </MultiDataTrigger>
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition
+                                                Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                                Value="True" />
+                                            <Condition
+                                                Binding="{Binding SubstanceType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                                Value="{StaticResource SubstanceTypeChemical}" />
+                                        </MultiDataTrigger.Conditions>
+
+                                        <Setter TargetName="MainControl" Property="Background" Value="#A800A8" />
+                                    </MultiDataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="Orientation" Value="Vertical">
@@ -35,35 +93,7 @@
                             <Setter Property="Height" Value="100" />
                             <Setter Property="MinHeight" Value="0" />
                             <Setter Property="MaxHeight" Value="{x:Static sys:Double.PositiveInfinity}" />
-                            <Setter TargetName="MainControl" Property="BorderThickness" Value="1,0" />
                         </Trigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="HasFlow" Value="True" />
-                                <Condition Property="SubstanceType" Value="{StaticResource SubstanceTypeGas}" />
-                            </MultiTrigger.Conditions>
-
-                            <Setter TargetName="MainControl" Property="Background" Value="#0000FF" />
-                        </MultiTrigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="HasFlow" Value="True" />
-                                <Condition Property="SubstanceType" Value="{StaticResource SubstanceTypePurge}" />
-                            </MultiTrigger.Conditions>
-
-                            <Setter TargetName="MainControl" Property="Background" Value="#808080" />
-                        </MultiTrigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="HasFlow" Value="True" />
-                                <Condition Property="SubstanceType" Value="{StaticResource SubstanceTypeChemical}" />
-                            </MultiTrigger.Conditions>
-
-                            <Setter TargetName="MainControl" Property="Background" Value="#A800A8" />
-                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
