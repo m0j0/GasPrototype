@@ -43,13 +43,68 @@ namespace Prototype.Core.Controls
                    b.Top <= a.Bottom;
         }
 
-        public static IReadOnlyCollection<IPipeSegment> SplitPipeToSegments(Pipe pipe)
+        public static IReadOnlyCollection<IPipeSegment> SplitPipeToSegments(Pipe pipe, IReadOnlyCollection<Pipe> allPipes)
         {
+
+            //double IPipe.Top => Canvas.GetTop(this);
+
+            //double IPipe.Left => Canvas.GetLeft(this);
+            //result.Add(new LinePipeSegment(new Point(0, 0), pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height, pipe.Orientation));
+
+            var allPipeRects = allPipes.ToDictionary(p => new Rect(Canvas.GetLeft(p), Canvas.GetTop(p), p.Width, p.Height));
+            var intersections = new Dictionary<Pipe, HashSet<Rect>>();
+            var connections = new Dictionary<Rect, PipeConnection>();
+
+            foreach (var pipe1 in allPipeRects.Keys)
+            {
+                foreach (var pipe2 in allPipeRects.Keys)
+                {
+                    if (pipe1 == pipe2)
+                    {
+                        continue;
+                    }
+
+                    var intersectionRect = Intersect(
+                        pipe1,
+                        pipe2
+                    );
+
+                    if (intersectionRect.Width != Pipe.PipeWidth ||
+                        intersectionRect.Height != Pipe.PipeWidth)
+                    {
+                        continue;
+                    }
+
+                    AddPipeIntersection(pipe1, intersectionRect);
+                    AddPipeIntersection(pipe2, intersectionRect);
+
+                    //if (!connections.ContainsKey(intersectionRect))
+                }
+            }
+
+
             var result = new List<IPipeSegment>();
+            result.Add(new LinePipeSegment(new Point(0, 0), pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height, pipe.Orientation));
 
-            result.Add(new LinePipeSegment(new Point(0,0), pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height, pipe.Orientation));
-
+/*            if (intersections.TryGetValue(pipe, out var pipeIntersections))
+            {
+                var inter = pipeIntersections.OrderBy(rect => pipe.Orientation == Orientation.Horizontal ? rect.Left : rect.Top).ToArray();
+            }
+            else
+            {
+                result.Add(new LinePipeSegment(new Point(0, 0), pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height, pipe.Orientation));
+            }*/
             return result;
+
+            void AddPipeIntersection(Rect p, Rect intersectionRect)
+            {
+                var ctrlPipe = allPipeRects[p];
+                if (!intersections.ContainsKey(ctrlPipe))
+                {
+                    intersections[ctrlPipe] = new HashSet<Rect>();
+                }
+                intersections[ctrlPipe].Add(intersectionRect);
+            }
         }
 
         /*public static void FindAllIntersections(IReadOnlyCollection<PipeControlModel> allPipes)
@@ -107,7 +162,6 @@ namespace Prototype.Core.Controls
             }
         }*/
     }
-    
 
     internal interface IPipeSegment
     {
@@ -116,6 +170,18 @@ namespace Prototype.Core.Controls
         double Length { get; }
 
         Orientation Orientation { get; }
+    }
+
+    internal class PipeConnection
+    {
+        public PipeConnection(Rect rect, params Pipe[] pipes)
+        {
+            Rect = rect;
+            ConnectedPipes = pipes;
+        }
+
+        public Rect Rect { get; }
+        public IReadOnlyCollection<Pipe> ConnectedPipes { get; }
     }
 
     internal class LinePipeSegment : IPipeSegment

@@ -96,33 +96,18 @@ namespace Prototype.Core.Controls
         
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Segments = PipeEx.SplitPipeToSegments(this);
+            var canvas = Parent as Canvas;
+            if (canvas == null)
+            {
+                throw new NotSupportedException("Pipe should be located on Canvas");
+            }
+
+            var allPipes = canvas.Children
+                .OfType<Pipe>()
+                .ToArray();
+
+            Segments = PipeEx.SplitPipeToSegments(this, allPipes);
         }
-
-        /*        protected override void OnRender(DrawingContext drawingContext)
-                {
-                    var canvas = Parent as Canvas;
-                    if (canvas == null)
-                    {
-                        throw new NotSupportedException("Pipe should be located on Canvas");
-                    }
-
-                    var allPipes = canvas.Children
-                        .OfType<Pipe>()
-                        .Select(pipe => new PipeControlModel(pipe))
-                        .ToArray();
-                    //PipeEx.FindAllIntersections(allPipes);
-
-                    var segments = PipeEx.SplitPipeToSegments(this, allPipes);
-
-                    var substanceBrush = GetSubstanceBrush(this);
-                    var borderBrush = GetBorderBrush(this);
-
-                    foreach (var segment in segments)
-                    {
-                        DrawPipeSegment(drawingContext, borderBrush, substanceBrush, segment);
-                    }
-                }*/
 
         private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {

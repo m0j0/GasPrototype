@@ -123,6 +123,11 @@ namespace Prototype
         {
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<WaferStatusesVm>()); }
         }
+        
+        public static PipesConnectionsVm PipesConnectionsVm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<PipesConnectionsVm>()); }
+        }
 
         #endregion
     }

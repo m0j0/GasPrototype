@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
+             xmlns:prototype="clr-namespace:Prototype"
+             mc:Ignorable="d" d:DataContext="{x:Static prototype:DesignBootstrapper.PipesConnectionsVm}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
@@ -30,12 +31,13 @@
             </Canvas.LayoutTransform>
 
             <Pipe Canvas.Left="51" Canvas.Top="61" Width="121" />
-            <Pipe Canvas.Left="51" Canvas.Top="120" Width="104" />
+            <Pipe Canvas.Left="51" Canvas.Top="120" Width="60" />
+            <Pipe Canvas.Left="106" Canvas.Top="120" Width="40" />
             <Pipe Canvas.Left="51" Canvas.Top="194" />
             <Pipe Canvas.Left="126" Canvas.Top="39" Orientation="Vertical" />
             <Pipe Canvas.Left="107" Canvas.Top="96" Orientation="Vertical" />
-            <Pipe Canvas.Left="51" Canvas.Top="66" Orientation="Vertical" />
-            <Pipe Canvas.Left="172" Canvas.Top="66" Orientation="Vertical"/>
+            <Pipe Canvas.Left="51" Canvas.Top="61" Orientation="Vertical" />
+            <Pipe Canvas.Left="167" Canvas.Top="61" Orientation="Vertical"/>
         </Canvas>
     </Grid>
 </UserControl>

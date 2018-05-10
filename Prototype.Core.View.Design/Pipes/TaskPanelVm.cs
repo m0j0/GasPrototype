@@ -183,6 +183,7 @@ namespace Prototype.Core.Design.Pipes
             var dataContext = _modelItem.Properties[nameof(FrameworkElement.DataContext)].ComputedValue;
             if (dataContext == null)
             {
+                _allVertices = new Dictionary<IVertex, VertexProjection>();
                 SynchronizeValues();
                 return;
             }

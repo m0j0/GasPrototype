@@ -239,7 +239,7 @@ namespace Prototype.ViewModels
                 return;
             }
 
-            _screenManager.ShowScreenAsync<Manifold3Vm>();
+            _screenManager.ShowScreenAsync<PipesConnectionsVm>();
         }
 
         Task<bool> INavigableViewModel.OnNavigatingFromAsync(INavigationContext context)
