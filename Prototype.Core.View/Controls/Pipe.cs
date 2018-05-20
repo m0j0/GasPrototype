@@ -106,7 +106,7 @@ namespace Prototype.Core.Controls
                 .OfType<Pipe>()
                 .ToArray();
 
-            Segments = PipeEx.SplitPipeToSegments(this, allPipes);
+            Segments = PipeDrawing.SplitPipeToSegments(this, allPipes);
         }
 
         private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
