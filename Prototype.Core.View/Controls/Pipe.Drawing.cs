@@ -47,7 +47,7 @@ namespace Prototype.Core.Controls
         {
             var processPipes = allPipes.Select(p => new ProcessPipe(p)).ToArray();
             var currentProcessPipe = processPipes.First(processPipe => processPipe.Pipe == pipe);
-            var connectors = new HashSet<ConnectorBase>();
+            var connectors = new HashSet<IConnector>();
             var result = new List<IPipeSegment>();
 
             foreach (var pipe1 in processPipes)
@@ -70,9 +70,6 @@ namespace Prototype.Core.Controls
                         continue;
                     }
 
-                    //AddPipeIntersection(pipe1, intersectionRect);
-                    //AddPipeIntersection(pipe2, intersectionRect);
-
                     var sortedPipes = SortPipes(pipe1, pipe2);
 
                     if (pipe1.Rect.Left < intersectionRect.Left &&
@@ -81,13 +78,29 @@ namespace Prototype.Core.Controls
                         pipe2.Rect.Top < intersectionRect.Top &&
                         pipe2.Rect.Bottom > intersectionRect.Bottom)
                     {
-                        AddConnector(pipe1, intersectionRect);
-                        AddConnector(pipe2, intersectionRect);
+                        var bridgeConnector = connectors.OfType<BridgeConnector>().FirstOrDefault(cnn => cnn.Rect == intersectionRect) ??
+                                              new BridgeConnector(intersectionRect);
+                        connectors.Add(bridgeConnector);
+                        bridgeConnector.AddPipes(pipe1, pipe2);
+                        continue;
                     }
 
+                    var cornerConnector = connectors.OfType<CornerConnector>().FirstOrDefault(cnn => cnn.Rect == intersectionRect) ??
+                                          new CornerConnector(intersectionRect);
+                    cornerConnector.AddPipe(pipe1);
+                    cornerConnector.AddPipe(pipe2);
+                    connectors.Add(cornerConnector);
                 }
             }
 
+            foreach (var connector in currentProcessPipe.Connectors)
+            {
+                currentProcessPipe.Segments.Add(new ConnectorSegment(
+                    new Point(connector.Rect.Left - currentProcessPipe.Rect.Left, connector.Rect.Top - currentProcessPipe.Rect.Top),
+                    currentProcessPipe.Orientation,
+                    Side.All
+                ));
+            }
 
             var orderedSegments = currentProcessPipe.Segments.OrderBy(s => s.StartPoint.X).ThenBy(s => s.StartPoint.Y).ToList();
             
@@ -110,13 +123,13 @@ namespace Prototype.Core.Controls
             {
                 if (currentProcessPipe.Orientation == Orientation.Horizontal)
                 {
-                    orderedSegments.Add(new LinePipeSegment(new Point(currentProcessPipe.Pipe.Width, 0),
+                    orderedSegments.Add(new LinePipeSegment(new Point(currentProcessPipe.Rect.Width, 0),
                         0,
                         currentProcessPipe.Orientation));
                 }
                 else
                 {
-                    orderedSegments.Add(new LinePipeSegment(new Point(0, currentProcessPipe.Pipe.Height),
+                    orderedSegments.Add(new LinePipeSegment(new Point(0, currentProcessPipe.Rect.Height),
                         0,
                         currentProcessPipe.Orientation));
                 }
@@ -148,20 +161,17 @@ namespace Prototype.Core.Controls
             }
             
             return allSegments;
-
-            void AddConnector(ProcessPipe p, Rect intersection)
-            {
-                p.Segments.Add(new BridgeConnector(
-                    new Point(intersection.Left - p.Rect.Left, intersection.Top - p.Rect.Top),
-                    p.Orientation
-                ));
-            }
         }
 
         private static Tuple<ProcessPipe, ProcessPipe> SortPipes(ProcessPipe pipe1, ProcessPipe pipe2)
         {
            var arr= new[] {pipe1, pipe2}.OrderBy(p => p.Rect.Left).ThenBy(p => p.Rect.Top).ThenBy(p => p.Orientation).ToArray();
             return Tuple.Create(arr[0], arr[1]);
+        }
+
+        public static bool HasFlagEx(this Side side, Side flag)
+        {
+            return (side & flag) != 0;
         }
     }
 
@@ -172,6 +182,7 @@ namespace Prototype.Core.Controls
             Rect = new Rect(Canvas.GetLeft(pipe), Canvas.GetTop(pipe), pipe.Width, pipe.Height);
             Pipe = pipe;
             Segments=new List<IPipeSegment>();
+            Connectors = new List<IConnector>();
         }
 
         public Pipe Pipe { get; }
@@ -180,11 +191,103 @@ namespace Prototype.Core.Controls
 
         public List<IPipeSegment> Segments { get; }
 
+        public List<IConnector> Connectors { get; }
+
         public override string ToString()
         {
             return $"{Rect} {Orientation}";
         }
     }
+
+    internal interface IConnector
+    {
+        Rect Rect { get; }
+    }
+
+    internal class BridgeConnector : IConnector
+    {
+        public Rect Rect { get; }
+
+        public BridgeConnector(Rect rect)
+        {
+            Rect = rect;
+        }
+
+        public ProcessPipe Pipe1 { get; private set; }
+        public ProcessPipe Pipe2 { get; private set; }
+
+        public void AddPipes(ProcessPipe pipe1, ProcessPipe pipe2)
+        {
+            if (Pipe1 != null || Pipe2 != null)
+            {
+                throw new Exception("!!!");
+            }
+            if (pipe1 == null || pipe2 == null)
+            {
+                throw new Exception("!!!");
+            }
+
+            if (pipe1.Connectors.Contains(this))
+            {
+                throw new Exception("!!");
+            }
+            if (pipe2.Connectors.Contains(this))
+            {
+                throw new Exception("!!");
+            }
+
+            Pipe1 = pipe1;
+            pipe1.Connectors.Add(this);
+
+            Pipe2 = pipe2;
+            pipe2.Connectors.Add(this);
+        }
+    }
+
+    internal class CornerConnector : IConnector
+    {
+        public Rect Rect { get; }
+        private readonly ProcessPipe[] _pipes;
+        
+        public CornerConnector(Rect rect)
+        {
+            Rect = rect;
+            _pipes=new ProcessPipe[4];
+        }
+
+        public ProcessPipe Pipe1 => _pipes[0];
+        public ProcessPipe Pipe2 => _pipes[1];
+        public ProcessPipe Pipe3 => _pipes[2];
+        public ProcessPipe Pipe4 => _pipes[3];
+
+        public void AddPipe(ProcessPipe pipe)
+        {
+            if (pipe.Connectors.Contains(this))
+            {
+                //throw new Exception("!!");
+                return;
+            }
+            pipe.Connectors.Add(this);
+
+            bool set = false;
+            for (int i = 0; i < _pipes.Length; i++)
+            {
+                if (_pipes[i] == null)
+                {
+                    _pipes[i] = pipe;
+                    set = true;
+                    break;
+                }
+            }
+
+            if (!set)
+            {
+                throw new Exception("!!!");
+            }
+        }
+    }
+
+
 
     internal interface IPipeSegment
     {
@@ -195,30 +298,22 @@ namespace Prototype.Core.Controls
         Orientation Orientation { get; }
     }
 
-    internal abstract class ConnectorBase : IPipeSegment
+    internal class ConnectorSegment : IPipeSegment
     {
-        public ConnectorBase(Point startPoint, Orientation orientation)
+        public ConnectorSegment(Point startPoint, Orientation orientation, Side side)
         {
             StartPoint = startPoint;
             Orientation = orientation;
+            Side = side;
         }
+
         public Point StartPoint { get; }
+
         public double Length => Pipe.PipeWidth;
+
         public Orientation Orientation { get; }
-    }
 
-    internal class CornerConnector : ConnectorBase
-    {
-        public CornerConnector(Point startPoint, Orientation orientation) : base(startPoint, orientation)
-        {
-        }
-    }
-
-    internal class BridgeConnector : ConnectorBase
-    {
-        public BridgeConnector(Point startPoint, Orientation orientation) : base(startPoint, orientation)
-        {
-        }
+        public Side Side { get; }
     }
 
     internal class LinePipeSegment : IPipeSegment

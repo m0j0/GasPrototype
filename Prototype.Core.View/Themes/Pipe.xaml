@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model">
+                    xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model"
+                    xmlns:converters="clr-namespace:Prototype.Core.Converters">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -38,7 +39,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="controls:LinePipeSegment">
                                 <Border x:Name="MainControl"
-                                        BorderThickness="0,1"
+                                        BorderThickness="{Binding Converter={x:Static converters:PipeBorderThicknessConverter.Instance}}"
                                         BorderBrush="#4D4F52" Background="#8B8D8E"
                                         Height="5" Width="{Binding Length}" />
 
@@ -46,12 +47,6 @@
                                     <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
                                         <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
                                         <Setter TargetName="MainControl" Property="Width" Value="5" />
-                                        <Setter TargetName="MainControl" Property="BorderThickness" Value="1,0" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Length}" Value="5">
-                                        <Setter TargetName="MainControl" Property="BorderBrush" Value="Red" />
-                                        <Setter TargetName="MainControl" Property="Background" Value="Green" />
                                     </DataTrigger>
 
                                     <MultiDataTrigger>

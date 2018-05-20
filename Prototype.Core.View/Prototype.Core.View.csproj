@@ -60,6 +60,7 @@
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Wafer.cs" />
     <Compile Include="Controls\WaferMovable.cs" />
+    <Compile Include="Converters\PipeBorderThicknessConverter.cs" />
     <Compile Include="Converters\WaferStatusColorConverter.cs" />
     <Compile Include="CoreViewExtensions.cs" />
     <Compile Include="MarkupExtensions\PipeSchemeEx.cs" />
