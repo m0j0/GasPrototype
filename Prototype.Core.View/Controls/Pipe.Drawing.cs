@@ -48,7 +48,6 @@ namespace Prototype.Core.Controls
             var processPipes = allPipes.Select(p => new ProcessPipe(p)).ToArray();
             var currentProcessPipe = processPipes.First(processPipe => processPipe.Pipe == pipe);
             var connectors = new HashSet<IConnector>();
-            var result = new List<IPipeSegment>();
 
             foreach (var pipe1 in processPipes)
             {
@@ -69,8 +68,6 @@ namespace Prototype.Core.Controls
                     {
                         continue;
                     }
-
-                    var sortedPipes = SortPipes(pipe1, pipe2);
 
                     if (pipe1.Rect.Left < intersectionRect.Left &&
                         pipe1.Rect.Right > intersectionRect.Right &&
@@ -95,11 +92,7 @@ namespace Prototype.Core.Controls
 
             foreach (var connector in currentProcessPipe.Connectors)
             {
-                currentProcessPipe.Segments.Add(new ConnectorSegment(
-                    new Point(connector.Rect.Left - currentProcessPipe.Rect.Left, connector.Rect.Top - currentProcessPipe.Rect.Top),
-                    currentProcessPipe.Orientation,
-                    Side.All
-                ));
+                currentProcessPipe.Segments.Add(connector.CreateSegment(currentProcessPipe));
             }
 
             var orderedSegments = currentProcessPipe.Segments.OrderBy(s => s.StartPoint.X).ThenBy(s => s.StartPoint.Y).ToList();
@@ -163,12 +156,6 @@ namespace Prototype.Core.Controls
             return allSegments;
         }
 
-        private static Tuple<ProcessPipe, ProcessPipe> SortPipes(ProcessPipe pipe1, ProcessPipe pipe2)
-        {
-           var arr= new[] {pipe1, pipe2}.OrderBy(p => p.Rect.Left).ThenBy(p => p.Rect.Top).ThenBy(p => p.Orientation).ToArray();
-            return Tuple.Create(arr[0], arr[1]);
-        }
-
         public static bool HasFlagEx(this Side side, Side flag)
         {
             return (side & flag) != 0;
@@ -202,16 +189,18 @@ namespace Prototype.Core.Controls
     internal interface IConnector
     {
         Rect Rect { get; }
+
+        IPipeSegment CreateSegment(ProcessPipe pipe);
     }
 
     internal class BridgeConnector : IConnector
     {
-        public Rect Rect { get; }
-
         public BridgeConnector(Rect rect)
         {
             Rect = rect;
         }
+
+        public Rect Rect { get; }
 
         public ProcessPipe Pipe1 { get; private set; }
         public ProcessPipe Pipe2 { get; private set; }
@@ -242,11 +231,23 @@ namespace Prototype.Core.Controls
             Pipe2 = pipe2;
             pipe2.Connectors.Add(this);
         }
+
+        public IPipeSegment CreateSegment(ProcessPipe pipe)
+        {
+            if (Pipe1 != pipe && Pipe2 != pipe)
+            {
+                throw new ArgumentException("!!!");
+            }
+
+            return new BridgeSegment(
+                new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
+                pipe.Orientation
+            );
+        }
     }
 
     internal class CornerConnector : IConnector
     {
-        public Rect Rect { get; }
         private readonly ProcessPipe[] _pipes;
         
         public CornerConnector(Rect rect)
@@ -254,6 +255,8 @@ namespace Prototype.Core.Controls
             Rect = rect;
             _pipes=new ProcessPipe[4];
         }
+
+        public Rect Rect { get; }
 
         public ProcessPipe Pipe1 => _pipes[0];
         public ProcessPipe Pipe2 => _pipes[1];
@@ -285,6 +288,42 @@ namespace Prototype.Core.Controls
                 throw new Exception("!!!");
             }
         }
+
+        public IPipeSegment CreateSegment(ProcessPipe pipe)
+        {
+            if (!_pipes.Contains(pipe))
+            {
+                throw new ArgumentException("!!!");
+            }
+
+            var side = Side.All;
+            if (_pipes.Any(p => p != null &&
+                                p.Rect.Left < Rect.Left))
+            {
+                side = side & ~Side.Left;
+            }
+            if (_pipes.Any(p => p != null &&
+                                p.Rect.Top < Rect.Top))
+            {
+                side = side & ~Side.Top;
+            }
+            if (_pipes.Any(p => p != null &&
+                                p.Rect.Right > Rect.Right))
+            {
+                side = side & ~Side.Right;
+            }
+            if (_pipes.Any(p => p != null &&
+                                p.Rect.Bottom > Rect.Bottom))
+            {
+                side = side & ~Side.Bottom;
+            }
+
+            return new ConnectorSegment(
+                new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
+                pipe.Orientation,
+                side
+            );
+        }
     }
 
 
@@ -314,6 +353,21 @@ namespace Prototype.Core.Controls
         public Orientation Orientation { get; }
 
         public Side Side { get; }
+    }
+
+    internal class BridgeSegment : IPipeSegment
+    {
+        public BridgeSegment(Point startPoint, Orientation orientation)
+        {
+            StartPoint = startPoint;
+            Orientation = orientation;
+        }
+
+        public Point StartPoint { get; }
+
+        public double Length => Pipe.PipeWidth;
+
+        public Orientation Orientation { get; }
     }
 
     internal class LinePipeSegment : IPipeSegment
