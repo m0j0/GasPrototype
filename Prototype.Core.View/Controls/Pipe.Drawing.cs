@@ -141,7 +141,10 @@ namespace Prototype.Core.Controls
                 var s1 = orderedSegments[i];
                 var s2 = orderedSegments[i + 1];
 
-                allSegments.Add(s1);
+                if (!(s1 is EmptySegment))
+                {
+                    allSegments.Add(s1);
+                }
 
                 if (currentProcessPipe.Orientation == Orientation.Horizontal)
                 {
@@ -156,7 +159,10 @@ namespace Prototype.Core.Controls
                         currentProcessPipe.Orientation));
                 }
 
-                allSegments.Add(s2);
+                if (!(s2 is EmptySegment))
+                {
+                    allSegments.Add(s2);
+                }
             }
 
             return allSegments;
