@@ -19,7 +19,7 @@ namespace Prototype.Core.Converters
         {
             switch (value)
             {
-                case BridgeConnector _:
+                case BridgeSegment _:
                     return new Thickness(0);
 
                 case ConnectorSegment connectorSegment:

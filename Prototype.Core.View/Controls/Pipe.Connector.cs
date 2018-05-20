@@ -16,23 +16,8 @@ namespace Prototype.Core.Controls
 
     internal class BridgeConnector : IConnector
     {
-        public BridgeConnector(Rect rect)
+        public BridgeConnector(Rect rect, ProcessPipe pipe1, ProcessPipe pipe2)
         {
-            Rect = rect;
-        }
-
-        public Rect Rect { get; }
-
-        public ProcessPipe Pipe1 { get; private set; }
-        public ProcessPipe Pipe2 { get; private set; }
-
-        public void AddPipes(ProcessPipe pipe1, ProcessPipe pipe2)
-        {
-            if (Pipe1 != null || Pipe2 != null)
-            {
-                throw new Exception("!!!");
-            }
-
             if (pipe1 == null || pipe2 == null)
             {
                 throw new Exception("!!!");
@@ -48,12 +33,17 @@ namespace Prototype.Core.Controls
                 throw new Exception("!!");
             }
 
+            Rect = rect;
             Pipe1 = pipe1;
-            pipe1.Connectors.Add(this);
-
             Pipe2 = pipe2;
+            pipe1.Connectors.Add(this);
             pipe2.Connectors.Add(this);
         }
+
+        public Rect Rect { get; }
+
+        public ProcessPipe Pipe1 { get;  }
+        public ProcessPipe Pipe2 { get;  }
 
         public IPipeSegment CreateSegment(ProcessPipe pipe)
         {
@@ -66,6 +56,11 @@ namespace Prototype.Core.Controls
                 new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
                 pipe.Orientation
             );
+        }
+
+        public override string ToString()
+        {
+            return $"Bridge {Rect}";
         }
     }
 
@@ -149,6 +144,11 @@ namespace Prototype.Core.Controls
                 pipe.Orientation,
                 side
             );
+        }
+
+        public override string ToString()
+        {
+            return $"Corner {Rect}";
         }
     }
 }

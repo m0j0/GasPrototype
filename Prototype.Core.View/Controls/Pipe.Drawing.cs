@@ -19,19 +19,6 @@ namespace Prototype.Core.Controls
 
     internal static class PipeDrawing
     {
-        public static Rect Intersect(Rect a, Rect b)
-        {
-            var x = Math.Max(a.X, b.X);
-            var num1 = Math.Min(a.X + a.Width, b.X + b.Width);
-            var y = Math.Max(a.Y, b.Y);
-            var num2 = Math.Min(a.Y + a.Height, b.Y + b.Height);
-            if (num1 >= x && num2 >= y)
-            {
-                return new Rect(x, y, num1 - x, num2 - y);
-            }
-
-            return Rect.Empty;
-        }
 
         private static bool IsIntersect(Rect a, Rect b)
         {
@@ -46,7 +33,7 @@ namespace Prototype.Core.Controls
         {
             var processPipes = allPipes.Select(p => new ProcessPipe(p)).ToArray();
             var currentProcessPipe = processPipes.First(processPipe => processPipe.Pipe == pipe);
-            var connectors = new HashSet<IConnector>();
+            var connectors = new List<IConnector>();
 
             foreach (var pipe1 in processPipes)
             {
@@ -57,7 +44,7 @@ namespace Prototype.Core.Controls
                         continue;
                     }
 
-                    var intersectionRect = Intersect(
+                    var intersectionRect = FindIntersection(
                         pipe1.Rect,
                         pipe2.Rect
                     );
@@ -68,25 +55,46 @@ namespace Prototype.Core.Controls
                         continue;
                     }
 
-                    if (pipe1.Rect.Left < intersectionRect.Left &&
-                        pipe1.Rect.Right > intersectionRect.Right &&
-                        pipe2.Rect.Top < intersectionRect.Top &&
-                        pipe2.Rect.Bottom > intersectionRect.Bottom)
+                    var existingConnector = connectors.FirstOrDefault(c => c.Rect == intersectionRect);
+                    
+                    if (IsBridgeConnection(pipe1, pipe2, intersectionRect) ||
+                        IsBridgeConnection(pipe2, pipe1, intersectionRect))
                     {
-                        var bridgeConnector = connectors.OfType<BridgeConnector>()
-                                                  .FirstOrDefault(cnn => cnn.Rect == intersectionRect) ??
-                                              new BridgeConnector(intersectionRect);
+                        if (existingConnector != null)
+                        {
+                            continue;
+                        }
+
+                        var bridgeConnector = new BridgeConnector(intersectionRect, pipe1, pipe2);
                         connectors.Add(bridgeConnector);
-                        bridgeConnector.AddPipes(pipe1, pipe2);
                         continue;
                     }
-
-                    var cornerConnector = connectors.OfType<CornerConnector>()
-                                              .FirstOrDefault(cnn => cnn.Rect == intersectionRect) ??
+                    
+                    var cornerConnector = (CornerConnector)existingConnector ??
                                           new CornerConnector(intersectionRect);
                     cornerConnector.AddPipe(pipe1);
                     cornerConnector.AddPipe(pipe2);
-                    connectors.Add(cornerConnector);
+                    if (existingConnector == null)
+                    {
+                        connectors.Add(cornerConnector);
+                    }
+                }
+            }
+
+            // just check
+            for (int i = 0; i < connectors.Count; i++)
+            {
+                for (int j = 0; j < connectors.Count; j++)
+                {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
+                    if (connectors[i].Rect == connectors[j].Rect)
+                    {
+                        throw new Exception("!!!");
+                    }
                 }
             }
 
@@ -104,8 +112,7 @@ namespace Prototype.Core.Controls
                 first.StartPoint.Y != 0)
             {
                 orderedSegments.Insert(0,
-                    new LinePipeSegment(new Point(0, 0),
-                        0,
+                    new EmptySegment(new Point(0, 0),
                         currentProcessPipe.Orientation)
                 );
             }
@@ -117,14 +124,12 @@ namespace Prototype.Core.Controls
             {
                 if (currentProcessPipe.Orientation == Orientation.Horizontal)
                 {
-                    orderedSegments.Add(new LinePipeSegment(new Point(currentProcessPipe.Rect.Width, 0),
-                        0,
+                    orderedSegments.Add(new EmptySegment(new Point(currentProcessPipe.Rect.Width, 0),
                         currentProcessPipe.Orientation));
                 }
                 else
                 {
-                    orderedSegments.Add(new LinePipeSegment(new Point(0, currentProcessPipe.Rect.Height),
-                        0,
+                    orderedSegments.Add(new EmptySegment(new Point(0, currentProcessPipe.Rect.Height),
                         currentProcessPipe.Orientation));
                 }
             }
@@ -155,6 +160,28 @@ namespace Prototype.Core.Controls
             }
 
             return allSegments;
+        }
+
+        private static bool IsBridgeConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
+        {
+            return pipe1.Rect.Left < intersectionRect.Left &&
+                   pipe1.Rect.Right > intersectionRect.Right &&
+                   pipe2.Rect.Top < intersectionRect.Top &&
+                   pipe2.Rect.Bottom > intersectionRect.Bottom;
+        }
+
+        public static Rect FindIntersection(Rect a, Rect b)
+        {
+            var x = Math.Max(a.X, b.X);
+            var num1 = Math.Min(a.X + a.Width, b.X + b.Width);
+            var y = Math.Max(a.Y, b.Y);
+            var num2 = Math.Min(a.Y + a.Height, b.Y + b.Height);
+            if (num1 >= x && num2 >= y)
+            {
+                return new Rect(x, y, num1 - x, num2 - y);
+            }
+
+            return Rect.Empty;
         }
 
         public static bool HasFlagEx(this Side side, Side flag)
