@@ -90,43 +90,64 @@ namespace Prototype.Core.Controls
 
 
             var orderedSegments = currentProcessPipe.Segments.OrderBy(s => s.StartPoint.X).ThenBy(s => s.StartPoint.Y).ToList();
+            
+            var first = orderedSegments.FirstOrDefault();
+            if (first == null ||
+                first.StartPoint.X != 0 ||
+                first.StartPoint.Y != 0)
+            {
+                orderedSegments.Insert(0,
+                    new LinePipeSegment(new Point(0, 0),
+                        0,
+                        currentProcessPipe.Orientation)
+                );
+            }
 
-/*            List<IPipeSegment> allSegments = new List<IPipeSegment>();
+            var last = orderedSegments.LastOrDefault();
+            if (last == null ||
+                last.StartPoint.X + Pipe.PipeWidth != currentProcessPipe.Rect.Right ||
+                last.StartPoint.Y + Pipe.PipeWidth != currentProcessPipe.Rect.Bottom)
+            {
+                if (currentProcessPipe.Orientation == Orientation.Horizontal)
+                {
+                    orderedSegments.Add(new LinePipeSegment(new Point(currentProcessPipe.Pipe.Width, 0),
+                        0,
+                        currentProcessPipe.Orientation));
+                }
+                else
+                {
+                    orderedSegments.Add(new LinePipeSegment(new Point(0, currentProcessPipe.Pipe.Height),
+                        0,
+                        currentProcessPipe.Orientation));
+                }
+            }
+
+
+            List<IPipeSegment> allSegments = new List<IPipeSegment>();
             for (int i = 0; i < orderedSegments.Count - 1; i++)
             {
                 var s1 = orderedSegments[i];
                 var s2 = orderedSegments[i + 1];
 
-                allSegments.Add(new LinePipeSegment(new Point(0, 0),
-                        Math.Max(first.StartPoint.X, first.StartPoint.Y),
-                        currentProcessPipe.Orientation)
-                );
-            }*/
+                allSegments.Add(s1);
 
-            if (orderedSegments.Count > 0)
-            {
-                var first = orderedSegments.First();
-                if (first.StartPoint.X != 0 || first.StartPoint.Y != 0)
+                if (currentProcessPipe.Orientation == Orientation.Horizontal)
                 {
-                    orderedSegments.Insert(0, 
-                        new LinePipeSegment(new Point(0, 0), 
-                            Math.Max(first.StartPoint.X, first.StartPoint.Y),
-                            currentProcessPipe.Orientation)
-                        );
+                    allSegments.Add(new LinePipeSegment(new Point(s1.StartPoint.X + s1.Length, 0),
+                        s2.StartPoint.X - (s1.StartPoint.X + s1.Length),
+                        currentProcessPipe.Orientation));
+                }
+                else
+                {
+                    allSegments.Add(new LinePipeSegment(new Point(0, s1.StartPoint.Y + s1.Length),
+                        s2.StartPoint.Y - (s1.StartPoint.Y + s1.Length),
+                        currentProcessPipe.Orientation));
                 }
 
-/*                var last = orderedSegments.Last();
-                if (last.StartPoint.X + Pipe.PipeWidth != currentProcessPipe.Rect.Right ||
-                    last.StartPoint.Y + Pipe.PipeWidth != currentProcessPipe.Rect.Bottom)
-                {
-                    orderedSegments.Add(new LinePipeSegment(new Point(last., 0),
-                            Math.Max(currentProcessPipe.Rect.Right, currentProcessPipe.Rect.Bottom),
-                            currentProcessPipe.Orientation)
-                    );
-                }*/
+                allSegments.Add(s2);
             }
-
-            return orderedSegments;
+            
+            return allSegments;
 
             void AddConnector(ProcessPipe p, Rect intersection)
             {
@@ -135,87 +156,6 @@ namespace Prototype.Core.Controls
                     p.Orientation
                 ));
             }
-
-            //double IPipe.Top => Canvas.GetTop(this);
-
-            //double IPipe.Left => Canvas.GetLeft(this);
-            //result.Add(new LinePipeSegment(new Point(0, 0), pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height, pipe.Orientation));
-
-            /*            var allPipeRects = allPipes.ToDictionary(p => new Rect(Canvas.GetLeft(p), Canvas.GetTop(p), p.Width, p.Height));
-                        var allPipeRects2 = allPipeRects.ToDictionary(pair => pair.Value, pair => pair.Key);
-
-                        var intersections = new Dictionary<Pipe, HashSet<Rect>>();
-
-
-
-                        foreach (var pipe1 in allPipeRects.Keys)
-                        {
-                            foreach (var pipe2 in allPipeRects.Keys)
-                            {
-                                if (pipe1 == pipe2)
-                                {
-                                    continue;
-                                }
-
-                                var intersectionRect = Intersect(
-                                    pipe1,
-                                    pipe2
-                                );
-
-                                if (intersectionRect.Width != Pipe.PipeWidth ||
-                                    intersectionRect.Height != Pipe.PipeWidth)
-                                {
-                                    continue;
-                                }
-
-                                AddPipeIntersection(pipe1, intersectionRect);
-                                AddPipeIntersection(pipe2, intersectionRect);
-                            }
-                        }
-
-                        var pipeRect = allPipeRects2[pipe];
-
-                        var result = new List<IPipeSegment>();
-
-                        if (intersections.TryGetValue(pipe, out var pipeIntersections))
-                        {
-                            var points = new HashSet<Point>();
-                            points.Add(pipeRect.TopLeft);
-                            points.Add(pipe.Orientation == Orientation.Horizontal ? pipeRect.TopRight : pipeRect.BottomLeft);
-                            foreach (var pipeIntersection in pipeIntersections)
-                            {
-                                points.Add(pipeIntersection.TopLeft);
-                                points.Add(pipe.Orientation == Orientation.Horizontal ? pipeIntersection.TopRight : pipeIntersection.BottomLeft);
-                            }
-
-                            var orderedPoint = points.OrderBy(rect => rect.X).ThenBy(rect => rect.Y).ToList();
-                            for (int i = 0; i < orderedPoint.Count - 1; i++)
-                            {
-                                var point1 = orderedPoint[i];
-                                var point2 = orderedPoint[i + 1];
-
-                                result.Add(new LinePipeSegment(point1, Math.Max(point2.X - point1.X, point2.Y - point1.Y), pipe.Orientation));
-                            }
-                        }
-                        else
-                        {
-                            result.Add(new LinePipeSegment(new Point(0, 0),
-                                pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height,
-                                pipe.Orientation));
-                        }
-
-                        return result;
-
-                        void AddPipeIntersection(Rect p, Rect intersectionRect)
-                        {
-                            var ctrlPipe = allPipeRects[p];
-                            if (!intersections.ContainsKey(ctrlPipe))
-                            {
-                                intersections[ctrlPipe] = new HashSet<Rect>();
-                            }
-
-                            intersections[ctrlPipe].Add(intersectionRect);
-                        }*/
         }
 
         private static Tuple<ProcessPipe, ProcessPipe> SortPipes(ProcessPipe pipe1, ProcessPipe pipe2)
@@ -281,13 +221,6 @@ namespace Prototype.Core.Controls
         }
     }
 
-    internal class TripleConnector : ConnectorBase
-    {
-        public TripleConnector(Point startPoint, Orientation orientation) : base(startPoint, orientation)
-        {
-        }
-    }
-
     internal class LinePipeSegment : IPipeSegment
     {
         public LinePipeSegment(Point startPoint, double length, Orientation orientation)
@@ -303,7 +236,7 @@ namespace Prototype.Core.Controls
 
         public override string ToString()
         {
-            return $"StartPoint: {StartPoint}, lenght: {Length}";
+            return $"Segment StartPoint: {StartPoint}, lenght: {Length}";
         }
     }
 

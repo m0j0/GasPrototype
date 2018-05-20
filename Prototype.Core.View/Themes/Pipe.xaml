@@ -29,14 +29,18 @@
                                 <Canvas />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="{Binding Path=StartPoint.X}" />
+                                <Setter Property="Canvas.Top" Value="{Binding Path=StartPoint.Y}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="controls:LinePipeSegment">
                                 <Border x:Name="MainControl"
                                         BorderThickness="0,1"
                                         BorderBrush="#4D4F52" Background="#8B8D8E"
-                                        Height="5" Width="{Binding Length}"
-                                        Canvas.Left="{Binding StartPoint.X}"
-                                        Canvas.Top="{Binding StartPoint.Y}" />
+                                        Height="5" Width="{Binding Length}" />
 
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
