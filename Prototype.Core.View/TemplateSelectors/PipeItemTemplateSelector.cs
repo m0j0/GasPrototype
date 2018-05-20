@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Prototype.Core.Controls;
@@ -29,9 +25,13 @@ namespace Prototype.Core.TemplateSelectors
 
                 case LinePipeSegment _:
                     return LineTemplate;
-            }
 
-            return null;
+                case null:
+                    return null;
+
+                default:
+                    throw new Exception("!!!");
+            }
         }
     }
 }
