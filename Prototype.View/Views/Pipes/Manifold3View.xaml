@@ -153,5 +153,18 @@
         <Valve Canvas.Left="206" Canvas.Top="552" Orientation="Horizontal" ValveVm="{Binding BksidePurgeValveVm}" />
         <Valve Canvas.Left="348" Canvas.Top="492" ValveVm="{Binding NdirEndpointUpValveVm}" />
 
+        <TextBlock Canvas.Left="177" Canvas.Top="347" Text="Bottom purge" />
+        <TextBlock Canvas.Left="51" Canvas.Top="469" Text="To gas line" />
+        <TextBlock Canvas.Left="321" Canvas.Top="452" Text="Vac" />
+        <TextBlock Canvas.Left="389" Canvas.Top="449" Text="Bypass" />
+        <TextBlock Canvas.Left="490" Canvas.Top="456" Text="Bypass" />
+        <TextBlock Canvas.Left="581" Canvas.Top="455" Text="Vac" />
+        <TextBlock Canvas.Left="704" Canvas.Top="472" Text="Turbo TV" />
+        <TextBlock Canvas.Left="731" Canvas.Top="569" Text="Turbo" />
+        <TextBlock Canvas.Left="490" Canvas.Top="512" Text="Iso" />
+        <TextBlock Canvas.Left="589" Canvas.Top="556" Text="Ballast" />
+        <TextBlock Canvas.Left="174" Canvas.Top="589" Text="BkSide purge" />
+        <TextBlock Canvas.Left="179" Canvas.Top="666" Text="Divert" />
+
     </Canvas>
 </UserControl>
