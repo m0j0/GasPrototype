@@ -129,6 +129,46 @@ namespace Prototype.ViewModels.Pipes
             TurboPumpDestinationVertex = new DestinationVertex();
             DivertDestinationVertex = new DestinationVertex();
             BksidePurgeDestinationVertex = new DestinationVertex();
+            BallastDestinationVertex = new DestinationVertex();
+
+            Connection1_DownStreamInv_DownStream_VfmSource = new Vertex();
+            Connection2_DownStream_Vacuum_Cnn3 = new Vertex();
+            Connection3_BksidePurge_Vacuum_Cnn4 = new Vertex();
+            Connection4_Cnn3_Divert_Cnn5 = new Vertex();
+            Connection5_Cnn4_NdirEndpointDown_Cnn6 = new Vertex();
+            Connection6_Cnn5_Throttle_Cnn7 = new Vertex();
+            Connection7_Cnn6_Ballast_Cnn8 = new Vertex();
+            Connection8_Cnn7_Vacuum2_Cnn9 = new Vertex();
+            Connection9_Cnn8_Turbo_TurboPump = new Vertex();
+            Connection10_Bypass_ChamberSource_Bypass2_Cnn11 = new Vertex();
+            Connection11_NdirEndpointUp_Cnn10_Iso = new Vertex();
+            Connection12_Cnn2_Vacuum_Bypass = new Vertex();
+            Connection13_Cnn12_Cnn14_Cnn15 = new Vertex();
+            Connection14_Cnn13_VacChuckShutOffLeft = new Vertex();
+            Connection15_Cnn13_VacChuckShutOffRight_Cnn16 = new Vertex();
+            Connection16_Cnn15_Bypass2_Vacuum2 = new Vertex();
+            Connection17_TurboTv_TurboPump_Turbo = new Vertex();
+
+            Scheme.AddVertices(VfmSourceVertex, Connection1_DownStreamInv_DownStream_VfmSource, DownStreamInvValveVertex, GasLineDestinationVertex);
+            Scheme.AddVertices(Connection1_DownStreamInv_DownStream_VfmSource, DownStreamValveVertex, Connection2_DownStream_Vacuum_Cnn3,
+                Connection3_BksidePurge_Vacuum_Cnn4, BksidePurgeValveVertex, BksidePurgeDestinationVertex);
+            Scheme.AddVertices(Connection3_BksidePurge_Vacuum_Cnn4, Connection4_Cnn3_Divert_Cnn5, DivertValveVertex, DivertDestinationVertex);
+            Scheme.AddVertices(Connection4_Cnn3_Divert_Cnn5, Connection5_Cnn4_NdirEndpointDown_Cnn6, NdirEndpointDownValveVertex, NdirEndpointUpValveVertex,
+                Connection11_NdirEndpointUp_Cnn10_Iso);
+            Scheme.AddVertices(Connection6_Cnn5_Throttle_Cnn7, ThrottleValveVertex, IsoValveVertex, Connection11_NdirEndpointUp_Cnn10_Iso);
+            Scheme.AddVertices(Connection5_Cnn4_NdirEndpointDown_Cnn6, Connection6_Cnn5_Throttle_Cnn7, Connection7_Cnn6_Ballast_Cnn8,
+                Connection8_Cnn7_Vacuum2_Cnn9, Connection9_Cnn8_Turbo_TurboPump, TurboPumpDestinationVertex);
+            Scheme.AddVertices(Connection2_DownStream_Vacuum_Cnn3, VacuumValveVertex, Connection12_Cnn2_Vacuum_Bypass, Connection13_Cnn12_Cnn14_Cnn15,
+                VacChuckShutOffLeftValveVertex, VacChuckDestinationVertex);
+            Scheme.AddVertices(Connection13_Cnn12_Cnn14_Cnn15, Connection15_Cnn13_VacChuckShutOffRight_Cnn16, VacChuckShutOffRightValveVertex,
+                VacChuck2DestinationVertex);
+            Scheme.AddVertices(Connection12_Cnn2_Vacuum_Bypass, ByPassValveVertex, Connection10_Bypass_ChamberSource_Bypass2_Cnn11, ChamberSourceVertex);
+            Scheme.AddVertices(Connection10_Bypass_ChamberSource_Bypass2_Cnn11, ByPassValve2Vertex, Connection16_Cnn15_Bypass2_Vacuum2,
+                Connection15_Cnn13_VacChuckShutOffRight_Cnn16);
+            Scheme.AddVertices(Connection16_Cnn15_Bypass2_Vacuum2, VacuumValve2Vertex, Connection8_Cnn7_Vacuum2_Cnn9);
+            Scheme.AddVertices(Connection8_Cnn7_Vacuum2_Cnn9, Connection9_Cnn8_Turbo_TurboPump, TurboValveVertex, Connection17_TurboTv_TurboPump_Turbo, TurboPumpDestinationVertex);
+            Scheme.AddVertices(Connection17_TurboTv_TurboPump_Turbo, TurboTvValveVertex, TurboGateValveVertex, ChamberSourceVertex);
+            Scheme.AddVertices(Connection7_Cnn6_Ballast_Cnn8, BallastValveVertex, BallastDestinationVertex);
         }
 
         #endregion
@@ -242,8 +282,27 @@ namespace Prototype.ViewModels.Pipes
         public DestinationVertex VacChuck2DestinationVertex { get; }
         public DestinationVertex PumpDestinationVertex { get; }
         public DestinationVertex TurboPumpDestinationVertex { get; }
+        public DestinationVertex BallastDestinationVertex { get; }
         public DestinationVertex DivertDestinationVertex { get; }
         public DestinationVertex BksidePurgeDestinationVertex { get; }
+
+        public Vertex Connection1_DownStreamInv_DownStream_VfmSource { get; }
+        public Vertex Connection2_DownStream_Vacuum_Cnn3 { get; }
+        public Vertex Connection3_BksidePurge_Vacuum_Cnn4 { get; }
+        public Vertex Connection4_Cnn3_Divert_Cnn5 { get; }
+        public Vertex Connection5_Cnn4_NdirEndpointDown_Cnn6 { get; }
+        public Vertex Connection6_Cnn5_Throttle_Cnn7 { get; }
+        public Vertex Connection7_Cnn6_Ballast_Cnn8 { get; }
+        public Vertex Connection8_Cnn7_Vacuum2_Cnn9 { get; }
+        public Vertex Connection9_Cnn8_Turbo_TurboPump { get; }
+        public Vertex Connection10_Bypass_ChamberSource_Bypass2_Cnn11 { get; }
+        public Vertex Connection11_NdirEndpointUp_Cnn10_Iso { get; }
+        public Vertex Connection12_Cnn2_Vacuum_Bypass { get; }
+        public Vertex Connection13_Cnn12_Cnn14_Cnn15 { get; }
+        public Vertex Connection14_Cnn13_VacChuckShutOffLeft { get; }
+        public Vertex Connection15_Cnn13_VacChuckShutOffRight_Cnn16 { get; }
+        public Vertex Connection16_Cnn15_Bypass2_Vacuum2 { get; }
+        public Vertex Connection17_TurboTv_TurboPump_Turbo { get; }
 
         #endregion
 
