@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\GasPanel\IVertex.cs" />
+    <Compile Include="Models\AttrList\AttrItemModel.cs" />
+    <Compile Include="Models\AttrList\AttrTableVm.cs" />
     <Compile Include="Models\GasPanel\DepthFirstDirectedPaths.cs" />
     <Compile Include="Models\GasPanel\Edge.cs" />
     <Compile Include="Models\GasPanel\Enums.cs" />

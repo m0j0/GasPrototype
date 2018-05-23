@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MugenMvvmToolkit.Models;
 
-namespace Prototype.ViewModels.AttrList
+namespace Prototype.Core.Models.AttrList
 {
    public class AttrItemModel : NotifyPropertyChangedBase
     {
@@ -14,10 +11,14 @@ namespace Prototype.ViewModels.AttrList
 
         public AttrItemModel(string title, string tiePath, bool isEditable = false)
         {
+            Title = title;
+            TiePath = tiePath;
             Update();
         }
 
         public string Title { get; set; }
+
+        public string TiePath { get; set; }
 
         public int Value
         {

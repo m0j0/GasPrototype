@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MugenMvvmToolkit.Interfaces.Models;
 using MugenMvvmToolkit.ViewModels;
+using Prototype.Core.Models.AttrList;
 using Prototype.Interfaces;
 
 namespace Prototype.ViewModels.AttrList

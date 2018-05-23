@@ -9,6 +9,7 @@ using MugenMvvmToolkit.ViewModels;
 using MugenMvvmToolkit.WPF.Binding.Modules;
 using MugenMvvmToolkit.WPF.Infrastructure;
 using Prototype.ViewModels;
+using Prototype.ViewModels.AttrList;
 using Prototype.ViewModels.Pipes;
 using Prototype.ViewModels.Wafers;
 
@@ -127,6 +128,16 @@ namespace Prototype
         public static PipesConnectionsVm PipesConnectionsVm
         {
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<PipesConnectionsVm>()); }
+        }
+
+        public static VmExampleVm VmExampleVm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<VmExampleVm>()); }
+        }
+
+        public static CbExampleVm CbExampleVm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<CbExampleVm>()); }
         }
 
         #endregion

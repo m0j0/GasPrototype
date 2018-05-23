@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MugenMvvmToolkit.Collections;
+﻿using MugenMvvmToolkit.Collections;
 using MugenMvvmToolkit.ViewModels;
 
-namespace Prototype.ViewModels.AttrList
+namespace Prototype.Core.Models.AttrList
 {
    public class AttrTableVm : ViewModelBase
     {

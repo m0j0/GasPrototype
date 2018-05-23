@@ -57,8 +57,6 @@
     <Compile Include="Modules\ViewModelWrapperRegistrationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Infrastructure\AccessProvider.cs" />
-    <Compile Include="ViewModels\AttrList\AttrItemModel.cs" />
-    <Compile Include="ViewModels\AttrList\AttrTableVm.cs" />
     <Compile Include="ViewModels\AttrList\CbExampleVm.cs" />
     <Compile Include="ViewModels\AttrList\VmExampleVm.cs" />
     <Compile Include="ViewModels\CfmApplicationVm.cs" />

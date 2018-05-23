@@ -71,9 +71,6 @@
     <Compile Include="DesignBootstrapper.cs" />
     <Compile Include="Infrastructure\AttachedProperties.cs" />
     <Compile Include="Modules\ViewModule.cs" />
-    <Compile Include="Views\AttrList\AttrTableView.xaml.cs">
-      <DependentUpon>AttrTableView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\AttrList\CbExampleView.xaml.cs">
       <DependentUpon>CbExampleView.xaml</DependentUpon>
     </Compile>
@@ -135,10 +132,6 @@
     <Compile Include="Views\Wafers\WaferStatusesView.xaml.cs">
       <DependentUpon>WaferStatusesView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\AttrList\AttrTableView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\AttrList\CbExampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
