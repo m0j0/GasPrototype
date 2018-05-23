@@ -9,7 +9,7 @@
 
     <Style TargetType="controls:AttrTable">
         <Setter Property="Margin" Value="4" />
-        <Setter Property="Width" Value="200" />
+        <Setter Property="Width" Value="250" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -24,21 +24,29 @@
 
                             <Border Grid.Row="0"
                                     Height="33" BorderThickness="0 0 0 1" BorderBrush="Black">
-                                <TextBlock Text="{Binding ViewModel.Title, RelativeSource={x:Static RelativeSource.TemplatedParent}}"
+                                <TextBlock Text="{TemplateBinding Title}"
                                            HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
 
-                            <ItemsControl Grid.Row="1"
-                                          ItemsSource="{Binding ViewModel.Attrs, RelativeSource={x:Static RelativeSource.TemplatedParent}}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="attrList:AttrItemModel">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Title}" />
-                                            <TextBlock Text="{Binding Value}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <ListView Grid.Row="1"
+                                      ItemsSource="{TemplateBinding Items}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridView.ColumnHeaderContainerStyle>
+                                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Style>
+                                        </GridView.ColumnHeaderContainerStyle>
+                                        <GridViewColumn 
+                                            Header="" 
+                                            Width="Auto" 
+                                            DisplayMemberBinding="{Binding Title}"/>
+                                        <GridViewColumn 
+                                            Header="" 
+                                            DisplayMemberBinding="{Binding Value}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
                         </Grid>
                     </Border>
                 </ControlTemplate>

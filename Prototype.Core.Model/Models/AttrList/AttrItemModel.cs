@@ -6,19 +6,23 @@ namespace Prototype.Core.Models.AttrList
 {
    public class AttrItemModel : NotifyPropertyChangedBase
     {
+        private static readonly Random _random = new Random();
+
         private int _value;
-        private readonly Random _random = new Random();
 
         public AttrItemModel(string title, string tiePath, bool isEditable = false)
         {
             Title = title;
             TiePath = tiePath;
+            IsEditable = isEditable;
             Update();
         }
 
         public string Title { get; set; }
 
         public string TiePath { get; set; }
+
+        public bool IsEditable { get; set; }
 
         public int Value
         {
@@ -38,8 +42,8 @@ namespace Prototype.Core.Models.AttrList
         {
             while (true)
             {
-                Value = _random.Next();
-                await Task.Delay(500);
+                Value = _random.Next() % 1000;
+                await Task.Delay(1000);
             }
         }
     }
