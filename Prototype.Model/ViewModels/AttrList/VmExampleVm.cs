@@ -14,22 +14,34 @@ namespace Prototype.ViewModels.AttrList
     {
         public VmExampleVm()
         {
-            PumpVm = GetViewModel<AttrTableVm>();
-            PumpVm.Title = "Pump";
-            PumpVm.Attrs.Add(new AttrItemModel("Status", "rStatus"));
-            PumpVm.Attrs.Add(new AttrItemModel("Command", "wCommand", true));
-            PumpVm.Attrs.Add(new AttrItemModel("N2 flow low", "sN2FlowLow"));
-            PumpVm.Attrs.Add(new AttrItemModel("Pump fault", "sFault"));
-            PumpVm.Attrs.Add(new AttrItemModel("Pump warning", "sWarning"));
-            PumpVm.Attrs.Add(new AttrItemModel("Pump running", "sPumpOn"));
+            PumpVm = new AttrTableVm
+            {
+                Title = "Pump",
+                Attrs =
+                {
+                    new AttrItemModel("Status", "rStatus"),
+                    new AttrItemModel("Command", "wCommand", true),
+                    new AttrItemModel("N2 flow low", "sN2FlowLow"),
+                    new AttrItemModel("Pump fault", "sFault"),
+                    new AttrItemModel("Pump warning", "sWarning"),
+                    new AttrItemModel("Pump running", "sPumpOn")
+                }
+            };
 
-            ArinnaTurboThrottleVm = GetViewModel<AttrTableVm>();
-            ArinnaTurboThrottleVm.Title = "Arinna turbo throttle valve";
-            ArinnaTurboThrottleVm.Attrs.Add(new AttrItemModel("Pressure", "rPressure"));
-            ArinnaTurboThrottleVm.Attrs.Add(new AttrItemModel("Pressure setpoint", "wSetpointPressure"));
-            ArinnaTurboThrottleVm.Attrs.Add(new AttrItemModel("Ramp rate", "wPressRampRate"));
-            ArinnaTurboThrottleVm.Attrs.Add(new AttrItemModel("Position", "rPosition"));
-            ArinnaTurboThrottleVm.Attrs.Add(new AttrItemModel("Position setpoint", "wSetpointPosition"));
+            ArinnaTurboThrottleVm = new AttrTableVm
+            {
+                Title = "Arinna turbo throttle valve",
+                Attrs =
+                {
+                    new AttrItemModel("Pressure", "rPressure"),
+                    new AttrItemModel("Pressure setpoint", "wSetpointPressure", true),
+                    new AttrItemModel("Ramp rate", "wPressRampRate"),
+                    new AttrItemModel("Position", "rPosition", true),
+                    new AttrItemModel("Position setpoint", "wSetpointPosition", true)
+                }
+            };
+
+            // TODO init children
         }
 
         public string DisplayName => "Tie list frames VM example";

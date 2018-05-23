@@ -4,18 +4,27 @@ using MugenMvvmToolkit.Models;
 
 namespace Prototype.Core.Models.AttrList
 {
-   public class AttrItemModel : NotifyPropertyChangedBase
+    public class AttrItemModel : NotifyPropertyChangedBase
     {
         private static readonly Random _random = new Random();
 
         private int _value;
+
+        public AttrItemModel()
+        {
+            Update();
+        }
 
         public AttrItemModel(string title, string tiePath, bool isEditable = false)
         {
             Title = title;
             TiePath = tiePath;
             IsEditable = isEditable;
-            Update();
+
+            if (!isEditable)
+            {
+                Update();
+            }
         }
 
         public string Title { get; set; }
@@ -33,6 +42,7 @@ namespace Prototype.Core.Models.AttrList
                 {
                     return;
                 }
+
                 _value = value;
                 OnPropertyChanged();
             }

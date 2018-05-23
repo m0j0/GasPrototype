@@ -7,13 +7,13 @@
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="controls:AttrTable">
+    <Style TargetType="controls:AttrTableCb">
         <Setter Property="Margin" Value="4" />
         <Setter Property="Width" Value="250" />
 
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:AttrTable">
+                <ControlTemplate TargetType="controls:AttrTableCb">
                     <Border BorderThickness="1" BorderBrush="Black"
                             Width="{TemplateBinding Width}">
                         <Grid>
@@ -37,10 +37,10 @@
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </Style>
                                         </GridView.ColumnHeaderContainerStyle>
-                                        <GridViewColumn
-                                            Header=""
-                                            Width="Auto"
-                                            DisplayMemberBinding="{Binding Title}" />
+                                        <GridViewColumn 
+                                            Header="" 
+                                            Width="Auto" 
+                                            DisplayMemberBinding="{Binding Title}"/>
                                         <GridViewColumn Header="">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
