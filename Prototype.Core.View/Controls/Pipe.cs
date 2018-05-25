@@ -31,7 +31,15 @@ namespace Prototype.Core.Controls
 
         public Pipe()
         {
-
+            DependencyPropertyDescriptor
+                .FromProperty(HeightProperty, typeof(Pipe))
+                .AddValueChanged(this, (s, e) => SizeChanged?.Invoke(this, EventArgs.Empty));
+            DependencyPropertyDescriptor
+                .FromProperty(WidthProperty, typeof(Pipe))
+                .AddValueChanged(this, (s, e) => SizeChanged?.Invoke(this, EventArgs.Empty));
+            DependencyPropertyDescriptor
+                .FromProperty(OrientationProperty, typeof(Pipe))
+                .AddValueChanged(this, (s, e) => SizeChanged?.Invoke(this, EventArgs.Empty));
         }
 
         #endregion

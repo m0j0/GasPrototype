@@ -40,6 +40,29 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Invalidate();
         }
 
+        public void Add(IEnumerable<IFlowControl> controls)
+        {
+            foreach (var flowControl in controls)
+            {
+                switch (flowControl)
+                {
+                    case IPipe pipe:
+                        pipe.SizeChanged += (sender, args) => Invalidate();
+                        _pipes.Add(pipe);
+                        break;
+
+                    case IValve valve:
+                        _valves.Add(valve);
+                        break;
+
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+            
+            Invalidate();
+        }
+
         public void Remove(IFlowControl control)
         {
 
