@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Prototype.Core.Controls
+namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class ProcessPipe
     {
-        public ProcessPipe(Pipe pipe)
+        public ProcessPipe(IContainer container, IPipe pipe)
         {
-            Rect = new Rect(Canvas.GetLeft(pipe), Canvas.GetTop(pipe), pipe.Width, pipe.Height);
+            Rect = new Rect(container.GetLeft(pipe), container.GetTop(pipe), pipe.Width, pipe.Height);
             Pipe = pipe;
             Segments = new List<IPipeSegment>();
             Connectors = new List<IConnector>();
         }
 
-        public Pipe Pipe { get; }
+        public IPipe Pipe { get; }
         public Rect Rect { get; }
         public Orientation Orientation => Pipe.Orientation;
 

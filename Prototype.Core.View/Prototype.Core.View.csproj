@@ -47,6 +47,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,7 +59,10 @@
   <ItemGroup>
     <Compile Include="Controls\AttrTableCb.cs" />
     <Compile Include="Controls\AttrTable.cs" />
-    <Compile Include="Controls\Pipe.Connector.cs" />
+    <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
+    <Compile Include="Controls\PipeFlowScheme\PipeFlowScheme.cs" />
+    <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />
+    <Compile Include="Controls\PipeFlowScheme\Pipe.Connector.cs" />
     <Compile Include="Controls\Pipe.cs" />
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Wafer.cs" />
@@ -113,11 +117,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Pipe.Drawing.cs" />
+    <Compile Include="Controls\PipeFlowScheme\Pipe.Drawing.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Pipe.Segment.cs" />
-    <Compile Include="Controls\Pipe.Model.cs" />
+    <Compile Include="Controls\PipeFlowScheme\Pipe.Segment.cs" />
+    <Compile Include="Controls\PipeFlowScheme\Pipe.Model.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

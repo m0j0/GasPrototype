@@ -24,7 +24,7 @@
                     Value="3" Minimum="0" Maximum="10" />
         </Grid>
 
-        <Canvas Grid.Row="1">
+        <PipeFlowCanvas Grid.Row="1">
             <Canvas.LayoutTransform>
                 <ScaleTransform ScaleX="{Binding Path=Value, ElementName=ScaleSlider}"
                                 ScaleY="{Binding Path=Value, ElementName=ScaleSlider}" />
@@ -38,6 +38,6 @@
             <Pipe Canvas.Left="107" Canvas.Top="96" Orientation="Vertical" />
             <Pipe Canvas.Left="51" Canvas.Top="61" Orientation="Vertical" />
             <Pipe Canvas.Left="167" Canvas.Top="61" Orientation="Vertical"/>
-        </Canvas>
+        </PipeFlowCanvas>
     </Grid>
 </UserControl>

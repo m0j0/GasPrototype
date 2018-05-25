@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Prototype.Core.Controls
+namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    internal interface IPipeSegment
+    public interface IPipeSegment
     {
         Point StartPoint { get; }
 

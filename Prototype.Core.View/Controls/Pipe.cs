@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using MugenMvvmToolkit.Binding;
+using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
 using Prototype.Core.Interfaces.GasPanel;
 using Prototype.Core.Models;
@@ -13,7 +14,7 @@ using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls
 {
-    public sealed class Pipe : Control
+    public sealed class Pipe : Control, IPipe
     {
         #region Constants
 
@@ -30,7 +31,7 @@ namespace Prototype.Core.Controls
 
         public Pipe()
         {
-            Loaded += OnLoaded;
+
         }
 
         #endregion
@@ -50,7 +51,13 @@ namespace Prototype.Core.Controls
             "PipeVm", typeof(IPipeVm), typeof(Pipe), new PropertyMetadata(default(IPipeVm), PipeVmPropertyChangedCallback));
 
         public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
-            "Segments", typeof(IReadOnlyCollection<IPipeSegment>), typeof(Pipe), new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
+            "Segments", typeof(IList<IPipeSegment>), typeof(Pipe), new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
+
+        #endregion        
+        
+        #region Events
+
+        public event EventHandler SizeChanged;
 
         #endregion
 
@@ -84,30 +91,15 @@ namespace Prototype.Core.Controls
             set { SetValue(PipeModelProperty, value); }
         }
 
-        private IReadOnlyCollection<IPipeSegment> Segments
+        public IList<IPipeSegment> Segments
         {
-            get { return (IReadOnlyCollection<IPipeSegment>)GetValue(SegmentsProperty); }
+            get { return (IList<IPipeSegment>)GetValue(SegmentsProperty); }
             set { SetValue(SegmentsProperty, value); }
         }
 
         #endregion
 
         #region Methods
-        
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var canvas = Parent as Canvas;
-            if (canvas == null)
-            {
-                throw new NotSupportedException("Pipe should be located on Canvas");
-            }
-
-            var allPipes = canvas.Children
-                .OfType<Pipe>()
-                .ToArray();
-
-            Segments = PipeDrawing.SplitPipeToSegments(this, allPipes);
-        }
 
         private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {

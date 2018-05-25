@@ -6,7 +6,7 @@
              xmlns:btsp="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.ManifoldVm}"
              d:DesignHeight="500" d:DesignWidth="500">
-    <Canvas>
+    <PipeFlowCanvas>
         <Pipe Canvas.Left="30" Canvas.Top="133" Orientation="Vertical" Height="143"
               PipeSchemeEx.StartVertex="{Binding SourceVertex1}" PipeSchemeEx.EndVertex="{Binding ValveVertex1}" />
         <Pipe Canvas.Left="30" Canvas.Top="111" Width="74"
@@ -66,5 +66,5 @@
         <Valve Canvas.Left="425" Canvas.Top="133" ValveVm="{Binding ValveVm6}" />
         <Valve Canvas.Left="83" Canvas.Top="41" ValveVm="{Binding ValveVm7}" />
         <Valve Canvas.Left="331" Canvas.Top="41" ValveVm="{Binding ValveVm8}" />
-    </Canvas>
+    </PipeFlowCanvas>
 </UserControl>

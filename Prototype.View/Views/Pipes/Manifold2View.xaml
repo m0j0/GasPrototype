@@ -7,33 +7,19 @@
              xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model"
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold2Vm}"
              d:DesignHeight="500" d:DesignWidth="500">
-    <Canvas>
-        <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex1}" Height="105" />
-        <Pipe Canvas.Left="57" Canvas.Top="160" Width="60"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex1}" />
-        <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical"
-              PipeSchemeEx.StartVertex="{Binding SourceVertex2}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex2}" Height="105"  />
-        <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="66"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex1}" PipeSchemeEx.EndVertex="{Binding ValveVertex1}" />
-        <Pipe Canvas.Left="112" Canvas.Top="160" Width="107"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex2}"
-              PipeSchemeEx.EndVertex="{Binding ConnectionVertex1}" />
-        <Pipe Canvas.Left="214" Canvas.Top="160" Width="118"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex2}" PipeSchemeEx.EndVertex="{Binding ValveVertex2}" />
-        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="66"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex2}" PipeSchemeEx.EndVertex="{Binding ValveVertex2}" />
-        <Pipe Canvas.Left="112" Canvas.Top="226" Orientation="Vertical" Height="89"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex3}" />
-        <Pipe Canvas.Left="327" Canvas.Top="226" Orientation="Vertical" Height="89"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex2}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex3}" />
-        <Pipe Canvas.Left="112" Canvas.Top="310" Width="110"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex1}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex3}" />
-        <Pipe Canvas.Left="217" Canvas.Top="310" Width="115"
-              PipeSchemeEx.StartVertex="{Binding ValveVertex2}" PipeSchemeEx.EndVertex="{Binding ConnectionVertex3}" />
-        <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68"
-              PipeSchemeEx.StartVertex="{Binding ConnectionVertex3}"
-              PipeSchemeEx.EndVertex="{Binding DestinationVertex1}" />
+    <PipeFlowCanvas>
+        <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" />
+        <Pipe Canvas.Left="57" Canvas.Top="160" Width="60" />
+        <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical" Height="105" />
+        <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="66" />
+        <Pipe Canvas.Left="112" Canvas.Top="160" Width="107" />
+        <Pipe Canvas.Left="214" Canvas.Top="160" Width="118" />
+        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="66" />
+        <Pipe Canvas.Left="112" Canvas.Top="226" Orientation="Vertical" Height="89" />
+        <Pipe Canvas.Left="327" Canvas.Top="226" Orientation="Vertical" Height="89" />
+        <Pipe Canvas.Left="112" Canvas.Top="310" Width="110" />
+        <Pipe Canvas.Left="217" Canvas.Top="310" Width="115" />
+        <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68" />
 
         <Valve Canvas.Left="96" Canvas.Top="226"
                ValveVm="{Binding ValveVm1}" />
@@ -46,7 +32,7 @@
         <TextBlock Text="Connection 2" Canvas.Left="180" Canvas.Top="165" />
         <TextBlock Text="Connection 3" Canvas.Left="186" Canvas.Top="294" />
         <TextBlock Text="Destination" Canvas.Left="190" Canvas.Top="378" />
-    </Canvas>
+    </PipeFlowCanvas>
 </UserControl>
 
 

@@ -40,6 +40,7 @@ using System.Windows.Markup;
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 [assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "Prototype.Core.Controls")]
 [assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "Prototype.Core.MarkupExtensions")]
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "Prototype.Core.Controls.PipeFlowScheme")]
 
 [assembly: InternalsVisibleTo("Prototype.Test")]
 [assembly: InternalsVisibleTo("Prototype.Core.View.Design")]

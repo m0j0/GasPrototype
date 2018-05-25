@@ -7,7 +7,7 @@
              xmlns:btsp="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold3Vm}"
              d:DesignHeight="700" d:DesignWidth="800">
-    <Canvas>
+    <PipeFlowCanvas>
 
         <Pipe Canvas.Left="206" Canvas.Top="14" Orientation="Vertical" Height="57"
               PipeSchemeEx.StartVertex="{Binding SourceFinal1Vertex}" PipeSchemeEx.EndVertex="{Binding ValveFinal1Vertex}" />
@@ -175,5 +175,5 @@
         <TextBlock Canvas.Left="174" Canvas.Top="589" Text="BkSide purge" />
         <TextBlock Canvas.Left="179" Canvas.Top="666" Text="Divert" />
 
-    </Canvas>
+    </PipeFlowCanvas>
 </UserControl>

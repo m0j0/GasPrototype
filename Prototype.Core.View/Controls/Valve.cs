@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using MugenMvvmToolkit.Binding;
+using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
 using Prototype.Core.Interfaces.GasPanel;
 using Prototype.Core.Models;
@@ -10,7 +12,7 @@ using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls
 {
-    public sealed class Valve : Control
+    public sealed class Valve : Control, IValve
     {
         #region Constructors
 
@@ -34,6 +36,12 @@ namespace Prototype.Core.Controls
 
         public static readonly DependencyProperty ValveModelProperty = DependencyProperty.Register(
             "ValveVm", typeof(IValveVm), typeof(Valve), new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler SizeChanged;
 
         #endregion
 
@@ -70,6 +78,11 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Methods
+
+        public bool CanPassFlow(IPipe pipe1, IPipe pipe2)
+        {
+            return State == ValveState.Opened;
+        }
 
         private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {

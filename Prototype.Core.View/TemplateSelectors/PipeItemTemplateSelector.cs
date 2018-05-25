@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Prototype.Core.Controls;
+using Prototype.Core.Controls.PipeFlowScheme;
 
 namespace Prototype.Core.TemplateSelectors
 {

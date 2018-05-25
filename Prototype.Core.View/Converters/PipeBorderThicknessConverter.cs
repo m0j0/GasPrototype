@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Prototype.Core.Controls;
+using Prototype.Core.Controls.PipeFlowScheme;
 
 namespace Prototype.Core.Converters
 {

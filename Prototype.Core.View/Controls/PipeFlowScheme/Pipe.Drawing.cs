@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Prototype.Core.Controls
+namespace Prototype.Core.Controls.PipeFlowScheme
 {
     [Flags]
     internal enum Side
@@ -28,10 +28,10 @@ namespace Prototype.Core.Controls
                    b.Top <= a.Bottom;
         }
 
-        public static IReadOnlyCollection<IPipeSegment> SplitPipeToSegments(Pipe pipe,
-            IReadOnlyCollection<Pipe> allPipes)
+        public static IReadOnlyCollection<IPipeSegment> SplitPipeToSegments(IContainer container, IPipe pipe,
+            IReadOnlyCollection<IPipe> allPipes)
         {
-            var processPipes = allPipes.Select(p => new ProcessPipe(p)).ToArray();
+            var processPipes = allPipes.Select(p => new ProcessPipe(container, p)).ToArray();
             var currentProcessPipe = processPipes.First(processPipe => processPipe.Pipe == pipe);
             var connectors = new List<IConnector>();
 

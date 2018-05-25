@@ -4,7 +4,8 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model"
                     xmlns:converters="clr-namespace:Prototype.Core.Converters"
-                    xmlns:templateSelectors="clr-namespace:Prototype.Core.TemplateSelectors">
+                    xmlns:templateSelectors="clr-namespace:Prototype.Core.TemplateSelectors"
+                    xmlns:pipeFlowScheme="clr-namespace:Prototype.Core.Controls.PipeFlowScheme">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -16,7 +17,7 @@
     <Style TargetType="controls:Pipe">
         <Style.Resources>
             <DataTemplate x:Key="LinePipeSegmentTemplate"
-                          DataType="controls:LinePipeSegment">
+                          DataType="pipeFlowScheme:LinePipeSegment">
                 <Border x:Name="MainControl"
                         BorderThickness="{Binding Converter={x:Static converters:PipeBorderThicknessConverter.Instance}}"
                         BorderBrush="#4D4F52" Background="#8B8D8E"
@@ -70,7 +71,7 @@
             </DataTemplate> 
             
             <DataTemplate x:Key="BridgeSegmentTemplate"
-                          DataType="controls:BridgeSegment">
+                          DataType="pipeFlowScheme:BridgeSegment">
                 <Border x:Name="MainControl"
                         BorderThickness="1"
                         BorderBrush="Red" Background="#8B8D8E"
