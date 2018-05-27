@@ -28,6 +28,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public Orientation Orientation { get; }
 
         public Side Side { get; }
+        public bool IsFailed { get; } // TODO delete
     }
 
     internal class BridgeSegment : IPipeSegment
@@ -47,16 +48,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class LinePipeSegment : IPipeSegment
     {
-        public LinePipeSegment(Point startPoint, double length, Orientation orientation)
+        public LinePipeSegment(Point startPoint, double length, Orientation orientation, bool isFailed)
         {
             StartPoint = startPoint;
             Length = length;
             Orientation = orientation;
+            IsFailed = isFailed;
         }
 
         public Point StartPoint { get; }
         public double Length { get; }
         public Orientation Orientation { get; }
+        public bool IsFailed { get; }
 
         public override string ToString()
         {

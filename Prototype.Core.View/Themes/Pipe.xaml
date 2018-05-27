@@ -28,6 +28,10 @@
                         <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
                         <Setter TargetName="MainControl" Property="Width" Value="5" />
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding IsFailed}" Value="True">
+                        <Setter TargetName="MainControl" Property="BorderBrush" Value="Red" />
+                        <Setter TargetName="MainControl" Property="Background" Value="Red" />
+                    </DataTrigger>
 
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>

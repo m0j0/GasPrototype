@@ -11,10 +11,10 @@
         <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" />
         <Pipe Canvas.Left="57" Canvas.Top="160" Width="60" />
         <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical" Height="105" />
-        <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="66" />
+        <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="71" />
         <Pipe Canvas.Left="112" Canvas.Top="160" Width="107" />
         <Pipe Canvas.Left="214" Canvas.Top="160" Width="118" />
-        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="66" />
+        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="71" />
         <Pipe Canvas.Left="112" Canvas.Top="226" Orientation="Vertical" Height="89" />
         <Pipe Canvas.Left="327" Canvas.Top="226" Orientation="Vertical" Height="89" />
         <Pipe Canvas.Left="112" Canvas.Top="310" Width="110" />

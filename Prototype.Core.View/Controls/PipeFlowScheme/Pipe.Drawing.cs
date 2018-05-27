@@ -51,6 +51,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (intersectionRect.Width != Pipe.PipeWidth ||
                         intersectionRect.Height != Pipe.PipeWidth)
                     {
+                        if (intersectionRect != Rect.Empty)
+                        {
+                            pipe1.IsFailed = true;
+                            pipe2.IsFailed = true;
+                        }
+
                         continue;
                     }
 
@@ -68,7 +74,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         connectors.Add(bridgeConnector);
                         continue;
                     }
-                    
+
+                    if (!IsCornerConnection(pipe1, pipe2, intersectionRect) &&
+                        !IsSerialConnection(pipe1, pipe2, intersectionRect))
+                    {
+                        pipe1.IsFailed = true;
+                        pipe2.IsFailed = true;
+
+                        continue;
+                    }
+
                     var cornerConnector = (CornerConnector)existingConnector ??
                                           new CornerConnector(intersectionRect);
                     cornerConnector.AddPipe(pipe1);
@@ -99,6 +114,22 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var currentProcessPipe in processPipes)
             {
+                if (currentProcessPipe.IsFailed)
+                {
+                    var result = new List<IPipeSegment>();
+
+                    result.Add(new LinePipeSegment(new Point(0, 0), 
+                        currentProcessPipe.Orientation == Orientation.Horizontal
+                            ? currentProcessPipe.Rect.Width
+                            : currentProcessPipe.Rect.Height,
+                        currentProcessPipe.Orientation,
+                        true));
+
+                    currentProcessPipe.Pipe.Segments = result;
+
+                    continue;
+                }
+
                 foreach (var connector in currentProcessPipe.Connectors)
                 {
                     currentProcessPipe.Segments.Add(connector.CreateSegment(currentProcessPipe));
@@ -152,13 +183,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         allSegments.Add(new LinePipeSegment(new Point(s1.StartPoint.X + s1.Length, 0),
                             s2.StartPoint.X - (s1.StartPoint.X + s1.Length),
-                            currentProcessPipe.Orientation));
+                            currentProcessPipe.Orientation,
+                            false));
                     }
                     else
                     {
                         allSegments.Add(new LinePipeSegment(new Point(0, s1.StartPoint.Y + s1.Length),
                             s2.StartPoint.Y - (s1.StartPoint.Y + s1.Length),
-                            currentProcessPipe.Orientation));
+                            currentProcessPipe.Orientation,
+                            false));
                     }
 
                     if (!(s2 is EmptySegment))
@@ -177,6 +210,52 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    pipe1.Rect.Right > intersectionRect.Right &&
                    pipe2.Rect.Top < intersectionRect.Top &&
                    pipe2.Rect.Bottom > intersectionRect.Bottom;
+        }
+
+        private static bool IsCornerConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
+        {
+            bool IsUpperLeft(ProcessPipe p1, ProcessPipe p2)
+            {
+                return p1.Rect.TopLeft == p2.Rect.TopLeft &&
+                       p1.Rect.TopLeft == intersectionRect.TopLeft;
+            }
+            bool IsUpperRight(ProcessPipe p1, ProcessPipe p2)
+            {
+                return p1.Rect.TopRight == p2.Rect.TopRight &&
+                       p1.Rect.TopRight == intersectionRect.TopRight;
+            }
+            bool IsLowerLeft(ProcessPipe p1, ProcessPipe p2)
+            {
+                return p1.Rect.BottomLeft == p2.Rect.BottomLeft &&
+                       p1.Rect.BottomLeft == intersectionRect.BottomLeft;
+            }
+            bool IsLowerRight(ProcessPipe p1, ProcessPipe p2)
+            {
+                return p1.Rect.BottomRight == p2.Rect.BottomRight &&
+                       p1.Rect.BottomRight == intersectionRect.BottomRight;
+            }
+
+            return IsUpperLeft(pipe1, pipe2) || IsUpperLeft(pipe2, pipe1) ||
+                   IsUpperRight(pipe1, pipe2) || IsUpperRight(pipe2, pipe1) ||
+                   IsLowerLeft(pipe1, pipe2) || IsLowerLeft(pipe2, pipe1) ||
+                   IsLowerRight(pipe1, pipe2) || IsLowerRight(pipe2, pipe1);
+        }
+
+        private static bool IsSerialConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
+        {
+            bool IsVertical(ProcessPipe p1, ProcessPipe p2)
+            {
+                return p1.Rect.BottomRight == p2.Rect.TopLeft + Pipe.ConnectorVector &&
+                       p1.Rect.BottomLeft == intersectionRect.BottomLeft;
+            }
+            bool IsHorizontal(ProcessPipe p1, ProcessPipe p2)
+            {
+                return p1.Rect.BottomRight == p2.Rect.TopLeft + Pipe.ConnectorVector &&
+                       p1.Rect.BottomRight == intersectionRect.BottomRight;
+            }
+
+            return IsVertical(pipe1, pipe2) || IsVertical(pipe2, pipe1) ||
+                   IsHorizontal(pipe1, pipe2) || IsHorizontal(pipe2, pipe1);
         }
 
         public static Rect FindIntersection(Rect a, Rect b)

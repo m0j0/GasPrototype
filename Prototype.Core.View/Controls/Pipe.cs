@@ -19,6 +19,7 @@ namespace Prototype.Core.Controls
         #region Constants
 
         internal const double PipeWidth = 5;
+        internal static Vector ConnectorVector = new Vector(PipeWidth, PipeWidth);
 
         #endregion
 
