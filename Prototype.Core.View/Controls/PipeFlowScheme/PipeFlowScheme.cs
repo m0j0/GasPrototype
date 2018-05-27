@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
@@ -23,6 +24,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void Add(IFlowControl control)
         {
+            AddInternal(control);
+
+            Invalidate();
+        }
+
+        private void AddInternal(IFlowControl control)
+        {
+            Should.NotBeNull(control, nameof(control));
+            control.SizeChanged += (sender, args) => Invalidate();
             switch (control)
             {
                 case IPipe pipe:
@@ -36,36 +46,32 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        public void Add(IReadOnlyCollection<IFlowControl> controls)
+        {
+            Should.NotBeNull(controls, nameof(controls));
+
+            if (controls.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var flowControl in controls)
+            {
+                AddInternal(flowControl);
+            }
 
             Invalidate();
         }
 
-        public void Add(IEnumerable<IFlowControl> controls)
+        public bool Contains(IFlowControl flowControl)
         {
-            foreach (var flowControl in controls)
-            {
-                switch (flowControl)
-                {
-                    case IPipe pipe:
-                        pipe.SizeChanged += (sender, args) => Invalidate();
-                        _pipes.Add(pipe);
-                        break;
-
-                    case IValve valve:
-                        _valves.Add(valve);
-                        break;
-
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-            
-            Invalidate();
+            return _pipes.Contains(flowControl) || _valves.Contains(flowControl);
         }
 
         public void Remove(IFlowControl control)
         {
-
         }
 
         public void Invalidate()
