@@ -41,7 +41,7 @@ namespace Prototype.Core.Controls
 
         #region Events
 
-        public event EventHandler SizeChanged;
+        public event EventHandler InvalidateRequired;
 
         #endregion
 

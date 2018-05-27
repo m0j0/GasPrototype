@@ -139,9 +139,9 @@
         <Pipe Canvas.Left="540" Canvas.Top="402" Orientation="Vertical" Height="42" PipeSchemeEx.StartVertex="{Binding Connection16_Cnn15_Bypass2_Vacuum2}" PipeSchemeEx.EndVertex="{Binding Connection15_Cnn13_VacChuckShutOffRight_Cnn16}" />
         <Pipe Canvas.Left="393" Canvas.Top="319" Orientation="Vertical" Height="28" PipeSchemeEx.StartVertex="{Binding VacChuckShutOffLeftValveVertex}" PipeSchemeEx.EndVertex="{Binding VacChuckDestinationVertex}" />
         <Pipe Canvas.Left="540" Canvas.Top="319" Orientation="Vertical" Height="28" PipeSchemeEx.StartVertex="{Binding VacChuckShutOffRightValveVertex}" PipeSchemeEx.EndVertex="{Binding VacChuck2DestinationVertex}" />
-        <Pipe Canvas.Left="398" Canvas.Top="439" Width="44" PipeSchemeEx.StartVertex="{Binding Connection12_Cnn2_Vacuum_Bypass}" PipeSchemeEx.EndVertex="{Binding ByPassValveVertex}"  />
-        <Pipe Canvas.Left="469" Canvas.Top="439" Width="43" PipeSchemeEx.StartVertex="{Binding Connection10_Bypass_ChamberSource_Bypass2_Cnn11}" PipeSchemeEx.EndVertex="{Binding ByPassValve2Vertex}" />
-        <Pipe Canvas.Left="545" Canvas.Top="439" Width="56" PipeSchemeEx.StartVertex="{Binding Connection16_Cnn15_Bypass2_Vacuum2}" PipeSchemeEx.EndVertex="{Binding VacuumValve2Vertex}" />
+        <Pipe Canvas.Left="393" Canvas.Top="439" Width="49" PipeSchemeEx.StartVertex="{Binding Connection12_Cnn2_Vacuum_Bypass}" PipeSchemeEx.EndVertex="{Binding ByPassValveVertex}"  />
+        <Pipe Canvas.Left="464" Canvas.Top="439" Width="48" PipeSchemeEx.StartVertex="{Binding Connection10_Bypass_ChamberSource_Bypass2_Cnn11}" PipeSchemeEx.EndVertex="{Binding ByPassValve2Vertex}" />
+        <Pipe Canvas.Left="540" Canvas.Top="439" Width="61" PipeSchemeEx.StartVertex="{Binding Connection16_Cnn15_Bypass2_Vacuum2}" PipeSchemeEx.EndVertex="{Binding VacuumValve2Vertex}" />
 
         <Valve Canvas.Left="85" Canvas.Top="422" Orientation="Horizontal" ValveVm="{Binding DownStreamInvValveVm}" />
         <Valve Canvas.Left="174" Canvas.Top="422" Orientation="Horizontal" ValveVm="{Binding DownStreamValveVm}" />

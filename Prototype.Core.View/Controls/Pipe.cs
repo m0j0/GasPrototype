@@ -33,13 +33,13 @@ namespace Prototype.Core.Controls
         {
             DependencyPropertyDescriptor
                 .FromProperty(HeightProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SizeChanged?.Invoke(this, EventArgs.Empty));
+                .AddValueChanged(this, (s, e) => InvalidateRequired?.Invoke(this, EventArgs.Empty));
             DependencyPropertyDescriptor
                 .FromProperty(WidthProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SizeChanged?.Invoke(this, EventArgs.Empty));
+                .AddValueChanged(this, (s, e) => InvalidateRequired?.Invoke(this, EventArgs.Empty));
             DependencyPropertyDescriptor
                 .FromProperty(OrientationProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SizeChanged?.Invoke(this, EventArgs.Empty));
+                .AddValueChanged(this, (s, e) => InvalidateRequired?.Invoke(this, EventArgs.Empty));
         }
 
         #endregion
@@ -65,7 +65,7 @@ namespace Prototype.Core.Controls
         
         #region Events
 
-        public event EventHandler SizeChanged;
+        public event EventHandler InvalidateRequired;
 
         #endregion
 

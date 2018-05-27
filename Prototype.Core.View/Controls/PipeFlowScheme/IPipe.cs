@@ -10,6 +10,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         double GetTop(IFlowControl control);
 
         double GetLeft(IFlowControl control);
+
+        event EventHandler InvalidateRequired;
     }
 
     public interface IFlowControl
@@ -18,7 +20,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         double Height { get; }
 
-        event EventHandler SizeChanged;
+        event EventHandler InvalidateRequired;
     }
 
     public interface IPipe : IFlowControl

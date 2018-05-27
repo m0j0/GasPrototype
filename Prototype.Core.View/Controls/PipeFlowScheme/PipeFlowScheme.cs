@@ -14,6 +14,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public PipeFlowScheme(IContainer container)
         {
             _container = container;
+            _container.InvalidateRequired += OnInvalidateRequired;
             _pipes = new List<IPipe>();
             _valves = new List<IValve>();
         }
@@ -27,25 +28,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             AddInternal(control);
 
             Invalidate();
-        }
-
-        private void AddInternal(IFlowControl control)
-        {
-            Should.NotBeNull(control, nameof(control));
-            control.SizeChanged += (sender, args) => Invalidate();
-            switch (control)
-            {
-                case IPipe pipe:
-                    _pipes.Add(pipe);
-                    break;
-
-                case IValve valve:
-                    _valves.Add(valve);
-                    break;
-
-                default:
-                    throw new NotSupportedException();
-            }
         }
 
         public void Add(IReadOnlyCollection<IFlowControl> controls)
@@ -72,14 +54,50 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void Remove(IFlowControl control)
         {
+            Should.NotBeNull(control, nameof(control));
+            control.InvalidateRequired -= OnInvalidateRequired;
+            switch (control)
+            {
+                case IPipe pipe:
+                    _pipes.Remove(pipe);
+                    break;
+
+                case IValve valve:
+                    _valves.Remove(valve);
+                    break;
+
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        public void Invalidate()
+        private void Invalidate()
         {
-            foreach (var pipe in _pipes)
+            PipeDrawing.SplitPipeToSegments(_container, _pipes);
+        }
+
+        private void AddInternal(IFlowControl control)
+        {
+            Should.NotBeNull(control, nameof(control));
+            control.InvalidateRequired += OnInvalidateRequired;
+            switch (control)
             {
-                pipe.Segments = PipeDrawing.SplitPipeToSegments(_container, pipe, _pipes).ToList();
+                case IPipe pipe:
+                    _pipes.Add(pipe);
+                    break;
+
+                case IValve valve:
+                    _valves.Add(valve);
+                    break;
+
+                default:
+                    throw new NotSupportedException();
             }
+        }
+
+        private void OnInvalidateRequired(object sender, EventArgs e)
+        {
+            Invalidate();
         }
     }
 }
