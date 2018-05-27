@@ -8,9 +8,9 @@
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold2Vm}"
              d:DesignHeight="500" d:DesignWidth="500">
     <PipeFlowCanvas>
-        <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" />
+        <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" PipeFlowScheme.IsSource="True" />
         <Pipe Canvas.Left="57" Canvas.Top="160" Width="60" />
-        <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical" Height="105" />
+        <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical" Height="105" PipeFlowScheme.IsSource="True" />
         <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="71" />
         <Pipe Canvas.Left="112" Canvas.Top="160" Width="107" />
         <Pipe Canvas.Left="214" Canvas.Top="160" Width="118" />
@@ -19,7 +19,7 @@
         <Pipe Canvas.Left="327" Canvas.Top="226" Orientation="Vertical" Height="89" />
         <Pipe Canvas.Left="112" Canvas.Top="310" Width="110" />
         <Pipe Canvas.Left="217" Canvas.Top="310" Width="115" />
-        <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68" />
+        <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68" PipeFlowScheme.IsDestination="True" />
 
         <Valve Canvas.Left="96" Canvas.Top="226"
                ValveVm="{Binding ValveVm1}" />

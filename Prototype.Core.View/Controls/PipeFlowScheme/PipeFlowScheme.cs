@@ -1,12 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public sealed class PipeFlowScheme
     {
+        #region Attached
+
+        public static readonly DependencyProperty IsSourceProperty = DependencyProperty.RegisterAttached(
+            "IsSource", typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
+
+        public static void SetIsSource(DependencyObject element, bool value)
+        {
+            element.SetValue(IsSourceProperty, value);
+        }
+
+        public static bool GetIsSource(DependencyObject element)
+        {
+            return (bool)element.GetValue(IsSourceProperty);
+        }
+
+        public static readonly DependencyProperty IsDestinationProperty = DependencyProperty.RegisterAttached(
+            "IsDestination", typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
+
+        public static void SetIsDestination(DependencyObject element, bool value)
+        {
+            element.SetValue(IsDestinationProperty, value);
+        }
+
+        public static bool GetIsDestination(DependencyObject element)
+        {
+            return (bool)element.GetValue(IsDestinationProperty);
+        }
+
+        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (GetIsDestination(d) && GetIsSource(d))
+            {
+                throw new Exception("!!!");
+            }
+        }
+
+        #endregion
+
         private readonly IContainer _container;
         private readonly List<IPipe> _pipes;
         private readonly List<IValve> _valves;
