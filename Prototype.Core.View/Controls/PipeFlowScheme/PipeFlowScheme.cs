@@ -113,6 +113,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private void Invalidate()
         {
             PipeDrawing.SplitPipeToSegments(_container, _pipes);
+
+            foreach (var pipe in _pipes)
+            {
+                pipe.HasFlow = true;
+            }
         }
 
         private void AddInternal(IFlowControl control)

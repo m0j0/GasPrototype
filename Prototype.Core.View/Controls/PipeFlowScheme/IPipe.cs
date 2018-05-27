@@ -28,6 +28,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Orientation Orientation { get; }
 
         IList<IPipeSegment> Segments { get; set; }
+
+        bool HasFlow { get; set; }
     }
 
     public interface IValve : IFlowControl
