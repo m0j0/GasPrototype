@@ -78,17 +78,13 @@
             
             <DataTemplate x:Key="BridgeSegmentTemplate"
                           DataType="pipeFlowScheme:BridgeSegment">
-                <Border x:Name="MainControl"
+                <!--<Border x:Name="MainControl"
                         BorderThickness="1"
                         BorderBrush="Red" Background="#8B8D8E"
-                        Width="5" Height="{Binding Length}" />
+                        Width="5" Height="{Binding Length}" />-->
 
-                <!--<Path x:Name="MainControl" Fill="#FF514F52"  
-                      Data="M196 168 L200 164 L200 159 L196 155 L196 148 L197 148 L197 154.585786 L201 158.585786 L201 164.414214 L197 168.414214 L197 175 L196 175 L196 168 Z M201 158.585786 L201 164.414214 L197 168.414214 L196 168 L200 164 L200 159 L196 155 L196 148 L197 148 L197 154.585786 L201 158.585786 Z M200 169 L204 165 L204 158 L200 154 L200 148 L201 148 L201 153.585786 L205 157.585786 L205 165.414214 L201 169.414214 L201 175 L200 175 L200 169 Z">
-                    <Path.RenderTransform>
-                        <TranslateTransform X="-196" Y="-148"/>
-                    </Path.RenderTransform>
-                </Path>-->
+                <Path x:Name="MainControl" Fill="Green" Stroke="Red" StrokeThickness="0.25" 
+                      Data="M0 20l4-4v-5L0 7V0h1v6.586l4 4v5.828l-4 4V27H0v-7zm5-9.414v5.828l-4 4L0 20l4-4v-5L0 7V0h1v6.586l4 4zM4 21l4-4v-7L4 6V0h1v5.586l4 4v7.828l-4 4V27H4v-6z" />
 
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding Orientation}" Value="Horizontal">

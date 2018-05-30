@@ -48,8 +48,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             if (pipe == Pipe1)
             {
-                double horizontalOffset = pipe.Orientation == Orientation.Horizontal ? -Pipe.PipeWidth : 0;
-                double verticalOffset = pipe.Orientation == Orientation.Horizontal ? 0 : -Pipe.PipeWidth;
+                double horizontalOffset = pipe.Orientation == Orientation.Horizontal ? -11 : 0;
+                double verticalOffset = pipe.Orientation == Orientation.Horizontal ? 0 : -11;
 
                 return new BridgeSegment(
                     new Point(

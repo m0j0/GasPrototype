@@ -41,7 +41,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Point StartPoint { get; }
 
-        public double Length => Pipe.PipeWidth * 3;
+        public double Length => 27;
 
         public Orientation Orientation { get; }
     }
