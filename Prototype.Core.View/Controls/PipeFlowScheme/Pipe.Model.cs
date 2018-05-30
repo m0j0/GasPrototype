@@ -29,4 +29,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return $"{Rect} {Orientation}";
         }
     }
+
+    internal class ProcessValve
+    {
+        public ProcessValve(IContainer container, IValve valve)
+        {
+            Rect = new Rect(container.GetLeft(valve), container.GetTop(valve), valve.Width, valve.Height);
+            Valve = valve;
+        }
+
+        public IValve Valve { get; }
+
+        public Rect Rect { get; }
+    }
 }

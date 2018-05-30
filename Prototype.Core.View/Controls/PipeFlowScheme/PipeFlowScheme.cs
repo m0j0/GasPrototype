@@ -112,7 +112,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void Invalidate()
         {
-            var processPipes = PipeDrawing.SplitPipeToSegments(_container, _pipes);
+            var processPipes = PipeDrawing.SplitPipeToSegments(_container, _pipes, _valves);
             var connectors = processPipes.SelectMany(pipe => pipe.Connectors).OfType<CornerConnector>().Distinct().ToArray();
 
             foreach (var edge in _pipes)

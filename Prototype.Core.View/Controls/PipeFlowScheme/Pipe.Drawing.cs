@@ -29,9 +29,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         public static ProcessPipe[] SplitPipeToSegments(IContainer container, 
-            IReadOnlyCollection<IPipe> allPipes)
+            IReadOnlyCollection<IPipe> allPipes, IReadOnlyCollection<IValve> allValves)
         {
             var processPipes = allPipes.Select(p => new ProcessPipe(container, p)).ToArray();
+            var processValves = allValves.Select(v => new ProcessValve(container, v)).ToArray();
             var connectors = new List<IConnector>();
 
             foreach (var pipe1 in processPipes)
@@ -108,6 +109,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (connectors[i].Rect == connectors[j].Rect)
                     {
                         throw new Exception("!!!");
+                    }
+                }
+            }
+
+            foreach (var connector in connectors.OfType<CornerConnector>())
+            {
+                foreach (var valve in processValves)
+                {
+                    if (IsIntersect(connector.Rect, valve.Rect))
+                    {
+                        connector.Valve = valve.Valve;
                     }
                 }
             }
