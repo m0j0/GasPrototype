@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
@@ -11,7 +10,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         double GetLeft(IFlowControl control);
 
-        event EventHandler InvalidateRequired;
+        event EventHandler SchemeChanged;
     }
 
     public interface IFlowControl
@@ -20,7 +19,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         double Height { get; }
 
-        event EventHandler InvalidateRequired;
+        event EventHandler SchemeChanged;
     }
 
     public interface IPipe : IFlowControl
@@ -35,5 +34,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     public interface IValve : IFlowControl
     {
         bool CanPassFlow(IPipe pipe1, IPipe pipe2);
+
+        event EventHandler StateChanged;
     }
 }

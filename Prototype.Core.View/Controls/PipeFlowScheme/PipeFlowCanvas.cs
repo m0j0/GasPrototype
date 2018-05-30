@@ -18,7 +18,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Unloaded += OnUnloaded;
         }
 
-        public event EventHandler InvalidateRequired;
+        public event EventHandler SchemeChanged;
 
         public double GetTop(IFlowControl control)
         {
@@ -100,12 +100,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void OnFlowControlPositionChanged(object sender, EventArgs e)
         {
-            OnInvalidateRequired();
-        }
-
-        private void OnInvalidateRequired()
-        {
-            InvalidateRequired?.Invoke(this, EventArgs.Empty);
+            SchemeChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

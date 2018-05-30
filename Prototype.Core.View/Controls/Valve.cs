@@ -41,7 +41,9 @@ namespace Prototype.Core.Controls
 
         #region Events
 
-        public event EventHandler InvalidateRequired;
+        public event EventHandler SchemeChanged;
+
+        public event EventHandler StateChanged;
 
         #endregion
 
@@ -101,7 +103,7 @@ namespace Prototype.Core.Controls
         private static void OnPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var valve = (Valve) d;
-            valve.InvalidateRequired?.Invoke(valve, EventArgs.Empty);
+            valve.StateChanged?.Invoke(valve, EventArgs.Empty);
         }
 
         #endregion

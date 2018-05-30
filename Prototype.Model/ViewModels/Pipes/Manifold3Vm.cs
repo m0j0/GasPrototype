@@ -50,13 +50,13 @@ namespace Prototype.ViewModels.Pipes
             Connection_V5_Vertex = new Vertex();
             Connection_V6_Vertex = new Vertex();
 
-            Scheme.AddVertices(SourceFinal1Vertex, ValveFinal1Vertex, Connection_V1V2_Vertex, Connection_V2Dst_Vertex, ChamberDestinationVertex);
+/*            Scheme.AddVertices(SourceFinal1Vertex, ValveFinal1Vertex, Connection_V1V2_Vertex, Connection_V2Dst_Vertex, ChamberDestinationVertex);
             Scheme.AddVertices(SourceFinal2Vertex, ValveFinal2Vertex, Connection_V1V2_Vertex);
             Scheme.AddVertices(SourceFinal3Vertex, ValveFinal3Vertex, Connection_V2Dst_Vertex);
             Scheme.AddVertices(SourceFinal4Vertex, ValveFinal4Vertex, Connection_V4_Vertex, Connection_V2Dst_Vertex);
             Scheme.AddVertices(SourceFinal5Vertex, ValveFinal5Vertex, Connection_V5_Vertex, Connection_V4_Vertex);
             Scheme.AddVertices(SourceFinal6Vertex, ValveFinal6Vertex, Connection_V6_Vertex, Connection_V5_Vertex);
-            Scheme.AddVertices(SourceFinal7Vertex, ValveFinal7Vertex, Connection_V6_Vertex);
+            Scheme.AddVertices(SourceFinal7Vertex, ValveFinal7Vertex, Connection_V6_Vertex);*/
 
             //
 
@@ -66,7 +66,7 @@ namespace Prototype.ViewModels.Pipes
             N2BottomPurgeSourceVertex = new SourceVertex();
             N2BottomPurgeDestinationVertex = new DestinationVertex();
 
-            Scheme.AddVertices(N2BottomPurgeSourceVertex, N2BottomPurgeValveVertex, N2BottomPurgeDestinationVertex);
+            //Scheme.AddVertices(N2BottomPurgeSourceVertex, N2BottomPurgeValveVertex, N2BottomPurgeDestinationVertex);
 
             //
 
@@ -76,7 +76,7 @@ namespace Prototype.ViewModels.Pipes
             UpStreamSourceVertex = new SourceVertex();
             UpStreamDestinationVertex = new DestinationVertex();
 
-            Scheme.AddVertices(UpStreamSourceVertex, UpStreamValveVertex, UpStreamDestinationVertex);
+            //Scheme.AddVertices(UpStreamSourceVertex, UpStreamValveVertex, UpStreamDestinationVertex);
 
             //
 
@@ -149,7 +149,7 @@ namespace Prototype.ViewModels.Pipes
             Connection16_Cnn15_Bypass2_Vacuum2 = new Vertex();
             Connection17_TurboTv_TurboPump_Turbo = new Vertex();
 
-            Scheme.AddVertices(VfmSourceVertex, Connection1_DownStreamInv_DownStream_VfmSource, DownStreamInvValveVertex, GasLineDestinationVertex);
+/*            Scheme.AddVertices(VfmSourceVertex, Connection1_DownStreamInv_DownStream_VfmSource, DownStreamInvValveVertex, GasLineDestinationVertex);
             Scheme.AddVertices(Connection1_DownStreamInv_DownStream_VfmSource, DownStreamValveVertex, Connection2_DownStream_Vacuum_Cnn3,
                 Connection3_BksidePurge_Vacuum_Cnn4, BksidePurgeValveVertex, BksidePurgeDestinationVertex);
             Scheme.AddVertices(Connection3_BksidePurge_Vacuum_Cnn4, Connection4_Cnn3_Divert_Cnn5, DivertValveVertex, DivertDestinationVertex);
@@ -168,7 +168,7 @@ namespace Prototype.ViewModels.Pipes
             Scheme.AddVertices(Connection16_Cnn15_Bypass2_Vacuum2, VacuumValve2Vertex, Connection8_Cnn7_Vacuum2_Cnn9);
             Scheme.AddVertices(Connection8_Cnn7_Vacuum2_Cnn9, Connection9_Cnn8_Turbo_TurboPump, TurboValveVertex, Connection17_TurboTv_TurboPump_Turbo, TurboPumpDestinationVertex);
             Scheme.AddVertices(Connection17_TurboTv_TurboPump_Turbo, TurboTvValveVertex, TurboGateValveVertex, ChamberSourceVertex);
-            Scheme.AddVertices(Connection7_Cnn6_Ballast_Cnn8, BallastValveVertex, BallastDestinationVertex);
+            Scheme.AddVertices(Connection7_Cnn6_Ballast_Cnn8, BallastValveVertex, BallastDestinationVertex);*/
         }
 
         #endregion

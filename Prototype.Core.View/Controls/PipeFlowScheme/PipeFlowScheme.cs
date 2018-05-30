@@ -8,7 +8,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public sealed class PipeFlowScheme
     {
-        #region Attached
+        #region Attached properties
 
         public static readonly DependencyProperty IsSourceProperty = DependencyProperty.RegisterAttached(
             "IsSource", typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
@@ -49,24 +49,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private readonly IContainer _container;
         private readonly List<IPipe> _pipes;
         private readonly List<IValve> _valves;
+        private ProcessPipe[] _processPipes;
 
         public PipeFlowScheme(IContainer container)
         {
             _container = container;
-            _container.InvalidateRequired += OnInvalidateRequired;
+            _container.SchemeChanged += OnSchemeChanged;
             _pipes = new List<IPipe>();
             _valves = new List<IValve>();
         }
-
-        public IReadOnlyCollection<IPipe> Pipes => _pipes;
-
-        public IReadOnlyCollection<IValve> Valves => _valves;
 
         public void Add(IFlowControl control)
         {
             AddInternal(control);
 
-            Invalidate();
+            InvalidateScheme();
         }
 
         public void Add(IReadOnlyCollection<IFlowControl> controls)
@@ -83,7 +80,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 AddInternal(flowControl);
             }
 
-            Invalidate();
+            InvalidateScheme();
         }
 
         public bool Contains(IFlowControl flowControl)
@@ -94,7 +91,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public void Remove(IFlowControl control)
         {
             Should.NotBeNull(control, nameof(control));
-            control.InvalidateRequired -= OnInvalidateRequired;
+            control.SchemeChanged -= OnSchemeChanged;
+
             switch (control)
             {
                 case IPipe pipe:
@@ -102,6 +100,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     break;
 
                 case IValve valve:
+                    valve.StateChanged -= OnValveStateChanged;
                     _valves.Remove(valve);
                     break;
 
@@ -110,10 +109,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        private void Invalidate()
+        private void InvalidateScheme()
         {
-            var processPipes = PipeDrawing.SplitPipeToSegments(_container, _pipes, _valves);
-            var connectors = processPipes.SelectMany(pipe => pipe.Connectors).OfType<CornerConnector>().Distinct().ToArray();
+            _processPipes = PipeDrawing.SplitPipeToSegments(_container, _pipes, _valves);
+            InvalidateFlow();
+        }
+
+        private void InvalidateFlow()
+        {
+            var connectors = _processPipes.SelectMany(pipe => pipe.Connectors).OfType<CornerConnector>().Distinct().ToArray();
 
             foreach (var edge in _pipes)
             {
@@ -142,7 +146,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         for (var i = 0; i < path.Count - 1; i++)
                         {
-                            var edge = processPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
+                            var edge = _processPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
                             edge.Pipe.HasFlow = true;
                         }
                     }
@@ -153,7 +157,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private void AddInternal(IFlowControl control)
         {
             Should.NotBeNull(control, nameof(control));
-            control.InvalidateRequired += OnInvalidateRequired;
+            control.SchemeChanged += OnSchemeChanged;
             switch (control)
             {
                 case IPipe pipe:
@@ -161,6 +165,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     break;
 
                 case IValve valve:
+                    valve.StateChanged += OnValveStateChanged;
                     _valves.Add(valve);
                     break;
 
@@ -169,9 +174,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        private void OnInvalidateRequired(object sender, EventArgs e)
+        private void OnValveStateChanged(object sender, EventArgs e)
         {
-            Invalidate();
+            InvalidateFlow();
+        }
+
+        private void OnSchemeChanged(object sender, EventArgs e)
+        {
+            InvalidateScheme();
         }
     }
 }

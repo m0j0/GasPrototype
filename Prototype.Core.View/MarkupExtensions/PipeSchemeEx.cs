@@ -88,6 +88,7 @@ namespace Prototype.Core.MarkupExtensions
 
             if (startVertex.Owner == null || startVertex.Owner != endVertex.Owner)
             {
+                return null;
                 throw new Exception("!!!");
             }
 
