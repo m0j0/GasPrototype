@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
@@ -45,15 +46,29 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public IPipeSegment CreateSegment(ProcessPipe pipe)
         {
-            if (Pipe1 != pipe && Pipe2 != pipe)
+            if (pipe == Pipe1)
             {
-                throw new ArgumentException("!!!");
+                double horizontalOffset = pipe.Orientation == Orientation.Horizontal ? -Pipe.PipeWidth : 0;
+                double verticalOffset = pipe.Orientation == Orientation.Horizontal ? 0 : -Pipe.PipeWidth;
+
+                return new BridgeSegment(
+                    new Point(
+                        Rect.Left - pipe.Rect.Left + horizontalOffset,
+                        Rect.Top - pipe.Rect.Top + verticalOffset),
+                    pipe.Orientation
+                );
             }
 
-            return new BridgeSegment(
-                new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
-                pipe.Orientation
-            );
+            if (pipe == Pipe2)
+            {
+                return new LinePipeSegment(
+                    new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
+                    pipe.Orientation == Orientation.Horizontal ? Rect.Right - Rect.Left : Rect.Bottom - Rect.Top,
+                    pipe.Orientation,
+                    false);
+            }
+
+            throw new ArgumentException("!!!");
         }
 
         public override string ToString()

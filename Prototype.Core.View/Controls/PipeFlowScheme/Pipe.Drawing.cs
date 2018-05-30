@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
@@ -71,7 +72,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             continue;
                         }
 
-                        var bridgeConnector = new BridgeConnector(intersectionRect, pipe1, pipe2);
+                        int pipe1Index = Array.IndexOf(processPipes, pipe1);
+                        int pipe2Index = Array.IndexOf(processPipes, pipe2);
+
+                        var bridgeConnector = new BridgeConnector(intersectionRect, 
+                            pipe1Index > pipe2Index ? pipe1 : pipe2, 
+                            pipe1Index > pipe2Index ? pipe2 : pipe1);
                         connectors.Add(bridgeConnector);
                         continue;
                     }

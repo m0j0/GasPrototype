@@ -81,15 +81,25 @@
                 <Border x:Name="MainControl"
                         BorderThickness="1"
                         BorderBrush="Red" Background="#8B8D8E"
-                        Height="5" Width="{Binding Length}" />
+                        Width="5" Height="{Binding Length}" />
+
+                <!--<Path x:Name="MainControl" Fill="#FF514F52"  
+                      Data="M196 168 L200 164 L200 159 L196 155 L196 148 L197 148 L197 154.585786 L201 158.585786 L201 164.414214 L197 168.414214 L197 175 L196 175 L196 168 Z M201 158.585786 L201 164.414214 L197 168.414214 L196 168 L200 164 L200 159 L196 155 L196 148 L197 148 L197 154.585786 L201 158.585786 Z M200 169 L204 165 L204 158 L200 154 L200 148 L201 148 L201 153.585786 L205 157.585786 L205 165.414214 L201 169.414214 L201 175 L200 175 L200 169 Z">
+                    <Path.RenderTransform>
+                        <TranslateTransform X="-196" Y="-148"/>
+                    </Path.RenderTransform>
+                </Path>-->
 
                 <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
-                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                    <DataTrigger Binding="{Binding Orientation}" Value="Horizontal">
+                        <Setter TargetName="MainControl" Property="LayoutTransform">
+                            <Setter.Value>
+                                <RotateTransform Angle="90" />
+                            </Setter.Value>
+                        </Setter>
                     </DataTrigger>
 
-                    <MultiDataTrigger>
+                    <!--<MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition
                                 Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
@@ -126,7 +136,7 @@
                         </MultiDataTrigger.Conditions>
 
                         <Setter TargetName="MainControl" Property="Background" Value="#A800A8" />
-                    </MultiDataTrigger>
+                    </MultiDataTrigger>-->
                 </DataTemplate.Triggers>
             </DataTemplate>
 

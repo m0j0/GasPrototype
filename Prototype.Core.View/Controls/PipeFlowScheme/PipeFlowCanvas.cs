@@ -48,7 +48,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             if (visualRemoved is IFlowControl removedControl)
             {
                 _scheme.Remove(removedControl);
-                UnsubscribePositionChangedEvents(visualAdded);
+                UnsubscribePositionChangedEvents(visualRemoved);
             }
         }
 
