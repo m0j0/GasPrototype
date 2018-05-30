@@ -112,11 +112,41 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void Invalidate()
         {
-            PipeDrawing.SplitPipeToSegments(_container, _pipes);
+            var processPipes = PipeDrawing.SplitPipeToSegments(_container, _pipes);
+            var connectors = processPipes.SelectMany(pipe => pipe.Connectors).OfType<CornerConnector>().Distinct().ToArray();
 
-            foreach (var pipe in _pipes)
+            foreach (var edge in _pipes)
             {
-                pipe.HasFlow = true;
+                edge.HasFlow = false;
+            }
+
+            var destinationConnectors = connectors.Where(c => c.IsDestination).ToArray();
+            foreach (var connector in connectors)
+            {
+                if (!connector.IsSource)
+                {
+                    continue;
+                }
+
+                var algo = new DepthFirstDirectedPaths(connector);
+
+                foreach (var destinationVertex in destinationConnectors)
+                {
+                    var paths = algo.PathsTo(destinationVertex);
+                    if (paths == null || paths.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var path in paths)
+                    {
+                        for (var i = 0; i < path.Count - 1; i++)
+                        {
+                            var edge = processPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
+                            edge.Pipe.HasFlow = true;
+                        }
+                    }
+                }
             }
         }
 

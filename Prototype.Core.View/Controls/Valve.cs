@@ -29,7 +29,7 @@ namespace Prototype.Core.Controls
             "Orientation", typeof(Orientation), typeof(Valve), new PropertyMetadata(Orientation.Vertical));
 
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
-            "State", typeof(ValveState), typeof(Valve), new PropertyMetadata(ValveState.Unknown));
+            "State", typeof(ValveState), typeof(Valve), new PropertyMetadata(ValveState.Unknown, OnPropertyChangedCallback));
 
         public static readonly DependencyProperty MenuCommandsProperty = DependencyProperty.Register(
             "MenuCommands", typeof(IReadOnlyCollection<INamedCommand>), typeof(Valve), new PropertyMetadata(default(IReadOnlyCollection<INamedCommand>)));
@@ -96,6 +96,12 @@ namespace Prototype.Core.Controls
             valve.Bind(() => v => v.State).To(model, () => (m, ctx) => m.State).Build();
             valve.Bind(() => v => v.MenuCommands).To(model, () => (m, ctx) => m.Commands).Build();
             valve.Bind(() => v => v.Visibility).To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
+        }
+
+        private static void OnPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var valve = (Valve) d;
+            valve.InvalidateRequired?.Invoke(valve, EventArgs.Empty);
         }
 
         #endregion

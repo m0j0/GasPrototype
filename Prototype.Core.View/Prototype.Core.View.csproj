@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Controls\AttrTableCb.cs" />
     <Compile Include="Controls\AttrTable.cs" />
+    <Compile Include="Controls\PipeFlowScheme\DepthFirstDirectedPaths.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowScheme.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />

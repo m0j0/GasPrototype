@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -72,6 +73,27 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         public Rect Rect { get; }
+
+        // TODO
+        public bool IsSource { get; set; }
+        public bool IsDestination { get; set; }
+
+        public IEnumerable<CornerConnector> GetAdjacentConnectors()
+        {
+            foreach (var pipe in _pipes)
+            {
+                if (pipe == null)
+                {
+                    continue;
+                }
+
+                foreach (var cornerConnector in pipe.Connectors.OfType<CornerConnector>())
+                {
+                    yield return  cornerConnector;
+                }
+            }
+        }
+        //
 
         public ProcessPipe Pipe1 => _pipes[0];
         public ProcessPipe Pipe2 => _pipes[1];

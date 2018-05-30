@@ -28,7 +28,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    b.Top <= a.Bottom;
         }
 
-        public static void SplitPipeToSegments(IContainer container, 
+        public static ProcessPipe[] SplitPipeToSegments(IContainer container, 
             IReadOnlyCollection<IPipe> allPipes)
         {
             var processPipes = allPipes.Select(p => new ProcessPipe(container, p)).ToArray();
@@ -140,6 +140,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.TopLeft, Pipe.ConnectorVector));
                     cornerConnector.AddPipe(currentProcessPipe);
                     orderedConnectors.Insert(0, cornerConnector);
+
+                    if (PipeFlowScheme.GetIsSource((DependencyObject)currentProcessPipe.Pipe))
+                    {
+                        cornerConnector.IsSource = true;
+                    }
+                    if (PipeFlowScheme.GetIsDestination((DependencyObject)currentProcessPipe.Pipe))
+                    {
+                        cornerConnector.IsDestination = true;
+                    }
                 }
 
                 if (lastOrDefault == null ||
@@ -148,8 +157,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.BottomRight - Pipe.ConnectorVector, Pipe.ConnectorVector));
                     cornerConnector.AddPipe(currentProcessPipe);
                     orderedConnectors.Add(cornerConnector);
-                }
 
+                    if (PipeFlowScheme.GetIsSource((DependencyObject)currentProcessPipe.Pipe))
+                    {
+                        cornerConnector.IsSource = true;
+                    }
+                    if (PipeFlowScheme.GetIsDestination((DependencyObject)currentProcessPipe.Pipe))
+                    {
+                        cornerConnector.IsDestination = true;
+                    }
+                }
+                
                 foreach (var connector in orderedConnectors)
                 {
                     currentProcessPipe.Segments.Add(connector.CreateSegment(currentProcessPipe));
@@ -183,6 +201,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                 currentProcessPipe.Pipe.Segments = allSegments;
             }
+
+            return processPipes;
         }
 
         private static bool IsBridgeConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
