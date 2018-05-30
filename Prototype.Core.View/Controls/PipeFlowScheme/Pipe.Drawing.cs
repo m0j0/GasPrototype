@@ -130,54 +130,38 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     continue;
                 }
 
-                foreach (var connector in currentProcessPipe.Connectors)
+                var orderedConnectors = currentProcessPipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).ToList();
+                var firstOrDefault = orderedConnectors.FirstOrDefault();
+                var lastOrDefault = orderedConnectors.LastOrDefault();
+
+                if (firstOrDefault == null ||
+                    firstOrDefault.Rect.TopLeft != currentProcessPipe.Rect.TopLeft)
+                {
+                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.TopLeft, Pipe.ConnectorVector));
+                    cornerConnector.AddPipe(currentProcessPipe);
+                    orderedConnectors.Insert(0, cornerConnector);
+                }
+
+                if (lastOrDefault == null ||
+                    lastOrDefault.Rect.BottomRight != currentProcessPipe.Rect.BottomRight)
+                {
+                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.BottomRight - Pipe.ConnectorVector, Pipe.ConnectorVector));
+                    cornerConnector.AddPipe(currentProcessPipe);
+                    orderedConnectors.Add(cornerConnector);
+                }
+
+                foreach (var connector in orderedConnectors)
                 {
                     currentProcessPipe.Segments.Add(connector.CreateSegment(currentProcessPipe));
                 }
-
-                var orderedSegments = currentProcessPipe.Segments.OrderBy(s => s.StartPoint.X)
-                    .ThenBy(s => s.StartPoint.Y)
-                    .ToList();
-
-                var first = orderedSegments.FirstOrDefault();
-                if (first == null ||
-                    first.StartPoint.X != 0 ||
-                    first.StartPoint.Y != 0)
-                {
-                    orderedSegments.Insert(0,
-                        new EmptySegment(new Point(0, 0),
-                            currentProcessPipe.Orientation)
-                    );
-                }
-
-                var last = orderedSegments.LastOrDefault();
-                if (last == null ||
-                    last.StartPoint.X + Pipe.PipeWidth != currentProcessPipe.Rect.Right ||
-                    last.StartPoint.Y + Pipe.PipeWidth != currentProcessPipe.Rect.Bottom)
-                {
-                    if (currentProcessPipe.Orientation == Orientation.Horizontal)
-                    {
-                        orderedSegments.Add(new EmptySegment(new Point(currentProcessPipe.Rect.Width, 0),
-                            currentProcessPipe.Orientation));
-                    }
-                    else
-                    {
-                        orderedSegments.Add(new EmptySegment(new Point(0, currentProcessPipe.Rect.Height),
-                            currentProcessPipe.Orientation));
-                    }
-                }
-
-
+                
                 List<IPipeSegment> allSegments = new List<IPipeSegment>();
-                for (int i = 0; i < orderedSegments.Count - 1; i++)
+                for (int i = 0; i < currentProcessPipe.Segments.Count - 1; i++)
                 {
-                    var s1 = orderedSegments[i];
-                    var s2 = orderedSegments[i + 1];
-
-                    if (!(s1 is EmptySegment))
-                    {
-                        allSegments.Add(s1);
-                    }
+                    var s1 = currentProcessPipe.Segments[i];
+                    var s2 = currentProcessPipe.Segments[i + 1];
+                    
+                    allSegments.Add(s1);
 
                     if (currentProcessPipe.Orientation == Orientation.Horizontal)
                     {
@@ -194,10 +178,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             false));
                     }
 
-                    if (!(s2 is EmptySegment))
-                    {
-                        allSegments.Add(s2);
-                    }
+                    allSegments.Add(s2);
                 }
 
                 currentProcessPipe.Pipe.Segments = allSegments;

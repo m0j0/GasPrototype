@@ -66,22 +66,4 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return $"Segment StartPoint: {StartPoint}, lenght: {Length}";
         }
     }
-
-    internal class EmptySegment : IPipeSegment
-    {
-        public EmptySegment(Point startPoint, Orientation orientation)
-        {
-            StartPoint = startPoint;
-            Orientation = orientation;
-        }
-
-        public Point StartPoint { get; }
-        public double Length => 0;
-        public Orientation Orientation { get; }
-
-        public override string ToString()
-        {
-            return $"Segment StartPoint: {StartPoint}, lenght: {Length}";
-        }
-    }
 }
