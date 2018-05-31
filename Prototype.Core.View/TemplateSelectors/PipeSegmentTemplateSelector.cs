@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Prototype.Core.Controls;
 using Prototype.Core.Controls.PipeFlowScheme;
 
 namespace Prototype.Core.TemplateSelectors
 {
-    internal class PipeItemTemplateSelector : DataTemplateSelector
+    internal class PipeSegmentTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ConnectorTemplate { get; set; }
 
         public DataTemplate BridgeTemplate { get; set; }
 
         public DataTemplate LineTemplate { get; set; }
+
+        public DataTemplate FailedTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -24,8 +25,11 @@ namespace Prototype.Core.TemplateSelectors
                 case BridgeSegment _:
                     return BridgeTemplate;
 
-                case LinePipeSegment _:
+                case LineSegment _:
                     return LineTemplate;
+
+                case FailedSegment _:
+                    return FailedTemplate;
 
                 case null:
                     return null;

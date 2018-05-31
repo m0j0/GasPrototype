@@ -16,8 +16,65 @@
 
     <Style TargetType="controls:Pipe">
         <Style.Resources>
-            <DataTemplate x:Key="LinePipeSegmentTemplate"
-                          DataType="pipeFlowScheme:LinePipeSegment">
+            <DataTemplate x:Key="LineSegmentTemplate"
+                          DataType="pipeFlowScheme:LineSegment">
+                <Border x:Name="MainControl"
+                        BorderThickness="0,1"
+                        BorderBrush="#4D4F52" Background="#8B8D8E"
+                        Height="5" Width="{Binding Length}" />
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
+                        <Setter TargetName="MainControl" Property="BorderThickness" Value="1,0" />
+                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
+                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                    </DataTrigger>
+
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition
+                                Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                Value="True" />
+                            <Condition
+                                Binding="{Binding SubstanceType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                Value="{StaticResource SubstanceTypeGas}" />
+                        </MultiDataTrigger.Conditions>
+
+                        <Setter TargetName="MainControl" Property="Background" Value="#0000FF" />
+                    </MultiDataTrigger>
+
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition
+                                Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                Value="True" />
+                            <Condition
+                                Binding="{Binding SubstanceType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                Value="{StaticResource SubstanceTypePurge}" />
+                        </MultiDataTrigger.Conditions>
+
+                        <Setter TargetName="MainControl" Property="Background" Value="#808080" />
+                    </MultiDataTrigger>
+
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition
+                                Binding="{Binding HasFlow, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                Value="True" />
+                            <Condition
+                                Binding="{Binding SubstanceType, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:Pipe}}"
+                                Value="{StaticResource SubstanceTypeChemical}" />
+                        </MultiDataTrigger.Conditions>
+
+                        <Setter TargetName="MainControl" Property="Background" Value="#A800A8" />
+                    </MultiDataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <!---->
+
+            <DataTemplate x:Key="ConnectorSegmentTemplate"
+                          DataType="pipeFlowScheme:LineSegment">
                 <Border x:Name="MainControl"
                         BorderThickness="{Binding Converter={x:Static converters:PipeBorderThicknessConverter.Instance}}"
                         BorderBrush="#4D4F52" Background="#8B8D8E"
@@ -67,15 +124,11 @@
 
                         <Setter TargetName="MainControl" Property="Background" Value="#A800A8" />
                     </MultiDataTrigger>
-
-
-                    <DataTrigger Binding="{Binding IsFailed}" Value="True">
-                        <Setter TargetName="MainControl" Property="BorderBrush" Value="Red" />
-                        <Setter TargetName="MainControl" Property="Background" Value="Red" />
-                    </DataTrigger>
                 </DataTemplate.Triggers>
-            </DataTemplate> 
-            
+            </DataTemplate>
+
+            <!---->
+
             <DataTemplate x:Key="BridgeSegmentTemplate"
                           DataType="pipeFlowScheme:BridgeSegment">
                 <!--<Border x:Name="MainControl"
@@ -83,7 +136,7 @@
                         BorderBrush="Red" Background="#8B8D8E"
                         Width="5" Height="{Binding Length}" />-->
 
-                <Path x:Name="MainControl" Fill="Green" Stroke="Red" StrokeThickness="0.25" 
+                <Path x:Name="MainControl" Fill="Green" Stroke="Red" StrokeThickness="0.25"
                       Data="M0 20l4-4v-5L0 7V0h1v6.586l4 4v5.828l-4 4V27H0v-7zm5-9.414v5.828l-4 4L0 20l4-4v-5L0 7V0h1v6.586l4 4zM4 21l4-4v-7L4 6V0h1v5.586l4 4v7.828l-4 4V27H4v-6z" />
 
                 <DataTemplate.Triggers>
@@ -136,10 +189,27 @@
                 </DataTemplate.Triggers>
             </DataTemplate>
 
-            <templateSelectors:PipeItemTemplateSelector x:Key="PipeItemTemplateSelector"
-                                                        ConnectorTemplate="{StaticResource LinePipeSegmentTemplate}"
-                                                        BridgeTemplate="{StaticResource BridgeSegmentTemplate}"
-                                                        LineTemplate="{StaticResource LinePipeSegmentTemplate}" />
+            <!---->
+
+            <DataTemplate x:Key="FailedSegmentTemplate"
+                          DataType="pipeFlowScheme:FailedSegment">
+                <Border x:Name="MainControl"
+                        Background="{Binding FailType, Converter={x:Static converters:FailedSegmentFailTypeConverter.Instance}}"
+                        Height="5" Width="{Binding Length}" />
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
+                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
+                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <templateSelectors:PipeSegmentTemplateSelector x:Key="PipeSegmentTemplateSelector"
+                                                           ConnectorTemplate="{StaticResource ConnectorSegmentTemplate}"
+                                                           BridgeTemplate="{StaticResource BridgeSegmentTemplate}"
+                                                           LineTemplate="{StaticResource LineSegmentTemplate}"
+                                                           FailedTemplate="{StaticResource FailedSegmentTemplate}" />
         </Style.Resources>
         <Setter Property="Width" Value="100" />
         <Setter Property="MinWidth" Value="0" />
@@ -152,7 +222,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:Pipe">
                     <ItemsControl ItemsSource="{TemplateBinding Segments}"
-                                  ItemTemplateSelector="{StaticResource PipeItemTemplateSelector}">
+                                  ItemTemplateSelector="{StaticResource PipeSegmentTemplateSelector}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Canvas />

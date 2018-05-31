@@ -32,7 +32,7 @@ namespace Prototype.Core.Converters
                         side.HasFlagEx(Side.Bottom) ? 1 : 0
                     );
 
-                case LinePipeSegment linePipeSegment:
+                case LineSegment linePipeSegment:
                     return linePipeSegment.Orientation ==
                         Orientation.Horizontal ? new Thickness(0, 1, 0, 1) : new Thickness(1, 0, 1, 0);
             }

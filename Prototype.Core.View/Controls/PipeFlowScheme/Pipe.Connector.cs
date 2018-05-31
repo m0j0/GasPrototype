@@ -48,24 +48,20 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             if (pipe == Pipe1)
             {
-                double horizontalOffset = pipe.Orientation == Orientation.Horizontal ? -11 : 0;
-                double verticalOffset = pipe.Orientation == Orientation.Horizontal ? 0 : -11;
-
                 return new BridgeSegment(
                     new Point(
-                        Rect.Left - pipe.Rect.Left + horizontalOffset,
-                        Rect.Top - pipe.Rect.Top + verticalOffset),
+                        Rect.Left - pipe.Rect.Left - Common.GetBridgeHorizontalConnectorOffset(pipe.Orientation),
+                        Rect.Top - pipe.Rect.Top - Common.GetBridgeVerticalConnectorOffset(pipe.Orientation)),
                     pipe.Orientation
                 );
             }
 
             if (pipe == Pipe2)
             {
-                return new LinePipeSegment(
+                return new LineSegment(
                     new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
                     pipe.Orientation == Orientation.Horizontal ? Rect.Right - Rect.Left : Rect.Bottom - Rect.Top,
-                    pipe.Orientation,
-                    false);
+                    pipe.Orientation);
             }
 
             throw new ArgumentException("!!!");

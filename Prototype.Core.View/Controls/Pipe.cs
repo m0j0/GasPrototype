@@ -16,14 +16,6 @@ namespace Prototype.Core.Controls
 {
     public sealed class Pipe : Control, IPipe
     {
-        #region Constants
-
-        internal const double PipeWidth = 5;
-        internal const double BridgeLength = PipeWidth * 3;
-        internal static Vector ConnectorVector = new Vector(PipeWidth, PipeWidth);
-
-        #endregion
-
         #region Constructors
 
         static Pipe()

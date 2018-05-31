@@ -50,8 +50,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         pipe2.Rect
                     );
 
-                    if (intersectionRect.Width != Pipe.PipeWidth ||
-                        intersectionRect.Height != Pipe.PipeWidth)
+                    if (intersectionRect.Width != Common.PipeWidth ||
+                        intersectionRect.Height != Common.PipeWidth)
                     {
                         if (intersectionRect != Rect.Empty)
                         {
@@ -136,12 +136,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 {
                     var result = new List<IPipeSegment>();
 
-                    result.Add(new LinePipeSegment(new Point(0, 0), 
+                    result.Add(new FailedSegment(new Point(0, 0), 
                         currentProcessPipe.Orientation == Orientation.Horizontal
                             ? currentProcessPipe.Rect.Width
                             : currentProcessPipe.Rect.Height,
                         currentProcessPipe.Orientation,
-                        true));
+                        FailType.WrongSize));
 
                     currentProcessPipe.Pipe.Segments = result;
 
@@ -155,7 +155,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (firstOrDefault == null ||
                     firstOrDefault.Rect.TopLeft != currentProcessPipe.Rect.TopLeft)
                 {
-                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.TopLeft, Pipe.ConnectorVector));
+                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.TopLeft, Common.ConnectorVector));
                     cornerConnector.AddPipe(currentProcessPipe);
                     orderedConnectors.Insert(0, cornerConnector);
 
@@ -172,7 +172,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (lastOrDefault == null ||
                     lastOrDefault.Rect.BottomRight != currentProcessPipe.Rect.BottomRight)
                 {
-                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.BottomRight - Pipe.ConnectorVector, Pipe.ConnectorVector));
+                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
                     cornerConnector.AddPipe(currentProcessPipe);
                     orderedConnectors.Add(cornerConnector);
 
@@ -201,17 +201,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     if (currentProcessPipe.Orientation == Orientation.Horizontal)
                     {
-                        allSegments.Add(new LinePipeSegment(new Point(s1.StartPoint.X + s1.Length, 0),
+                        allSegments.Add(new LineSegment(new Point(s1.StartPoint.X + s1.Length, 0),
                             s2.StartPoint.X - (s1.StartPoint.X + s1.Length),
-                            currentProcessPipe.Orientation,
-                            false));
+                            currentProcessPipe.Orientation));
                     }
                     else
                     {
-                        allSegments.Add(new LinePipeSegment(new Point(0, s1.StartPoint.Y + s1.Length),
+                        allSegments.Add(new LineSegment(new Point(0, s1.StartPoint.Y + s1.Length),
                             s2.StartPoint.Y - (s1.StartPoint.Y + s1.Length),
-                            currentProcessPipe.Orientation,
-                            false));
+                            currentProcessPipe.Orientation));
                     }
 
                     allSegments.Add(s2);
@@ -264,12 +262,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             bool IsVertical(ProcessPipe p1, ProcessPipe p2)
             {
-                return p1.Rect.BottomRight == p2.Rect.TopLeft + Pipe.ConnectorVector &&
+                return p1.Rect.BottomRight == p2.Rect.TopLeft + Common.ConnectorVector &&
                        p1.Rect.BottomLeft == intersectionRect.BottomLeft;
             }
             bool IsHorizontal(ProcessPipe p1, ProcessPipe p2)
             {
-                return p1.Rect.BottomRight == p2.Rect.TopLeft + Pipe.ConnectorVector &&
+                return p1.Rect.BottomRight == p2.Rect.TopLeft + Common.ConnectorVector &&
                        p1.Rect.BottomRight == intersectionRect.BottomRight;
             }
 

@@ -12,6 +12,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Orientation Orientation { get; }
     }
 
+    internal enum FailType
+    {
+        WrongSize,
+        IntersectionNotSupported,
+        BridgeNotEnoughSpace
+    }
+
     internal class ConnectorSegment : IPipeSegment
     {
         public ConnectorSegment(Point startPoint, Orientation orientation, Side side)
@@ -23,12 +30,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Point StartPoint { get; }
 
-        public double Length => Pipe.PipeWidth;
+        public double Length => Common.PipeWidth;
 
         public Orientation Orientation { get; }
 
         public Side Side { get; }
-        public bool IsFailed { get; } // TODO delete
     }
 
     internal class BridgeSegment : IPipeSegment
@@ -41,29 +47,43 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Point StartPoint { get; }
 
-        public double Length => 27;
+        public double Length => Common.BridgeLength;
 
         public Orientation Orientation { get; }
     }
 
-    internal class LinePipeSegment : IPipeSegment
+    internal class LineSegment : IPipeSegment
     {
-        public LinePipeSegment(Point startPoint, double length, Orientation orientation, bool isFailed)
+        public LineSegment(Point startPoint, double length, Orientation orientation)
         {
             StartPoint = startPoint;
             Length = length;
             Orientation = orientation;
-            IsFailed = isFailed;
         }
 
         public Point StartPoint { get; }
-        public double Length { get; }
-        public Orientation Orientation { get; }
-        public bool IsFailed { get; }
 
-        public override string ToString()
+        public double Length { get; }
+
+        public Orientation Orientation { get; }
+    }
+
+    internal class FailedSegment : IPipeSegment
+    {
+        public FailedSegment(Point startPoint, double length, Orientation orientation, FailType failType)
         {
-            return $"Segment StartPoint: {StartPoint}, lenght: {Length}";
+            StartPoint = startPoint;
+            Length = length;
+            Orientation = orientation;
+            FailType = failType;
         }
+
+        public Point StartPoint { get; }
+
+        public double Length { get; }
+
+        public Orientation Orientation { get; }
+
+        public FailType FailType { get; }
     }
 }
