@@ -13,137 +13,63 @@ using MugenMvvmToolkit;
 using MugenMvvmToolkit.Collections;
 using MugenMvvmToolkit.Models;
 using Prototype.Core.Controls;
+using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces.GasPanel;
 using Prototype.Core.MarkupExtensions;
 using Prototype.Core.Models.GasPanel;
+using IContainer = Prototype.Core.Controls.PipeFlowScheme.IContainer;
 
 namespace Prototype.Core.Design.Pipes
 {
-    public class TaskPanelVm : NotifyPropertyChangedBase
+    internal class TaskPanelVm : NotifyPropertyChangedBase
     {
         #region Fields
 
-        private double _length;
+        private static readonly PropertyIdentifier IsSourcePropertyIdentifier =
+            new PropertyIdentifier(typeof(PipeFlowScheme), PipeFlowScheme.IsSourcePropertyName);
+
+        private static readonly PropertyIdentifier IsDestinationPropertyIdentifier =
+            new PropertyIdentifier(typeof(PipeFlowScheme), PipeFlowScheme.IsDestinationPropertyName);
+
         private ModelItem _modelItem;
-        private Orientation _orientation;
-        private VertexProjection _startVertex;
-        private VertexProjection _endVertex;
+        private IPipe _pipe;
+        private IContainer _container;
 
-        private Dictionary<IVertex, VertexProjection> _allVertices;
-
-        #endregion
-
-        #region Constructors
-
-        public TaskPanelVm()
-        {
-            StartVertices = new SynchronizedNotifiableCollection<VertexProjection>();
-            EndVertices = new SynchronizedNotifiableCollection<VertexProjection>();
-
-            DuplicateControlCommand = new RelayCommand(DuplicateControl);
-        }
+        private FailType _failType;
+        private PipeType _pipeType;
 
         #endregion
 
         #region Properties
 
-        public double Length
+        public FailType FailType
         {
-            get => _length;
-            set
-            {
-                if (value.Equals(_length))
-                {
-                    return;
-                }
-
-                _length = value;
-                UpdateControlLength(value);
-                OnPropertyChanged();
-            }
-        }
-
-        public Orientation Orientation
-        {
-            get => _orientation;
+            get => _failType;
             private set
             {
-                if (value == _orientation)
+                if (value == _failType)
                 {
                     return;
                 }
 
-                _orientation = value;
+                _failType = value;
                 OnPropertyChanged();
             }
         }
 
-        public VertexProjection StartVertex
+        public PipeType PipeType
         {
-            get => _startVertex;
+            get => _pipeType;
             set
             {
-                if (Equals(value, _startVertex))
+                if (value == _pipeType)
                 {
                     return;
                 }
 
-                _startVertex = value;
-                SetControlVertice(value, PipeSchemeEx.StartVertexPropertyName);
+                _pipeType = value;
+                UpdatePipeType(value);
                 OnPropertyChanged();
-
-
-                if (EndVertex != null)
-                {
-                    return;
-                }
-
-                if (value == null)
-                {
-                    EndVertices.Clear();
-                }
-                else
-                {
-                    EndVertices.Update(SelectAdjacentVerticesProjections(value));
-                }
-            }
-        }
-
-        public SynchronizedNotifiableCollection<VertexProjection> StartVertices { get; }
-
-        public VertexProjection EndVertex
-        {
-            get => _endVertex;
-            set
-            {
-                if (Equals(value, _endVertex))
-                {
-                    return;
-                }
-
-                _endVertex = value;
-                SetControlVertice(value, PipeSchemeEx.EndVertexPropertyName);
-                OnPropertyChanged();
-            }
-        }
-
-        public SynchronizedNotifiableCollection<VertexProjection> EndVertices { get; }
-
-        #endregion
-
-        #region Commands
-
-        public ICommand DuplicateControlCommand { get; }
-
-        private void DuplicateControl()
-        {
-            using (var scope = _modelItem.BeginEdit())
-            {
-                var pipe = ModelFactory.CreateItem(_modelItem.Context, typeof(Pipe));
-                //pipe.Properties[nameof(Pipe.Width)].SetValue("textBox");
-                ModelParent.Parent(_modelItem.Context, _modelItem.Parent, pipe);
-
-                scope.Complete();
             }
         }
 
@@ -155,136 +81,91 @@ namespace Prototype.Core.Design.Pipes
         {
             _modelItem = modelItem;
             _modelItem.PropertyChanged += ModelItemOnPropertyChanged;
+            _pipe = (IPipe) _modelItem.View.PlatformObject;
+            _pipe.SchemeChanged += OnSchemeChanged;
+            _container = ((Pipe) (_modelItem.View.PlatformObject)).Parent as IContainer; // TODO
+            _container.SchemeChanged += OnSchemeChanged;
 
-            Initialize();
+            SynchronizeValues();
         }
 
         public void Deactivate()
         {
             _modelItem.PropertyChanged -= ModelItemOnPropertyChanged;
             _modelItem = null;
+            _pipe.SchemeChanged -= OnSchemeChanged;
+            _pipe = null;
+            _container.SchemeChanged -= OnSchemeChanged;
+            _container = null;
+        }
+
+        private void OnSchemeChanged(object sender, EventArgs e)
+        {
+            SynchronizeValues();
         }
 
         private void ModelItemOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.PropertyName) ||
-                e.PropertyName == nameof(Pipe.Orientation) ||
-                e.PropertyName == nameof(Pipe.Width) ||
-                e.PropertyName == nameof(Pipe.Height))
-            {
-                SynchronizeValues();
-            }
-        }
-
-        private void Initialize()
-        {
-            var vertices = new List<VertexProjection>();
-
-            var dataContext = _modelItem.Properties[nameof(FrameworkElement.DataContext)].ComputedValue;
-            if (dataContext == null)
-            {
-                _allVertices = new Dictionary<IVertex, VertexProjection>();
-                SynchronizeValues();
-                return;
-            }
-
-            var properties = dataContext.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-            foreach (var pi in properties)
-            {
-                if (typeof(IVertex).IsAssignableFrom(pi.PropertyType) && pi.CanRead)
-                {
-                    var vertex = (IVertex)pi.GetValue(dataContext);
-                    if (vertex.Owner == null)
-                    {
-                        continue;
-                    }
-
-                    vertices.Add(new VertexProjection(vertex, pi.Name));
-                }
-            }
-
-            _allVertices = vertices.OrderBy(vertex => vertex.Name).ToDictionary(projection => projection.Vertex, projection => projection);
-
             SynchronizeValues();
         }
 
         private void SynchronizeValues()
         {
-            SynchronizeVertices();
-
-            var pipe = (Pipe)_modelItem.View.PlatformObject;
-
-            SetDisplayLength(pipe.Orientation == Orientation.Horizontal ? pipe.Width : pipe.Height);
-            Orientation = pipe.Orientation;
-        }
-
-        private void SynchronizeVertices()
-        {
-            var startVertexProperty = _modelItem.Properties[new PropertyIdentifier(typeof(PipeSchemeEx), PipeSchemeEx.StartVertexPropertyName)];
-            var startVertex = startVertexProperty.ComputedValue as IVertex;
-
-            var endVertexProperty = _modelItem.Properties[new PropertyIdentifier(typeof(PipeSchemeEx), PipeSchemeEx.EndVertexPropertyName)];
-            var endVertex = endVertexProperty.ComputedValue as IVertex;
-
-            if (startVertex != null)
+            if (_pipe.Segments != null)
             {
-                _allVertices.TryGetValue(startVertex, out var startVertexProjection);
-                _startVertex = startVertexProjection;
-                OnPropertyChanged(nameof(StartVertex));
-            }
-            StartVertices.Update(_allVertices.Values);
-
-            if (endVertex != null)
-            {
-                _allVertices.TryGetValue(endVertex, out var endVertexProjection);
-                _endVertex = endVertexProjection;
-                OnPropertyChanged(nameof(EndVertex));
-            }
-            EndVertices.Update(_allVertices.Values);
-        }
-
-        private void SetDisplayLength(double newLength)
-        {
-            _length = newLength;
-            OnPropertyChanged(nameof(Length));
-        }
-
-        private void UpdateControlLength(double newLength)
-        {
-            var pipe = _modelItem.View.PlatformObject as Pipe;
-            if (pipe == null)
-            {
-                return;
+                var failedSegment = _pipe.Segments.OfType<FailedSegment>().SingleOrDefault();
+                SetFailType(_pipe.Segments.Count == 1 && failedSegment != null ? failedSegment.FailType : FailType.None);
             }
 
-            if (pipe.Orientation == Orientation.Vertical)
+            var isSource = _modelItem.Properties[IsSourcePropertyIdentifier];
+            var isDestination = _modelItem.Properties[IsDestinationPropertyIdentifier];
+            if (isSource.IsSet && (bool)isSource.ComputedValue)
             {
-                _modelItem.Properties[nameof(Pipe.Height)].SetValue(newLength);
+                SetPipeType(PipeType.Source);
+            }
+            else if (isDestination.IsSet && (bool)isDestination.ComputedValue)
+            {
+                SetPipeType(PipeType.Destination);
             }
             else
             {
-                _modelItem.Properties[nameof(Pipe.Width)].SetValue(newLength);
+                SetPipeType(PipeType.Regular);
             }
+
+            OnPropertyChanged(nameof(PipeType));
         }
 
-        private void SetControlVertice(VertexProjection vertex, string property)
+        private void SetFailType(FailType failType)
         {
-            var propertyIdentifier = new PropertyIdentifier(typeof(PipeSchemeEx), property);
-            if (vertex == null)
-            {
-                _modelItem.Properties[propertyIdentifier].ClearValue();
-            }
-            else
-            {
-                _modelItem.Properties[propertyIdentifier].SetValue(new Binding(vertex.PropertyName));
-            }
-
+            _failType = failType;
+            OnPropertyChanged(nameof(FailType));
         }
 
-        private IEnumerable<VertexProjection> SelectAdjacentVerticesProjections(VertexProjection value)
+        private void SetPipeType(PipeType pipeType)
         {
-            return value.Vertex.GetAllAdjacentVertices().Select(vertex => _allVertices[vertex]);
+            _pipeType = pipeType;
+            OnPropertyChanged(nameof(PipeType));
+        }
+
+        private void UpdatePipeType(PipeType pipeType)
+        {
+            switch (pipeType)
+            {
+                case PipeType.Regular:
+                    _modelItem.Properties[IsSourcePropertyIdentifier].ClearValue();
+                    _modelItem.Properties[IsDestinationPropertyIdentifier].ClearValue();
+                    break;
+                case PipeType.Source:
+                    _modelItem.Properties[IsSourcePropertyIdentifier].SetValue(true);
+                    _modelItem.Properties[IsDestinationPropertyIdentifier].ClearValue();
+                    break;
+                case PipeType.Destination:
+                    _modelItem.Properties[IsSourcePropertyIdentifier].ClearValue();
+                    _modelItem.Properties[IsDestinationPropertyIdentifier].SetValue(true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(pipeType), pipeType, null);
+            }
         }
 
         #endregion

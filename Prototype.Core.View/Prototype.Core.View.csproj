@@ -60,6 +60,7 @@
     <Compile Include="Controls\AttrTable.cs" />
     <Compile Include="Controls\PipeFlowScheme\Common.cs" />
     <Compile Include="Controls\PipeFlowScheme\DepthFirstDirectedPaths.cs" />
+    <Compile Include="Controls\PipeFlowScheme\Enums.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowScheme.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Controls\WaferMovable.cs" />
     <Compile Include="Converters\FailedSegmentFailTypeConverter.cs" />
     <Compile Include="Converters\PipeBorderThicknessConverter.cs" />
+    <Compile Include="Converters\EnumEqualityConverter.cs" />
     <Compile Include="Converters\WaferStatusColorConverter.cs" />
     <Compile Include="CoreViewExtensions.cs" />
     <Compile Include="MarkupExtensions\PipeSchemeEx.cs" />

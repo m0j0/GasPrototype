@@ -2,7 +2,7 @@
 
 namespace Prototype.Core.Design.Pipes
 {
-    public partial class TaskPanel : UserControl
+    internal partial class TaskPanel : UserControl
     {
         public TaskPanel()
         {

@@ -5,57 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Prototype.Core.Design.Pipes"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:TaskPanelVm}"
-             Height="300" Width="300">
+             Width="250" x:ClassModifier="internal">
     <Border BorderBrush="Black" BorderThickness="2" Background="White">
-        <StackPanel>
-            <TextBlock Text="Text" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <Button Content="Duplicate" Command="{Binding DuplicateControlCommand}" />
+            <TextBlock Grid.Row="0"
+                       Text="{Binding FailType, StringFormat=Fail status: {0}}" />
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="1"
+                      Header="Pipe type">
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <PipeType x:Key="Regular">Regular</PipeType>
+                        <PipeType x:Key="Source">Source</PipeType>
+                        <PipeType x:Key="Destination">Destination</PipeType>
+                    </StackPanel.Resources>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Current orientation:" />
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Orientation}" />
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Current length:" />
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Length}" />
-                <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                        Minimum="1" Maximum="300" Value="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </Grid>
-            <Rectangle Height="2" Fill="Black" />
-
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Start vertex" />
-                <ComboBox Grid.Row="0" Grid.Column="1"
-                          ItemsSource="{Binding StartVertices}"
-                          SelectedItem="{Binding StartVertex, Mode=TwoWay}" 
-                          DisplayMemberPath="Name" />
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="End vertex" />
-                <ComboBox Grid.Row="1" Grid.Column="1"
-                          ItemsSource="{Binding EndVertices}" 
-                          SelectedItem="{Binding EndVertex, Mode=TwoWay}" 
-                          DisplayMemberPath="Name"/>
-            </Grid>
-
-        </StackPanel>
+                    <RadioButton Content="Regular"
+                                 IsChecked="{Binding Path=PipeType, Mode=TwoWay, Converter={x:Static EnumEqualityConverter.Instance}, ConverterParameter={StaticResource Regular}}" />
+                    <RadioButton Content="Source"
+                                 IsChecked="{Binding Path=PipeType, Mode=TwoWay, Converter={x:Static EnumEqualityConverter.Instance}, ConverterParameter={StaticResource Source}}" />
+                    <RadioButton Content="Destination"
+                                 IsChecked="{Binding Path=PipeType, Mode=TwoWay, Converter={x:Static EnumEqualityConverter.Instance}, ConverterParameter={StaticResource Destination}}" />
+                </StackPanel>
+            </GroupBox>
+        </Grid>
     </Border>
 </UserControl>

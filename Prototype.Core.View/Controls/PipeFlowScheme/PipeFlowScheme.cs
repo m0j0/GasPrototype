@@ -10,8 +10,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         #region Attached properties
 
+        internal const string IsSourcePropertyName = "IsSource";
+        internal const string IsDestinationPropertyName = "IsDestination";
+
         public static readonly DependencyProperty IsSourceProperty = DependencyProperty.RegisterAttached(
-            "IsSource", typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
+            IsSourcePropertyName, typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
 
         public static void SetIsSource(DependencyObject element, bool value)
         {
@@ -24,7 +27,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         public static readonly DependencyProperty IsDestinationProperty = DependencyProperty.RegisterAttached(
-            "IsDestination", typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
+            IsDestinationPropertyName, typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
 
         public static void SetIsDestination(DependencyObject element, bool value)
         {
