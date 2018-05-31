@@ -31,6 +31,43 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return pipeOrientation == Orientation.Horizontal ? 0 : BridgeOffset;
         }
 
+        internal static bool IsSizeValid(ProcessPipe pipe)
+        {
+            return IsSizeValid(pipe.Rect, pipe.Orientation);
+        }
+
+        internal static bool IsSizeValid(Rect rect, Orientation orientation)
+        {
+            switch (orientation)
+            {
+                case Orientation.Horizontal:
+                    return rect.Height == PipeWidth && rect.Width > 0;
+                case Orientation.Vertical:
+                    return rect.Width == PipeWidth && rect.Height > 0;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null);
+            }
+        }
+
+        internal static bool IsIntersectionSizeValid(Rect intersectionRect)
+        {
+            return intersectionRect.Width == Common.PipeWidth &&
+                   intersectionRect.Height == Common.PipeWidth;
+        }
+
+        internal static double GetLength(Rect rect, Orientation orientation)
+        {
+            switch (orientation)
+            {
+                case Orientation.Horizontal:
+                    return rect.Width;
+                case Orientation.Vertical:
+                    return rect.Height;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null);
+            }
+        }
+
         #endregion
     }
 }

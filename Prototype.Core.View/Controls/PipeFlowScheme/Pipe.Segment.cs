@@ -14,6 +14,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal enum FailType
     {
+        None,
         WrongSize,
         IntersectionNotSupported,
         BridgeNotEnoughSpace

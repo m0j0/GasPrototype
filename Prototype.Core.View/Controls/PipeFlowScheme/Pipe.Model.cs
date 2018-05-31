@@ -18,7 +18,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public Rect Rect { get; }
         public Orientation Orientation => Pipe.Orientation;
 
-        public bool IsFailed { get; set; }
+        public FailType FailType { get; set; }
+
+        public bool IsFailed => FailType != FailType.None;
 
         public List<IPipeSegment> Segments { get; }
 

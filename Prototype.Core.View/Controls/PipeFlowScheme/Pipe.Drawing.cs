@@ -38,9 +38,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe1 in processPipes)
             {
+                if (!Common.IsSizeValid(pipe1))
+                {
+                    pipe1.FailType = FailType.WrongSize;
+                    continue;
+                }
+
                 foreach (var pipe2 in processPipes)
                 {
-                    if (pipe1 == pipe2)
+                    if (pipe1 == pipe2 ||
+                        pipe2.IsFailed)
                     {
                         continue;
                     }
@@ -50,13 +57,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         pipe2.Rect
                     );
 
-                    if (intersectionRect.Width != Common.PipeWidth ||
-                        intersectionRect.Height != Common.PipeWidth)
+                    if (!Common.IsIntersectionSizeValid(intersectionRect))
                     {
                         if (intersectionRect != Rect.Empty)
                         {
-                            pipe1.IsFailed = true;
-                            pipe2.IsFailed = true;
+                            pipe1.FailType = FailType.IntersectionNotSupported;
+                            pipe2.FailType = FailType.IntersectionNotSupported;
                         }
 
                         continue;
@@ -85,8 +91,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (!IsCornerConnection(pipe1, pipe2, intersectionRect) &&
                         !IsSerialConnection(pipe1, pipe2, intersectionRect))
                     {
-                        pipe1.IsFailed = true;
-                        pipe2.IsFailed = true;
+                        pipe1.FailType = FailType.IntersectionNotSupported;
+                        pipe2.FailType = FailType.IntersectionNotSupported;
 
                         continue;
                     }
@@ -136,12 +142,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 {
                     var result = new List<IPipeSegment>();
 
-                    result.Add(new FailedSegment(new Point(0, 0), 
-                        currentProcessPipe.Orientation == Orientation.Horizontal
-                            ? currentProcessPipe.Rect.Width
-                            : currentProcessPipe.Rect.Height,
-                        currentProcessPipe.Orientation,
-                        FailType.WrongSize));
+                    result.Add(
+                        new FailedSegment(
+                            new Point(0, 0),
+                            Common.GetLength(currentProcessPipe.Rect, currentProcessPipe.Orientation),
+                            currentProcessPipe.Orientation,
+                            currentProcessPipe.FailType)
+                    );
 
                     currentProcessPipe.Pipe.Segments = result;
 
