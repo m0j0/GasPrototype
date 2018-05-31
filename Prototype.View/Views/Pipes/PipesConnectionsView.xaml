@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{Binding Path=Value, ElementName=ScaleSlider,  StringFormat=Current value: {0:0.00}}" />
+            <TextBlock Text="{Binding Path=Value, ElementName=ScaleSlider, StringFormat=Current value: {0:0.00}}" />
             <Slider Grid.Column="1"
                     x:Name="ScaleSlider"
                     Value="3" Minimum="0" Maximum="10" />
@@ -30,14 +30,14 @@
                                 ScaleY="{Binding Path=Value, ElementName=ScaleSlider}" />
             </Canvas.LayoutTransform>
 
+            <Pipe Canvas.Left="2" Canvas.Top="111" Width="60" />
             <Pipe Canvas.Left="51" Canvas.Top="61" Width="121" />
-            <Pipe Canvas.Left="51" Canvas.Top="120" Width="60" />
-            <Pipe Canvas.Left="106" Canvas.Top="120" Width="40" />
-            <Pipe Canvas.Left="51" Canvas.Top="194" />
+            <Pipe Canvas.Left="41" Canvas.Top="61" Orientation="Vertical" />
+            <Pipe Canvas.Left="14" Canvas.Top="90" Width="143" />
             <Pipe Canvas.Left="126" Canvas.Top="39" Orientation="Vertical" />
-            <Pipe Canvas.Left="107" Canvas.Top="96" Orientation="Vertical" />
-            <Pipe Canvas.Left="51" Canvas.Top="61" Orientation="Vertical" />
-            <Pipe Canvas.Left="167" Canvas.Top="61" Orientation="Vertical"/>
+            <Pipe Canvas.Left="77" Canvas.Top="25" Orientation="Vertical" />
+            <Pipe Canvas.Left="2" Canvas.Top="145" Width="60" />
+            <Pipe Canvas.Left="106" Canvas.Top="120" Width="40" />
         </PipeFlowCanvas>
     </Grid>
 </UserControl>
