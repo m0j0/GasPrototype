@@ -29,7 +29,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    b.Top <= a.Bottom;
         }
 
-        public static ProcessPipe[] SplitPipeToSegments(IContainer container, 
+        public static ProcessPipe[] SplitPipeToSegments(ISchemeContainer container, 
             IReadOnlyCollection<IPipe> allPipes, IReadOnlyCollection<IValve> allValves)
         {
             var processPipes = allPipes.Select(p => new ProcessPipe(container, p)).ToArray();

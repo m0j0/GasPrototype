@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    public sealed class PipeFlowCanvas : Canvas, IContainer
+    public sealed class PipeFlowCanvas : Canvas, ISchemeContainer
     {
         private readonly PipeFlowScheme _scheme;
 

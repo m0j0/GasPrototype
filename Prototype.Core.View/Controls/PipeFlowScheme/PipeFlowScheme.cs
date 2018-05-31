@@ -49,12 +49,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #endregion
 
-        private readonly IContainer _container;
+        private readonly ISchemeContainer _container;
         private readonly List<IPipe> _pipes;
         private readonly List<IValve> _valves;
         private ProcessPipe[] _processPipes;
 
-        public PipeFlowScheme(IContainer container)
+        public PipeFlowScheme(ISchemeContainer container)
         {
             _container = container;
             _container.SchemeChanged += OnSchemeChanged;

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    public interface IContainer
+    public interface ISchemeContainer
     {
         double GetTop(IFlowControl control);
 
@@ -18,6 +18,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         double Width { get; }
 
         double Height { get; }
+
+        ISchemeContainer GetContainer();
 
         event EventHandler SchemeChanged;
     }

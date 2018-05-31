@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 using Microsoft.Windows.Design.Model;
 using Microsoft.Windows.Design.Metadata;
-using MugenMvvmToolkit;
-using MugenMvvmToolkit.Collections;
 using MugenMvvmToolkit.Models;
-using Prototype.Core.Controls;
 using Prototype.Core.Controls.PipeFlowScheme;
-using Prototype.Core.Interfaces.GasPanel;
-using Prototype.Core.MarkupExtensions;
-using Prototype.Core.Models.GasPanel;
-using IContainer = Prototype.Core.Controls.PipeFlowScheme.IContainer;
 
 namespace Prototype.Core.Design.Pipes
 {
@@ -33,7 +20,7 @@ namespace Prototype.Core.Design.Pipes
 
         private ModelItem _modelItem;
         private IPipe _pipe;
-        private IContainer _container;
+        private ISchemeContainer _container;
 
         private FailType _failType;
         private PipeType _pipeType;
@@ -83,7 +70,7 @@ namespace Prototype.Core.Design.Pipes
             _modelItem.PropertyChanged += ModelItemOnPropertyChanged;
             _pipe = (IPipe) _modelItem.View.PlatformObject;
             _pipe.SchemeChanged += OnSchemeChanged;
-            _container = ((Pipe) (_modelItem.View.PlatformObject)).Parent as IContainer; // TODO
+            _container = _pipe.GetContainer();
             _container.SchemeChanged += OnSchemeChanged;
 
             SynchronizeValues();
@@ -119,11 +106,11 @@ namespace Prototype.Core.Design.Pipes
 
             var isSource = _modelItem.Properties[IsSourcePropertyIdentifier];
             var isDestination = _modelItem.Properties[IsDestinationPropertyIdentifier];
-            if (isSource.IsSet && (bool)isSource.ComputedValue)
+            if (isSource.IsSet && (bool) isSource.ComputedValue)
             {
                 SetPipeType(PipeType.Source);
             }
-            else if (isDestination.IsSet && (bool)isDestination.ComputedValue)
+            else if (isDestination.IsSet && (bool) isDestination.ComputedValue)
             {
                 SetPipeType(PipeType.Destination);
             }

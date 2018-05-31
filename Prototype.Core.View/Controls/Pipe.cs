@@ -106,6 +106,11 @@ namespace Prototype.Core.Controls
 
         #region Methods
 
+        public ISchemeContainer GetContainer()
+        {
+            return (ISchemeContainer) Parent;
+        }
+
         private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
             var pipe = (Pipe)dependencyObject;

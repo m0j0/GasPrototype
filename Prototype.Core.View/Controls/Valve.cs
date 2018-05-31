@@ -80,6 +80,11 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Methods
+        
+        public ISchemeContainer GetContainer()
+        {
+            return (ISchemeContainer)Parent;
+        }
 
         public bool CanPassFlow(IPipe pipe1, IPipe pipe2)
         {

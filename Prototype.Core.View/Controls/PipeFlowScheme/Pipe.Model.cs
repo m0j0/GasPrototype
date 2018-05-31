@@ -6,7 +6,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class ProcessPipe
     {
-        public ProcessPipe(IContainer container, IPipe pipe)
+        public ProcessPipe(ISchemeContainer container, IPipe pipe)
         {
             Rect = Common.GetAbsoluteRect(container, pipe);
             Pipe = pipe;
@@ -31,7 +31,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class ProcessValve
     {
-        public ProcessValve(IContainer container, IValve valve)
+        public ProcessValve(ISchemeContainer container, IValve valve)
         {
             Rect = Common.GetAbsoluteRect(container, valve);
             Valve = valve;
