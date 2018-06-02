@@ -14,7 +14,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         internal const string IsDestinationPropertyName = "IsDestination";
 
         public static readonly DependencyProperty IsSourceProperty = DependencyProperty.RegisterAttached(
-            IsSourcePropertyName, typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
+            IsSourcePropertyName, typeof(bool), typeof(PipeFlowScheme),
+            new PropertyMetadata(false, PropertyChangedCallback));
 
         public static void SetIsSource(DependencyObject element, bool value)
         {
@@ -23,11 +24,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public static bool GetIsSource(DependencyObject element)
         {
-            return (bool)element.GetValue(IsSourceProperty);
+            return (bool) element.GetValue(IsSourceProperty);
         }
 
         public static readonly DependencyProperty IsDestinationProperty = DependencyProperty.RegisterAttached(
-            IsDestinationPropertyName, typeof(bool), typeof(PipeFlowScheme), new PropertyMetadata(false, PropertyChangedCallback));
+            IsDestinationPropertyName, typeof(bool), typeof(PipeFlowScheme),
+            new PropertyMetadata(false, PropertyChangedCallback));
 
         public static void SetIsDestination(DependencyObject element, bool value)
         {
@@ -36,7 +38,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public static bool GetIsDestination(DependencyObject element)
         {
-            return (bool)element.GetValue(IsDestinationProperty);
+            return (bool) element.GetValue(IsDestinationProperty);
         }
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -49,10 +51,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #endregion
 
+        #region Fields
+
         private readonly ISchemeContainer _container;
         private readonly List<IPipe> _pipes;
         private readonly List<IValve> _valves;
-        private ProcessPipe[] _processPipes;
+        private FlowGraph _graph;
+
+        #endregion
+
+        #region Methods
 
         public PipeFlowScheme(ISchemeContainer container)
         {
@@ -61,6 +69,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             _pipes = new List<IPipe>();
             _valves = new List<IValve>();
         }
+
+        #endregion
+
+        #region Methods
 
         public void Add(IFlowControl control)
         {
@@ -114,53 +126,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void InvalidateScheme()
         {
-            _processPipes = PipeDrawing.SplitPipeToSegments(_container, _pipes, _valves);
-            InvalidateFlow();
+            _graph = new FlowGraph(_container, _pipes, _valves);
         }
 
         private void InvalidateFlow()
         {
-            var connectors = _processPipes.SelectMany(pipe => pipe.Connectors).OfType<CornerConnector>().Distinct().ToArray();
-
-            foreach (var edge in _pipes)
-            {
-                foreach (var segment in edge.Segments)
-                {
-                    segment.FlowDirection = FlowDirection.None;
-                }
-            }
-
-            var destinationConnectors = connectors.Where(c => c.IsDestination).ToArray();
-            foreach (var connector in connectors)
-            {
-                if (!connector.IsSource)
-                {
-                    continue;
-                }
-
-                var algo = new DepthFirstDirectedPaths(connector);
-
-                foreach (var destinationVertex in destinationConnectors)
-                {
-                    var paths = algo.PathsTo(destinationVertex);
-                    if (paths == null || paths.Count == 0)
-                    {
-                        continue;
-                    }
-
-                    foreach (var path in paths)
-                    {
-                        for (var i = 0; i < path.Count - 1; i++)
-                        {
-                            var edge = _processPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
-                            foreach (var segment in edge.Segments)
-                            {
-                                segment.FlowDirection = FlowDirection.Both;
-                            }
-                        }
-                    }
-                }
-            }
+            _graph.InvalidateFlow();
         }
 
         private void AddInternal(IFlowControl control)
@@ -192,5 +163,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             InvalidateScheme();
         }
+
+        #endregion
     }
 }

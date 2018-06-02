@@ -73,6 +73,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            // TODO scheme also should unsubscribe
             foreach (DependencyObject child in Children)
             {
                 if (child is IFlowControl)
