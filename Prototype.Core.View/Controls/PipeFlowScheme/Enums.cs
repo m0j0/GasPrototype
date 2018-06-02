@@ -2,7 +2,6 @@
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-
     [Flags]
     public enum FlowDirection
     {
@@ -34,7 +33,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         None,
         WrongSize,
-        IntersectionNotSupported,
-        BridgeNotEnoughSpace
+        IntersectionIsNotSupported,
+        BridgeNotEnoughSpace,
+        DeadPath
     }
 }

@@ -6,16 +6,16 @@ using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    internal interface IConnector
+    internal interface IPipeConnector
     {
         Rect Rect { get; }
 
-        IPipeSegment CreateSegment(ProcessPipe pipe);
+        IPipeSegment CreateSegment(GraphPipe pipe);
     }
 
-    internal class BridgeConnector : IConnector
+    internal class BridgePipeConnector : IPipeConnector
     {
-        public BridgeConnector(Rect rect, ProcessPipe pipe1, ProcessPipe pipe2)
+        public BridgePipeConnector(Rect rect, GraphPipe pipe1, GraphPipe pipe2)
         {
             if (pipe1 == null || pipe2 == null)
             {
@@ -31,11 +31,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Rect Rect { get; }
 
-        public ProcessPipe Pipe1 { get; }
+        public GraphPipe Pipe1 { get; }
 
-        public ProcessPipe Pipe2 { get; }
+        public GraphPipe Pipe2 { get; }
 
-        public IPipeSegment CreateSegment(ProcessPipe pipe)
+        public IPipeSegment CreateSegment(GraphPipe pipe)
         {
             if (pipe == Pipe1)
             {
@@ -64,14 +64,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
     }
 
-    internal class CornerConnector : IConnector
+    internal class PipeConnector : IPipeConnector
     {
-        private readonly ProcessPipe[] _pipes;
+        private readonly GraphPipe[] _pipes;
 
-        public CornerConnector(Rect rect)
+        public PipeConnector(Rect rect)
         {
             Rect = rect;
-            _pipes = new ProcessPipe[4];
+            _pipes = new GraphPipe[4];
         }
 
         public Rect Rect { get; }
@@ -81,7 +81,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public bool IsDestination { get; set; }
         public IValve Valve { get; set; }
 
-        public IEnumerable<CornerConnector> GetAdjacentConnectors()
+        public IEnumerable<PipeConnector> GetAdjacentConnectors()
         {
             if (Valve != null && !Valve.CanPassFlow(null, null))
             {
@@ -95,7 +95,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     continue;
                 }
 
-                foreach (var cornerConnector in pipe.Connectors.OfType<CornerConnector>())
+                foreach (var cornerConnector in pipe.Connectors.OfType<PipeConnector>())
                 {
                     yield return cornerConnector;
                 }
@@ -103,15 +103,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
         //
 
-        public ProcessPipe Pipe1 => _pipes[0];
+        public GraphPipe Pipe1 => _pipes[0];
 
-        public ProcessPipe Pipe2 => _pipes[1];
+        public GraphPipe Pipe2 => _pipes[1];
 
-        public ProcessPipe Pipe3 => _pipes[2];
+        public GraphPipe Pipe3 => _pipes[2];
 
-        public ProcessPipe Pipe4 => _pipes[3];
+        public GraphPipe Pipe4 => _pipes[3];
 
-        public void AddPipe(ProcessPipe pipe)
+        public void AddPipe(GraphPipe pipe)
         {
             if (pipe.Connectors.Contains(this))
             {
@@ -137,7 +137,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        public IPipeSegment CreateSegment(ProcessPipe pipe)
+        public IPipeSegment CreateSegment(GraphPipe pipe)
         {
             if (!_pipes.Contains(pipe))
             {

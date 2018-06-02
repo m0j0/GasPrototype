@@ -18,8 +18,9 @@ namespace Prototype.Core.Converters
             _brushes = new Dictionary<FailType, Brush>
             {
                 [FailType.WrongSize] = new SolidColorBrush(Colors.Red),
-                [FailType.IntersectionNotSupported] = new SolidColorBrush(Colors.Green),
+                [FailType.IntersectionIsNotSupported] = new SolidColorBrush(Colors.Green),
                 [FailType.BridgeNotEnoughSpace] = new SolidColorBrush(Colors.Blue),
+                [FailType.DeadPath] = new SolidColorBrush(Colors.Black),
             };
         }
 

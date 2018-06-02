@@ -61,10 +61,12 @@
     <Compile Include="Controls\PipeFlowScheme\Common.cs" />
     <Compile Include="Controls\PipeFlowScheme\DepthFirstDirectedPaths.cs" />
     <Compile Include="Controls\PipeFlowScheme\Enums.cs" />
+    <Compile Include="Controls\PipeFlowScheme\GraphPipe.cs" />
+    <Compile Include="Controls\PipeFlowScheme\GraphValve.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowScheme.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />
-    <Compile Include="Controls\PipeFlowScheme\IConnector.cs" />
+    <Compile Include="Controls\PipeFlowScheme\IPipeConnector.cs" />
     <Compile Include="Controls\Pipe.cs" />
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Wafer.cs" />
@@ -123,7 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\PipeFlowScheme\IPipeSegment.cs" />
-    <Compile Include="Controls\PipeFlowScheme\Pipe.Model.cs" />
+    <Compile Include="Controls\PipeFlowScheme\FlowGraph.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

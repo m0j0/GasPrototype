@@ -31,7 +31,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return pipeOrientation == Orientation.Horizontal ? 0 : BridgeOffset;
         }
 
-        internal static bool IsSizeValid(ProcessPipe pipe)
+        internal static bool IsSizeValid(GraphPipe pipe)
         {
             return IsSizeValid(pipe.Rect, pipe.Orientation);
         }
@@ -99,7 +99,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return Rect.Empty;
         }
 
-        public static bool IsBridgeConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
+        public static bool IsBridgeConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)
         {
             return pipe1.Rect.Left < intersectionRect.Left &&
                    pipe1.Rect.Right > intersectionRect.Right &&
@@ -107,27 +107,27 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    pipe2.Rect.Bottom > intersectionRect.Bottom;
         }
 
-        public static bool IsCornerConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
+        public static bool IsCornerConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)
         {
-            bool IsUpperLeft(ProcessPipe p1, ProcessPipe p2)
+            bool IsUpperLeft(GraphPipe p1, GraphPipe p2)
             {
                 return p1.Rect.TopLeft == p2.Rect.TopLeft &&
                        p1.Rect.TopLeft == intersectionRect.TopLeft;
             }
 
-            bool IsUpperRight(ProcessPipe p1, ProcessPipe p2)
+            bool IsUpperRight(GraphPipe p1, GraphPipe p2)
             {
                 return p1.Rect.TopRight == p2.Rect.TopRight &&
                        p1.Rect.TopRight == intersectionRect.TopRight;
             }
 
-            bool IsLowerLeft(ProcessPipe p1, ProcessPipe p2)
+            bool IsLowerLeft(GraphPipe p1, GraphPipe p2)
             {
                 return p1.Rect.BottomLeft == p2.Rect.BottomLeft &&
                        p1.Rect.BottomLeft == intersectionRect.BottomLeft;
             }
 
-            bool IsLowerRight(ProcessPipe p1, ProcessPipe p2)
+            bool IsLowerRight(GraphPipe p1, GraphPipe p2)
             {
                 return p1.Rect.BottomRight == p2.Rect.BottomRight &&
                        p1.Rect.BottomRight == intersectionRect.BottomRight;
@@ -139,15 +139,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    IsLowerRight(pipe1, pipe2) || IsLowerRight(pipe2, pipe1);
         }
 
-        public static bool IsSerialConnection(ProcessPipe pipe1, ProcessPipe pipe2, Rect intersectionRect)
+        public static bool IsSerialConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)
         {
-            bool IsVertical(ProcessPipe p1, ProcessPipe p2)
+            bool IsVertical(GraphPipe p1, GraphPipe p2)
             {
                 return p1.Rect.BottomRight == p2.Rect.TopLeft + Common.ConnectorVector &&
                        p1.Rect.BottomLeft == intersectionRect.BottomLeft;
             }
 
-            bool IsHorizontal(ProcessPipe p1, ProcessPipe p2)
+            bool IsHorizontal(GraphPipe p1, GraphPipe p2)
             {
                 return p1.Rect.BottomRight == p2.Rect.TopLeft + Common.ConnectorVector &&
                        p1.Rect.BottomRight == intersectionRect.BottomRight;

@@ -8,23 +8,23 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class DepthFirstDirectedPaths
     {
-        private readonly Dictionary<CornerConnector, List<IReadOnlyList<CornerConnector>>> _paths;
+        private readonly Dictionary<PipeConnector, List<IReadOnlyList<PipeConnector>>> _paths;
 
-        public DepthFirstDirectedPaths(CornerConnector sourceVertex)
+        public DepthFirstDirectedPaths(PipeConnector sourceVertex)
         {
-            _paths = new Dictionary<CornerConnector, List<IReadOnlyList<CornerConnector>>>();
+            _paths = new Dictionary<PipeConnector, List<IReadOnlyList<PipeConnector>>>();
 
-            var vertices = new Stack<CornerConnector>();
+            var vertices = new Stack<PipeConnector>();
             vertices.Push(sourceVertex);
             DepthFirstSearch(vertices);
         }
 
-        public IReadOnlyCollection<IReadOnlyList<CornerConnector>> PathsTo(CornerConnector vertex)
+        public IReadOnlyCollection<IReadOnlyList<PipeConnector>> PathsTo(PipeConnector vertex)
         {
             return _paths.TryGetValue(vertex, out var result) ? result : null;
         }
 
-        private void DepthFirstSearch(Stack<CornerConnector> visited)
+        private void DepthFirstSearch(Stack<PipeConnector> visited)
         {
             var vertices = visited.Peek().GetAdjacentConnectors();
 
@@ -41,7 +41,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 {
                     if (!_paths.ContainsKey(vertex))
                     {
-                        _paths[vertex] = new List<IReadOnlyList<CornerConnector>>();
+                        _paths[vertex] = new List<IReadOnlyList<PipeConnector>>();
                     }
 
                     _paths[vertex].Add(visited.Reverse().ToArray());

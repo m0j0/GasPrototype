@@ -8,21 +8,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class FlowGraph
     {
-        private ProcessPipe[] _processPipes;
+        private GraphPipe[] _graphPipes;
 
         public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes, IReadOnlyCollection<IValve> valves)
         {
-            _processPipes = SplitPipeToSegments(container, pipes, valves);
+            _graphPipes = SplitPipeToSegments(container, pipes, valves);
             InvalidateFlow();
         }
 
 
-        private static ProcessPipe[] SplitPipeToSegments(ISchemeContainer container,
+        private static GraphPipe[] SplitPipeToSegments(ISchemeContainer container,
             IReadOnlyCollection<IPipe> allPipes, IReadOnlyCollection<IValve> allValves)
         {
-            var processPipes = allPipes.Select(p => new ProcessPipe(container, p)).ToArray();
-            var processValves = allValves.Select(v => new ProcessValve(container, v)).ToArray();
-            var connectors = new List<IConnector>();
+            var processPipes = allPipes.Select(p => new GraphPipe(container, p)).ToArray();
+            var processValves = allValves.Select(v => new GraphValve(container, v)).ToArray();
+            var connectors = new List<IPipeConnector>();
 
             foreach (var pipe1 in processPipes)
             {
@@ -49,8 +49,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         if (intersectionRect != Rect.Empty)
                         {
-                            pipe1.FailType = FailType.IntersectionNotSupported;
-                            pipe2.FailType = FailType.IntersectionNotSupported;
+                            pipe1.FailType = FailType.IntersectionIsNotSupported;
+                            pipe2.FailType = FailType.IntersectionIsNotSupported;
                         }
 
                         continue;
@@ -69,7 +69,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         int pipe1Index = Array.IndexOf(processPipes, pipe1);
                         int pipe2Index = Array.IndexOf(processPipes, pipe2);
 
-                        var bridgeConnector = new BridgeConnector(intersectionRect,
+                        var bridgeConnector = new BridgePipeConnector(intersectionRect,
                             pipe1Index > pipe2Index ? pipe1 : pipe2,
                             pipe1Index > pipe2Index ? pipe2 : pipe1);
                         connectors.Add(bridgeConnector);
@@ -79,14 +79,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (!Common.IsCornerConnection(pipe1, pipe2, intersectionRect) &&
                         !Common.IsSerialConnection(pipe1, pipe2, intersectionRect))
                     {
-                        pipe1.FailType = FailType.IntersectionNotSupported;
-                        pipe2.FailType = FailType.IntersectionNotSupported;
+                        pipe1.FailType = FailType.IntersectionIsNotSupported;
+                        pipe2.FailType = FailType.IntersectionIsNotSupported;
 
                         continue;
                     }
 
-                    var cornerConnector = (CornerConnector)existingConnector ??
-                                          new CornerConnector(intersectionRect);
+                    var cornerConnector = (PipeConnector)existingConnector ??
+                                          new PipeConnector(intersectionRect);
                     cornerConnector.AddPipe(pipe1);
                     cornerConnector.AddPipe(pipe2);
                     if (existingConnector == null)
@@ -113,7 +113,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            foreach (var connector in connectors.OfType<CornerConnector>())
+            foreach (var connector in connectors.OfType<PipeConnector>())
             {
                 foreach (var valve in processValves)
                 {
@@ -150,7 +150,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (firstOrDefault == null ||
                     firstOrDefault.Rect.TopLeft != currentProcessPipe.Rect.TopLeft)
                 {
-                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.TopLeft, Common.ConnectorVector));
+                    var cornerConnector = new PipeConnector(new Rect(currentProcessPipe.Rect.TopLeft, Common.ConnectorVector));
                     cornerConnector.AddPipe(currentProcessPipe);
                     orderedConnectors.Insert(0, cornerConnector);
 
@@ -167,7 +167,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (lastOrDefault == null ||
                     lastOrDefault.Rect.BottomRight != currentProcessPipe.Rect.BottomRight)
                 {
-                    var cornerConnector = new CornerConnector(new Rect(currentProcessPipe.Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
+                    var cornerConnector = new PipeConnector(new Rect(currentProcessPipe.Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
                     cornerConnector.AddPipe(currentProcessPipe);
                     orderedConnectors.Add(cornerConnector);
 
@@ -210,8 +210,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     allSegments.Add(s2);
                 }
 
-                currentProcessPipe.Segments.Clear();
-                currentProcessPipe.Segments.AddRange(allSegments);
                 currentProcessPipe.Pipe.Segments = allSegments;
             }
 
@@ -220,9 +218,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void InvalidateFlow()
         {
-            var connectors = _processPipes.SelectMany(pipe => pipe.Connectors).OfType<CornerConnector>().Distinct().ToArray();
+            var connectors = _graphPipes.SelectMany(pipe => pipe.Connectors).OfType<PipeConnector>().Distinct().ToArray();
 
-            foreach (var edge in _processPipes)
+            foreach (var edge in _graphPipes)
             {
                 foreach (var segment in edge.Pipe.Segments)
                 {
@@ -252,7 +250,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         for (var i = 0; i < path.Count - 1; i++)
                         {
-                            var edge = _processPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
+                            var edge = _graphPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
                             foreach (var segment in edge.Pipe.Segments)
                             {
                                 segment.FlowDirection = FlowDirection.Both;
@@ -262,43 +260,5 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
         }
-    }
-
-    internal class ProcessPipe
-    {
-        public ProcessPipe(ISchemeContainer container, IPipe pipe)
-        {
-            Rect = Common.GetAbsoluteRect(container, pipe);
-            Pipe = pipe;
-            Segments = new List<IPipeSegment>();
-            Connectors = new List<IConnector>();
-        }
-
-        public IPipe Pipe { get; }
-
-        public Rect Rect { get; }
-
-        public Orientation Orientation => Pipe.Orientation;
-
-        public FailType FailType { get; set; }
-
-        public bool IsFailed => FailType != FailType.None;
-
-        public List<IPipeSegment> Segments { get; }
-
-        public List<IConnector> Connectors { get; }
-    }
-
-    internal class ProcessValve
-    {
-        public ProcessValve(ISchemeContainer container, IValve valve)
-        {
-            Rect = Common.GetAbsoluteRect(container, valve);
-            Valve = valve;
-        }
-
-        public IValve Valve { get; }
-
-        public Rect Rect { get; }
     }
 }
