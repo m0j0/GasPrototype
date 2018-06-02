@@ -222,6 +222,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     allSegments.Add(s2);
                 }
 
+                currentProcessPipe.Segments.Clear();
+                currentProcessPipe.Segments.AddRange(allSegments);
                 currentProcessPipe.Pipe.Segments = allSegments;
             }
 

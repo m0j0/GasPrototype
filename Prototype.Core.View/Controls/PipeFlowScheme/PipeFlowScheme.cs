@@ -124,7 +124,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var edge in _pipes)
             {
-                edge.HasFlow = false;
+                foreach (var segment in edge.Segments)
+                {
+                    segment.FlowDirection = FlowDirection.None;
+                }
             }
 
             var destinationConnectors = connectors.Where(c => c.IsDestination).ToArray();
@@ -150,7 +153,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         for (var i = 0; i < path.Count - 1; i++)
                         {
                             var edge = _processPipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
-                            edge.Pipe.HasFlow = true;
+                            foreach (var segment in edge.Segments)
+                            {
+                                segment.FlowDirection = FlowDirection.Both;
+                            }
                         }
                     }
                 }
