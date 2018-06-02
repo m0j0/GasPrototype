@@ -1,42 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using MugenMvvmToolkit.Binding;
 using Prototype.Core.Controls.PipeFlowScheme;
-using Prototype.Core.Interfaces;
 using Prototype.Core.Interfaces.GasPanel;
-using Prototype.Core.Models;
 using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls
 {
     public sealed class Pipe : Control, IPipe
     {
+        #region Fields
+
+        private static readonly EventHandler SizeChangedHandler;
+
+        #endregion
+
         #region Constructors
 
         static Pipe()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
+            SizeChangedHandler = OnSizeChanged;
         }
 
         public Pipe()
         {
-            DependencyPropertyDescriptor
-                .FromProperty(HeightProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SchemeChanged?.Invoke(this, EventArgs.Empty));
-            DependencyPropertyDescriptor
-                .FromProperty(WidthProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SchemeChanged?.Invoke(this, EventArgs.Empty));
-            DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SchemeChanged?.Invoke(this, EventArgs.Empty));
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Pipe))
-                .AddValueChanged(this, (s, e) => SchemeChanged?.Invoke(this, EventArgs.Empty));
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
         }
 
         #endregion
@@ -46,20 +39,19 @@ namespace Prototype.Core.Controls
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
             "Orientation", typeof(Orientation), typeof(Pipe), new PropertyMetadata(Orientation.Horizontal));
 
-        public static readonly DependencyProperty HasFlowProperty = DependencyProperty.Register(
-            "HasFlow", typeof(bool), typeof(Pipe), new PropertyMetadata(default(bool)));
-
         public static readonly DependencyProperty SubstanceTypeProperty = DependencyProperty.Register(
             "SubstanceType", typeof(SubstanceType), typeof(Pipe), new PropertyMetadata(SubstanceType.Gas));
 
         internal static readonly DependencyProperty PipeModelProperty = DependencyProperty.Register(
-            "PipeVm", typeof(IPipeVm), typeof(Pipe), new PropertyMetadata(default(IPipeVm), PipeVmPropertyChangedCallback));
+            "PipeVm", typeof(IPipeVm), typeof(Pipe),
+            new PropertyMetadata(default(IPipeVm), PipeVmPropertyChangedCallback));
 
         public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
-            "Segments", typeof(IList<IPipeSegment>), typeof(Pipe), new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
+            "Segments", typeof(IList<IPipeSegment>), typeof(Pipe),
+            new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
 
-        #endregion        
-        
+        #endregion
+
         #region Events
 
         public event EventHandler SchemeChanged;
@@ -91,7 +83,7 @@ namespace Prototype.Core.Controls
 
         public IList<IPipeSegment> Segments
         {
-            get { return (IList<IPipeSegment>)GetValue(SegmentsProperty); }
+            get { return (IList<IPipeSegment>) GetValue(SegmentsProperty); }
             set { SetValue(SegmentsProperty, value); }
         }
 
@@ -104,17 +96,58 @@ namespace Prototype.Core.Controls
             return (ISchemeContainer) Parent;
         }
 
-        private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var pipe = (Pipe)dependencyObject;
+            DependencyPropertyDescriptor
+                .FromProperty(HeightProperty, typeof(Pipe))
+                .AddValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(WidthProperty, typeof(Pipe))
+                .AddValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(OrientationProperty, typeof(Pipe))
+                .AddValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(VisibilityProperty, typeof(Pipe))
+                .AddValueChanged(this, SizeChangedHandler);
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            DependencyPropertyDescriptor
+                .FromProperty(HeightProperty, typeof(Pipe))
+                .RemoveValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(WidthProperty, typeof(Pipe))
+                .RemoveValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(OrientationProperty, typeof(Pipe))
+                .RemoveValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(VisibilityProperty, typeof(Pipe))
+                .RemoveValueChanged(this, SizeChangedHandler);
+        }
+
+        private static void OnSizeChanged(object sender, EventArgs e)
+        {
+            var pipe = (Pipe) sender;
+            pipe.SchemeChanged?.Invoke(pipe, EventArgs.Empty);
+        }
+
+        private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject,
+            DependencyPropertyChangedEventArgs args)
+        {
+            var pipe = (Pipe) dependencyObject;
             var model = args.NewValue as IPipeVm;
 
             if (model == null)
             {
                 return;
             }
+
             pipe.Bind(() => v => v.SubstanceType).To(model, () => (m, ctx) => m.SubstanceType).Build();
-            pipe.Bind(() => v => v.Visibility).To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
+            pipe.Bind(() => v => v.Visibility)
+                .To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
         }
 
         #endregion

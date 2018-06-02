@@ -14,11 +14,24 @@ namespace Prototype.Core.Controls
 {
     public sealed class Valve : Control, IValve
     {
+        #region Fields
+
+        private static readonly EventHandler SizeChangedHandler;
+
+        #endregion
+
         #region Constructors
 
         static Valve()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve), new FrameworkPropertyMetadata(typeof(Valve)));
+            SizeChangedHandler = OnSizeChanged;
+        }
+
+        public Valve()
+        {
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
         }
 
         #endregion
@@ -29,13 +42,16 @@ namespace Prototype.Core.Controls
             "Orientation", typeof(Orientation), typeof(Valve), new PropertyMetadata(Orientation.Vertical));
 
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
-            "State", typeof(ValveState), typeof(Valve), new PropertyMetadata(ValveState.Unknown, OnPropertyChangedCallback));
+            "State", typeof(ValveState), typeof(Valve),
+            new PropertyMetadata(ValveState.Unknown, OnStatePropertyChangedCallback));
 
         public static readonly DependencyProperty MenuCommandsProperty = DependencyProperty.Register(
-            "MenuCommands", typeof(IReadOnlyCollection<INamedCommand>), typeof(Valve), new PropertyMetadata(default(IReadOnlyCollection<INamedCommand>)));
+            "MenuCommands", typeof(IReadOnlyCollection<INamedCommand>), typeof(Valve),
+            new PropertyMetadata(default(IReadOnlyCollection<INamedCommand>)));
 
         public static readonly DependencyProperty ValveModelProperty = DependencyProperty.Register(
-            "ValveVm", typeof(IValveVm), typeof(Valve), new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
+            "ValveVm", typeof(IValveVm), typeof(Valve),
+            new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
 
         #endregion
 
@@ -80,10 +96,10 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Methods
-        
+
         public ISchemeContainer GetContainer()
         {
-            return (ISchemeContainer)Parent;
+            return (ISchemeContainer) Parent;
         }
 
         public bool CanPassFlow(IPipe pipe1, IPipe pipe2)
@@ -91,7 +107,40 @@ namespace Prototype.Core.Controls
             return State == ValveState.Opened;
         }
 
-        private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            DependencyPropertyDescriptor
+                .FromProperty(OrientationProperty, typeof(Valve))
+                .AddValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(VisibilityProperty, typeof(Valve))
+                .AddValueChanged(this, SizeChangedHandler);
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            DependencyPropertyDescriptor
+                .FromProperty(OrientationProperty, typeof(Valve))
+                .RemoveValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(VisibilityProperty, typeof(Valve))
+                .RemoveValueChanged(this, SizeChangedHandler);
+        }
+
+        private static void OnSizeChanged(object sender, EventArgs e)
+        {
+            var valve = (Valve) sender;
+            valve.SchemeChanged?.Invoke(valve, EventArgs.Empty);
+        }
+
+        private static void OnStatePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var valve = (Valve) d;
+            valve.StateChanged?.Invoke(valve, EventArgs.Empty);
+        }
+
+        private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject,
+            DependencyPropertyChangedEventArgs args)
         {
             var valve = (Valve) dependencyObject;
             var model = args.NewValue as IValveVm;
@@ -100,15 +149,11 @@ namespace Prototype.Core.Controls
             {
                 return;
             }
+
             valve.Bind(() => v => v.State).To(model, () => (m, ctx) => m.State).Build();
             valve.Bind(() => v => v.MenuCommands).To(model, () => (m, ctx) => m.Commands).Build();
-            valve.Bind(() => v => v.Visibility).To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
-        }
-
-        private static void OnPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var valve = (Valve) d;
-            valve.StateChanged?.Invoke(valve, EventArgs.Empty);
+            valve.Bind(() => v => v.Visibility)
+                .To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
         }
 
         #endregion
