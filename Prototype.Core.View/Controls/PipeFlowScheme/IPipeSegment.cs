@@ -17,23 +17,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         FlowDirection FlowDirection { get; set; }
     }
 
-    [Flags]
-    public enum FlowDirection
-    {
-        None = 0,
-        Forward = 1 << 0,
-        Backward = 1 << 1,
-        Both = Forward | Backward
-    }
-
-    internal enum FailType
-    {
-        None,
-        WrongSize,
-        IntersectionNotSupported,
-        BridgeNotEnoughSpace
-    }
-
     internal class ConnectorSegment : NotifyPropertyChangedBase, IPipeSegment
     {
         private FlowDirection _flowDirection;

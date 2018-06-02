@@ -22,16 +22,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 throw new Exception("!!!");
             }
 
-            if (pipe1.Connectors.Contains(this))
-            {
-                throw new Exception("!!");
-            }
-
-            if (pipe2.Connectors.Contains(this))
-            {
-                throw new Exception("!!");
-            }
-
             Rect = rect;
             Pipe1 = pipe1;
             Pipe2 = pipe2;
@@ -41,8 +31,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Rect Rect { get; }
 
-        public ProcessPipe Pipe1 { get;  }
-        public ProcessPipe Pipe2 { get;  }
+        public ProcessPipe Pipe1 { get; }
+
+        public ProcessPipe Pipe2 { get; }
 
         public IPipeSegment CreateSegment(ProcessPipe pipe)
         {
@@ -106,15 +97,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                 foreach (var cornerConnector in pipe.Connectors.OfType<CornerConnector>())
                 {
-                    yield return  cornerConnector;
+                    yield return cornerConnector;
                 }
             }
         }
         //
 
         public ProcessPipe Pipe1 => _pipes[0];
+
         public ProcessPipe Pipe2 => _pipes[1];
+
         public ProcessPipe Pipe3 => _pipes[2];
+
         public ProcessPipe Pipe4 => _pipes[3];
 
         public void AddPipe(ProcessPipe pipe)

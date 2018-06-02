@@ -64,7 +64,7 @@
     <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowScheme.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />
-    <Compile Include="Controls\PipeFlowScheme\Pipe.Connector.cs" />
+    <Compile Include="Controls\PipeFlowScheme\IConnector.cs" />
     <Compile Include="Controls\Pipe.cs" />
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Wafer.cs" />
@@ -122,10 +122,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\PipeFlowScheme\Pipe.Drawing.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Controls\PipeFlowScheme\Pipe.Segment.cs" />
+    <Compile Include="Controls\PipeFlowScheme\IPipeSegment.cs" />
     <Compile Include="Controls\PipeFlowScheme\Pipe.Model.cs" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -2,6 +2,16 @@
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
+
+    [Flags]
+    public enum FlowDirection
+    {
+        None = 0,
+        Forward = 1 << 0,
+        Backward = 1 << 1,
+        Both = Forward | Backward
+    }
+
     internal enum PipeType
     {
         Regular,
@@ -18,5 +28,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Right = 1 << 2,
         Bottom = 1 << 3,
         All = Left | Right | Top | Bottom
+    }
+
+    internal enum FailType
+    {
+        None,
+        WrongSize,
+        IntersectionNotSupported,
+        BridgeNotEnoughSpace
     }
 }

@@ -13,6 +13,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes, IReadOnlyCollection<IValve> valves)
         {
             _processPipes = SplitPipeToSegments(container, pipes, valves);
+            InvalidateFlow();
         }
 
 
@@ -39,7 +40,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         continue;
                     }
 
-                    var intersectionRect = PipeDrawing.FindIntersection(
+                    var intersectionRect = Common.FindIntersection(
                         pipe1.Rect,
                         pipe2.Rect
                     );
@@ -57,8 +58,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     var existingConnector = connectors.FirstOrDefault(c => c.Rect == intersectionRect);
 
-                    if (PipeDrawing.IsBridgeConnection(pipe1, pipe2, intersectionRect) ||
-                        PipeDrawing.IsBridgeConnection(pipe2, pipe1, intersectionRect))
+                    if (Common.IsBridgeConnection(pipe1, pipe2, intersectionRect) ||
+                        Common.IsBridgeConnection(pipe2, pipe1, intersectionRect))
                     {
                         if (existingConnector != null)
                         {
@@ -75,8 +76,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         continue;
                     }
 
-                    if (!PipeDrawing.IsCornerConnection(pipe1, pipe2, intersectionRect) &&
-                        !PipeDrawing.IsSerialConnection(pipe1, pipe2, intersectionRect))
+                    if (!Common.IsCornerConnection(pipe1, pipe2, intersectionRect) &&
+                        !Common.IsSerialConnection(pipe1, pipe2, intersectionRect))
                     {
                         pipe1.FailType = FailType.IntersectionNotSupported;
                         pipe2.FailType = FailType.IntersectionNotSupported;
@@ -116,7 +117,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 foreach (var valve in processValves)
                 {
-                    if (PipeDrawing.IsIntersect(connector.Rect, valve.Rect))
+                    if (Common.IsIntersect(connector.Rect, valve.Rect))
                     {
                         connector.Valve = valve.Valve;
                     }
