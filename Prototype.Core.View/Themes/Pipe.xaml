@@ -115,8 +115,8 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemContainerStyle>
                             <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.Left" Value="{Binding Path=StartPoint.X}" />
-                                <Setter Property="Canvas.Top" Value="{Binding Path=StartPoint.Y}" />
+                                <Setter Property="Canvas.Left" Value="{Binding Path=StartPoint.X, Mode=OneTime}" />
+                                <Setter Property="Canvas.Top" Value="{Binding Path=StartPoint.Y, Mode=OneTime}" />
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                     </ItemsControl>
