@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Prototype.Core.Interfaces.GasPanel;
-using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class DepthFirstDirectedPaths
     {
-        private readonly Dictionary<PipeConnector, List<IReadOnlyList<PipeConnector>>> _paths;
+        private readonly Dictionary<IVertex, List<IReadOnlyList<IVertex>>> _paths;
 
-        public DepthFirstDirectedPaths(PipeConnector sourceVertex)
+        public DepthFirstDirectedPaths(SourceVertex sourceVertex)
         {
-            _paths = new Dictionary<PipeConnector, List<IReadOnlyList<PipeConnector>>>();
+            _paths = new Dictionary<IVertex, List<IReadOnlyList<IVertex>>>();
 
-            var vertices = new Stack<PipeConnector>();
+            var vertices = new Stack<IVertex>();
             vertices.Push(sourceVertex);
             DepthFirstSearch(vertices);
         }
 
-        public IReadOnlyCollection<IReadOnlyList<PipeConnector>> PathsTo(PipeConnector vertex)
+        public IReadOnlyCollection<IReadOnlyList<IVertex>> PathsTo(IVertex vertex)
         {
             return _paths.TryGetValue(vertex, out var result) ? result : null;
         }
 
-        private void DepthFirstSearch(Stack<PipeConnector> visited)
+        private void DepthFirstSearch(Stack<IVertex> visited)
         {
-            var vertices = visited.Peek().GetAdjacentConnectors();
+            var vertices = visited.Peek().GetAdjacentVertices();
 
             foreach (var vertex in vertices)
             {
@@ -37,11 +35,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                 visited.Push(vertex);
 
-                if (vertex.IsDestination)
+                if (vertex is DestinationVertex)
                 {
                     if (!_paths.ContainsKey(vertex))
                     {
-                        _paths[vertex] = new List<IReadOnlyList<PipeConnector>>();
+                        _paths[vertex] = new List<IReadOnlyList<IVertex>>();
                     }
 
                     _paths[vertex].Add(visited.Reverse().ToArray());
@@ -51,5 +49,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 visited.Pop();
             }
         }
+
     }
 }

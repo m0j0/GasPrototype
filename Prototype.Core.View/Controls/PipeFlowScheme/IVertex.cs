@@ -10,21 +10,33 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         PipeConnector Connector { get; }
 
-        IReadOnlyList<IVertex> GetAdjacentVertices();
+        IEnumerable<IVertex> GetAdjacentVertices();
     }
 
     internal abstract class VertexBase : IVertex
     {
         protected VertexBase(PipeConnector connector)
         {
+            if (connector.Vertex != null)
+            {
+                throw new Exception("!!!");
+            }
+
             Connector = connector;
+            connector.Vertex = this;
         }
 
         public PipeConnector Connector { get; }
 
-        public IReadOnlyList<IVertex> GetAdjacentVertices()
+        public virtual IEnumerable<IVertex> GetAdjacentVertices()
         {
-            throw new NotImplementedException();
+            foreach (var pipe in Connector.GetPipes())
+            {
+                foreach (var connector in pipe.Connectors.OfType<PipeConnector>())
+                {
+                    yield return connector.Vertex;
+                }
+            }
         }
     }
 
@@ -46,6 +58,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         public Vertex(PipeConnector connector) : base(connector)
         {
+        }
+
+        public IValve Valve { get; set; }
+
+        public override IEnumerable<IVertex> GetAdjacentVertices()
+        {
+            if (Valve != null && !Valve.CanPassFlow(null, null))
+            {
+                return Enumerable.Empty<IVertex>();
+            }
+
+            return base.GetAdjacentVertices();
         }
     }
 

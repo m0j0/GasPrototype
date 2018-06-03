@@ -112,107 +112,145 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     }
                 }
 
-                bool hasStartConnector = pipe1.StartConnector != null;
-                bool hasEndConnector = pipe1.EndConnector != null;
-
-                if (pipe1.StartConnector == null)
-                {
-                    var connector = new PipeConnector(new Rect(pipe1.Rect.TopLeft, Common.ConnectorVector));
-                    connector.AddPipe(pipe1);
-
-                    pipe1.StartConnector = connector;
-                    connectors.Add(connector);
-
-                    if (_container.IsSource(pipe1.Pipe))
-                    {
-                        connector.IsSource = true;
-                    }
-
-                    if (_container.IsDestination(pipe1.Pipe))
-                    {
-                        connector.IsDestination = true;
-                    }
-
-                    if (connector.IsSource && connector.IsDestination)
-                    {
-                        throw new Exception("!!!");
-                    }
-
-                    if ((connector.IsSource || connector.IsDestination) && !hasEndConnector)
-                    {
-                        throw new Exception("!!!");
-                    }
-                }
-
-                if (pipe1.EndConnector == null)
-                {
-                    var connector = new PipeConnector(new Rect(pipe1.Rect.BottomRight - Common.ConnectorVector,
-                        Common.ConnectorVector));
-                    connector.AddPipe(pipe1);
-
-                    pipe1.EndConnector = connector;
-                    connectors.Add(connector);
-
-                    if (_container.IsSource(pipe1.Pipe))
-                    {
-                        connector.IsSource = true;
-                    }
-
-                    if (_container.IsDestination(pipe1.Pipe))
-                    {
-                        connector.IsDestination = true;
-                    }
-
-                    if (connector.IsSource && connector.IsDestination)
-                    {
-                        throw new Exception("!!!");
-                    }
-
-                    if ((connector.IsSource || connector.IsDestination) && !hasStartConnector)
-                    {
-                        throw new Exception("!!!");
-                    }
-                }
             }
 
-            // just check
-            for (int i = 0; i < connectors.Count; i++)
-            {
-                for (int j = 0; j < connectors.Count; j++)
-                {
-                    if (i == j)
-                    {
-                        continue;
-                    }
+            //// move to tests
+            //for (int i = 0; i < connectors.Count; i++)
+            //{
+            //    for (int j = 0; j < connectors.Count; j++)
+            //    {
+            //        if (i == j)
+            //        {
+            //            continue;
+            //        }
 
-                    if (connectors[i].Rect == connectors[j].Rect)
-                    {
-                        throw new Exception("!!!");
-                    }
-                }
-            }
+            //        if (connectors[i].Rect == connectors[j].Rect)
+            //        {
+            //            throw new Exception("!!!");
+            //        }
+            //    }
+            //}
 
-            foreach (var connector in connectors.OfType<PipeConnector>())
-            {
-                foreach (var valve in _valves)
-                {
-                    if (Common.IsIntersect(connector.Rect, valve.Rect))
-                    {
-                        connector.Valve = valve.Valve;
-                    }
-                }
-            }
 
             var vertices = new List<IVertex>();
             var segments = new List<IPipeSegment>();
 
-            //foreach (var connector in connectors.OfType<PipeConnector>())
-            //{
-            //    if (connector.IsSource)
-            //    {
-            //        vertices.Add(new SourceVertex());
-            //    }
-            //}
+            foreach (var pipe in _pipes)
+            {
+
+
+
+                bool hasStartConnector = pipe.StartConnector != null;
+                bool hasEndConnector = pipe.EndConnector != null;
+
+                bool isSource = _container.IsSource(pipe.Pipe);
+                bool isDestination = _container.IsDestination(pipe.Pipe);
+                
+                if (isSource && isDestination)
+                {
+                    pipe.FailType = FailType.BothSourceDestination;
+                    continue;
+                }
+
+                if ((isSource || isDestination) && 
+                    (!hasStartConnector && !hasEndConnector || hasStartConnector && hasEndConnector))
+                {
+                    pipe.FailType = FailType.BothSourceDestination;
+                    continue;
+                }
+
+                if (!hasStartConnector)
+                {
+                    var connector = new PipeConnector(new Rect(pipe.Rect.TopLeft, Common.ConnectorVector));
+                    connector.AddPipe(pipe);
+
+                    pipe.StartConnector = connector;
+                    connectors.Add(connector);
+
+                    IVertex vertex;
+                    if (isSource)
+                    {
+                        vertex = new SourceVertex(connector);
+                    }
+                    else if (isDestination)
+                    {
+                        vertex = new DestinationVertex(connector);
+                    }
+                    else
+                    {
+                        vertex = new Vertex(connector);
+                    }
+
+                    vertices.Add(vertex);
+                }
+
+                if (!hasEndConnector)
+                {
+                    var connector = new PipeConnector(new Rect(pipe.Rect.BottomRight - Common.ConnectorVector,
+                        Common.ConnectorVector));
+                    connector.AddPipe(pipe);
+
+                    pipe.EndConnector = connector;
+                    connectors.Add(connector);
+                    
+                    IVertex vertex;
+                    if (isSource)
+                    {
+                        vertex = new SourceVertex(connector);
+                    }
+                    else if (isDestination)
+                    {
+                        vertex = new DestinationVertex(connector);
+                    }
+                    else
+                    {
+                        vertex = new Vertex(connector);
+                    }
+                    vertices.Add(vertex);
+                }
+                
+                foreach (var connector in pipe.Connectors.OfType<PipeConnector>())
+                {
+                    bool hasIntersectionWithValve = false;
+                    foreach (var valve in _valves)
+                    {
+                        if (!Common.IsIntersect(connector.Rect, valve.Rect))
+                        {
+                            continue;
+                        }
+
+                        if (hasIntersectionWithValve)
+                        {
+                            throw new Exception("!!!");
+                        }
+
+                        hasIntersectionWithValve = true;
+                        if (connector.Vertex == null)
+                        {
+                            connector.Vertex = new Vertex(connector);
+                        }
+
+                        switch (connector.Vertex)
+                        {
+                            case Vertex vertex:
+                                vertex.Valve = valve.Valve;
+                                break;
+
+                            case SourceVertex _:
+                            case DestinationVertex _:
+                                throw new Exception("!!!");
+
+                            default:
+                                throw new Exception("!!! !!!");
+                        }
+                    }
+
+                    if (connector.Vertex == null)
+                    {
+                        connector.Vertex = new Vertex(connector);
+                    }
+                }
+            }
 
             foreach (var currentProcessPipe in _pipes)
             {
@@ -269,9 +307,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            var _connectors = _pipes.SelectMany(pipe => pipe.Connectors).Distinct().OfType<PipeConnector>().ToArray(); // TODO
-            var destinationConnectors = _connectors.Where(c => c.IsDestination).ToArray();
-            var sourceConnectors = _connectors.Where(c => c.IsSource);
+            var sourceConnectors = _vertices.OfType<SourceVertex>();
+            var destinationConnectors = _vertices.OfType<DestinationVertex>().ToArray();
             foreach (var connector in sourceConnectors)
             {
                 var algo = new DepthFirstDirectedPaths(connector);
@@ -288,8 +325,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         for (var i = 0; i < path.Count - 1; i++)
                         {
-                            var edge = _pipes.Single(pipe =>
-                                pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
+                            var edge = path[i].Connector.GetPipes().Intersect(path[i + 1].Connector.GetPipes()).Single();
+                            
                             foreach (var segment in edge.Pipe.Segments)
                             {
                                 segment.FlowDirection = FlowDirection.Both;

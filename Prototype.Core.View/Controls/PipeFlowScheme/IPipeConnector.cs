@@ -76,33 +76,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Rect Rect { get; }
 
-        // TODO
-        public bool IsSource { get; set; }
-        public bool IsDestination { get; set; }
-        public IValve Valve { get; set; }
-
-        public IEnumerable<PipeConnector> GetAdjacentConnectors()
-        {
-            if (Valve != null && !Valve.CanPassFlow(null, null))
-            {
-                yield break;
-            }
-
-            foreach (var pipe in _pipes)
-            {
-                if (pipe == null)
-                {
-                    continue;
-                }
-
-                foreach (var cornerConnector in pipe.Connectors.OfType<PipeConnector>())
-                {
-                    yield return cornerConnector;
-                }
-            }
-        }
-        //
-
+        public IVertex Vertex { get; set; }
+        
         public GraphPipe Pipe1 => _pipes[0];
 
         public GraphPipe Pipe2 => _pipes[1];
@@ -135,6 +110,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 throw new Exception("!!!");
             }
+        }
+
+        public IEnumerable<GraphPipe> GetPipes()
+        {
+            return _pipes.Where(pipe => pipe != null);
         }
 
         public IPipeSegment CreateSegment(GraphPipe pipe)
