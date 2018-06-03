@@ -7,20 +7,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class FlowGraph
     {
-        private readonly IReadOnlyCollection<IVertex> _vertices;
-        private readonly IReadOnlyCollection<IPipeSegment> _segments;
+        private IReadOnlyCollection<IVertex> _vertices;
+        private IReadOnlyCollection<IPipeSegment> _segments;
 
         public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes,
             IReadOnlyCollection<IValve> valves)
         {
-            var result = SplitPipesToSegments(container, pipes, valves);
-            _vertices = result.Item1;
-            _segments = result.Item2;
-
+            SplitPipesToSegments(container, pipes, valves);
+            
             InvalidateFlow();
         }
 
-        private Tuple<IReadOnlyCollection<IVertex>, IReadOnlyCollection<IPipeSegment>> SplitPipesToSegments(ISchemeContainer container, IReadOnlyCollection<IPipe> pipeControls,
+        private void SplitPipesToSegments(ISchemeContainer container, IReadOnlyCollection<IPipe> pipeControls,
             IReadOnlyCollection<IValve> valveControls)
         {
             var pipes = pipeControls.Select(p => new GraphPipe(container, p)).ToArray();
@@ -51,12 +49,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     if (!Common.IsIntersectionSizeValid(intersectionRect))
                     {
-                        if (intersectionRect != Rect.Empty)
-                        {
-                            pipe1.FailType = FailType.IntersectionIsNotSupported;
-                            pipe2.FailType = FailType.IntersectionIsNotSupported;
-                        }
-
                         continue;
                     }
 
@@ -79,16 +71,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         connectors.Add(bridgeConnector);
                         continue;
                     }
-
-                    if (!Common.IsCornerConnection(pipe1, pipe2, intersectionRect) &&
-                        !Common.IsSerialConnection(pipe1, pipe2, intersectionRect))
-                    {
-                        pipe1.FailType = FailType.IntersectionIsNotSupported;
-                        pipe2.FailType = FailType.IntersectionIsNotSupported;
-
-                        continue;
-                    }
-
+                    
                     var connector = (PipeConnector) existingConnector ??
                                     new PipeConnector(intersectionRect);
                     connector.AddPipe(pipe1);
@@ -222,6 +205,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         if (connector.Vertex == null)
                         {
                             connector.Vertex = new Vertex(connector);
+
+                            vertices.Add(connector.Vertex);
                         }
 
                         switch (connector.Vertex)
@@ -242,6 +227,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (connector.Vertex == null)
                     {
                         connector.Vertex = new Vertex(connector);
+
+                        vertices.Add(connector.Vertex);
                     }
                 }
             }
@@ -280,8 +267,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     var s1 = connectorSegments[i];
                     var s2 = connectorSegments[i + 1];
 
+                    var lineSegment = Common.CreateSegmentBetweenSegments(currentProcessPipe, s1, s2);
                     allSegments.Add(s1);
-                    allSegments.Add(Common.CreateSegmentBetweenSegments(currentProcessPipe, s1, s2));
+                    allSegments.Add(lineSegment);
                     allSegments.Add(s2);
                 }
 
@@ -289,7 +277,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 currentProcessPipe.Pipe.Segments = allSegments;
             }
 
-            return Tuple.Create<IReadOnlyCollection<IVertex>, IReadOnlyCollection<IPipeSegment>>(vertices, segments);
+            _vertices = vertices;
+            _segments = segments;
         }
 
         public void InvalidateFlow()
@@ -317,9 +306,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         for (var i = 0; i < path.Count - 1; i++)
                         {
-                            var edge = path[i].Connector.GetPipes().Intersect(path[i + 1].Connector.GetPipes()).Single();
+                            var pipe = path[i].Connector.GetPipes().Intersect(path[i + 1].Connector.GetPipes()).Single();
                             
-                            foreach (var segment in edge.Pipe.Segments)
+                            foreach (var segment in pipe.Pipe.Segments)
                             {
                                 segment.FlowDirection = FlowDirection.Both;
                             }

@@ -38,6 +38,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return GetType().Name + " " + Connector.Rect;
+        }
     }
 
     internal class SourceVertex : VertexBase
@@ -71,30 +76,35 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             return base.GetAdjacentVertices();
         }
+
+        public override string ToString()
+        {
+            return GetType().Name + " " + Connector.Rect + (Valve == null ? "" : " Valve");
+        }
     }
 
     internal class Edge
     {
-        private readonly IVertex _startVertex;
-        private readonly IVertex _endVertex;
-        private readonly bool _bidirectional;
+        public IVertex StartVertex { get; }
+        public IVertex EndVertex { get; }
+        public IPipeSegment Segment { get; }
 
-        public Edge(IVertex startVertex, IVertex endVertex, bool bidirectional)
+        public Edge(IVertex startVertex, IVertex endVertex, IPipeSegment segment)
         {
-            _startVertex = startVertex;
-            _endVertex = endVertex;
-            _bidirectional = bidirectional;
+            StartVertex = startVertex;
+            EndVertex = endVertex;
+            Segment = segment;
         }
         
-        public bool Equals(IVertex startVertex, IVertex endVertex)
-        {
-            if (_bidirectional)
-            {
-                return _startVertex == startVertex && _endVertex == endVertex ||
-                       _endVertex == startVertex && _startVertex == endVertex;
-            }
+        //public bool Equals(IVertex startVertex, IVertex endVertex)
+        //{
+        //    if (_bidirectional)
+        //    {
+        //        return _startVertex == startVertex && _endVertex == endVertex ||
+        //               _endVertex == startVertex && _startVertex == endVertex;
+        //    }
 
-            return _startVertex == startVertex && _endVertex == endVertex;
-        }
+        //    return _startVertex == startVertex && _endVertex == endVertex;
+        //}
     }
 }

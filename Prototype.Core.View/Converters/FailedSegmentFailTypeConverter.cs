@@ -21,6 +21,7 @@ namespace Prototype.Core.Converters
                 [FailType.IntersectionIsNotSupported] = new SolidColorBrush(Colors.Green),
                 [FailType.BridgeNotEnoughSpace] = new SolidColorBrush(Colors.Blue),
                 [FailType.DeadPath] = new SolidColorBrush(Colors.Black),
+                [FailType.BothSourceDestination] = new SolidColorBrush(Colors.Yellow),
             };
         }
 
