@@ -73,6 +73,20 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
+        internal static LineSegment CreateSegmentBetweenSegments(GraphPipe pipe, IPipeSegment s1, IPipeSegment s2)
+        {
+            if (pipe.Orientation == Orientation.Horizontal)
+            {
+                return new LineSegment(new Point(s1.StartPoint.X + s1.Length, 0),
+                    s2.StartPoint.X - (s1.StartPoint.X + s1.Length),
+                    pipe.Orientation);
+            }
+
+            return new LineSegment(new Point(0, s1.StartPoint.Y + s1.Length),
+                s2.StartPoint.Y - (s1.StartPoint.Y + s1.Length),
+                pipe.Orientation);
+        }
+
         #endregion
 
         #region Intersections

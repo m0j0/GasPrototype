@@ -12,7 +12,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private readonly GraphValve[] _valves;
         private readonly PipeConnector[] _connectors;
 
-        public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes, IReadOnlyCollection<IValve> valves)
+        public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes,
+            IReadOnlyCollection<IValve> valves)
         {
             _pipes = pipes.Select(p => new GraphPipe(container, p)).ToArray();
             _valves = valves.Select(v => new GraphValve(container, v)).ToArray();
@@ -20,7 +21,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             InvalidateFlow();
         }
-        
+
         private PipeConnector[] SplitPipesToSegments()
         {
             var connectors = new List<IPipeConnector>();
@@ -85,9 +86,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                         continue;
                     }
-                    
-                    var connector = (PipeConnector)existingConnector ??
-                                          new PipeConnector(intersectionRect);
+
+                    var connector = (PipeConnector) existingConnector ??
+                                    new PipeConnector(intersectionRect);
                     connector.AddPipe(pipe1);
                     connector.AddPipe(pipe2);
                     if (existingConnector == null)
@@ -99,6 +100,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         pipe1.StartConnector = connector;
                     }
+
                     if (pipe1.Rect.BottomRight == connector.Rect.BottomRight)
                     {
                         pipe1.EndConnector = connector;
@@ -111,15 +113,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     connector.AddPipe(pipe1);
 
                     pipe1.StartConnector = connector;
-                    pipe1.Connectors.Add(connector);
                     connectors.Add(connector);
 
                     // TODO
-                    if (PipeFlowScheme.GetIsSource((DependencyObject)pipe1.Pipe))
+                    if (PipeFlowScheme.GetIsSource((DependencyObject) pipe1.Pipe))
                     {
                         connector.IsSource = true;
                     }
-                    if (PipeFlowScheme.GetIsDestination((DependencyObject)pipe1.Pipe))
+
+                    if (PipeFlowScheme.GetIsDestination((DependencyObject) pipe1.Pipe))
                     {
                         connector.IsDestination = true;
                     }
@@ -127,19 +129,20 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                 if (pipe1.EndConnector == null)
                 {
-                    var connector = new PipeConnector(new Rect(pipe1.Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
+                    var connector = new PipeConnector(new Rect(pipe1.Rect.BottomRight - Common.ConnectorVector,
+                        Common.ConnectorVector));
                     connector.AddPipe(pipe1);
 
                     pipe1.EndConnector = connector;
-                    pipe1.Connectors.Add(connector);
                     connectors.Add(connector);
 
                     // TODO
-                    if (PipeFlowScheme.GetIsSource((DependencyObject)pipe1.Pipe))
+                    if (PipeFlowScheme.GetIsSource((DependencyObject) pipe1.Pipe))
                     {
                         connector.IsSource = true;
                     }
-                    if (PipeFlowScheme.GetIsDestination((DependencyObject)pipe1.Pipe))
+
+                    if (PipeFlowScheme.GetIsDestination((DependencyObject) pipe1.Pipe))
                     {
                         connector.IsDestination = true;
                     }
@@ -193,7 +196,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     continue;
                 }
 
-                var orderedConnectors = currentProcessPipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).ToList();
+                var orderedConnectors = currentProcessPipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left)
+                    .ToList();
 
                 var connectorSegments = new List<IPipeSegment>();
                 foreach (var connector in orderedConnectors)
@@ -208,20 +212,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     var s2 = connectorSegments[i + 1];
 
                     allSegments.Add(s1);
-
-                    if (currentProcessPipe.Orientation == Orientation.Horizontal)
-                    {
-                        allSegments.Add(new LineSegment(new Point(s1.StartPoint.X + s1.Length, 0),
-                            s2.StartPoint.X - (s1.StartPoint.X + s1.Length),
-                            currentProcessPipe.Orientation));
-                    }
-                    else
-                    {
-                        allSegments.Add(new LineSegment(new Point(0, s1.StartPoint.Y + s1.Length),
-                            s2.StartPoint.Y - (s1.StartPoint.Y + s1.Length),
-                            currentProcessPipe.Orientation));
-                    }
-
+                    allSegments.Add(Common.CreateSegmentBetweenSegments(currentProcessPipe, s1, s2));
                     allSegments.Add(s2);
                 }
 
@@ -259,7 +250,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     {
                         for (var i = 0; i < path.Count - 1; i++)
                         {
-                            var edge = _pipes.Single(pipe => pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
+                            var edge = _pipes.Single(pipe =>
+                                pipe.Connectors.Contains(path[i]) && pipe.Connectors.Contains(path[i + 1]));
                             foreach (var segment in edge.Pipe.Segments)
                             {
                                 segment.FlowDirection = FlowDirection.Both;
