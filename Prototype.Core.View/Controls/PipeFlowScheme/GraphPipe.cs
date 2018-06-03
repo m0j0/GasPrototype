@@ -27,5 +27,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public IList<IPipeSegment> Segments { get; }
 
         public IList<IPipeConnector> Connectors { get; }
+
+        public PipeConnector StartConnector { get; set; }
+
+        public PipeConnector EndConnector { get; set; }
     }
 }

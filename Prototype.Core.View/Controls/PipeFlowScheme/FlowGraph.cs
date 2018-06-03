@@ -85,13 +85,22 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         continue;
                     }
 
-                    var cornerConnector = (PipeConnector)existingConnector ??
+                    var connector = (PipeConnector)existingConnector ??
                                           new PipeConnector(intersectionRect);
-                    cornerConnector.AddPipe(pipe1);
-                    cornerConnector.AddPipe(pipe2);
+                    connector.AddPipe(pipe1);
+                    connector.AddPipe(pipe2);
                     if (existingConnector == null)
                     {
-                        connectors.Add(cornerConnector);
+                        connectors.Add(connector);
+                    }
+
+                    if (pipe1.Rect.TopLeft == connector.Rect.TopLeft)
+                    {
+                        pipe1.StartConnector = connector;
+                    }
+                    if (pipe1.Rect.BottomRight == connector.Rect.BottomRight)
+                    {
+                        pipe1.EndConnector = connector;
                     }
                 }
             }
