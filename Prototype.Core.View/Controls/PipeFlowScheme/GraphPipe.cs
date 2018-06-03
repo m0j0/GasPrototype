@@ -10,7 +10,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             Rect = Common.GetAbsoluteRect(container, pipe);
             Pipe = pipe;
-            Segments = new List<IPipeSegment>();
             Connectors = new List<IPipeConnector>();
         }
 
@@ -23,8 +22,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public FailType FailType { get; set; }
 
         public bool IsFailed => FailType != FailType.None;
-
-        public IList<IPipeSegment> Segments { get; }
 
         public IList<IPipeConnector> Connectors { get; }
 
