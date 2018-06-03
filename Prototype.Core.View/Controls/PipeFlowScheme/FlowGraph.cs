@@ -7,31 +7,28 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class FlowGraph
     {
-        private readonly ISchemeContainer _container;
-        private readonly GraphPipe[] _pipes;
-        private readonly GraphValve[] _valves;
-
         private readonly IReadOnlyCollection<IVertex> _vertices;
         private readonly IReadOnlyCollection<IPipeSegment> _segments;
 
         public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes,
             IReadOnlyCollection<IValve> valves)
         {
-            _container = container;
-            _pipes = pipes.Select(p => new GraphPipe(container, p)).ToArray();
-            _valves = valves.Select(v => new GraphValve(container, v)).ToArray();
-            var result = SplitPipesToSegments();
+            var result = SplitPipesToSegments(container, pipes, valves);
             _vertices = result.Item1;
             _segments = result.Item2;
 
             InvalidateFlow();
         }
 
-        private Tuple<IReadOnlyCollection<IVertex>, IReadOnlyCollection<IPipeSegment>> SplitPipesToSegments()
+        private Tuple<IReadOnlyCollection<IVertex>, IReadOnlyCollection<IPipeSegment>> SplitPipesToSegments(ISchemeContainer container, IReadOnlyCollection<IPipe> pipeControls,
+            IReadOnlyCollection<IValve> valveControls)
         {
+            var pipes = pipeControls.Select(p => new GraphPipe(container, p)).ToArray();
+            var valves = valveControls.Select(v => new GraphValve(container, v)).ToArray();
+
             var connectors = new List<IPipeConnector>();
 
-            foreach (var pipe1 in _pipes)
+            foreach (var pipe1 in pipes)
             {
                 if (!Common.IsSizeValid(pipe1))
                 {
@@ -39,7 +36,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     continue;
                 }
 
-                foreach (var pipe2 in _pipes)
+                foreach (var pipe2 in pipes)
                 {
                     if (pipe1 == pipe2 ||
                         pipe2.IsFailed)
@@ -73,8 +70,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             continue;
                         }
 
-                        int pipe1Index = Array.IndexOf(_pipes, pipe1);
-                        int pipe2Index = Array.IndexOf(_pipes, pipe2);
+                        int pipe1Index = Array.IndexOf(pipes, pipe1);
+                        int pipe2Index = Array.IndexOf(pipes, pipe2);
 
                         var bridgeConnector = new BridgePipeConnector(intersectionRect,
                             pipe1Index > pipe2Index ? pipe1 : pipe2,
@@ -135,16 +132,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var vertices = new List<IVertex>();
             var segments = new List<IPipeSegment>();
 
-            foreach (var pipe in _pipes)
+            foreach (var pipe in pipes)
             {
-
-
-
                 bool hasStartConnector = pipe.StartConnector != null;
                 bool hasEndConnector = pipe.EndConnector != null;
 
-                bool isSource = _container.IsSource(pipe.Pipe);
-                bool isDestination = _container.IsDestination(pipe.Pipe);
+                bool isSource = container.IsSource(pipe.Pipe);
+                bool isDestination = container.IsDestination(pipe.Pipe);
                 
                 if (isSource && isDestination)
                 {
@@ -212,7 +206,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 foreach (var connector in pipe.Connectors.OfType<PipeConnector>())
                 {
                     bool hasIntersectionWithValve = false;
-                    foreach (var valve in _valves)
+                    foreach (var valve in valves)
                     {
                         if (!Common.IsIntersect(connector.Rect, valve.Rect))
                         {
@@ -252,7 +246,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            foreach (var currentProcessPipe in _pipes)
+            foreach (var currentProcessPipe in pipes)
             {
                 if (currentProcessPipe.IsFailed)
                 {
@@ -291,6 +285,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     allSegments.Add(s2);
                 }
 
+                segments.AddRange(allSegments);
                 currentProcessPipe.Pipe.Segments = allSegments;
             }
 
@@ -299,12 +294,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void InvalidateFlow()
         {
-            foreach (var edge in _pipes)
+            foreach (var segment in _segments)
             {
-                foreach (var segment in edge.Pipe.Segments)
-                {
-                    segment.FlowDirection = FlowDirection.None;
-                }
+                segment.FlowDirection = FlowDirection.None;
             }
 
             var sourceConnectors = _vertices.OfType<SourceVertex>();
