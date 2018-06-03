@@ -10,6 +10,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         double GetLeft(IFlowControl control);
 
+        bool IsSource(IPipe pipe);
+
+        bool IsDestination(IPipe pipe);
+
         event EventHandler SchemeChanged;
     }
 

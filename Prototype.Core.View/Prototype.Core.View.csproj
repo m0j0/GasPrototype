@@ -63,6 +63,7 @@
     <Compile Include="Controls\PipeFlowScheme\Enums.cs" />
     <Compile Include="Controls\PipeFlowScheme\GraphPipe.cs" />
     <Compile Include="Controls\PipeFlowScheme\GraphValve.cs" />
+    <Compile Include="Controls\PipeFlowScheme\IVertex.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
     <Compile Include="Controls\PipeFlowScheme\PipeFlowScheme.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />

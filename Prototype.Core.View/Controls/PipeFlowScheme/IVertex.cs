@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Prototype.Core.Controls.PipeFlowScheme
+{
+    internal interface IVertex
+    {
+        PipeConnector Connector { get; }
+
+        IReadOnlyList<IVertex> GetAdjacentVertices();
+    }
+
+    internal abstract class VertexBase : IVertex
+    {
+        protected VertexBase(PipeConnector connector)
+        {
+            Connector = connector;
+        }
+
+        public PipeConnector Connector { get; }
+
+        public IReadOnlyList<IVertex> GetAdjacentVertices()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class SourceVertex : VertexBase
+    {
+        public SourceVertex(PipeConnector connector) : base(connector)
+        {
+        }
+    }
+
+    internal class DestinationVertex : VertexBase
+    {
+        public DestinationVertex(PipeConnector connector) : base(connector)
+        {
+        }
+    }
+
+    internal class Vertex : VertexBase
+    {
+        public Vertex(PipeConnector connector) : base(connector)
+        {
+        }
+    }
+
+    internal class Edge
+    {
+        private readonly IVertex _startVertex;
+        private readonly IVertex _endVertex;
+        private readonly bool _bidirectional;
+
+        public Edge(IVertex startVertex, IVertex endVertex, bool bidirectional)
+        {
+            _startVertex = startVertex;
+            _endVertex = endVertex;
+            _bidirectional = bidirectional;
+        }
+        
+        public bool Equals(IVertex startVertex, IVertex endVertex)
+        {
+            if (_bidirectional)
+            {
+                return _startVertex == startVertex && _endVertex == endVertex ||
+                       _endVertex == startVertex && _startVertex == endVertex;
+            }
+
+            return _startVertex == startVertex && _endVertex == endVertex;
+        }
+    }
+}

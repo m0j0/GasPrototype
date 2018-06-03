@@ -2,27 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class FlowGraph
     {
+        private readonly ISchemeContainer _container;
         private readonly GraphPipe[] _pipes;
         private readonly GraphValve[] _valves;
-        private readonly PipeConnector[] _connectors;
+
+        private readonly IReadOnlyCollection<IVertex> _vertices;
+        private readonly IReadOnlyCollection<IPipeSegment> _segments;
 
         public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes,
             IReadOnlyCollection<IValve> valves)
         {
+            _container = container;
             _pipes = pipes.Select(p => new GraphPipe(container, p)).ToArray();
             _valves = valves.Select(v => new GraphValve(container, v)).ToArray();
-            _connectors = SplitPipesToSegments();
+            var result = SplitPipesToSegments();
+            _vertices = result.Item1;
+            _segments = result.Item2;
 
             InvalidateFlow();
         }
 
-        private PipeConnector[] SplitPipesToSegments()
+        private Tuple<IReadOnlyCollection<IVertex>, IReadOnlyCollection<IPipeSegment>> SplitPipesToSegments()
         {
             var connectors = new List<IPipeConnector>();
 
@@ -107,6 +112,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     }
                 }
 
+                bool hasStartConnector = pipe1.StartConnector != null;
+                bool hasEndConnector = pipe1.EndConnector != null;
+
                 if (pipe1.StartConnector == null)
                 {
                     var connector = new PipeConnector(new Rect(pipe1.Rect.TopLeft, Common.ConnectorVector));
@@ -115,15 +123,24 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     pipe1.StartConnector = connector;
                     connectors.Add(connector);
 
-                    // TODO
-                    if (PipeFlowScheme.GetIsSource((DependencyObject) pipe1.Pipe))
+                    if (_container.IsSource(pipe1.Pipe))
                     {
                         connector.IsSource = true;
                     }
 
-                    if (PipeFlowScheme.GetIsDestination((DependencyObject) pipe1.Pipe))
+                    if (_container.IsDestination(pipe1.Pipe))
                     {
                         connector.IsDestination = true;
+                    }
+
+                    if (connector.IsSource && connector.IsDestination)
+                    {
+                        throw new Exception("!!!");
+                    }
+
+                    if ((connector.IsSource || connector.IsDestination) && !hasEndConnector)
+                    {
+                        throw new Exception("!!!");
                     }
                 }
 
@@ -136,15 +153,24 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     pipe1.EndConnector = connector;
                     connectors.Add(connector);
 
-                    // TODO
-                    if (PipeFlowScheme.GetIsSource((DependencyObject) pipe1.Pipe))
+                    if (_container.IsSource(pipe1.Pipe))
                     {
                         connector.IsSource = true;
                     }
 
-                    if (PipeFlowScheme.GetIsDestination((DependencyObject) pipe1.Pipe))
+                    if (_container.IsDestination(pipe1.Pipe))
                     {
                         connector.IsDestination = true;
+                    }
+
+                    if (connector.IsSource && connector.IsDestination)
+                    {
+                        throw new Exception("!!!");
+                    }
+
+                    if ((connector.IsSource || connector.IsDestination) && !hasStartConnector)
+                    {
+                        throw new Exception("!!!");
                     }
                 }
             }
@@ -176,6 +202,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     }
                 }
             }
+
+            var vertices = new List<IVertex>();
+            var segments = new List<IPipeSegment>();
+
+            //foreach (var connector in connectors.OfType<PipeConnector>())
+            //{
+            //    if (connector.IsSource)
+            //    {
+            //        vertices.Add(new SourceVertex());
+            //    }
+            //}
 
             foreach (var currentProcessPipe in _pipes)
             {
@@ -219,7 +256,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 currentProcessPipe.Pipe.Segments = allSegments;
             }
 
-            return connectors.OfType<PipeConnector>().ToArray();
+            return Tuple.Create<IReadOnlyCollection<IVertex>, IReadOnlyCollection<IPipeSegment>>(vertices, segments);
         }
 
         public void InvalidateFlow()
@@ -232,6 +269,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
+            var _connectors = _pipes.SelectMany(pipe => pipe.Connectors).Distinct().OfType<PipeConnector>().ToArray(); // TODO
             var destinationConnectors = _connectors.Where(c => c.IsDestination).ToArray();
             var sourceConnectors = _connectors.Where(c => c.IsSource);
             foreach (var connector in sourceConnectors)
