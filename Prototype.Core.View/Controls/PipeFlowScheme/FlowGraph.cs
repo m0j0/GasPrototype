@@ -85,7 +85,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                         continue;
                     }
-
+                    
                     var connector = (PipeConnector)existingConnector ??
                                           new PipeConnector(intersectionRect);
                     connector.AddPipe(pipe1);
@@ -102,6 +102,46 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (pipe1.Rect.BottomRight == connector.Rect.BottomRight)
                     {
                         pipe1.EndConnector = connector;
+                    }
+                }
+
+                if (pipe1.StartConnector == null)
+                {
+                    var connector = new PipeConnector(new Rect(pipe1.Rect.TopLeft, Common.ConnectorVector));
+                    connector.AddPipe(pipe1);
+
+                    pipe1.StartConnector = connector;
+                    pipe1.Connectors.Add(connector);
+                    connectors.Add(connector);
+
+                    // TODO
+                    if (PipeFlowScheme.GetIsSource((DependencyObject)pipe1.Pipe))
+                    {
+                        connector.IsSource = true;
+                    }
+                    if (PipeFlowScheme.GetIsDestination((DependencyObject)pipe1.Pipe))
+                    {
+                        connector.IsDestination = true;
+                    }
+                }
+
+                if (pipe1.EndConnector == null)
+                {
+                    var connector = new PipeConnector(new Rect(pipe1.Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
+                    connector.AddPipe(pipe1);
+
+                    pipe1.EndConnector = connector;
+                    pipe1.Connectors.Add(connector);
+                    connectors.Add(connector);
+
+                    // TODO
+                    if (PipeFlowScheme.GetIsSource((DependencyObject)pipe1.Pipe))
+                    {
+                        connector.IsSource = true;
+                    }
+                    if (PipeFlowScheme.GetIsDestination((DependencyObject)pipe1.Pipe))
+                    {
+                        connector.IsDestination = true;
                     }
                 }
             }
@@ -154,46 +194,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
 
                 var orderedConnectors = currentProcessPipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).ToList();
-                var firstOrDefault = orderedConnectors.FirstOrDefault();
-                var lastOrDefault = orderedConnectors.LastOrDefault();
-
-                if (firstOrDefault == null ||
-                    firstOrDefault.Rect.TopLeft != currentProcessPipe.Rect.TopLeft)
-                {
-                    var cornerConnector = new PipeConnector(new Rect(currentProcessPipe.Rect.TopLeft, Common.ConnectorVector));
-                    cornerConnector.AddPipe(currentProcessPipe);
-                    orderedConnectors.Insert(0, cornerConnector);
-
-                    if (PipeFlowScheme.GetIsSource((DependencyObject)currentProcessPipe.Pipe))
-                    {
-                        cornerConnector.IsSource = true;
-                    }
-                    if (PipeFlowScheme.GetIsDestination((DependencyObject)currentProcessPipe.Pipe))
-                    {
-                        cornerConnector.IsDestination = true;
-                    }
-
-                    connectors.Add(cornerConnector);
-                }
-
-                if (lastOrDefault == null ||
-                    lastOrDefault.Rect.BottomRight != currentProcessPipe.Rect.BottomRight)
-                {
-                    var cornerConnector = new PipeConnector(new Rect(currentProcessPipe.Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
-                    cornerConnector.AddPipe(currentProcessPipe);
-                    orderedConnectors.Add(cornerConnector);
-
-                    if (PipeFlowScheme.GetIsSource((DependencyObject)currentProcessPipe.Pipe))
-                    {
-                        cornerConnector.IsSource = true;
-                    }
-                    if (PipeFlowScheme.GetIsDestination((DependencyObject)currentProcessPipe.Pipe))
-                    {
-                        cornerConnector.IsDestination = true;
-                    }
-
-                    connectors.Add(cornerConnector);
-                }
 
                 var connectorSegments = new List<IPipeSegment>();
                 foreach (var connector in orderedConnectors)
