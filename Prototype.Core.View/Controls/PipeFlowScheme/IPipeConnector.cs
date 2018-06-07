@@ -76,16 +76,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Rect Rect { get; }
 
-        public IVertex Vertex { get; set; }
-        
-        public GraphPipe Pipe1 => _pipes[0];
-
-        public GraphPipe Pipe2 => _pipes[1];
-
-        public GraphPipe Pipe3 => _pipes[2];
-
-        public GraphPipe Pipe4 => _pipes[3];
-
         public void AddPipe(GraphPipe pipe)
         {
             if (pipe.Connectors.Contains(this))

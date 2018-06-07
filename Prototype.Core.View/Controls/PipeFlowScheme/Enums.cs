@@ -11,6 +11,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Both = Forward | Backward
     }
 
+    public enum PipeLocation
+    {
+        Forward,
+        Backward,
+        Both = Forward | Backward
+    }
+
     internal enum PipeType
     {
         Regular,

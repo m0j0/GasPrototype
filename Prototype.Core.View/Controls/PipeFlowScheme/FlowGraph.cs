@@ -8,7 +8,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     internal class FlowGraph
     {
         private IReadOnlyCollection<IVertex> _vertices;
-        private IReadOnlyCollection<IPipeSegment> _segments;
+        private IReadOnlyCollection<Edge> _edges;
 
         public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes,
             IReadOnlyCollection<IValve> valves)
@@ -25,6 +25,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var valves = valveControls.Select(v => new GraphValve(container, v)).ToArray();
 
             var connectors = new List<IPipeConnector>();
+            var cnnToVertex = new Dictionary<PipeConnector, IVertex>();
+            var vertexToCnn = new Dictionary<IVertex, PipeConnector>();
+            var edges = new List<Edge>();
 
             foreach (var pipe1 in pipes)
             {
@@ -49,6 +52,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     if (!Common.IsIntersectionSizeValid(intersectionRect))
                     {
+                        if (!intersectionRect.IsEmpty)
+                        {
+                            pipe1.FailType = FailType.IntersectionIsNotSupported;
+                            pipe2.FailType = FailType.IntersectionIsNotSupported;
+                        }
+
                         continue;
                     }
 
@@ -79,6 +88,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (existingConnector == null)
                     {
                         connectors.Add(connector);
+                        cnnToVertex[connector] = new Vertex(connector);
                     }
 
                     if (pipe1.Rect.TopLeft == connector.Rect.TopLeft)
@@ -93,28 +103,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
 
             }
-
-            //// move to tests
-            //for (int i = 0; i < connectors.Count; i++)
-            //{
-            //    for (int j = 0; j < connectors.Count; j++)
-            //    {
-            //        if (i == j)
-            //        {
-            //            continue;
-            //        }
-
-            //        if (connectors[i].Rect == connectors[j].Rect)
-            //        {
-            //            throw new Exception("!!!");
-            //        }
-            //    }
-            //}
-
-
-            var vertices = new List<IVertex>();
-            var segments = new List<IPipeSegment>();
-
+            
             foreach (var pipe in pipes)
             {
                 bool hasStartConnector = pipe.StartConnector != null;
@@ -143,22 +132,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     pipe.StartConnector = connector;
                     connectors.Add(connector);
-
-                    IVertex vertex;
-                    if (isSource)
-                    {
-                        vertex = new SourceVertex(connector);
-                    }
-                    else if (isDestination)
-                    {
-                        vertex = new DestinationVertex(connector);
-                    }
-                    else
-                    {
-                        vertex = new Vertex(connector);
-                    }
-
-                    vertices.Add(vertex);
+                    cnnToVertex[connector] = new SourceVertex(connector);
                 }
 
                 if (!hasEndConnector)
@@ -169,123 +143,142 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     pipe.EndConnector = connector;
                     connectors.Add(connector);
-                    
-                    IVertex vertex;
-                    if (isSource)
-                    {
-                        vertex = new SourceVertex(connector);
-                    }
-                    else if (isDestination)
-                    {
-                        vertex = new DestinationVertex(connector);
-                    }
-                    else
-                    {
-                        vertex = new Vertex(connector);
-                    }
-                    vertices.Add(vertex);
-                }
-                
-                foreach (var connector in pipe.Connectors.OfType<PipeConnector>())
-                {
-                    bool hasIntersectionWithValve = false;
-                    foreach (var valve in valves)
-                    {
-                        if (!Common.IsIntersect(connector.Rect, valve.Rect))
-                        {
-                            continue;
-                        }
-
-                        if (hasIntersectionWithValve)
-                        {
-                            throw new Exception("!!!");
-                        }
-
-                        hasIntersectionWithValve = true;
-                        if (connector.Vertex == null)
-                        {
-                            connector.Vertex = new Vertex(connector);
-
-                            vertices.Add(connector.Vertex);
-                        }
-
-                        switch (connector.Vertex)
-                        {
-                            case Vertex vertex:
-                                vertex.Valve = valve.Valve;
-                                break;
-
-                            case SourceVertex _:
-                            case DestinationVertex _:
-                                throw new Exception("!!!");
-
-                            default:
-                                throw new Exception("!!! !!!");
-                        }
-                    }
-
-                    if (connector.Vertex == null)
-                    {
-                        connector.Vertex = new Vertex(connector);
-
-                        vertices.Add(connector.Vertex);
-                    }
+                    cnnToVertex[connector] = new DestinationVertex(connector);
                 }
             }
 
-            foreach (var currentProcessPipe in pipes)
+            foreach (var pipe in pipes)
             {
-                if (currentProcessPipe.IsFailed)
+                if (pipe.IsFailed)
+                {
+                    continue;
+                }
+                
+                foreach (var valve in valves)
+                {
+                    var intersectionRect = Common.FindIntersection(
+                        pipe.Rect,
+                        valve.Rect
+                    );
+
+                    if (intersectionRect.IsEmpty)
+                    {
+                        continue;
+                    }
+
+                    var connector = new PipeConnector(intersectionRect);
+                    connector.AddPipe(pipe);
+                    cnnToVertex[connector] = new Vertex(connector) {Valve = valve.Valve};
+                }
+            }
+
+            vertexToCnn = cnnToVertex.ToDictionary(pair => pair.Value, pair => pair.Key);
+
+            foreach (var pipe in pipes)
+            {
+                if (pipe.IsFailed)
+                {
+                    continue;
+                }
+
+                var pipeConnectors = pipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).OfType<PipeConnector>().ToArray();
+                if (pipeConnectors.Length < 2)
+                {
+                    throw new Exception("!!!");
+                }
+
+                for (var i = 0; i < pipeConnectors.Length - 1; i++)
+                {
+                    var startVertex = cnnToVertex[pipeConnectors[i]];
+                    var endVertex = cnnToVertex[pipeConnectors[i + 1]];
+
+                    var edge = new Edge(startVertex, endVertex);
+
+                    startVertex.AddAdjacentVertex(endVertex);
+                    if (edge.IsBidirectional)
+                    {
+                        endVertex.AddAdjacentVertex(startVertex);
+                    }
+
+                    edges.Add(edge);
+                }
+            }
+            
+            foreach (var pipe in pipes)
+            {
+                if (pipe.IsFailed)
                 {
                     var result = new List<IPipeSegment>();
 
                     result.Add(
                         new FailedSegment(
                             new Point(0, 0),
-                            Common.GetLength(currentProcessPipe.Rect, currentProcessPipe.Orientation),
-                            currentProcessPipe.Orientation,
-                            currentProcessPipe.FailType)
+                            Common.GetLength(pipe.Rect, pipe.Orientation),
+                            pipe.Orientation,
+                            pipe.FailType)
                     );
 
-                    currentProcessPipe.Pipe.Segments = result;
+                    pipe.Pipe.Segments = result;
+                }
+            }
 
+            foreach (var pipe in pipes)
+            {
+                if (pipe.IsFailed)
+                {
                     continue;
                 }
 
-                var orderedConnectors = currentProcessPipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left)
+                List<IPipeSegment> allSegments = new List<IPipeSegment>();
+                var orderedConnectors = pipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).OfType<PipeConnector>()
                     .ToList();
 
-                var connectorSegments = new List<IPipeSegment>();
-                foreach (var connector in orderedConnectors)
+                for (var i = 0; i < orderedConnectors.Count - 1; i++)
                 {
-                    connectorSegments.Add(connector.CreateSegment(currentProcessPipe));
-                }
+                    var c1 = orderedConnectors[i];
+                    var c2 = orderedConnectors[i + 1];
 
-                List<IPipeSegment> allSegments = new List<IPipeSegment>();
-                for (int i = 0; i < connectorSegments.Count - 1; i++)
-                {
-                    var s1 = connectorSegments[i];
-                    var s2 = connectorSegments[i + 1];
+                    var s1 = c1.CreateSegment(pipe);
+                    var s2 = c2.CreateSegment(pipe);
 
-                    var lineSegment = Common.CreateSegmentBetweenSegments(currentProcessPipe, s1, s2);
-                    allSegments.Add(s1);
+                    var v1 = cnnToVertex[c1];
+                    var v2 = cnnToVertex[c2];
+
+                    if (i == 0)
+                    {
+                        allSegments.Add(s1);
+                        cnnToVertex[c1].PipeSegments.Add(s1);
+                    }
+
+                    var edge = edges.Single(e => e.Equals(v1, v2));
+
+                    var lineSegment = Common.CreateSegmentBetweenSegments(pipe, s1, s2);
+                    edge.PipeSegment = lineSegment;
                     allSegments.Add(lineSegment);
-                    allSegments.Add(s2);
-                }
 
-                segments.AddRange(allSegments);
-                currentProcessPipe.Pipe.Segments = allSegments;
+                    allSegments.Add(s2);
+                    cnnToVertex[c2].PipeSegments.Add(s2);
+                }
+                
+                pipe.Pipe.Segments = allSegments;
             }
 
-            _vertices = vertices;
-            _segments = segments;
+            _vertices = vertexToCnn.Keys.ToArray();
+            _edges = edges;
         }
 
         public void InvalidateFlow()
         {
-            foreach (var segment in _segments)
+            foreach (var edge in _edges)
             {
-                segment.FlowDirection = FlowDirection.None;
+                edge.PipeSegment.FlowDirection = FlowDirection.None;
+            }
+            foreach (var vertex in _vertices)
+            {
+                foreach (var pipeSegment in vertex.PipeSegments)
+                {
+                    pipeSegment.FlowDirection = FlowDirection.None;
+                }
             }
 
             var sourceConnectors = _vertices.OfType<SourceVertex>();
@@ -304,14 +297,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     foreach (var path in paths)
                     {
+                        foreach (var vertex in path)
+                        {
+                            foreach (var pipeSegment in vertex.PipeSegments)
+                            {
+                                pipeSegment.FlowDirection = FlowDirection.Both;
+                            }
+                        }
+
                         for (var i = 0; i < path.Count - 1; i++)
                         {
-                            var pipe = path[i].Connector.GetPipes().Intersect(path[i + 1].Connector.GetPipes()).Single();
-                            
-                            foreach (var segment in pipe.Pipe.Segments)
-                            {
-                                segment.FlowDirection = FlowDirection.Both;
-                            }
+                            var edge = _edges.Single(e => e.Equals(path[i], path[i + 1]));
+                            edge.PipeSegment.FlowDirection = FlowDirection.Both;
                         }
                     }
                 }

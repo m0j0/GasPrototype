@@ -10,33 +10,35 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         PipeConnector Connector { get; }
 
+        IList<IPipeSegment> PipeSegments { get; }
+
         IEnumerable<IVertex> GetAdjacentVertices();
+
+        void AddAdjacentVertex(IVertex vertex);
     }
 
     internal abstract class VertexBase : IVertex
     {
+        protected List<IVertex> AdjacentVertices = new List<IVertex>();
+
         protected VertexBase(PipeConnector connector)
         {
-            if (connector.Vertex != null)
-            {
-                throw new Exception("!!!");
-            }
-
             Connector = connector;
-            connector.Vertex = this;
+            PipeSegments = new List<IPipeSegment>();
         }
 
         public PipeConnector Connector { get; }
 
+        public IList<IPipeSegment> PipeSegments { get; }
+
         public virtual IEnumerable<IVertex> GetAdjacentVertices()
         {
-            foreach (var pipe in Connector.GetPipes())
-            {
-                foreach (var connector in pipe.Connectors.OfType<PipeConnector>())
-                {
-                    yield return connector.Vertex;
-                }
-            }
+            return AdjacentVertices;
+        }
+
+        public void AddAdjacentVertex(IVertex vertex)
+        {
+            AdjacentVertices.Add(vertex);
         }
 
         public override string ToString()
@@ -85,26 +87,35 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class Edge
     {
-        public IVertex StartVertex { get; }
-        public IVertex EndVertex { get; }
-        public IPipeSegment Segment { get; }
 
-        public Edge(IVertex startVertex, IVertex endVertex, IPipeSegment segment)
+        public Edge(IVertex startVertex, IVertex endVertex)
         {
             StartVertex = startVertex;
             EndVertex = endVertex;
-            Segment = segment;
+            IsBidirectional = !(startVertex is SourceVertex || endVertex is DestinationVertex);
         }
-        
-        //public bool Equals(IVertex startVertex, IVertex endVertex)
-        //{
-        //    if (_bidirectional)
-        //    {
-        //        return _startVertex == startVertex && _endVertex == endVertex ||
-        //               _endVertex == startVertex && _startVertex == endVertex;
-        //    }
 
-        //    return _startVertex == startVertex && _endVertex == endVertex;
-        //}
+        public IVertex StartVertex { get; }
+        public IVertex EndVertex { get; }
+        public bool IsBidirectional { get; }
+
+        public IPipeSegment PipeSegment { get; set; }
+
+        public bool Equals(IVertex startVertex, IVertex endVertex)
+        {
+            if (IsBidirectional)
+            {
+                return StartVertex == startVertex && EndVertex == endVertex ||
+                       EndVertex == startVertex && StartVertex == endVertex;
+            }
+
+            return StartVertex == startVertex && EndVertex == endVertex;
+        }
+
+
+        public override string ToString()
+        {
+            return $"Start: {StartVertex} End: {EndVertex} Bi: {IsBidirectional}";
+        }
     }
 }
