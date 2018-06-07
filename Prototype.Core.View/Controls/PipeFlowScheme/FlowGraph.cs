@@ -10,16 +10,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private IReadOnlyCollection<IVertex> _vertices;
         private IReadOnlyCollection<Edge> _edges;
 
-        public FlowGraph(ISchemeContainer container, IReadOnlyCollection<IPipe> pipes,
-            IReadOnlyCollection<IValve> valves)
+        public FlowGraph(ISchemeContainer container, IEnumerable<IPipe> pipes,
+            IEnumerable<IValve> valves)
         {
             SplitPipesToSegments(container, pipes, valves);
             
             InvalidateFlow();
         }
 
-        private void SplitPipesToSegments(ISchemeContainer container, IReadOnlyCollection<IPipe> pipeControls,
-            IReadOnlyCollection<IValve> valveControls)
+        private void SplitPipesToSegments(ISchemeContainer container, IEnumerable<IPipe> pipeControls,
+            IEnumerable<IValve> valveControls)
         {
             var pipes = pipeControls.Select(p => new GraphPipe(container, p)).ToArray();
             var valves = valveControls.Select(v => new GraphValve(container, v)).ToArray();

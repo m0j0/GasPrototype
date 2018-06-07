@@ -32,7 +32,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         Orientation Orientation { get; }
 
-        IList<IPipeSegment> Segments { get; set; }
+        IList<IPipeSegment> Segments { get; set; } // TODO Observable / ReadOnly
     }
 
     public interface IValve : IFlowControl
