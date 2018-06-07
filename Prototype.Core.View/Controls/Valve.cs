@@ -102,7 +102,7 @@ namespace Prototype.Core.Controls
             return (ISchemeContainer) Parent;
         }
 
-        public bool CanPassFlow(IPipe pipe1, IPipe pipe2)
+        public bool CanPassFlow(IPipeSegment startPipeSegment, IPipeSegment endPipeSegment)
         {
             return State == ValveState.Opened;
         }

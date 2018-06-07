@@ -8,12 +8,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public sealed class PipeFlowCanvas : Canvas, ISchemeContainer
     {
-        private readonly PipeFlowScheme _scheme;
+        private static readonly EventHandler OnFlowControlPositionChangedEventHandler = OnFlowControlPositionChanged;
+        private static readonly EventHandler OnValveStateChangedEventHandler = OnValveStateChanged;
+
+        private FlowGraph _scheme;
 
         public PipeFlowCanvas()
         {
-            _scheme = new PipeFlowScheme(this);
-
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -49,69 +50,127 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
-            if (visualAdded is IFlowControl addedControl)
+            if (visualAdded is IFlowControl)
             {
-                _scheme.Add(addedControl);
                 SubscribePositionChangedEvents(visualAdded);
             }
 
-            if (visualRemoved is IFlowControl removedControl)
+            if (visualRemoved is IFlowControl)
             {
-                _scheme.Remove(removedControl);
                 UnsubscribePositionChangedEvents(visualRemoved);
             }
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var flowControls = new List<IFlowControl>();
+            // TODO optimize when there is no changes
             foreach (DependencyObject child in Children)
             {
-                if (child is IFlowControl flowControl)
-                {
-                    if (!_scheme.Contains(flowControl))
-                    {
-                        flowControls.Add(flowControl);
-                    }
-
-                    SubscribePositionChangedEvents(child);
-                }
+                SubscribePositionChangedEvents(child);
             }
 
-            _scheme.Add(flowControls);
+            InvalidateScheme();
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            // TODO scheme also should unsubscribe
             foreach (DependencyObject child in Children)
             {
-                if (child is IFlowControl)
-                {
-                    UnsubscribePositionChangedEvents(child);
-                }
+                UnsubscribePositionChangedEvents(child);
             }
         }
 
         private void SubscribePositionChangedEvents(DependencyObject element)
         {
-            var topDescriptor = DependencyPropertyDescriptor.FromProperty(TopProperty, typeof(DependencyObject));
-            var leftDescriptor = DependencyPropertyDescriptor.FromProperty(LeftProperty, typeof(DependencyObject));
-            topDescriptor.AddValueChanged(element, OnFlowControlPositionChanged);
-            leftDescriptor.AddValueChanged(element, OnFlowControlPositionChanged);
+            switch (element)
+            {
+                case IPipe pipe:
+                    pipe.SchemeChanged += OnFlowControlPositionChangedEventHandler;
+                    break;
+                case IValve valve:
+                    valve.SchemeChanged += OnFlowControlPositionChangedEventHandler;
+                    valve.StateChanged += OnValveStateChangedEventHandler;
+                    break;
+            }
+
+            DependencyPropertyDescriptor
+                .FromProperty(TopProperty, typeof(DependencyObject))
+                .AddValueChanged(element, OnFlowControlPositionChangedEventHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(LeftProperty, typeof(DependencyObject))
+                .AddValueChanged(element, OnFlowControlPositionChangedEventHandler);
         }
 
         private void UnsubscribePositionChangedEvents(DependencyObject element)
         {
-            var topDescriptor = DependencyPropertyDescriptor.FromProperty(TopProperty, typeof(DependencyObject));
-            var leftDescriptor = DependencyPropertyDescriptor.FromProperty(LeftProperty, typeof(DependencyObject));
-            topDescriptor.RemoveValueChanged(element, OnFlowControlPositionChanged);
-            leftDescriptor.RemoveValueChanged(element, OnFlowControlPositionChanged);
+            switch (element)
+            {
+                case IPipe pipe:
+                    pipe.SchemeChanged -= OnFlowControlPositionChangedEventHandler;
+                    break;
+                case IValve valve:
+                    valve.SchemeChanged -= OnFlowControlPositionChangedEventHandler;
+                    valve.StateChanged -= OnValveStateChangedEventHandler;
+                    break;
+            }
+
+            DependencyPropertyDescriptor
+                .FromProperty(TopProperty, typeof(DependencyObject))
+                .RemoveValueChanged(element, OnFlowControlPositionChangedEventHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(LeftProperty, typeof(DependencyObject))
+                .RemoveValueChanged(element, OnFlowControlPositionChangedEventHandler);
         }
 
-        private void OnFlowControlPositionChanged(object sender, EventArgs e)
+        private static void OnFlowControlPositionChanged(object sender, EventArgs e)
         {
+            switch (sender)
+            {
+                case IFlowControl flowControl:
+                    ((PipeFlowCanvas) flowControl.GetContainer()).InvalidateScheme();
+                    break;
+
+                case PipeFlowCanvas canvas:
+                    canvas.InvalidateScheme();
+                    break;
+
+                default:
+                    throw new ArgumentException(nameof(sender));
+            }
+        }
+
+        private static void OnValveStateChanged(object sender, EventArgs e)
+        {
+            var valve = (IValve) sender;
+            ((PipeFlowCanvas) valve.GetContainer()).InvalidateSchemeFlow();
+        }
+
+        private void InvalidateScheme()
+        {
+            var pipes = new List<IPipe>();
+            var valves = new List<IValve>();
+
+            foreach (var child in Children)
+            {
+                if (child is IPipe pipe)
+                {
+                    pipes.Add(pipe);
+                }
+
+                if (child is IValve valve)
+                {
+                    valves.Add(valve);
+                }
+            }
+
+            _scheme = new FlowGraph(this, pipes, valves);
+
             SchemeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void InvalidateSchemeFlow()
+        {
+            _scheme.InvalidateFlow();
         }
     }
 }
