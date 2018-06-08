@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using MugenMvvmToolkit.Binding;
 using Prototype.Core.Controls.PipeFlowScheme;
-using Prototype.Core.Interfaces.GasPanel;
 using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls
@@ -45,10 +43,6 @@ namespace Prototype.Core.Controls
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
             "Type", typeof(PipeType), typeof(Pipe), new PropertyMetadata(default(PipeType)));
 
-        internal static readonly DependencyProperty PipeModelProperty = DependencyProperty.Register(
-            "PipeVm", typeof(IPipeVm), typeof(Pipe),
-            new PropertyMetadata(default(IPipeVm), PipeVmPropertyChangedCallback));
-
         public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
             "Segments", typeof(IList<IPipeSegment>), typeof(Pipe),
             new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
@@ -81,13 +75,6 @@ namespace Prototype.Core.Controls
         {
             get { return (PipeType) GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
-        }
-
-        [Category("Model")]
-        internal IPipeVm PipeVm
-        {
-            get { return (IPipeVm) GetValue(PipeModelProperty); }
-            set { SetValue(PipeModelProperty, value); }
         }
 
         public IList<IPipeSegment> Segments
@@ -147,22 +134,6 @@ namespace Prototype.Core.Controls
         {
             var pipe = (Pipe) sender;
             pipe.SchemeChanged?.Invoke(pipe, EventArgs.Empty);
-        }
-
-        private static void PipeVmPropertyChangedCallback(DependencyObject dependencyObject,
-            DependencyPropertyChangedEventArgs args)
-        {
-            var pipe = (Pipe) dependencyObject;
-            var model = args.NewValue as IPipeVm;
-
-            if (model == null)
-            {
-                return;
-            }
-
-            pipe.Bind(() => v => v.SubstanceType).To(model, () => (m, ctx) => m.SubstanceType).Build();
-            pipe.Bind(() => v => v.Visibility)
-                .To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
         }
 
         #endregion

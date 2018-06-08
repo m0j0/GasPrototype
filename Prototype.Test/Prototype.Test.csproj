@@ -52,10 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GasPanel\Manifold2Test.cs" />
-    <Compile Include="GasPanel\Manifold1Test.cs" />
-    <Compile Include="GasPanel\Manifold3Test.cs" />
-    <Compile Include="GasPanel\PipeSchemeTest.cs" />
+    <Compile Include="PipeFlowScheme\FlowTests.cs" />
     <Compile Include="PipeFlowScheme\Manifold2Test.cs" />
     <Compile Include="PipeFlowScheme\Models.cs" />
   </ItemGroup>
