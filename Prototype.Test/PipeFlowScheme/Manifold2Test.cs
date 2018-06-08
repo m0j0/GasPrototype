@@ -15,17 +15,17 @@ namespace Prototype.Test.PipeFlowScheme
     {
         #region Nested types
 
-        // 1v        3v
+        // 1v        2v
         // |         |
         // |         |
-        // 2>----4v---------5v
+        // 3>----5v--4>-----6v
         //       |          |
         //       |          |
-        //       v1         v2
+        //       v1         7v v2
         //       |          |
         //       |          |
-        //       6>---7v-----
-        //            |
+        //       8>---9>-----
+        //            10v
         //            |
         //            |
 
@@ -33,17 +33,25 @@ namespace Prototype.Test.PipeFlowScheme
         {
             public Manifold()
             {
-                Container = new TestContainer();
-                Container.Add(Pipe1 = new TestPipe(Container) {Left = 1, Top = 1, Orientation = Orientation.Vertical, Height = 105, IsSource = true});
-                Container.Add(Pipe2 = new TestPipe(Container) {Left = 1, Top = 101, Width = 275});
-                Container.Add(Pipe3 = new TestPipe(Container) {Left = 158, Top = 1, Orientation = Orientation.Vertical, Height = 105, IsSource = true});
-                Container.Add(Pipe4 = new TestPipe(Container) {Left = 56, Top = 101, Orientation = Orientation.Vertical, Height = 155});
-                Container.Add(Pipe5 = new TestPipe(Container) {Left = 271, Top = 101, Orientation = Orientation.Vertical, Height = 155});
-                Container.Add(Pipe6 = new TestPipe(Container) {Left = 56, Top = 251, Width = 220});
-                Container.Add(Pipe7 = new TestPipe(Container) {Left = 161, Top = 251, Orientation = Orientation.Vertical, Height = 68, IsDestination = true});
+                /*
 
-                Container.Add(Valve1 = new TestValve(Container) {Left = 40, Top = 167, Orientation = Orientation.Vertical});
-                Container.Add(Valve2 = new TestValve(Container) {Left = 255, Top = 167, Orientation = Orientation.Vertical});
+
+                 */
+
+                Container = new TestContainer();
+                Container.Add(Pipe1 = new TestPipe(Container) { Left = 57, Top = 60, Orientation = Orientation.Vertical, Height = 105, IsSource = true });
+                Container.Add(Pipe2 = new TestPipe(Container) { Left = 214, Top = 60, Orientation = Orientation.Vertical, Height = 105, IsSource = true });
+                Container.Add(Pipe3 = new TestPipe(Container) { Left = 57, Top = 160, Width = 162 });
+                Container.Add(Pipe4 = new TestPipe(Container) { Left = 214, Top = 160, Width = 118 });
+                Container.Add(Pipe5 = new TestPipe(Container) { Left = 112, Top = 160, Orientation = Orientation.Vertical, Height = 155 });
+                Container.Add(Pipe6 = new TestPipe(Container) { Left = 327, Top = 160, Orientation = Orientation.Vertical, Height = 92 });
+                Container.Add(Pipe7 = new TestPipe(Container) { Left = 327, Top = 247, Orientation = Orientation.Vertical, Height = 68 });
+                Container.Add(Pipe8 = new TestPipe(Container) { Left = 112, Top = 310, Width = 110 });
+                Container.Add(Pipe9 = new TestPipe(Container) { Left = 217, Top = 310, Width = 115 });
+                Container.Add(Pipe10 = new TestPipe(Container) { Left = 217, Top = 310, Orientation = Orientation.Vertical, Height = 68, IsDestination = true });
+
+                Container.Add(Valve1 = new TestValve(Container) {Left = 96, Top = 226, Orientation = Orientation.Vertical});
+                Container.Add(Valve2 = new TestValve(Container) {Left = 311, Top = 226, Orientation = Orientation.Vertical});
 
                 Graph = Container.CreateGraph();
             }
@@ -57,6 +65,9 @@ namespace Prototype.Test.PipeFlowScheme
             public TestPipe Pipe5 { get; }
             public TestPipe Pipe6 { get; }
             public TestPipe Pipe7 { get; }
+            public TestPipe Pipe8 { get; }
+            public TestPipe Pipe9 { get; }
+            public TestPipe Pipe10 { get; }
             public TestValve Valve1 { get; }
             public TestValve Valve2 { get; }
 
@@ -87,6 +98,9 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(SegmentsHasValue(manifold.Pipe5, false));
             Assert.IsTrue(SegmentsHasValue(manifold.Pipe6, false));
             Assert.IsTrue(SegmentsHasValue(manifold.Pipe7, false));
+            Assert.IsTrue(SegmentsHasValue(manifold.Pipe8, false));
+            Assert.IsTrue(SegmentsHasValue(manifold.Pipe9, false));
+            Assert.IsTrue(SegmentsHasValue(manifold.Pipe10, false));
             
             manifold.Valve1.CanPassFlow = true;
             manifold.Valve2.CanPassFlow = true;
@@ -99,6 +113,9 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(SegmentsHasValue(manifold.Pipe5, true));
             Assert.IsTrue(SegmentsHasValue(manifold.Pipe6, true));
             Assert.IsTrue(SegmentsHasValue(manifold.Pipe7, true));
+            Assert.IsTrue(SegmentsHasValue(manifold.Pipe8, true));
+            Assert.IsTrue(SegmentsHasValue(manifold.Pipe9, true));
+            Assert.IsTrue(SegmentsHasValue(manifold.Pipe10, true));
         }
 
         private static bool SegmentsHasValue(IPipe pipe, bool v)
