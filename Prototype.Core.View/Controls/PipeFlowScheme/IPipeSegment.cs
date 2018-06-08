@@ -14,12 +14,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         Orientation Orientation { get; }
 
-        FlowDirection FlowDirection { get; set; }
+        bool HasFlow { get; set; }
     }
 
     internal class ConnectorSegment : NotifyPropertyChangedBase, IPipeSegment
     {
-        private FlowDirection _flowDirection;
+        private bool _hasFlow;
 
         public ConnectorSegment(Point startPoint, Orientation orientation, Side side)
         {
@@ -34,17 +34,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Orientation Orientation { get; }
 
-        public FlowDirection FlowDirection
+        public bool HasFlow
         {
-            get => _flowDirection;
+            get => _hasFlow;
             set
             {
-                if (value == _flowDirection)
+                if (value == _hasFlow)
                 {
                     return;
                 }
 
-                _flowDirection = value;
+                _hasFlow = value;
                 OnPropertyChanged();
             }
         }
@@ -54,7 +54,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class BridgeSegment : NotifyPropertyChangedBase, IPipeSegment
     {
-        private FlowDirection _flowDirection;
+        private bool _hasFlow;
 
         public BridgeSegment(Point startPoint, Orientation orientation)
         {
@@ -68,17 +68,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Orientation Orientation { get; }
 
-        public FlowDirection FlowDirection
+        public bool HasFlow
         {
-            get => _flowDirection;
+            get => _hasFlow;
             set
             {
-                if (value == _flowDirection)
+                if (value == _hasFlow)
                 {
                     return;
                 }
 
-                _flowDirection = value;
+                _hasFlow = value;
                 OnPropertyChanged();
             }
         }
@@ -86,7 +86,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class LineSegment : NotifyPropertyChangedBase, IPipeSegment
     {
-        private FlowDirection _flowDirection;
+        private bool _hasFlow;
 
         public LineSegment(Point startPoint, double length, Orientation orientation)
         {
@@ -101,17 +101,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Orientation Orientation { get; }
 
-        public FlowDirection FlowDirection
+        public bool HasFlow
         {
-            get => _flowDirection;
+            get => _hasFlow;
             set
             {
-                if (value == _flowDirection)
+                if (value == _hasFlow)
                 {
                     return;
                 }
 
-                _flowDirection = value;
+                _hasFlow = value;
                 OnPropertyChanged();
             }
         }
@@ -135,6 +135,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public FailType FailType { get; }
 
-        FlowDirection IPipeSegment.FlowDirection { get; set; }
+        bool IPipeSegment.HasFlow { get; set; }
     }
 }

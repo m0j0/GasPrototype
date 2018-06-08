@@ -271,13 +271,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             foreach (var edge in _edges)
             {
-                edge.PipeSegment.FlowDirection = FlowDirection.None;
+                edge.PipeSegment.HasFlow = false;
             }
             foreach (var vertex in _vertices)
             {
                 foreach (var pipeSegment in vertex.PipeSegments)
                 {
-                    pipeSegment.FlowDirection = FlowDirection.None;
+                    pipeSegment.HasFlow = false;
                 }
             }
 
@@ -301,14 +301,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         {
                             foreach (var pipeSegment in vertex.PipeSegments)
                             {
-                                pipeSegment.FlowDirection = FlowDirection.Both;
+                                pipeSegment.HasFlow = true;
                             }
                         }
 
                         for (var i = 0; i < path.Count - 1; i++)
                         {
                             var edge = _edges.Single(e => e.Equals(path[i], path[i + 1]));
-                            edge.PipeSegment.FlowDirection = FlowDirection.Both;
+                            edge.PipeSegment.HasFlow = true;
                         }
                     }
                 }

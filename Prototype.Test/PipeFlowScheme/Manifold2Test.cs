@@ -117,7 +117,7 @@ namespace Prototype.Test.PipeFlowScheme
         {
             foreach (var segment in pipe.Segments)
             {
-                if (v ? segment.FlowDirection != FlowDirection.Both : segment.FlowDirection != FlowDirection.None)
+                if (segment.HasFlow != v)
                 {
                     return false;
                 }

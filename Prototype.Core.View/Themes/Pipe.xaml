@@ -23,7 +23,7 @@
                 <Border x:Name="MainControl"
                         BorderThickness="0,1"
                         BorderBrush="#4D4F52" 
-                        Background="{Binding FlowDirection, Converter={x:Static converters:FlowDirectionToColorConverter.Instance}}"
+                        Background="{Binding HasFlow, Converter={x:Static converters:HasFlowToColorConverter.Instance}}"
                         Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
 
                 <DataTemplate.Triggers>
@@ -42,7 +42,7 @@
                 <Border x:Name="MainControl"
                         BorderThickness="{Binding Converter={x:Static converters:PipeBorderThicknessConverter.Instance}}"
                         BorderBrush="#4D4F52"
-                        Background="{Binding FlowDirection, Converter={x:Static converters:FlowDirectionToColorConverter.Instance}}"
+                        Background="{Binding HasFlow, Converter={x:Static converters:HasFlowToColorConverter.Instance}}"
                         Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
 
                 <DataTemplate.Triggers>
