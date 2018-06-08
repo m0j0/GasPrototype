@@ -9,6 +9,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Destination
     }
 
+    public enum SubstanceType
+    {
+        Gas = 0,
+        Purge = 1,
+        Chemical = 2
+    }
+
     internal enum PipeDirection
     {
         None,

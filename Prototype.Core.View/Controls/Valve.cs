@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using MugenMvvmToolkit.Binding;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
-using Prototype.Core.Interfaces.GasPanel;
+using Prototype.Core.Interfaces.Controls;
 using Prototype.Core.Models;
 using Prototype.Core.Models.GasPanel;
 

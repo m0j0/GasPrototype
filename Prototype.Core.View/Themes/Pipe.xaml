@@ -10,9 +10,9 @@
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <gasPanel:SubstanceType x:Key="SubstanceTypeGas">Gas</gasPanel:SubstanceType>
-    <gasPanel:SubstanceType x:Key="SubstanceTypePurge">Purge</gasPanel:SubstanceType>
-    <gasPanel:SubstanceType x:Key="SubstanceTypeChemical">Chemical</gasPanel:SubstanceType>
+    <pipeFlowScheme:SubstanceType x:Key="SubstanceTypeGas">Gas</pipeFlowScheme:SubstanceType>
+    <pipeFlowScheme:SubstanceType x:Key="SubstanceTypePurge">Purge</pipeFlowScheme:SubstanceType>
+    <pipeFlowScheme:SubstanceType x:Key="SubstanceTypeChemical">Chemical</pipeFlowScheme:SubstanceType>
     <sys:Double x:Key="PipeWidth">5</sys:Double>
     <sys:Double x:Key="DefaultPipeLength">100</sys:Double>
 

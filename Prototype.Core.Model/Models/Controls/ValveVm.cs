@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using MugenMvvmToolkit.Models;
 using Prototype.Core.Interfaces;
-using Prototype.Core.Interfaces.GasPanel;
+using Prototype.Core.Interfaces.Controls;
 
 namespace Prototype.Core.Models.GasPanel
 {

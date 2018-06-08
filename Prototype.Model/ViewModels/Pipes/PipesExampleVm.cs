@@ -1,6 +1,6 @@
 ﻿using MugenMvvmToolkit.ViewModels;
 using Prototype.Core.Interfaces;
-using Prototype.Core.Interfaces.GasPanel;
+using Prototype.Core.Interfaces.Controls;
 using Prototype.Core.Models;
 using Prototype.Core.Models.GasPanel;
 using Prototype.Interfaces;

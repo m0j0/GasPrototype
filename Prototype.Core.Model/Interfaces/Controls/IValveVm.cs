@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Prototype.Core.Models.GasPanel;
+using Prototype.Core.Models;
 
-namespace Prototype.Core.Interfaces.GasPanel
+namespace Prototype.Core.Interfaces.Controls
 {
     public interface IValveVm : INotifyPropertyChanged
     {

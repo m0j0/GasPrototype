@@ -8,9 +8,9 @@
         <ResourceDictionary Source="Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <gasPanel:ValveState x:Key="ValveStateOpened">Opened</gasPanel:ValveState>
-    <gasPanel:ValveState x:Key="ValveStateClosed">Closed</gasPanel:ValveState>
-    <gasPanel:ValveState x:Key="ValveStateUnknown">Unknown</gasPanel:ValveState>
+    <models:ValveState x:Key="ValveStateOpened">Opened</models:ValveState>
+    <models:ValveState x:Key="ValveStateClosed">Closed</models:ValveState>
+    <models:ValveState x:Key="ValveStateUnknown">Unknown</models:ValveState>
 
     <DataTemplate x:Key="OpenValveTemplate">
         <Viewbox Stretch="Uniform">

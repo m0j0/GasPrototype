@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using MugenMvvmToolkit.Binding;
 using MugenMvvmToolkit.Interfaces.Collections;
-using Prototype.Core.Interfaces.GasPanel;
 using Prototype.Core.Models.AttrList;
 
 namespace Prototype.Core.Controls
