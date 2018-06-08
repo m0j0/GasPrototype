@@ -69,13 +69,10 @@
     <Compile Include="Controls\PipeFlowScheme\IPipeConnector.cs" />
     <Compile Include="Controls\Pipe.cs" />
     <Compile Include="Controls\Valve.cs" />
-    <Compile Include="Controls\Wafer.cs" />
-    <Compile Include="Controls\WaferMovable.cs" />
     <Compile Include="Converters\FailedSegmentFailTypeConverter.cs" />
     <Compile Include="Converters\HasFlowToColorConverter.cs" />
     <Compile Include="Converters\PipeBorderThicknessConverter.cs" />
     <Compile Include="Converters\EnumEqualityConverter.cs" />
-    <Compile Include="Converters\WaferStatusColorConverter.cs" />
     <Compile Include="CoreViewExtensions.cs" />
     <Compile Include="MarkupExtensions\TransparentColorExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,10 +103,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\AttrTable.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Wafer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

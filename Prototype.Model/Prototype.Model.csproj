@@ -75,7 +75,6 @@
     <Compile Include="ViewModels\RestrictedVm.cs" />
     <Compile Include="ViewModels\SelectorVm.cs" />
     <Compile Include="ViewModels\SettingsVm.cs" />
-    <Compile Include="ViewModels\Wafers\WaferStatusesVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj">

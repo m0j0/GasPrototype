@@ -46,15 +46,11 @@
     <Compile Include="Models\AttrList\AttrItemModel.cs" />
     <Compile Include="Models\AttrList\AttrTableVm.cs" />
     <Compile Include="Models\GasPanel\Enums.cs" />
-    <Compile Include="Interfaces\IWaferModel.cs" />
-    <Compile Include="Interfaces\IWaferVm.cs" />
     <Compile Include="Interfaces\INamedCommand.cs" />
     <Compile Include="Interfaces\GasPanel\IValveVm.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\GasPanel\ValveVm.cs" />
     <Compile Include="Models\NamedCommand.cs" />
-    <Compile Include="Models\WaferModel.cs" />
-    <Compile Include="Models\WaferVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

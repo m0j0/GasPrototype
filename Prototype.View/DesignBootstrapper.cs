@@ -11,7 +11,6 @@ using MugenMvvmToolkit.WPF.Infrastructure;
 using Prototype.ViewModels;
 using Prototype.ViewModels.AttrList;
 using Prototype.ViewModels.Pipes;
-using Prototype.ViewModels.Wafers;
 
 namespace Prototype
 {
@@ -118,11 +117,6 @@ namespace Prototype
         public static Manifold3Vm Manifold3Vm
         {
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Manifold3Vm>()); }
-        }
-
-        public static WaferStatusesVm WaferStatusesVm
-        {
-            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<WaferStatusesVm>()); }
         }
         
         public static PipesConnectionsVm PipesConnectionsVm

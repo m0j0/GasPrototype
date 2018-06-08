@@ -14,7 +14,6 @@ using Prototype.Infrastructure;
 using Prototype.Interfaces;
 using Prototype.ViewModels.AttrList;
 using Prototype.ViewModels.Pipes;
-using Prototype.ViewModels.Wafers;
 
 namespace Prototype.ViewModels
 {
@@ -64,7 +63,6 @@ namespace Prototype.ViewModels
                     new MenuItemModel("Manifold", _screenManager.ShowScreenAsync<ManifoldVm>),
                     new MenuItemModel("Manifold 2", _screenManager.ShowScreenAsync<Manifold2Vm>),
                     new MenuItemModel("Manifold 3", _screenManager.ShowScreenAsync<Manifold3Vm>),
-                    new MenuItemModel("Wafer statuses", _screenManager.ShowScreenAsync<WaferStatusesVm>),
                     new MenuItemModel("TieListFrame example VM", _screenManager.ShowScreenAsync<VmExampleVm>),
                     new MenuItemModel("TieListFrame example CB", _screenManager.ShowScreenAsync<CbExampleVm>),
                 }),

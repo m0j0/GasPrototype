@@ -4,9 +4,6 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    <converters:WaferStatusColorConverter x:Key="WaferStatusColorConverter" />
-    <converters:WaferStatusSolidBrushConverter x:Key="WaferStatusSolidBrushConverter" />
-    <converters:WaferStatusHatchedBrushConverter x:Key="WaferStatusHatchedBrushConverter" />
 
     <FontFamily x:Key="DefaultFontFamily">Segoe UI</FontFamily>
     <system:Double x:Key="DefaultFontSize">14</system:Double>
