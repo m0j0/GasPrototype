@@ -13,7 +13,8 @@
         <Pipe Canvas.Left="57" Canvas.Top="160" Width="162" />
         <Pipe Canvas.Left="214" Canvas.Top="160" Width="118" />
         <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="155" />
-        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="155" />
+        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="92" />
+        <Pipe Canvas.Left="327" Canvas.Top="247" Orientation="Vertical" Height="68" />
         <Pipe Canvas.Left="112" Canvas.Top="310" Width="110" />
         <Pipe Canvas.Left="217" Canvas.Top="310" Width="115" />
         <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68" PipeFlowScheme.IsDestination="True" />

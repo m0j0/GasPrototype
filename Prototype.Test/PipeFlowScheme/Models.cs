@@ -63,9 +63,8 @@ namespace Prototype.Test.PipeFlowScheme
     internal class TestPipe : IPipe
     {
         private readonly ISchemeContainer _container;
-        private double _width;
-        private double _height;
-        private Orientation _orientation;
+        private double? _width;
+        private double? _height;
 
         public TestPipe(ISchemeContainer container)
         {
@@ -73,35 +72,45 @@ namespace Prototype.Test.PipeFlowScheme
             Orientation = Orientation.Horizontal;
         }
 
-        public double Width { get; set; }
+        public double Width
+        {
+            get
+            {
+                switch (Orientation)
+                {
+                    case Orientation.Horizontal:
+                        return _width ?? Common.DefaultPipeLength;
+                    case Orientation.Vertical:
+                        return Common.PipeWidth;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            set => _width = value;
+        }
 
-        public double Height { get; set; }
+        public double Height
+        {
+            get
+            {
+                switch (Orientation)
+                {
+                    case Orientation.Horizontal:
+                        return Common.PipeWidth;
+                    case Orientation.Vertical:
+                        return _height ?? Common.DefaultPipeLength;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            set => _height = value;
+        }
 
         public double Top { get; set; }
 
         public double Left { get; set; }
 
-        public Orientation Orientation
-        {
-            get => _orientation;
-            set
-            {
-                _orientation = value;
-                switch (value)
-                {
-                    case Orientation.Horizontal:
-                        Width = 100;
-                        Height = 5;
-                        break;
-                    case Orientation.Vertical:
-                        Width = 5;
-                        Height = 100;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(value), value, null);
-                }
-            }
-        }
+        public Orientation Orientation { get; set; }
 
         public bool IsSource { get; set; }
 

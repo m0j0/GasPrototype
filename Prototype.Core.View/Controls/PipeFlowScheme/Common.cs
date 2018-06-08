@@ -13,6 +13,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         #region Constants
 
         internal const double PipeWidth = 5;
+        internal const double DefaultPipeLength = 5;
+
         internal const double BridgeLength = 27;
         internal const double BridgeOffset = (BridgeLength - PipeWidth) / 2;
         internal static Vector ConnectorVector = new Vector(PipeWidth, PipeWidth);

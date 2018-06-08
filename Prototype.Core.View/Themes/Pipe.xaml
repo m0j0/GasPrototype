@@ -13,6 +13,8 @@
     <gasPanel:SubstanceType x:Key="SubstanceTypeGas">Gas</gasPanel:SubstanceType>
     <gasPanel:SubstanceType x:Key="SubstanceTypePurge">Purge</gasPanel:SubstanceType>
     <gasPanel:SubstanceType x:Key="SubstanceTypeChemical">Chemical</gasPanel:SubstanceType>
+    <sys:Double x:Key="PipeWidth">5</sys:Double>
+    <sys:Double x:Key="DefaultPipeLength">100</sys:Double>
 
     <Style TargetType="controls:Pipe">
         <Style.Resources>
@@ -22,13 +24,13 @@
                         BorderThickness="0,1"
                         BorderBrush="#4D4F52" 
                         Background="{Binding FlowDirection, Converter={x:Static converters:FlowDirectionToColorConverter.Instance}}"
-                        Height="5" Width="{Binding Length}" />
+                        Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
 
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
                         <Setter TargetName="MainControl" Property="BorderThickness" Value="1,0" />
                         <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                        <Setter TargetName="MainControl" Property="Width" Value="{StaticResource PipeWidth}" />
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
@@ -41,12 +43,12 @@
                         BorderThickness="{Binding Converter={x:Static converters:PipeBorderThicknessConverter.Instance}}"
                         BorderBrush="#4D4F52"
                         Background="{Binding FlowDirection, Converter={x:Static converters:FlowDirectionToColorConverter.Instance}}"
-                        Height="5" Width="{Binding Length}" />
+                        Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
 
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
                         <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                        <Setter TargetName="MainControl" Property="Width" Value="{StaticResource PipeWidth}" />
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
@@ -80,12 +82,12 @@
                           DataType="pipeFlowScheme:FailedSegment">
                 <Border x:Name="MainControl"
                         Background="{Binding FailType, Converter={x:Static converters:FailedSegmentFailTypeConverter.Instance}}"
-                        Height="5" Width="{Binding Length}" />
+                        Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
 
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
                         <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="5" />
+                        <Setter TargetName="MainControl" Property="Width" Value="{StaticResource PipeWidth}" />
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
@@ -96,12 +98,12 @@
                                                            LineTemplate="{StaticResource LineSegmentTemplate}"
                                                            FailedTemplate="{StaticResource FailedSegmentTemplate}" />
         </Style.Resources>
-        <Setter Property="Width" Value="100" />
+        <Setter Property="Width" Value="{StaticResource DefaultPipeLength}" />
         <Setter Property="MinWidth" Value="0" />
         <Setter Property="MaxWidth" Value="{x:Static sys:Double.PositiveInfinity}" />
-        <Setter Property="Height" Value="5" />
-        <Setter Property="MinHeight" Value="5" />
-        <Setter Property="MaxHeight" Value="5" />
+        <Setter Property="Height" Value="{StaticResource PipeWidth}" />
+        <Setter Property="MinHeight" Value="{StaticResource PipeWidth}" />
+        <Setter Property="MaxHeight" Value="{StaticResource PipeWidth}" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -123,10 +125,10 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Width" Value="5" />
-                            <Setter Property="MinWidth" Value="5" />
-                            <Setter Property="MaxWidth" Value="5" />
-                            <Setter Property="Height" Value="100" />
+                            <Setter Property="Width" Value="{StaticResource PipeWidth}" />
+                            <Setter Property="MinWidth" Value="{StaticResource PipeWidth}" />
+                            <Setter Property="MaxWidth" Value="{StaticResource PipeWidth}" />
+                            <Setter Property="Height" Value="{StaticResource DefaultPipeLength}" />
                             <Setter Property="MinHeight" Value="0" />
                             <Setter Property="MaxHeight" Value="{x:Static sys:Double.PositiveInfinity}" />
                         </Trigger>
