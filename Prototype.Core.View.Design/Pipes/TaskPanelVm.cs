@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Windows.Design.Model;
 using Microsoft.Windows.Design.Metadata;
 using MugenMvvmToolkit.Models;
+using Prototype.Core.Controls;
 using Prototype.Core.Controls.PipeFlowScheme;
 
 namespace Prototype.Core.Design.Pipes
@@ -11,13 +12,7 @@ namespace Prototype.Core.Design.Pipes
     internal class TaskPanelVm : NotifyPropertyChangedBase
     {
         #region Fields
-
-        private static readonly PropertyIdentifier IsSourcePropertyIdentifier =
-            new PropertyIdentifier(typeof(PipeFlowScheme), PipeFlowScheme.IsSourcePropertyName);
-
-        private static readonly PropertyIdentifier IsDestinationPropertyIdentifier =
-            new PropertyIdentifier(typeof(PipeFlowScheme), PipeFlowScheme.IsDestinationPropertyName);
-
+        
         private ModelItem _modelItem;
         private IPipe _pipe;
         private ISchemeContainer _container;
@@ -103,22 +98,8 @@ namespace Prototype.Core.Design.Pipes
                 var failedSegment = _pipe.Segments.OfType<FailedSegment>().SingleOrDefault();
                 SetFailType(_pipe.Segments.Count == 1 && failedSegment != null ? failedSegment.FailType : FailType.None);
             }
-
-            var isSource = _modelItem.Properties[IsSourcePropertyIdentifier];
-            var isDestination = _modelItem.Properties[IsDestinationPropertyIdentifier];
-            if (isSource.IsSet && (bool) isSource.ComputedValue)
-            {
-                SetPipeType(PipeType.Source);
-            }
-            else if (isDestination.IsSet && (bool) isDestination.ComputedValue)
-            {
-                SetPipeType(PipeType.Destination);
-            }
-            else
-            {
-                SetPipeType(PipeType.Regular);
-            }
-
+            
+            SetPipeType((PipeType) _modelItem.Properties[nameof(Pipe.Type)].ComputedValue);
             OnPropertyChanged(nameof(PipeType));
         }
 
@@ -139,16 +120,11 @@ namespace Prototype.Core.Design.Pipes
             switch (pipeType)
             {
                 case PipeType.Regular:
-                    _modelItem.Properties[IsSourcePropertyIdentifier].ClearValue();
-                    _modelItem.Properties[IsDestinationPropertyIdentifier].ClearValue();
+                    _modelItem.Properties[nameof(Pipe.Type)].ClearValue();
                     break;
                 case PipeType.Source:
-                    _modelItem.Properties[IsSourcePropertyIdentifier].SetValue(true);
-                    _modelItem.Properties[IsDestinationPropertyIdentifier].ClearValue();
-                    break;
                 case PipeType.Destination:
-                    _modelItem.Properties[IsSourcePropertyIdentifier].ClearValue();
-                    _modelItem.Properties[IsDestinationPropertyIdentifier].SetValue(true);
+                    _modelItem.Properties[nameof(Pipe.Type)].SetValue(pipeType);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(pipeType), pipeType, null);

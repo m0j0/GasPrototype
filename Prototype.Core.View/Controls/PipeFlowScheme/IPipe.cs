@@ -10,10 +10,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         double GetLeft(IFlowControl control);
 
-        bool IsSource(IPipe pipe);
-
-        bool IsDestination(IPipe pipe);
-
         event EventHandler SchemeChanged;
     }
 
@@ -31,6 +27,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     public interface IPipe : IFlowControl
     {
         Orientation Orientation { get; }
+
+        PipeType Type { get; }
 
         IList<IPipeSegment> Segments { get; set; } // TODO Observable / ReadOnly
     }

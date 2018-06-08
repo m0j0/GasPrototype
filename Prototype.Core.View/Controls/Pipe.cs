@@ -42,6 +42,9 @@ namespace Prototype.Core.Controls
         public static readonly DependencyProperty SubstanceTypeProperty = DependencyProperty.Register(
             "SubstanceType", typeof(SubstanceType), typeof(Pipe), new PropertyMetadata(SubstanceType.Gas));
 
+        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
+            "Type", typeof(PipeType), typeof(Pipe), new PropertyMetadata(default(PipeType)));
+
         internal static readonly DependencyProperty PipeModelProperty = DependencyProperty.Register(
             "PipeVm", typeof(IPipeVm), typeof(Pipe),
             new PropertyMetadata(default(IPipeVm), PipeVmPropertyChangedCallback));
@@ -72,6 +75,12 @@ namespace Prototype.Core.Controls
         {
             get { return (SubstanceType) GetValue(SubstanceTypeProperty); }
             set { SetValue(SubstanceTypeProperty, value); }
+        }
+
+        public PipeType Type
+        {
+            get { return (PipeType) GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
         }
 
         [Category("Model")]
@@ -110,6 +119,9 @@ namespace Prototype.Core.Controls
             DependencyPropertyDescriptor
                 .FromProperty(VisibilityProperty, typeof(Pipe))
                 .AddValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(TypeProperty, typeof(Pipe))
+                .AddValueChanged(this, SizeChangedHandler);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -125,6 +137,9 @@ namespace Prototype.Core.Controls
                 .RemoveValueChanged(this, SizeChangedHandler);
             DependencyPropertyDescriptor
                 .FromProperty(VisibilityProperty, typeof(Pipe))
+                .RemoveValueChanged(this, SizeChangedHandler);
+            DependencyPropertyDescriptor
+                .FromProperty(TypeProperty, typeof(Pipe))
                 .RemoveValueChanged(this, SizeChangedHandler);
         }
 

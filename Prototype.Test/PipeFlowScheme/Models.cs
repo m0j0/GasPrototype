@@ -37,16 +37,6 @@ namespace Prototype.Test.PipeFlowScheme
             }
         }
 
-        public bool IsSource(IPipe pipe)
-        {
-            return ((TestPipe) pipe).IsSource;
-        }
-
-        public bool IsDestination(IPipe pipe)
-        {
-            return ((TestPipe) pipe).IsDestination;
-        }
-
         public event EventHandler SchemeChanged;
 
         public void Add(IFlowControl flowControl)
@@ -112,9 +102,7 @@ namespace Prototype.Test.PipeFlowScheme
 
         public Orientation Orientation { get; set; }
 
-        public bool IsSource { get; set; }
-
-        public bool IsDestination { get; set; }
+        public PipeType Type { get; set; }
 
         public IList<IPipeSegment> Segments { get; set; }
 

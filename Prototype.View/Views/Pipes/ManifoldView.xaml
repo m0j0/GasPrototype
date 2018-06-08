@@ -7,11 +7,11 @@
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.ManifoldVm}"
              d:DesignHeight="500" d:DesignWidth="500">
     <PipeFlowCanvas>
-        <Pipe Canvas.Left="30" Canvas.Top="133" Orientation="Vertical" Height="143" PipeFlowScheme.IsSource="True" />
+        <Pipe Canvas.Left="30" Canvas.Top="133" Orientation="Vertical" Height="143" Type="Source" />
         <Pipe Canvas.Left="30" Canvas.Top="111" Width="74" />
-        <Pipe Canvas.Left="441" Canvas.Top="133" Orientation="Vertical" Height="143" PipeFlowScheme.IsSource="True" />
+        <Pipe Canvas.Left="441" Canvas.Top="133" Orientation="Vertical" Height="143" Type="Source" />
         <Pipe Canvas.Left="99" Canvas.Top="111" Width="87" />
-        <Pipe Canvas.Left="181" Canvas.Top="226" Orientation="Vertical" Height="50" PipeFlowScheme.IsSource="True" />
+        <Pipe Canvas.Left="181" Canvas.Top="226" Orientation="Vertical" Height="50" Type="Source" />
         <Pipe Canvas.Left="99" Canvas.Top="226" Width="87" />
         <Pipe Canvas.Left="99" Canvas.Top="133" Orientation="Vertical" Height="98" />
         <Pipe Canvas.Left="347" Canvas.Top="111" Width="99" />
@@ -28,8 +28,8 @@
         <Pipe Canvas.Left="268" Canvas.Top="111" Width="84" />
         <Pipe Canvas.Left="347" Canvas.Top="111" Orientation="Vertical" Height="27" />
         <Pipe Canvas.Left="347" Canvas.Top="41" Orientation="Vertical" Height="75" />
-        <Pipe Canvas.Left="99" Canvas.Top="16" Orientation="Vertical" Height="30" PipeFlowScheme.IsDestination="True" />
-        <Pipe Canvas.Left="347" Canvas.Top="26" Orientation="Vertical" Height="20" PipeFlowScheme.IsDestination="True" />
+        <Pipe Canvas.Left="99" Canvas.Top="16" Orientation="Vertical" Height="30" Type="Destination" />
+        <Pipe Canvas.Left="347" Canvas.Top="26" Orientation="Vertical" Height="20" Type="Destination" />
         <Pipe Canvas.Left="181" Canvas.Top="133" Orientation="Vertical" Height="98" />
         <Pipe Canvas.Left="268" Canvas.Top="210" Orientation="Vertical" Height="21" />
 

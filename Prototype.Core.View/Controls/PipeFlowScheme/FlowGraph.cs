@@ -26,7 +26,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             var connectors = new List<IPipeConnector>();
             var cnnToVertex = new Dictionary<IPipeConnector, IVertex>();
-            var vertexToCnn = new Dictionary<IVertex, IPipeConnector>();
             var edges = new List<Edge>();
 
             foreach (var pipe1 in pipes)
@@ -100,8 +99,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 bool hasStartConnector = pipe.StartConnector != null;
                 bool hasEndConnector = pipe.EndConnector != null;
 
-                bool isSource = container.IsSource(pipe.Pipe);
-                bool isDestination = container.IsDestination(pipe.Pipe);
+                bool isSource = pipe.Type == PipeType.Source;
+                bool isDestination = pipe.Type == PipeType.Destination;
                 
                 if (isSource && isDestination)
                 {
@@ -161,8 +160,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            vertexToCnn = cnnToVertex.ToDictionary(pair => pair.Value, pair => pair.Key);
-
             foreach (var pipe in pipes)
             {
                 if (pipe.IsFailed)
@@ -206,7 +203,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             pipe.FailType)
                     );
 
-                    pipe.Pipe.Segments = result;
+                    pipe.SetPipeSegments(result);
                 }
             }
 
@@ -246,10 +243,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     cnnToVertex[c2].PipeSegments.Add(s2);
                 }
                 
-                pipe.Pipe.Segments = allSegments;
+                pipe.SetPipeSegments(allSegments);
             }
 
-            _vertices = vertexToCnn.Keys.ToArray();
+            _vertices = cnnToVertex.Values.ToArray();
             _edges = edges;
         }
 

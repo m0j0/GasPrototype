@@ -31,16 +31,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return GetLeft((UIElement) control);
         }
 
-        public bool IsSource(IPipe pipe)
-        {
-            return PipeFlowScheme.GetIsSource((DependencyObject) pipe);
-        }
-
-        public bool IsDestination(IPipe pipe)
-        {
-            return PipeFlowScheme.GetIsDestination((DependencyObject) pipe);
-        }
-
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
@@ -63,12 +53,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // TODO optimize when there is no changes
             foreach (DependencyObject child in Children)
             {
                 SubscribePositionChangedEvents(child);
             }
 
+            // TODO optimize when there is no changes
             InvalidateScheme();
         }
 

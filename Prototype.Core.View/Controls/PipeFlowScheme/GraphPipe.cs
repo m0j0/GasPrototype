@@ -66,11 +66,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #region Properties
 
-        public IPipe Pipe { get; }
+        private IPipe Pipe { get; }
 
         public Rect Rect { get; }
 
         public Orientation Orientation => Pipe.Orientation;
+
+        public PipeType Type => Pipe.Type;
 
         public FailType FailType { get; set; }
 
@@ -102,6 +104,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 EndConnector = (PipeConnector)connector;
             }
             
+        }
+
+        public void SetPipeSegments(IList<IPipeSegment> segments)
+        {
+            Pipe.Segments = segments;
         }
 
         #endregion
