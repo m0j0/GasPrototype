@@ -25,8 +25,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var valves = valveControls.Select(v => new GraphValve(container, v)).ToArray();
 
             var connectors = new List<IPipeConnector>();
-            var cnnToVertex = new Dictionary<PipeConnector, IVertex>();
-            var vertexToCnn = new Dictionary<IVertex, PipeConnector>();
+            var cnnToVertex = new Dictionary<IPipeConnector, IVertex>();
+            var vertexToCnn = new Dictionary<IVertex, IPipeConnector>();
             var edges = new List<Edge>();
 
             foreach (var pipe1 in pipes)
@@ -78,6 +78,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             pipe1Index > pipe2Index ? pipe1 : pipe2,
                             pipe1Index > pipe2Index ? pipe2 : pipe1);
                         connectors.Add(bridgeConnector);
+                        cnnToVertex[bridgeConnector] = new Vertex(bridgeConnector);
                         continue;
                     }
                     
@@ -168,17 +169,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 {
                     continue;
                 }
-
-                var pipeConnectors = pipe.Connectors.OfType<PipeConnector>().ToArray();
-                if (pipeConnectors.Length < 2)
+                
+                if (pipe.Connectors.Count < 2)
                 {
                     throw new Exception("!!!");
                 }
 
-                for (var i = 0; i < pipeConnectors.Length - 1; i++)
+                for (var i = 0; i < pipe.Connectors.Count - 1; i++)
                 {
-                    var startVertex = cnnToVertex[pipeConnectors[i]];
-                    var endVertex = cnnToVertex[pipeConnectors[i + 1]];
+                    var startVertex = cnnToVertex[pipe.Connectors[i]];
+                    var endVertex = cnnToVertex[pipe.Connectors[i + 1]];
 
                     var edge = new Edge(startVertex, endVertex);
 
@@ -218,13 +218,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
 
                 List<IPipeSegment> allSegments = new List<IPipeSegment>();
-                var orderedConnectors = pipe.Connectors.OfType<PipeConnector>()
-                    .ToList();
 
-                for (var i = 0; i < orderedConnectors.Count - 1; i++)
+                for (var i = 0; i < pipe.Connectors.Count - 1; i++)
                 {
-                    var c1 = orderedConnectors[i];
-                    var c2 = orderedConnectors[i + 1];
+                    var c1 = pipe.Connectors[i];
+                    var c2 = pipe.Connectors[i + 1];
 
                     var s1 = c1.CreateSegment(pipe);
                     var s2 = c2.CreateSegment(pipe);

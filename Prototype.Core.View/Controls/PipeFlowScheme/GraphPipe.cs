@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MugenMvvmToolkit;
@@ -77,7 +78,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public PipeDirection Direction { get; }
 
-        public IEnumerable<IPipeConnector> Connectors => _connectors;
+        public IReadOnlyList<IPipeConnector> Connectors => _connectors.ToArray();
 
         public PipeConnector StartConnector { get; private set; }
 

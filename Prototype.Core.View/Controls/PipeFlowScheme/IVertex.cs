@@ -8,7 +8,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal interface IVertex
     {
-        PipeConnector Connector { get; }
+        IPipeConnector Connector { get; }
 
         IList<IPipeSegment> PipeSegments { get; }
 
@@ -21,13 +21,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         protected List<IVertex> AdjacentVertices = new List<IVertex>();
 
-        protected VertexBase(PipeConnector connector)
+        protected VertexBase(IPipeConnector connector)
         {
             Connector = connector;
             PipeSegments = new List<IPipeSegment>();
         }
 
-        public PipeConnector Connector { get; }
+        public IPipeConnector Connector { get; }
 
         public IList<IPipeSegment> PipeSegments { get; }
 
@@ -49,21 +49,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class SourceVertex : VertexBase
     {
-        public SourceVertex(PipeConnector connector) : base(connector)
+        public SourceVertex(IPipeConnector connector) : base(connector)
         {
         }
     }
 
     internal class DestinationVertex : VertexBase
     {
-        public DestinationVertex(PipeConnector connector) : base(connector)
+        public DestinationVertex(IPipeConnector connector) : base(connector)
         {
         }
     }
 
     internal class Vertex : VertexBase
     {
-        public Vertex(PipeConnector connector) : base(connector)
+        public Vertex(IPipeConnector connector) : base(connector)
         {
         }
 
