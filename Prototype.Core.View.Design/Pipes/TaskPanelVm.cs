@@ -83,7 +83,7 @@ namespace Prototype.Core.Design.Pipes
 
         private void OnSchemeChanged(object sender, EventArgs e)
         {
-            SynchronizeValues();
+            SynchronizeFailType();
         }
 
         private void ModelItemOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -93,14 +93,21 @@ namespace Prototype.Core.Design.Pipes
 
         private void SynchronizeValues()
         {
-            if (_pipe.Segments != null)
-            {
-                var failedSegment = _pipe.Segments.OfType<FailedSegment>().SingleOrDefault();
-                SetFailType(_pipe.Segments.Count == 1 && failedSegment != null ? failedSegment.FailType : FailType.None);
-            }
+            SynchronizeFailType();
             
             SetPipeType((PipeType) _modelItem.Properties[nameof(Pipe.Type)].ComputedValue);
             OnPropertyChanged(nameof(PipeType));
+        }
+
+        private void SynchronizeFailType()
+        {
+            if (_pipe.Segments == null)
+            {
+                return;
+            }
+
+            var failedSegment = _pipe.Segments.OfType<FailedSegment>().SingleOrDefault();
+            SetFailType(_pipe.Segments.Count == 1 && failedSegment != null ? failedSegment.FailType : FailType.None);
         }
 
         private void SetFailType(FailType failType)
