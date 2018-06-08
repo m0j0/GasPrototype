@@ -19,9 +19,9 @@
         <Pipe Canvas.Left="217" Canvas.Top="310" Width="115" />
         <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68" PipeFlowScheme.IsDestination="True" />
 
-        <Valve Canvas.Left="96" Canvas.Top="226"
+        <Valve Canvas.Left="96" Canvas.Top="226" Orientation="Vertical"
                ValveVm="{Binding ValveVm1}" />
-        <Valve Canvas.Left="311" Canvas.Top="226"
+        <Valve Canvas.Left="311" Canvas.Top="226" Orientation="Vertical"
                ValveVm="{Binding ValveVm2}" />
 
         <TextBlock Text="Source 1" Canvas.Left="36" Canvas.Top="44" />

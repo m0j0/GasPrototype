@@ -33,13 +33,13 @@
         <Pipe Canvas.Left="181" Canvas.Top="133" Orientation="Vertical" Height="98" />
         <Pipe Canvas.Left="268" Canvas.Top="210" Orientation="Vertical" Height="21" />
 
-        <Valve Canvas.Left="14" Canvas.Top="133" ValveVm="{Binding ValveVm1}" />
-        <Valve Canvas.Left="83" Canvas.Top="133" ValveVm="{Binding ValveVm2}" />
-        <Valve Canvas.Left="165" Canvas.Top="133" ValveVm="{Binding ValveVm3}" />
-        <Valve Canvas.Left="252" Canvas.Top="133" ValveVm="{Binding ValveVm4}" />
-        <Valve Canvas.Left="331" Canvas.Top="133" ValveVm="{Binding ValveVm5}" />
-        <Valve Canvas.Left="425" Canvas.Top="133" ValveVm="{Binding ValveVm6}" />
-        <Valve Canvas.Left="83" Canvas.Top="41" ValveVm="{Binding ValveVm7}" />
-        <Valve Canvas.Left="331" Canvas.Top="41" ValveVm="{Binding ValveVm8}" />
+        <Valve Canvas.Left="14" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm1}" />
+        <Valve Canvas.Left="83" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm2}" />
+        <Valve Canvas.Left="165" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm3}" />
+        <Valve Canvas.Left="252" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm4}" />
+        <Valve Canvas.Left="331" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm5}" />
+        <Valve Canvas.Left="425" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm6}" />
+        <Valve Canvas.Left="83" Canvas.Top="41" Orientation="Vertical" ValveVm="{Binding ValveVm7}" />
+        <Valve Canvas.Left="331" Canvas.Top="41" Orientation="Vertical" ValveVm="{Binding ValveVm8}" />
     </PipeFlowCanvas>
 </UserControl>

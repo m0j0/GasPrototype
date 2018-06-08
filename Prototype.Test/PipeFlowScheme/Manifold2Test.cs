@@ -33,11 +33,6 @@ namespace Prototype.Test.PipeFlowScheme
         {
             public Manifold()
             {
-                /*
-
-
-                 */
-
                 Container = new TestContainer();
                 Container.Add(Pipe1 = new TestPipe(Container) { Left = 57, Top = 60, Orientation = Orientation.Vertical, Height = 105, IsSource = true });
                 Container.Add(Pipe2 = new TestPipe(Container) { Left = 214, Top = 60, Orientation = Orientation.Vertical, Height = 105, IsSource = true });

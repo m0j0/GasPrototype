@@ -39,7 +39,7 @@ namespace Prototype.Core.Controls
         #region Dependency properties
 
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
-            "Orientation", typeof(Orientation), typeof(Valve), new PropertyMetadata(Orientation.Vertical));
+            "Orientation", typeof(Orientation), typeof(Valve), new PropertyMetadata(Orientation.Horizontal));
 
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
             "State", typeof(ValveState), typeof(Valve),
