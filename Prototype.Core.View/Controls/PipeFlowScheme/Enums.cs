@@ -2,20 +2,11 @@
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    [Flags]
-    public enum FlowDirection
+    public enum PipeDirection
     {
-        None = 0,
-        Forward = 1 << 0,
-        Backward = 1 << 1,
-        Both = Forward | Backward
-    }
-
-    public enum PipeLocation
-    {
+        None,
         Forward,
-        Backward,
-        Both = Forward | Backward
+        Backward
     }
 
     internal enum PipeType

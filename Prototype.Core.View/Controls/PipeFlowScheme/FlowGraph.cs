@@ -90,16 +90,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         connectors.Add(connector);
                         cnnToVertex[connector] = new Vertex(connector);
                     }
-
-                    if (pipe1.Rect.TopLeft == connector.Rect.TopLeft)
-                    {
-                        pipe1.StartConnector = connector;
-                    }
-
-                    if (pipe1.Rect.BottomRight == connector.Rect.BottomRight)
-                    {
-                        pipe1.EndConnector = connector;
-                    }
                 }
 
             }
@@ -129,8 +119,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 {
                     var connector = new PipeConnector(new Rect(pipe.Rect.TopLeft, Common.ConnectorVector));
                     connector.AddPipe(pipe);
-
-                    pipe.StartConnector = connector;
+                    
                     connectors.Add(connector);
                     cnnToVertex[connector] = new SourceVertex(connector);
                 }
@@ -140,8 +129,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     var connector = new PipeConnector(new Rect(pipe.Rect.BottomRight - Common.ConnectorVector,
                         Common.ConnectorVector));
                     connector.AddPipe(pipe);
-
-                    pipe.EndConnector = connector;
+                    
                     connectors.Add(connector);
                     cnnToVertex[connector] = new DestinationVertex(connector);
                 }
@@ -181,7 +169,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     continue;
                 }
 
-                var pipeConnectors = pipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).OfType<PipeConnector>().ToArray();
+                var pipeConnectors = pipe.Connectors.OfType<PipeConnector>().ToArray();
                 if (pipeConnectors.Length < 2)
                 {
                     throw new Exception("!!!");
@@ -230,7 +218,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
 
                 List<IPipeSegment> allSegments = new List<IPipeSegment>();
-                var orderedConnectors = pipe.Connectors.OrderBy(c => c.Rect.Top).ThenBy(c => c.Rect.Left).OfType<PipeConnector>()
+                var orderedConnectors = pipe.Connectors.OfType<PipeConnector>()
                     .ToList();
 
                 for (var i = 0; i < orderedConnectors.Count - 1; i++)

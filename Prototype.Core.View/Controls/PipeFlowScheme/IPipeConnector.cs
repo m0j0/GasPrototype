@@ -25,8 +25,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Rect = rect;
             Pipe1 = pipe1;
             Pipe2 = pipe2;
-            pipe1.Connectors.Add(this);
-            pipe2.Connectors.Add(this);
+            pipe1.AddConnector(this);
+            pipe2.AddConnector(this);
         }
 
         public Rect Rect { get; }
@@ -83,7 +83,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
-            pipe.Connectors.Add(this);
+            pipe.AddConnector(this);
 
             bool set = false;
             for (int i = 0; i < _pipes.Length; i++)
