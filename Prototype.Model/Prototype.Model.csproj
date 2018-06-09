@@ -72,6 +72,7 @@
     <Compile Include="ViewModels\Pipes\PipesPerformanceVm.cs" />
     <Compile Include="ViewModels\Pipes\PipesExampleVm.cs" />
     <Compile Include="ViewModels\Pipes\PipesScalingVm.cs" />
+    <Compile Include="ViewModels\Pipes\Valve3WayExampleVm.cs" />
     <Compile Include="ViewModels\RestrictedVm.cs" />
     <Compile Include="ViewModels\SelectorVm.cs" />
     <Compile Include="ViewModels\SettingsVm.cs" />

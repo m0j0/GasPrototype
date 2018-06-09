@@ -120,6 +120,9 @@
     <Compile Include="Views\Pipes\PipesScalingView.xaml.cs">
       <DependentUpon>PipesScalingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Pipes\Valve3WayExampleView.xaml.cs">
+      <DependentUpon>Valve3WayExampleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RestrictedView.xaml.cs">
       <DependentUpon>RestrictedView.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pipes\PipesScalingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pipes\Valve3WayExampleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -69,6 +69,7 @@
     <Compile Include="Controls\PipeFlowScheme\IPipeConnector.cs" />
     <Compile Include="Controls\Pipe.cs" />
     <Compile Include="Controls\Valve.cs" />
+    <Compile Include="Controls\Valve3Way.cs" />
     <Compile Include="Converters\FailedSegmentFailTypeConverter.cs" />
     <Compile Include="Converters\HasFlowToColorConverter.cs" />
     <Compile Include="Converters\PipeBorderThicknessConverter.cs" />
@@ -103,6 +104,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\AttrTable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Valve3Way.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

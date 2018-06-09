@@ -134,6 +134,11 @@ namespace Prototype
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<CbExampleVm>()); }
         }
 
+        public static Valve3WayExampleVm Valve3WayExampleVm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Valve3WayExampleVm>()); }
+        }
+
         #endregion
     }
 }

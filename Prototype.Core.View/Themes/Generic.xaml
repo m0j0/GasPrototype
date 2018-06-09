@@ -6,5 +6,6 @@
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Pipe.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Valve.xaml" />
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Valve3Way.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
