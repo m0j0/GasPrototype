@@ -287,6 +287,26 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(PipeHasSegments(manifold.Pipe10, 3));
         }
 
+        [Test]
+        public void TestHidedPipesFlow()
+        {
+            var manifold = new Manifold();
+            manifold.Valve1.CanPassFlow = false;
+            manifold.Valve2.CanPassFlow = true;
+            manifold.HideRightPath();
+
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe1, false, false, false));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe2, false, false, false));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe3, false, false, false, false, false));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe4));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe5, false, false, false, false, false));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe6));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe7));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe8, false, false, false));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe9));
+            Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe10, false, false, false));
+        }
+
         #endregion
 
         #region Methods
