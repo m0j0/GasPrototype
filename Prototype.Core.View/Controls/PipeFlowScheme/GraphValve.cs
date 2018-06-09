@@ -13,5 +13,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public IValve Valve { get; }
 
         public Rect Rect { get; }
+
+        public IPipeConnector Connector { get; set; }
     }
 }

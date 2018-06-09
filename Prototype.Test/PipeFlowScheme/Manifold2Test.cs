@@ -43,8 +43,7 @@ namespace Prototype.Test.PipeFlowScheme
                 Container.Add(Pipe7 = new TestPipe(Container) {Left = 327, Top = 247, Orientation = Orientation.Vertical, Height = 68});
                 Container.Add(Pipe8 = new TestPipe(Container) {Left = 112, Top = 310, Width = 110});
                 Container.Add(Pipe9 = new TestPipe(Container) {Left = 217, Top = 310, Width = 115});
-                Container.Add(Pipe10 =
-                    new TestPipe(Container) {Left = 217, Top = 310, Orientation = Orientation.Vertical, Height = 68, Type = PipeType.Destination});
+                Container.Add(Pipe10 = new TestPipe(Container) {Left = 217, Top = 310, Orientation = Orientation.Vertical, Height = 68, Type = PipeType.Destination});
 
                 Container.Add(Valve1 = new TestValve(Container) {Left = 96, Top = 226, Orientation = Orientation.Vertical});
                 Container.Add(Valve2 = new TestValve(Container) {Left = 311, Top = 226, Orientation = Orientation.Vertical});
@@ -71,10 +70,17 @@ namespace Prototype.Test.PipeFlowScheme
             {
                 Graph = Container.CreateGraph();
             }
+
+            public IEnumerable<TestPipe> GetPipes()
+            {
+                return Container.GetPipes();
+            }
         }
 
         #endregion
 
+
+        #region Set up
 
         [SetUp]
         public void SetUp()
@@ -82,43 +88,64 @@ namespace Prototype.Test.PipeFlowScheme
             Initialize(new MugenContainer());
         }
 
+        #endregion
+
+        #region Tests
+
         [Test]
-        public void TestFindPipes()
+        public void TestAllValvesClosed()
         {
             var manifold = new Manifold();
 
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe1, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe2, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe3, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe4, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe5, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe6, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe7, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe8, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe9, false));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe10, false));
+            foreach (var pipe in manifold.GetPipes())
+            {
+                Assert.IsTrue(SegmentsFlowHasValue(pipe, false));
+            }
+        }
+
+        [Test]
+        public void TestAllValvesOpen()
+        {
+            var manifold = new Manifold();
 
             manifold.Valve1.CanPassFlow = true;
             manifold.Valve2.CanPassFlow = true;
             manifold.UpdateGraph();
 
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe1, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe2, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe3, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe4, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe5, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe6, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe7, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe8, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe9, true));
-            Assert.IsTrue(SegmentsHasValue(manifold.Pipe10, true));
+            foreach (var pipe in manifold.GetPipes())
+            {
+                Assert.IsTrue(SegmentsFlowHasValue(pipe, true));
+            }
         }
 
-        private static bool SegmentsHasValue(IPipe pipe, bool v)
+        [Test]
+        public void TestSegmentsSplitting()
+        {
+            var manifold = new Manifold();
+
+            var cnn = typeof(ConnectorSegment);
+            var line = typeof(LineSegment);
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe1, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe2, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe3, cnn, line, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe4, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe5, cnn, line, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe6, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe7, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe8, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe9, cnn, line, cnn));
+            Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe10, cnn, line, cnn));
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static bool SegmentsFlowHasValue(IPipe pipe, bool val)
         {
             foreach (var segment in pipe.Segments)
             {
-                if (segment.HasFlow != v)
+                if (segment.HasFlow != val)
                 {
                     return false;
                 }
@@ -126,5 +153,25 @@ namespace Prototype.Test.PipeFlowScheme
 
             return true;
         }
+
+        private static bool PipeHasSegmentTypes(IPipe pipe, params Type[] segmentTypes)
+        {
+            if (pipe.Segments.Count != segmentTypes.Length)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < pipe.Segments.Count; i++)
+            {
+                if (pipe.Segments[i].GetType() != segmentTypes[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

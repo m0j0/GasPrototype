@@ -144,6 +144,33 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 
                 foreach (var valve in valves)
                 {
+                    if (valve.Connector != null)
+                    {
+                        continue;
+                    }
+
+                    foreach (var pipeConnector in pipe.Connectors)
+                    {
+                        if (!Common.IsIntersect(pipeConnector.Rect, valve.Rect))
+                        {
+                            continue;
+                        }
+
+                        var vertex = (Vertex)cnnToVertex[pipeConnector];
+                        if (vertex.Valve != null)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                        vertex.Valve = valve.Valve;
+                        valve.Connector = pipeConnector;
+                        break;
+                    }
+
+                    if (valve.Connector != null)
+                    {
+                        continue;
+                    }
+                    
                     var intersectionRect = Common.FindIntersection(
                         pipe.Rect,
                         valve.Rect

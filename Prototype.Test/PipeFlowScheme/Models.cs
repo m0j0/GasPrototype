@@ -48,6 +48,11 @@ namespace Prototype.Test.PipeFlowScheme
         {
             return new FlowGraph(this, _controls.OfType<IPipe>(), _controls.OfType<IValve>());
         }
+
+        public IEnumerable<TestPipe> GetPipes()
+        {
+            return _controls.OfType<TestPipe>();
+        }
     }
 
     internal class TestPipe : IPipe
