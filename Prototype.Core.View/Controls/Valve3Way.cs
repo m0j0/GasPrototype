@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using MugenMvvmToolkit.Binding;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
@@ -39,9 +40,9 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Dependency properties
-
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
-            "Orientation", typeof(Orientation), typeof(Valve3Way), new PropertyMetadata(Orientation.Horizontal));
+        
+        public static readonly DependencyProperty RotationProperty = DependencyProperty.Register(
+            "Rotation", typeof(Rotation), typeof(Valve3Way), new PropertyMetadata(Rotation.Rotate0));
 
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
             "State", typeof(ValveState), typeof(Valve3Way),
@@ -66,12 +67,11 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Properties
-
-        [Category("Layout")]
-        public Orientation Orientation
+        
+        public Rotation Rotation
         {
-            get { return (Orientation)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
+            get { return (Rotation) GetValue(RotationProperty); }
+            set { SetValue(RotationProperty, value); }
         }
 
         [Category("Model")]
@@ -112,20 +112,20 @@ namespace Prototype.Core.Controls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Valve))
+                .FromProperty(RotationProperty, typeof(Valve3Way))
                 .AddValueChanged(this, SizeChangedHandler);
             DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Valve))
+                .FromProperty(VisibilityProperty, typeof(Valve3Way))
                 .AddValueChanged(this, SizeChangedHandler);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Valve))
+                .FromProperty(RotationProperty, typeof(Valve3Way))
                 .RemoveValueChanged(this, SizeChangedHandler);
             DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Valve))
+                .FromProperty(VisibilityProperty, typeof(Valve3Way))
                 .RemoveValueChanged(this, SizeChangedHandler);
         }
 

@@ -8,7 +8,10 @@
              mc:Ignorable="d" d:DataContext="{x:Static btsr:DesignBootstrapper.Valve3WayExampleVm}"
              d:DesignHeight="300" d:DesignWidth="300">
     <PipeFlowCanvas>
-        <Valve3Way />
+        <Valve3Way Canvas.Left="20" Canvas.Top="38" />
+        <Valve3Way Canvas.Left="120" Canvas.Top="38" Rotation="Rotate90" />
+        <Valve3Way Canvas.Left="220" Canvas.Top="38" Rotation="Rotate180" />
+        <Valve3Way Canvas.Left="320" Canvas.Top="38" Rotation="Rotate270" />
 
     </PipeFlowCanvas>
 </UserControl>
