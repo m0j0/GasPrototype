@@ -19,6 +19,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         double Height { get; }
 
+        bool IsVisible { get; }
+
         ISchemeContainer GetContainer();
 
         event EventHandler SchemeChanged;

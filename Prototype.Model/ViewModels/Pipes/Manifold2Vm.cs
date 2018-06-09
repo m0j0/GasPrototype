@@ -27,6 +27,21 @@ namespace Prototype.ViewModels.Pipes
         public ValveVm ValveVm1 { get; }
         public ValveVm ValveVm2 { get; }
 
+        public bool IsValve2Present
+        {
+            get => ValveVm2.IsPresent;
+            set
+            {
+                if (ValveVm2.IsPresent == value)
+                {
+                    return;
+                }
+                
+                ValveVm2.IsPresent = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
     }
 }

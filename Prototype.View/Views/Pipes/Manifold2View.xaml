@@ -8,15 +8,15 @@
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold2Vm}"
              d:DesignHeight="500" d:DesignWidth="500">
     <PipeFlowCanvas>
-        <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" Type="Source"/>
+        <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" Type="Source" />
         <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical" Height="105" Type="Source" />
         <Pipe Canvas.Left="57" Canvas.Top="160" Width="162" />
-        <Pipe Canvas.Left="214" Canvas.Top="160" Width="118" />
+        <Pipe Canvas.Left="214" Canvas.Top="160" Width="118" View.Visible="{Binding IsValve2Present}" />
         <Pipe Canvas.Left="112" Canvas.Top="160" Orientation="Vertical" Height="155" />
-        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="92" />
-        <Pipe Canvas.Left="327" Canvas.Top="247" Orientation="Vertical" Height="68" />
+        <Pipe Canvas.Left="327" Canvas.Top="160" Orientation="Vertical" Height="92" View.Visible="{Binding IsValve2Present}" />
+        <Pipe Canvas.Left="327" Canvas.Top="247" Orientation="Vertical" Height="68" View.Visible="{Binding IsValve2Present}" />
         <Pipe Canvas.Left="112" Canvas.Top="310" Width="110" />
-        <Pipe Canvas.Left="217" Canvas.Top="310" Width="115" />
+        <Pipe Canvas.Left="217" Canvas.Top="310" Width="115" View.Visible="{Binding IsValve2Present}" />
         <Pipe Canvas.Left="217" Canvas.Top="310" Orientation="Vertical" Height="68" Type="Destination" />
 
         <Valve Canvas.Left="96" Canvas.Top="226" Orientation="Vertical"
@@ -24,6 +24,7 @@
         <Valve Canvas.Left="311" Canvas.Top="226" Orientation="Vertical"
                ValveVm="{Binding ValveVm2}" />
 
+        <CheckBox IsChecked="{Binding IsValve2Present}" Content="Is Valve 2 present" />
         <TextBlock Text="Source 1" Canvas.Left="36" Canvas.Top="44" />
         <TextBlock Text="Source 2" Canvas.Left="193" Canvas.Top="44" />
         <TextBlock Text="Connection 1" Canvas.Left="79" Canvas.Top="144" />

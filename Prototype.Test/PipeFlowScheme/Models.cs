@@ -101,6 +101,8 @@ namespace Prototype.Test.PipeFlowScheme
             set => _height = value;
         }
 
+        public bool IsVisible { get; set; } = true;
+
         public double Top { get; set; }
 
         public double Left { get; set; }
@@ -159,6 +161,8 @@ namespace Prototype.Test.PipeFlowScheme
                 }
             }
         }
+
+        public bool IsVisible { get; set; } = true;
 
         public Orientation Orientation { get; set; }
 

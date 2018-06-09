@@ -21,8 +21,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private void SplitPipesToSegments(ISchemeContainer container, IEnumerable<IPipe> pipeControls,
             IEnumerable<IValve> valveControls)
         {
-            var pipes = pipeControls.Select(p => new GraphPipe(container, p)).ToArray();
-            var valves = valveControls.Select(v => new GraphValve(container, v)).ToArray();
+            var pipes = new List<GraphPipe>();
+            foreach (var pipeControl in pipeControls)
+            {
+                pipeControl.Segments?.Clear();
+                if (!pipeControl.IsVisible)
+                {
+                    continue;
+                }
+
+                pipes.Add(new GraphPipe(container, pipeControl));
+            }
+            var valves = valveControls.Where(v => v.IsVisible).Select(v => new GraphValve(container, v)).ToArray();
 
             var connectors = new List<IPipeConnector>();
             var cnnToVertex = new Dictionary<IPipeConnector, IVertex>();
@@ -70,8 +80,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             continue;
                         }
 
-                        int pipe1Index = Array.IndexOf(pipes, pipe1);
-                        int pipe2Index = Array.IndexOf(pipes, pipe2);
+                        int pipe1Index = pipes.IndexOf(pipe1);
+                        int pipe2Index = pipes.IndexOf(pipe2);
 
                         var bridgeConnector = new BridgePipeConnector(intersectionRect,
                             pipe1Index > pipe2Index ? pipe1 : pipe2,

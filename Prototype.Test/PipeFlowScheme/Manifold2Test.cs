@@ -48,7 +48,7 @@ namespace Prototype.Test.PipeFlowScheme
                 Container.Add(Valve1 = new TestValve(Container) {Left = 96, Top = 226, Orientation = Orientation.Vertical});
                 Container.Add(Valve2 = new TestValve(Container) {Left = 311, Top = 226, Orientation = Orientation.Vertical});
 
-                Graph = Container.CreateGraph();
+                UpdateGraph();
             }
 
             public TestContainer Container { get; }
@@ -76,6 +76,16 @@ namespace Prototype.Test.PipeFlowScheme
                 Pipe1.Type = PipeType.Destination;
                 Pipe2.Type = PipeType.Destination;
                 Pipe10.Type = PipeType.Source;
+                UpdateGraph();
+            }
+
+            public void HideRightPath()
+            {
+                Pipe4.IsVisible = false;
+                Pipe6.IsVisible = false;
+                Pipe7.IsVisible = false;
+                Pipe9.IsVisible = false;
+                Valve2.IsVisible = false;
                 UpdateGraph();
             }
 
@@ -259,6 +269,24 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(PipeHasSegmentTypes(manifold.Pipe10, cnn, line, cnn));
         }
 
+        [Test]
+        public void TestPipeHiding()
+        {
+            var manifold = new Manifold();
+            manifold.HideRightPath();
+            
+            Assert.IsTrue(PipeHasSegments(manifold.Pipe1, 3));
+            Assert.IsTrue(PipeHasSegments(manifold.Pipe2, 3));
+            Assert.IsTrue(PipeHasSegments(manifold.Pipe3, 5));
+            Assert.IsTrue(PipeDoesNotHaveSegments(manifold.Pipe4));
+            Assert.IsTrue(PipeHasSegments(manifold.Pipe5, 5));
+            Assert.IsTrue(PipeDoesNotHaveSegments(manifold.Pipe6));
+            Assert.IsTrue(PipeDoesNotHaveSegments(manifold.Pipe7));
+            Assert.IsTrue(PipeHasSegments(manifold.Pipe8, 3));
+            Assert.IsTrue(PipeDoesNotHaveSegments(manifold.Pipe9));
+            Assert.IsTrue(PipeHasSegments(manifold.Pipe10, 3));
+        }
+
         #endregion
 
         #region Methods
@@ -292,6 +320,16 @@ namespace Prototype.Test.PipeFlowScheme
             }
 
             return true;
+        }
+
+        private static bool PipeDoesNotHaveSegments(IPipe pipe)
+        {
+            return pipe.Segments == null || pipe.Segments.Count == 0;
+        }
+
+        private static bool PipeHasSegments(IPipe pipe, int count)
+        {
+            return pipe.Segments != null && pipe.Segments.Count == count;
         }
 
         private static bool PipeHasSegmentFlow(IPipe pipe, params bool[] segmentTypes)
