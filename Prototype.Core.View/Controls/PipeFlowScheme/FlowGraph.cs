@@ -131,7 +131,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     connector.AddPipe(pipe);
                     
                     connectors.Add(connector);
-                    cnnToVertex[connector] = new SourceVertex(connector);
+                    cnnToVertex[connector] = isSource ? (IVertex) new SourceVertex(connector) : new Vertex(connector);
                 }
 
                 if (!hasEndConnector)
@@ -141,7 +141,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     connector.AddPipe(pipe);
                     
                     connectors.Add(connector);
-                    cnnToVertex[connector] = new DestinationVertex(connector);
+                    cnnToVertex[connector] = isDestination ? (IVertex)new DestinationVertex(connector) : new Vertex(connector);
                 }
             }
 
@@ -225,6 +225,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     edges.Add(edge);
                 }
             }
+
+            ValidateVerticesAccessibility(pipes, cnnToVertex);
             
             foreach (var pipe in pipes)
             {
@@ -284,7 +286,47 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             _vertices = cnnToVertex.Values.ToArray();
-            _edges = edges;
+            _edges = edges.Where(edge => edge.PipeSegment != null).ToArray();
+        }
+
+        private void ValidateVerticesAccessibility(IReadOnlyList<GraphPipe> pipes, Dictionary<IPipeConnector, IVertex> cnnToVertexDictionary)
+        {
+            var sourceVertices = cnnToVertexDictionary.Values.OfType<SourceVertex>();
+            var destinationVertices = cnnToVertexDictionary.Values.OfType<DestinationVertex>().ToArray();
+            var visitedVertices = new HashSet<IVertex>();
+
+            foreach (var connector in sourceVertices)
+            {
+                var algo = new DepthFirstDirectedPaths(connector, vertex => vertex.GetAllAdjacentVertices());
+
+                foreach (var destinationVertex in destinationVertices)
+                {
+                    var paths = algo.PathsTo(destinationVertex);
+                    if (paths == null || paths.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var path in paths)
+                    {
+                        foreach (var vertex in path)
+                        {
+                            visitedVertices.Add(vertex);
+                        }
+                    }
+                }
+            }
+
+            foreach (var pipe in pipes)
+            {
+                foreach (var connector in pipe.Connectors)
+                {
+                    if (!visitedVertices.Contains(cnnToVertexDictionary[connector]))
+                    {
+                        pipe.FailType = FailType.DeadPath;
+                    }
+                }
+            }
         }
 
         public void InvalidateFlow()
@@ -305,7 +347,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var destinationConnectors = _vertices.OfType<DestinationVertex>().ToArray();
             foreach (var connector in sourceConnectors)
             {
-                var algo = new DepthFirstDirectedPaths(connector);
+                var algo = new DepthFirstDirectedPaths(connector, vertex => vertex.GetAdjacentVertices());
 
                 foreach (var destinationVertex in destinationConnectors)
                 {

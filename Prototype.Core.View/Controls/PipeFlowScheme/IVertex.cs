@@ -14,12 +14,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         IEnumerable<IVertex> GetAdjacentVertices();
 
+        IEnumerable<IVertex> GetAllAdjacentVertices();
+
         void AddAdjacentVertex(IVertex vertex);
     }
 
     internal abstract class VertexBase : IVertex
     {
-        protected List<IVertex> AdjacentVertices = new List<IVertex>();
+        protected readonly List<IVertex> AdjacentVertices = new List<IVertex>();
 
         protected VertexBase(IPipeConnector connector)
         {
@@ -32,6 +34,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public IList<IPipeSegment> PipeSegments { get; }
 
         public virtual IEnumerable<IVertex> GetAdjacentVertices()
+        {
+            return AdjacentVertices;
+        }
+
+        public IEnumerable<IVertex> GetAllAdjacentVertices()
         {
             return AdjacentVertices;
         }

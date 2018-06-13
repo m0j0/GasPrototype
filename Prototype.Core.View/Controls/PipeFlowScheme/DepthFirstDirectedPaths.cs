@@ -7,9 +7,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     internal class DepthFirstDirectedPaths
     {
         private readonly Dictionary<IVertex, List<IReadOnlyList<IVertex>>> _paths;
+        private readonly Func<IVertex, IEnumerable<IVertex>> _getAdjacentVertices;
 
-        public DepthFirstDirectedPaths(SourceVertex sourceVertex)
+        public DepthFirstDirectedPaths(SourceVertex sourceVertex, Func<IVertex, IEnumerable<IVertex>> getAdjacentVertices)
         {
+            _getAdjacentVertices = getAdjacentVertices;
             _paths = new Dictionary<IVertex, List<IReadOnlyList<IVertex>>>();
 
             var vertices = new Stack<IVertex>();
@@ -24,7 +26,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void DepthFirstSearch(Stack<IVertex> visited)
         {
-            var vertices = visited.Peek().GetAdjacentVertices();
+            var vertices = _getAdjacentVertices(visited.Peek());
 
             foreach (var vertex in vertices)
             {

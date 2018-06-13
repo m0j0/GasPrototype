@@ -97,7 +97,6 @@ namespace Prototype.Test.PipeFlowScheme
 
         #endregion
 
-
         #region Set up
 
         [SetUp]
@@ -307,6 +306,26 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(PipeHasSegmentFlow(manifold.Pipe10, false, false, false));
         }
 
+        [Test]
+        public void TestIncomplitedPaths()
+        {
+            var manifold = new Manifold();
+            manifold.Pipe7.IsVisible = false;
+            manifold.Pipe9.IsVisible = false;
+            manifold.UpdateGraph();
+
+            Assert.IsTrue(PipeIsNotFailed(manifold.Pipe1));
+            Assert.IsTrue(PipeIsNotFailed(manifold.Pipe2));
+            Assert.IsTrue(PipeIsNotFailed(manifold.Pipe3));
+            Assert.IsTrue(PipeIsFailed(manifold.Pipe4, FailType.DeadPath));
+            Assert.IsTrue(PipeIsNotFailed(manifold.Pipe5));
+            Assert.IsTrue(PipeIsFailed(manifold.Pipe6, FailType.DeadPath));
+            Assert.IsTrue(PipeIsEmpty(manifold.Pipe7));
+            Assert.IsTrue(PipeIsNotFailed(manifold.Pipe8));
+            Assert.IsTrue(PipeIsEmpty(manifold.Pipe9));
+            Assert.IsTrue(PipeIsNotFailed(manifold.Pipe10));
+        }
+
         #endregion
 
         #region Methods
@@ -368,6 +387,32 @@ namespace Prototype.Test.PipeFlowScheme
             }
 
             return true;
+        }
+
+        private static bool PipeIsFailed(IPipe pipe, FailType failType)
+        {
+            if (pipe.Segments.Count != 1)
+            {
+                return false;
+            }
+
+            var failedSegment = pipe.Segments[0] as FailedSegment;
+            if (failedSegment == null)
+            {
+                return false;
+            }
+
+            return failedSegment.FailType == failType;
+        }
+
+        private static bool PipeIsNotFailed(IPipe pipe)
+        {
+            return pipe.Segments.Any(segment => !(segment is FailedSegment));
+        }
+
+        private static bool PipeIsEmpty(IPipe pipe)
+        {
+            return pipe.Segments.Count == 0;
         }
 
         #endregion
