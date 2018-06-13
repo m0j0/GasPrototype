@@ -40,6 +40,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         internal static bool IsSizeValid(Rect rect, Orientation orientation)
         {
+            if (double.IsInfinity(rect.Top) || double.IsInfinity(rect.Left) ||
+                double.IsNaN(rect.Top) || double.IsNaN(rect.Left))
+            {
+                return false;
+            }
+
             switch (orientation)
             {
                 case Orientation.Horizontal:

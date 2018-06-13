@@ -49,6 +49,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 UnsubscribePositionChangedEvents(visualRemoved);
             }
+
+            InvalidateScheme();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

@@ -111,6 +111,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Pipe.Segments = segments;
         }
 
+        public void CreateEndsConnectors()
+        {
+
+        }
+
         #endregion
     }
 }

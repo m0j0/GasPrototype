@@ -7,6 +7,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class FlowGraph
     {
+        private bool _isSchemeFailed;
         private IReadOnlyCollection<IVertex> _vertices;
         private IReadOnlyCollection<Edge> _edges;
 
@@ -285,6 +286,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 pipe.SetPipeSegments(allSegments);
             }
 
+            _isSchemeFailed = pipes.Any(pipe => pipe.IsFailed);
             _vertices = cnnToVertex.Values.ToArray();
             _edges = edges.Where(edge => edge.PipeSegment != null).ToArray();
         }
@@ -331,6 +333,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void InvalidateFlow()
         {
+            if (_isSchemeFailed)
+            {
+                return;
+            }
+
             foreach (var edge in _edges)
             {
                 edge.PipeSegment.HasFlow = false;
@@ -343,13 +350,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            var sourceConnectors = _vertices.OfType<SourceVertex>();
-            var destinationConnectors = _vertices.OfType<DestinationVertex>().ToArray();
-            foreach (var connector in sourceConnectors)
+            var sourceVertices = _vertices.OfType<SourceVertex>();
+            var destinationVertices = _vertices.OfType<DestinationVertex>().ToArray();
+            foreach (var connector in sourceVertices)
             {
                 var algo = new DepthFirstDirectedPaths(connector, vertex => vertex.GetAdjacentVertices());
 
-                foreach (var destinationVertex in destinationConnectors)
+                foreach (var destinationVertex in destinationVertices)
                 {
                     var paths = algo.PathsTo(destinationVertex);
                     if (paths == null || paths.Count == 0)
