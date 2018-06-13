@@ -95,6 +95,8 @@ namespace Prototype.Core.Controls
             set { SetValue(ValveModelProperty, value); }
         }
 
+        bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
+
         #endregion
 
         #region Methods

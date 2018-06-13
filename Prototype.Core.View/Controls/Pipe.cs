@@ -83,6 +83,8 @@ namespace Prototype.Core.Controls
             set { SetValue(SegmentsProperty, value); }
         }
 
+        bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
+
         #endregion
 
         #region Methods
