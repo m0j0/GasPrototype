@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
@@ -11,6 +12,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public DepthFirstDirectedPaths(SourceVertex sourceVertex, Func<IVertex, IEnumerable<IVertex>> getAdjacentVertices)
         {
+            Should.NotBeNull(sourceVertex, nameof(sourceVertex));
+            Should.NotBeNull(getAdjacentVertices, nameof(getAdjacentVertices));
             _getAdjacentVertices = getAdjacentVertices;
             _paths = new Dictionary<IVertex, List<IReadOnlyList<IVertex>>>();
 
@@ -51,6 +54,5 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 visited.Pop();
             }
         }
-
     }
 }
