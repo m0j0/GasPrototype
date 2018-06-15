@@ -107,43 +107,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             
             foreach (var pipe in pipes)
             {
-                bool hasStartConnector = pipe.StartConnector != null;
-                bool hasEndConnector = pipe.EndConnector != null;
-
-                bool isSource = pipe.Type == PipeType.Source;
-                bool isDestination = pipe.Type == PipeType.Destination;
+                pipe.CreateEndsConnectors();
                 
-                if (isSource && isDestination)
-                {
-                    pipe.FailType = FailType.BothSourceDestination;
-                    continue;
-                }
-
-                if ((isSource || isDestination) && 
-                    (!hasStartConnector && !hasEndConnector || hasStartConnector && hasEndConnector))
-                {
-                    pipe.FailType = FailType.BothSourceDestination;
-                    continue;
-                }
-
-                if (!hasStartConnector)
-                {
-                    var connector = new PipeConnector(new Rect(pipe.Rect.TopLeft, Common.ConnectorVector));
-                    connector.AddPipe(pipe);
-                    
-                    connectors.Add(connector);
-                    cnnToVertex[connector] = isSource ? (IVertex) new SourceVertex(connector) : new Vertex(connector);
-                }
-
-                if (!hasEndConnector)
-                {
-                    var connector = new PipeConnector(new Rect(pipe.Rect.BottomRight - Common.ConnectorVector,
-                        Common.ConnectorVector));
-                    connector.AddPipe(pipe);
-                    
-                    connectors.Add(connector);
-                    cnnToVertex[connector] = isDestination ? (IVertex)new DestinationVertex(connector) : new Vertex(connector);
-                }
+                AddEndVertex(pipe, pipe.StartConnector, connectors, cnnToVertex);
+                AddEndVertex(pipe, pipe.EndConnector, connectors, cnnToVertex);
             }
 
             foreach (var pipe in pipes)
@@ -289,6 +256,38 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             _isSchemeFailed = pipes.Any(pipe => pipe.IsFailed);
             _vertices = cnnToVertex.Values.ToArray();
             _edges = edges.Where(edge => edge.PipeSegment != null).ToArray();
+        }
+
+        private void AddEndVertex(GraphPipe pipe, IPipeConnector connector, List<IPipeConnector> connectors, Dictionary<IPipeConnector, IVertex> cnnToVertex)
+        {
+            bool isStartVertex = pipe.StartConnector == connector;
+            if (!isStartVertex && pipe.EndConnector != connector)
+            {
+                throw new Exception("!! !!");
+            }
+
+            if (connectors.Contains(connector))
+            {
+                return;
+            }
+
+            connectors.Add(connector);
+            IVertex vertex;
+            switch (pipe.Direction)
+            {
+                case PipeDirection.None:
+                    vertex = new Vertex(connector);
+                    break;
+                case PipeDirection.Forward:
+                    vertex = isStartVertex ? (IVertex) new SourceVertex(connector) : new DestinationVertex(connector);
+                    break;
+                case PipeDirection.Backward:
+                    vertex = isStartVertex ? new DestinationVertex(connector) : (IVertex)new SourceVertex(connector);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            cnnToVertex[connector] = vertex;
         }
 
         private void ValidateVerticesAccessibility(IReadOnlyList<GraphPipe> pipes, Dictionary<IPipeConnector, IVertex> cnnToVertexDictionary)

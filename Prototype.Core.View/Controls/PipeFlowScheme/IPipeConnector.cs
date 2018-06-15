@@ -83,8 +83,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
-            pipe.AddConnector(this);
-
             bool set = false;
             for (int i = 0; i < _pipes.Length; i++)
             {
@@ -100,11 +98,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 throw new Exception("!!!");
             }
+
+            pipe.AddConnector(this);
         }
 
-        public IEnumerable<GraphPipe> GetPipes()
+        public bool IsEndConnector()
         {
-            return _pipes.Where(pipe => pipe != null);
+            return _pipes.Count(pipe => pipe != null) == 1;
         }
 
         public IPipeSegment CreateSegment(GraphPipe pipe)

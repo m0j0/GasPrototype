@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using MugenMvvmToolkit;
@@ -49,7 +49,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #region Fields
 
-        private readonly SortedSet<IPipeConnector> _connectors;
+        private readonly List<IPipeConnector> _connectors;
+        private readonly ConnectorComparer _comparer;
 
         #endregion
 
@@ -59,7 +60,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             Rect = Common.GetAbsoluteRect(container, pipe);
             Pipe = pipe;
-            _connectors = new SortedSet<IPipeConnector>(new ConnectorComparer(this));
+            _connectors = new List<IPipeConnector>();
+            _comparer = new ConnectorComparer(this);
         }
 
         #endregion
@@ -78,9 +80,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public bool IsFailed => FailType != FailType.None;
 
-        public PipeDirection Direction { get; }
+        public PipeDirection Direction { get; private set; }
 
-        public IReadOnlyList<IPipeConnector> Connectors => _connectors.ToArray();
+        public IReadOnlyList<IPipeConnector> Connectors => _connectors;
 
         public PipeConnector StartConnector { get; private set; }
 
@@ -103,7 +105,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 EndConnector = (PipeConnector)connector;
             }
-            
+
+            UpdateDirection();
         }
 
         public void SetPipeSegments(IList<IPipeSegment> segments)
@@ -113,7 +116,76 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void CreateEndsConnectors()
         {
+            bool hasStartConnector = StartConnector != null;
+            bool hasEndConnector = EndConnector != null;
 
+            bool isSource = Type == PipeType.Source;
+            bool isDestination = Type == PipeType.Destination;
+
+            if ((isSource || isDestination) &&
+                (!hasStartConnector && !hasEndConnector || hasStartConnector && hasEndConnector))
+            {
+                FailType = FailType.BothSourceDestination;
+                return;
+            }
+
+            if (!hasStartConnector)
+            {
+                var connector = new PipeConnector(new Rect(Rect.TopLeft, Common.ConnectorVector));
+                connector.AddPipe(this);
+                StartConnector = connector;
+            }
+
+            if (!hasEndConnector)
+            {
+                var connector = new PipeConnector(new Rect(Rect.BottomRight - Common.ConnectorVector, Common.ConnectorVector));
+                connector.AddPipe(this);
+                EndConnector = connector;
+            }
+
+            UpdateDirection();
+        }
+
+        private void UpdateDirection()
+        {
+            if (StartConnector == null || 
+                EndConnector == null)
+            {
+                return;
+            }
+
+            if (Type == PipeType.Source)
+            {
+                if (StartConnector.IsEndConnector())
+                {
+                    Direction = PipeDirection.Forward;
+                }
+                else if (EndConnector.IsEndConnector())
+                {
+                    Direction = PipeDirection.Backward;
+                }
+                else
+                {
+                    throw new Exception("! ! !");
+                }
+            }
+            else if (Type == PipeType.Destination)
+            {
+                if (StartConnector.IsEndConnector())
+                {
+                    Direction = PipeDirection.Backward;
+                }
+                else if (EndConnector.IsEndConnector())
+                {
+                    Direction = PipeDirection.Forward;
+                }
+                else
+                {
+                    throw new Exception("! ! !");
+                }
+            }
+
+            _connectors.Sort(_comparer);
         }
 
         #endregion

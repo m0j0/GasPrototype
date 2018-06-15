@@ -29,5 +29,11 @@
         <Valve Canvas.Left="425" Canvas.Top="133" Orientation="Vertical" ValveVm="{Binding ValveVm6}" />
         <Valve Canvas.Left="83" Canvas.Top="41" Orientation="Vertical" ValveVm="{Binding ValveVm7}" />
         <Valve Canvas.Left="331" Canvas.Top="41" Orientation="Vertical" ValveVm="{Binding ValveVm8}" />
+
+        <TextBlock Canvas.Left="35" Text="Destination" Canvas.Top="16"/>
+        <TextBlock Canvas.Left="282" Text="Destination" Canvas.Top="20"/>
+        <TextBlock Canvas.Left="40" Text="Source" Canvas.Top="260"/>
+        <TextBlock Canvas.Left="131" Text="Source" Canvas.Top="263"/>
+        <TextBlock Canvas.Left="388" Text="Source" Canvas.Top="260"/>
     </PipeFlowCanvas>
 </UserControl>
