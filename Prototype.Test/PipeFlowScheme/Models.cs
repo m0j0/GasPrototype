@@ -53,6 +53,11 @@ namespace Prototype.Test.PipeFlowScheme
         {
             return _controls.OfType<TestPipe>();
         }
+
+        public IEnumerable<TestValve> GetValves()
+        {
+            return _controls.OfType<TestValve>();
+        }
     }
 
     internal class TestPipe : IPipe
