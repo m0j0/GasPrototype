@@ -6,7 +6,7 @@ namespace Prototype.Test.PipeFlowScheme
 {
     internal static class Extensions
     {
-        public static bool SegmentsFlowHasValue(IPipe pipe, bool val)
+        public static bool PipeSegmentsFlowHasValue(this IPipe pipe, bool val)
         {
             foreach (var segment in pipe.Segments)
             {
@@ -19,7 +19,7 @@ namespace Prototype.Test.PipeFlowScheme
             return true;
         }
 
-        public static bool PipeHasSegmentTypes(IPipe pipe, params Type[] segmentTypes)
+        public static bool PipeHasSegmentTypes(this IPipe pipe, params Type[] segmentTypes)
         {
             if (pipe.Segments.Count != segmentTypes.Length)
             {
@@ -37,17 +37,17 @@ namespace Prototype.Test.PipeFlowScheme
             return true;
         }
 
-        public static bool PipeDoesNotHaveSegments(IPipe pipe)
+        public static bool PipeDoesNotHaveSegments(this IPipe pipe)
         {
             return pipe.Segments == null || pipe.Segments.Count == 0;
         }
 
-        public static bool PipeHasSegments(IPipe pipe, int count)
+        public static bool PipeHasSegments(this IPipe pipe, int count)
         {
             return pipe.Segments != null && pipe.Segments.Count == count;
         }
 
-        public static bool PipeHasSegmentFlow(IPipe pipe, params bool[] segmentTypes)
+        public static bool PipeHasSegmentFlow(this IPipe pipe, params bool[] segmentTypes)
         {
             if (pipe.Segments.Count != segmentTypes.Length)
             {
@@ -65,7 +65,7 @@ namespace Prototype.Test.PipeFlowScheme
             return true;
         }
 
-        public static bool PipeIsFailed(IPipe pipe, FailType failType)
+        public static bool PipeIsFailed(this IPipe pipe, FailType failType)
         {
             if (pipe.Segments.Count != 1)
             {
@@ -81,12 +81,12 @@ namespace Prototype.Test.PipeFlowScheme
             return failedSegment.FailType == failType;
         }
 
-        public static bool PipeIsNotFailed(IPipe pipe)
+        public static bool PipeIsNotFailed(this IPipe pipe)
         {
             return pipe.Segments.Any(segment => !(segment is FailedSegment));
         }
 
-        public static bool PipeIsEmpty(IPipe pipe)
+        public static bool PipeIsEmpty(this IPipe pipe)
         {
             return pipe.Segments.Count == 0;
         }

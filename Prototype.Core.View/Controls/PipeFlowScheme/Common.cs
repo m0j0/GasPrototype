@@ -84,6 +84,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         internal static LineSegment CreateSegmentBetweenSegments(GraphPipe pipe, IPipeSegment s1, IPipeSegment s2)
         {
+            if (pipe.Direction == PipeDirection.Backward)
+            {
+                var tmp = s1;
+                s1 = s2;
+                s2 = tmp;
+            }
+
             if (pipe.Orientation == Orientation.Horizontal)
             {
                 return new LineSegment(new Point(s1.StartPoint.X + s1.Length, 0),

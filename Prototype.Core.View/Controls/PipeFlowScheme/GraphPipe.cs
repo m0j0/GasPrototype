@@ -31,15 +31,19 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             public int Compare(IPipeConnector x, IPipeConnector y)
             {
-                if (_graphPipe.Direction == PipeDirection.None ||
-                    _graphPipe.Direction == PipeDirection.Forward)
+                if (x == null || y == null)
                 {
-                    var topCompare = x.Rect.Top.CompareTo(y.Rect.Top);
-                    return topCompare == 0 ? x.Rect.Left.CompareTo(y.Rect.Left) : topCompare;
+                    throw new ArgumentException();
                 }
 
+                var topCompare = x.Rect.Top.CompareTo(y.Rect.Top);
                 var leftCompare = x.Rect.Left.CompareTo(y.Rect.Left);
-                return leftCompare == 0 ? x.Rect.Top.CompareTo(y.Rect.Top) : leftCompare;
+                var result = topCompare == 0 ? leftCompare : topCompare;
+
+                return _graphPipe.Direction == PipeDirection.None ||
+                       _graphPipe.Direction == PipeDirection.Forward
+                    ? result
+                    : -result;
             }
 
             #endregion
@@ -183,6 +187,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 {
                     throw new Exception("! ! !");
                 }
+            }
+            
+            if (Direction == PipeDirection.Backward)
+            {
+                var tmp = StartConnector;
+                StartConnector = EndConnector;
+                EndConnector = tmp;
             }
 
             _connectors.Sort(_comparer);

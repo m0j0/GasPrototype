@@ -107,7 +107,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             foreach (var pipe in manifold.Container.GetPipes())
             {
-                Assert.IsTrue(Extensions.SegmentsFlowHasValue(pipe, false));
+                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, false));
             }
         }
 
@@ -124,7 +124,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             foreach (var pipe in manifold.Container.GetPipes())
             {
-                Assert.IsTrue(Extensions.SegmentsFlowHasValue(pipe, true));
+                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, true));
             }
         }
 
