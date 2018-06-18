@@ -98,7 +98,7 @@ namespace Prototype.Test.PipeFlowScheme
                     case Orientation.Horizontal:
                         return Common.PipeWidth;
                     case Orientation.Vertical:
-                        return _height ?? Common.DefaultPipeLength;
+                        return _height ?? Common.DefaultPipeHeight;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

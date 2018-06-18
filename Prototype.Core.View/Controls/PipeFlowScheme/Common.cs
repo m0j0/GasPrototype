@@ -14,6 +14,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         internal const double PipeWidth = 5;
         internal const double DefaultPipeLength = 5;
+        internal const double DefaultPipeHeight = 100;
 
         internal const double BridgeLength = 27;
         internal const double BridgeOffset = (BridgeLength - PipeWidth) / 2;

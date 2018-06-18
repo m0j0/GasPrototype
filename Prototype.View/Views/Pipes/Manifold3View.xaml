@@ -9,26 +9,19 @@
              d:DesignHeight="700" d:DesignWidth="800">
     <PipeFlowCanvas>
 
-        <Pipe Canvas.Left="206" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="206" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="206" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="206" Canvas.Top="131" Width="75" />
-        <Pipe Canvas.Left="276" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="276" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="276" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="276" Canvas.Top="131" Width="77" />
-        <Pipe Canvas.Left="348" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="348" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="348" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="348" Canvas.Top="131" Width="77" />
-        <Pipe Canvas.Left="420" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="420" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="420" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="420" Canvas.Top="131" Width="76" />
-        <Pipe Canvas.Left="491" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="491" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="491" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="491" Canvas.Top="131" Width="77" />
-        <Pipe Canvas.Left="563" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="563" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="563" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="563" Canvas.Top="131" Width="77" />
-        <Pipe Canvas.Left="635" Canvas.Top="14" Orientation="Vertical" Height="67" Type="Source" />
-        <Pipe Canvas.Left="635" Canvas.Top="76" Orientation="Vertical" Height="60" />
+        <Pipe Canvas.Left="635" Canvas.Top="14" Orientation="Vertical" Height="122" Type="Source" />
         <Pipe Canvas.Left="348" Canvas.Top="131" Orientation="Vertical" Type="Destination" />
 
         <Valve Canvas.Left="190" Canvas.Top="71" Orientation="Vertical" ValveVm="{Binding ValveFinal1Vm}" />

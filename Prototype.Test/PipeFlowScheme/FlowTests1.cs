@@ -11,21 +11,22 @@ namespace Prototype.Test.PipeFlowScheme
     {
         #region Nested types
 
-        //      d1              d2
+        //      12v             13v
         //      |               |
         //      |               |
         //      v7              v8
         //      |               |
         //      |               |
-        // -----c1----     -----c4----
-        // |    |    |     |    |    |
+        // 2>---6v---7v    10>--11v--3v
+        // 1v   |    |     9v   |    |
         // |    |    |     |    |    |
         // v1   v2   v3    v4   v5   v6
         // |    |    |     |    |    |
-        // |    |    |     |    |    |
-        // |    -----c2----c3----    |
+        // |    |    |     8>---|    |
+        // |    |    |     |         |
+        // |    5>---4v-----         |
         // |         |               |
-        // s1        s2              s3
+        // |         |               |
 
         private class Manifold
         {
