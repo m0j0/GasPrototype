@@ -107,8 +107,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             
             foreach (var pipe in pipes)
             {
+                if (pipe.IsFailed)
+                {
+                    continue;
+                }
+
                 pipe.CreateEndsConnectors();
                 
+                if (pipe.IsFailed)
+                {
+                    continue;
+                }
+
                 AddEndVertex(pipe, pipe.StartConnector, connectors, cnnToVertex);
                 AddEndVertex(pipe, pipe.EndConnector, connectors, cnnToVertex);
             }
