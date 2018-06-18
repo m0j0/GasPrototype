@@ -182,6 +182,116 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(true, false, false, false, false));
         }
 
+        [Test]
+        public void Test_V1V2V3V4V5V6V8_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve1.CanPassFlow = true;
+            manifold.Valve2.CanPassFlow = true;
+            manifold.Valve3.CanPassFlow = true;
+            manifold.Valve4.CanPassFlow = true;
+            manifold.Valve5.CanPassFlow = true;
+            manifold.Valve6.CanPassFlow = true;
+            manifold.Valve8.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+            
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(true, true, true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(true, true, true, true, true));
+        }
+
+        [Test]
+        public void Test_V1V7_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve1.CanPassFlow = true;
+            manifold.Valve7.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+            
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, false, false));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(false, false, false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(false, false, false, false, false));
+        }
+
+        [Test]
+        public void Test_V1V3V4V8_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve1.CanPassFlow = true;
+            manifold.Valve3.CanPassFlow = true;
+            manifold.Valve4.CanPassFlow = true;
+            manifold.Valve8.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+            
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, true, true, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(true, true, true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true, false, false));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(true, true, true, true, true));
+        }
+
+        [Test]
+        public void Test_V1V3V5V6V8_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve1.CanPassFlow = true;
+            manifold.Valve3.CanPassFlow = true;
+            manifold.Valve5.CanPassFlow = true;
+            manifold.Valve6.CanPassFlow = true;
+            manifold.Valve8.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+            
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, true, true, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(false, false, false, false, true, true, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(false, false, true, true, true));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(true, true, true, true, true));
+        }
+
         #endregion
     }
 }
