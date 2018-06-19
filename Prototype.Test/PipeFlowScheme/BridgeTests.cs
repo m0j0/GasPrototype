@@ -113,7 +113,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.UpdateGraph();
 
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(false, false, false, false, false));
-            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(false, false, false));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
             Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, true, true, true, true));
@@ -130,7 +130,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.UpdateGraph();
 
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
-            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(false, false, false, false, false));
             Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, false, false, false));
@@ -164,7 +164,7 @@ namespace Prototype.Test.PipeFlowScheme
             var lin = typeof(LineSegment);
             var brg = typeof(BridgeSegment);
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentTypes(cnn, lin, cnn, lin, cnn));
-            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentTypes(cnn, lin, lin, lin, cnn));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentTypes(cnn, lin, cnn));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentTypes(cnn, lin, cnn, lin, cnn));
             Assert.IsTrue(manifold.Pipe4.PipeHasSegmentTypes(cnn, lin, cnn, lin, cnn));
             Assert.IsTrue(manifold.Pipe5.PipeHasSegmentTypes(cnn, lin, brg, lin, cnn));

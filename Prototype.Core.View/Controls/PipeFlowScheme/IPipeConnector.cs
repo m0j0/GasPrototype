@@ -15,47 +15,35 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class BridgePipeConnector : IPipeConnector
     {
-        public BridgePipeConnector(Rect rect, GraphPipe pipe1, GraphPipe pipe2)
+        public BridgePipeConnector(Rect rect, GraphPipe pipe)
         {
-            if (pipe1 == null || pipe2 == null)
+            if (pipe == null)
             {
                 throw new Exception("!!!");
             }
 
             Rect = rect;
-            Pipe1 = pipe1;
-            Pipe2 = pipe2;
-            pipe1.AddConnector(this);
-            pipe2.AddConnector(this);
+            Pipe = pipe;
+            pipe.AddConnector(this);
         }
 
         public Rect Rect { get; }
 
-        public GraphPipe Pipe1 { get; }
-
-        public GraphPipe Pipe2 { get; }
+        public GraphPipe Pipe { get; }
 
         public IPipeSegment CreateSegment(GraphPipe pipe)
         {
-            if (pipe == Pipe1)
+            if (pipe != Pipe)
             {
-                return new BridgeSegment(
-                    new Point(
-                        Rect.Left - pipe.Rect.Left - Common.GetBridgeHorizontalConnectorOffset(pipe.Orientation),
-                        Rect.Top - pipe.Rect.Top - Common.GetBridgeVerticalConnectorOffset(pipe.Orientation)),
-                    pipe.Orientation
-                );
+                throw new ArgumentException("!!!");
             }
 
-            if (pipe == Pipe2)
-            {
-                return new LineSegment(
-                    new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
-                    pipe.Orientation == Orientation.Horizontal ? Rect.Right - Rect.Left : Rect.Bottom - Rect.Top,
-                    pipe.Orientation);
-            }
-
-            throw new ArgumentException("!!!");
+            return new BridgeSegment(
+                new Point(
+                    Rect.Left - pipe.Rect.Left - Common.GetBridgeHorizontalConnectorOffset(pipe.Orientation),
+                    Rect.Top - pipe.Rect.Top - Common.GetBridgeVerticalConnectorOffset(pipe.Orientation)),
+                pipe.Orientation
+            );
         }
 
         public override string ToString()
@@ -68,10 +56,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         private readonly GraphPipe[] _pipes;
 
-        public PipeConnector(Rect rect)
+        public PipeConnector(Rect rect, params GraphPipe[] pipes)
         {
             Rect = rect;
             _pipes = new GraphPipe[4];
+
+            foreach (var pipe in pipes)
+            {
+                AddPipe(pipe);
+            }
         }
 
         public Rect Rect { get; }

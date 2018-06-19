@@ -81,14 +81,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             continue;
                         }
 
-                        int pipe1Index = pipes.IndexOf(pipe1);
-                        int pipe2Index = pipes.IndexOf(pipe2);
-
-                        var bridgeConnector = new BridgePipeConnector(intersectionRect,
-                            pipe1Index > pipe2Index ? pipe1 : pipe2,
-                            pipe1Index > pipe2Index ? pipe2 : pipe1);
+                        var bridgeConnector = new BridgePipeConnector(intersectionRect, pipe2);
                         connectors.Add(bridgeConnector);
                         cnnToVertex[bridgeConnector] = new Vertex(bridgeConnector);
+
                         continue;
                     }
                     
