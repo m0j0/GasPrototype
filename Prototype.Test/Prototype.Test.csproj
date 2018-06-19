@@ -52,6 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PipeFlowScheme\BridgeTests.cs" />
     <Compile Include="PipeFlowScheme\Extensions.cs" />
     <Compile Include="PipeFlowScheme\FlowTests2.cs" />
     <Compile Include="PipeFlowScheme\FlowTests1.cs" />
