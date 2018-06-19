@@ -118,6 +118,11 @@ namespace Prototype
         {
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Manifold3Vm>()); }
         }
+
+        public static Manifold4Vm Manifold4Vm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Manifold4Vm>()); }
+        }
         
         public static PipesConnectionsVm PipesConnectionsVm
         {

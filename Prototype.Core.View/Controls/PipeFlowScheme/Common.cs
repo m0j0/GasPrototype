@@ -50,9 +50,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             switch (orientation)
             {
                 case Orientation.Horizontal:
-                    return rect.Height == PipeWidth && rect.Width > 0;
+                    return rect.Height == PipeWidth && rect.Width > 10;
                 case Orientation.Vertical:
-                    return rect.Width == PipeWidth && rect.Height > 0;
+                    return rect.Width == PipeWidth && rect.Height > 10;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null);
             }

@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Prototype.Views.Pipes.Manifold4View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Prototype.Views.Pipes"
+             xmlns:btsp="clr-namespace:Prototype"
+             mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold4Vm}"
+             d:DesignHeight="500" d:DesignWidth="500">
+    <PipeFlowCanvas>
+        <Pipe Canvas.Left="82" Canvas.Top="10" Orientation="Vertical" Height="261" Type="Source" />
+        <Pipe Canvas.Left="82" Canvas.Top="266" Width="139" />
+        <Pipe Canvas.Left="216" Canvas.Top="10" Orientation="Vertical" Height="261" Type="Destination" />
+        <Pipe Canvas.Left="151" Canvas.Top="56" Orientation="Vertical" Type="Source" Height="105" />
+        <Pipe Canvas.Left="151" Canvas.Top="156" Orientation="Vertical" Height="150" Type="Destination" />
+
+        <Valve Canvas.Left="66" Canvas.Top="86" Orientation="Vertical" ValveVm="{Binding ValveVm1}" />
+        <Valve Canvas.Left="200" Canvas.Top="86" Orientation="Vertical" ValveVm="{Binding ValveVm2}" />
+        <Valve Canvas.Left="135" Canvas.Top="136" Orientation="Vertical" ValveVm="{Binding ValveVm3}" />
+    </PipeFlowCanvas>
+</UserControl>

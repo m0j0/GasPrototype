@@ -63,6 +63,7 @@ namespace Prototype.ViewModels
                     new MenuItemModel("Manifold", _screenManager.ShowScreenAsync<ManifoldVm>),
                     new MenuItemModel("Manifold 2", _screenManager.ShowScreenAsync<Manifold2Vm>),
                     new MenuItemModel("Manifold 3", _screenManager.ShowScreenAsync<Manifold3Vm>),
+                    new MenuItemModel("Manifold 4", _screenManager.ShowScreenAsync<Manifold4Vm>),
                     new MenuItemModel("Valve3Way example", _screenManager.ShowScreenAsync<Valve3WayExampleVm>),
                     new MenuItemModel("TieListFrame example VM", _screenManager.ShowScreenAsync<VmExampleVm>),
                     new MenuItemModel("TieListFrame example CB", _screenManager.ShowScreenAsync<CbExampleVm>),
