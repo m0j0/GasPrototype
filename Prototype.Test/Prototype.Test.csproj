@@ -55,7 +55,7 @@
     <Compile Include="PipeFlowScheme\Extensions.cs" />
     <Compile Include="PipeFlowScheme\FlowTests2.cs" />
     <Compile Include="PipeFlowScheme\FlowTests1.cs" />
-    <Compile Include="PipeFlowScheme\Manifold2Test.cs" />
+    <Compile Include="PipeFlowScheme\ManifoldTest.cs" />
     <Compile Include="PipeFlowScheme\Models.cs" />
   </ItemGroup>
   <ItemGroup>

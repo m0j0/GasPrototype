@@ -7,7 +7,7 @@ using Prototype.Core.Controls.PipeFlowScheme;
 namespace Prototype.Test.PipeFlowScheme
 {
     [TestFixture]
-    internal class Manifold2Test : UnitTestBase
+    internal class ManifoldTest : UnitTestBase
     {
         #region Nested types
 
