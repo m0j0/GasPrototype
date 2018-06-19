@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using MugenMvvmToolkit;
 using NUnit.Framework;
 using Prototype.Core.Controls.PipeFlowScheme;
@@ -61,6 +60,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             public TestContainer Container { get; }
             public FlowGraph Graph { get; private set; }
+
             public TestPipe Pipe1 { get; }
             public TestPipe Pipe2 { get; }
             public TestPipe Pipe3 { get; }
@@ -74,6 +74,7 @@ namespace Prototype.Test.PipeFlowScheme
             public TestPipe Pipe11 { get; }
             public TestPipe Pipe12 { get; }
             public TestPipe Pipe13 { get; }
+
             public TestValve Valve1 { get; }
             public TestValve Valve2 { get; }
             public TestValve Valve3 { get; }
@@ -166,7 +167,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve7.CanPassFlow = true;
 
             manifold.UpdateGraph();
-            
+
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
@@ -196,7 +197,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve8.CanPassFlow = true;
 
             manifold.UpdateGraph();
-            
+
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
@@ -221,7 +222,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve7.CanPassFlow = true;
 
             manifold.UpdateGraph();
-            
+
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, false, false));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
@@ -248,7 +249,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve8.CanPassFlow = true;
 
             manifold.UpdateGraph();
-            
+
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
@@ -276,7 +277,7 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve8.CanPassFlow = true;
 
             manifold.UpdateGraph();
-            
+
             Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));

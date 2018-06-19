@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using MugenMvvmToolkit;
 using NUnit.Framework;
@@ -116,7 +112,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             foreach (var pipe in manifold.GetPipes())
             {
-                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, false));
+                Assert.IsTrue(pipe.PipeSegmentsFlowHasValue(false));
             }
         }
 
@@ -131,7 +127,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             foreach (var pipe in manifold.GetPipes())
             {
-                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, true));
+                Assert.IsTrue(pipe.PipeSegmentsFlowHasValue(true));
             }
         }
 
@@ -144,16 +140,16 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve2.CanPassFlow = false;
             manifold.UpdateGraph();
 
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe1, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe2, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe3, true, true, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe4, true, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe5, true, true, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe6, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe7, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe8, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe9, true, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe10, true, true, true));
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
         }
 
         [Test]
@@ -165,16 +161,16 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve2.CanPassFlow = true;
             manifold.UpdateGraph();
 
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe1, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe2, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe3, true, true, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe4, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe5, true, false, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe6, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe7, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe8, false, false, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe9, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe10, true, true, true));
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(false, false, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
         }
 
         [Test]
@@ -185,7 +181,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             foreach (var pipe in manifold.GetPipes())
             {
-                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, false));
+                Assert.IsTrue(pipe.PipeSegmentsFlowHasValue(false));
             }
         }
 
@@ -201,7 +197,7 @@ namespace Prototype.Test.PipeFlowScheme
 
             foreach (var pipe in manifold.GetPipes())
             {
-                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, true));
+                Assert.IsTrue(pipe.PipeSegmentsFlowHasValue(true));
             }
         }
 
@@ -215,16 +211,16 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve2.CanPassFlow = false;
             manifold.UpdateGraph();
 
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe1, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe2, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe3, true, true, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe4, true, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe5, true, true, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe6, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe7, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe8, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe9, true, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe10, true, true, true));
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
         }
 
         [Test]
@@ -237,16 +233,16 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve2.CanPassFlow = true;
             manifold.UpdateGraph();
 
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe1, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe2, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe3, true, true, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe4, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe5, true, false, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe6, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe7, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe8, false, false, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe9, true, true, true));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe10, true, true, true));
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(false, false, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
         }
 
         [Test]
@@ -256,16 +252,16 @@ namespace Prototype.Test.PipeFlowScheme
 
             var cnn = typeof(ConnectorSegment);
             var line = typeof(LineSegment);
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe1, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe2, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe3, cnn, line, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe4, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe5, cnn, line, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe6, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe7, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe8, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe9, cnn, line, cnn));
-            Assert.IsTrue(Extensions.PipeHasSegmentTypes(manifold.Pipe10, cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentTypes(cnn, line, cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentTypes(cnn, line, cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentTypes(cnn, line, cnn));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentTypes(cnn, line, cnn));
         }
 
         [Test]
@@ -273,17 +269,17 @@ namespace Prototype.Test.PipeFlowScheme
         {
             var manifold = new Manifold();
             manifold.HideRightPath();
-            
-            Assert.IsTrue(Extensions.PipeHasSegments(manifold.Pipe1, 3));
-            Assert.IsTrue(Extensions.PipeHasSegments(manifold.Pipe2, 3));
-            Assert.IsTrue(Extensions.PipeHasSegments(manifold.Pipe3, 5));
-            Assert.IsTrue(Extensions.PipeDoesNotHaveSegments(manifold.Pipe4));
-            Assert.IsTrue(Extensions.PipeHasSegments(manifold.Pipe5, 5));
-            Assert.IsTrue(Extensions.PipeDoesNotHaveSegments(manifold.Pipe6));
-            Assert.IsTrue(Extensions.PipeDoesNotHaveSegments(manifold.Pipe7));
-            Assert.IsTrue(Extensions.PipeHasSegments(manifold.Pipe8, 3));
-            Assert.IsTrue(Extensions.PipeDoesNotHaveSegments(manifold.Pipe9));
-            Assert.IsTrue(Extensions.PipeHasSegments(manifold.Pipe10, 3));
+
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegments(3));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegments(3));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegments(5));
+            Assert.IsTrue(manifold.Pipe4.PipeDoesNotHaveSegments());
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegments(5));
+            Assert.IsTrue(manifold.Pipe6.PipeDoesNotHaveSegments());
+            Assert.IsTrue(manifold.Pipe7.PipeDoesNotHaveSegments());
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegments(3));
+            Assert.IsTrue(manifold.Pipe9.PipeDoesNotHaveSegments());
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegments(3));
         }
 
         [Test]
@@ -294,16 +290,16 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve2.CanPassFlow = true;
             manifold.HideRightPath();
 
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe1, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe2, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe3, false, false, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe4));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe5, false, false, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe6));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe7));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe8, false, false, false));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe9));
-            Assert.IsTrue(Extensions.PipeHasSegmentFlow(manifold.Pipe10, false, false, false));
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow());
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow());
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow());
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow());
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(false, false, false));
         }
 
         [Test]
@@ -314,16 +310,16 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Pipe9.IsVisible = false;
             manifold.UpdateGraph();
 
-            Assert.IsTrue(Extensions.PipeIsNotFailed(manifold.Pipe1));
-            Assert.IsTrue(Extensions.PipeIsNotFailed(manifold.Pipe2));
-            Assert.IsTrue(Extensions.PipeIsNotFailed(manifold.Pipe3));
-            Assert.IsTrue(Extensions.PipeIsFailed(manifold.Pipe4, FailType.DeadPath));
-            Assert.IsTrue(Extensions.PipeIsNotFailed(manifold.Pipe5));
-            Assert.IsTrue(Extensions.PipeIsFailed(manifold.Pipe6, FailType.DeadPath));
-            Assert.IsTrue(Extensions.PipeIsEmpty(manifold.Pipe7));
-            Assert.IsTrue(Extensions.PipeIsNotFailed(manifold.Pipe8));
-            Assert.IsTrue(Extensions.PipeIsEmpty(manifold.Pipe9));
-            Assert.IsTrue(Extensions.PipeIsNotFailed(manifold.Pipe10));
+            Assert.IsTrue(manifold.Pipe1.PipeIsNotFailed());
+            Assert.IsTrue(manifold.Pipe2.PipeIsNotFailed());
+            Assert.IsTrue(manifold.Pipe3.PipeIsNotFailed());
+            Assert.IsTrue(manifold.Pipe4.PipeIsFailed(FailType.DeadPath));
+            Assert.IsTrue(manifold.Pipe5.PipeIsNotFailed());
+            Assert.IsTrue(manifold.Pipe6.PipeIsFailed(FailType.DeadPath));
+            Assert.IsTrue(manifold.Pipe7.PipeIsEmpty());
+            Assert.IsTrue(manifold.Pipe8.PipeIsNotFailed());
+            Assert.IsTrue(manifold.Pipe9.PipeIsEmpty());
+            Assert.IsTrue(manifold.Pipe10.PipeIsNotFailed());
         }
 
         #endregion

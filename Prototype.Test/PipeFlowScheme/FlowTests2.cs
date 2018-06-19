@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using MugenMvvmToolkit;
 using NUnit.Framework;
 using Prototype.Core.Controls.PipeFlowScheme;
@@ -28,28 +27,28 @@ namespace Prototype.Test.PipeFlowScheme
             {
                 Container = new TestContainer();
 
-                Container.Add(Pipe1 = new TestPipe(Container) { Left = 206, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe2 = new TestPipe(Container) { Left = 206, Top = 131, Width = 75 });
-                Container.Add(Pipe3 = new TestPipe(Container) { Left = 276, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe4 = new TestPipe(Container) { Left = 276, Top = 131, Width = 77 });
-                Container.Add(Pipe5 = new TestPipe(Container) { Left = 348, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe6 = new TestPipe(Container) { Left = 348, Top = 131, Width = 77 });
-                Container.Add(Pipe7 = new TestPipe(Container) { Left = 420, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe8 = new TestPipe(Container) { Left = 420, Top = 131, Width = 76 });
-                Container.Add(Pipe9 = new TestPipe(Container) { Left = 491, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe10 = new TestPipe(Container) { Left = 491, Top = 131, Width = 77 });
-                Container.Add(Pipe11 = new TestPipe(Container) { Left = 563, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe12 = new TestPipe(Container) { Left = 563, Top = 131, Width = 77 });
-                Container.Add(Pipe13 = new TestPipe(Container) { Left = 635, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source });
-                Container.Add(Pipe14 = new TestPipe(Container) { Left = 348, Top = 131, Orientation = Orientation.Vertical, Type = PipeType.Destination });
+                Container.Add(Pipe1 = new TestPipe(Container) {Left = 206, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe2 = new TestPipe(Container) {Left = 206, Top = 131, Width = 75});
+                Container.Add(Pipe3 = new TestPipe(Container) {Left = 276, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe4 = new TestPipe(Container) {Left = 276, Top = 131, Width = 77});
+                Container.Add(Pipe5 = new TestPipe(Container) {Left = 348, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe6 = new TestPipe(Container) {Left = 348, Top = 131, Width = 77});
+                Container.Add(Pipe7 = new TestPipe(Container) {Left = 420, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe8 = new TestPipe(Container) {Left = 420, Top = 131, Width = 76});
+                Container.Add(Pipe9 = new TestPipe(Container) {Left = 491, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe10 = new TestPipe(Container) {Left = 491, Top = 131, Width = 77});
+                Container.Add(Pipe11 = new TestPipe(Container) {Left = 563, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe12 = new TestPipe(Container) {Left = 563, Top = 131, Width = 77});
+                Container.Add(Pipe13 = new TestPipe(Container) {Left = 635, Top = 14, Orientation = Orientation.Vertical, Height = 122, Type = PipeType.Source});
+                Container.Add(Pipe14 = new TestPipe(Container) {Left = 348, Top = 131, Orientation = Orientation.Vertical, Type = PipeType.Destination});
 
-                Container.Add(Valve1 = new TestValve(Container) { Left = 190, Top = 71, Orientation = Orientation.Vertical });
-                Container.Add(Valve2 = new TestValve(Container) { Left = 260, Top = 71, Orientation = Orientation.Vertical });
-                Container.Add(Valve3 = new TestValve(Container) { Left = 332, Top = 71, Orientation = Orientation.Vertical });
-                Container.Add(Valve4 = new TestValve(Container) { Left = 404, Top = 71, Orientation = Orientation.Vertical });
-                Container.Add(Valve5 = new TestValve(Container) { Left = 475, Top = 71, Orientation = Orientation.Vertical });
-                Container.Add(Valve6 = new TestValve(Container) { Left = 547, Top = 71, Orientation = Orientation.Vertical });
-                Container.Add(Valve7 = new TestValve(Container) { Left = 619, Top = 71, Orientation = Orientation.Vertical });
+                Container.Add(Valve1 = new TestValve(Container) {Left = 190, Top = 71, Orientation = Orientation.Vertical});
+                Container.Add(Valve2 = new TestValve(Container) {Left = 260, Top = 71, Orientation = Orientation.Vertical});
+                Container.Add(Valve3 = new TestValve(Container) {Left = 332, Top = 71, Orientation = Orientation.Vertical});
+                Container.Add(Valve4 = new TestValve(Container) {Left = 404, Top = 71, Orientation = Orientation.Vertical});
+                Container.Add(Valve5 = new TestValve(Container) {Left = 475, Top = 71, Orientation = Orientation.Vertical});
+                Container.Add(Valve6 = new TestValve(Container) {Left = 547, Top = 71, Orientation = Orientation.Vertical});
+                Container.Add(Valve7 = new TestValve(Container) {Left = 619, Top = 71, Orientation = Orientation.Vertical});
 
                 UpdateGraph();
             }
@@ -120,11 +119,12 @@ namespace Prototype.Test.PipeFlowScheme
             {
                 valve.CanPassFlow = true;
             }
+
             manifold.UpdateGraph();
 
             foreach (var pipe in manifold.Container.GetPipes())
             {
-                Assert.IsTrue(Extensions.PipeSegmentsFlowHasValue(pipe, true));
+                Assert.IsTrue(pipe.PipeSegmentsFlowHasValue(true));
             }
         }
 
@@ -152,6 +152,83 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
             Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(true, true, true, true, true));
             Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe14.PipeHasSegmentFlow(true, true, true));
+        }
+
+        [Test]
+        public void Test_V1V7_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve1.CanPassFlow = true;
+            manifold.Valve7.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe14.PipeHasSegmentFlow(true, true, true));
+        }
+
+        [Test]
+        public void Test_V2V6_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve2.CanPassFlow = true;
+            manifold.Valve6.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(false, false, true));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(false, false, false, false, true));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe14.PipeHasSegmentFlow(true, true, true));
+        }
+
+        [Test]
+        public void Test_V3_Open()
+        {
+            var manifold = new Manifold();
+
+            manifold.Valve3.CanPassFlow = true;
+
+            manifold.UpdateGraph();
+
+            Assert.IsTrue(manifold.Pipe1.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe2.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe3.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe4.PipeHasSegmentFlow(false, false, true));
+            Assert.IsTrue(manifold.Pipe5.PipeHasSegmentFlow(true, true, true, true, true));
+            Assert.IsTrue(manifold.Pipe6.PipeHasSegmentFlow(true, false, false));
+            Assert.IsTrue(manifold.Pipe7.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe8.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe9.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe10.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.Pipe11.PipeHasSegmentFlow(false, false, false, false, false));
+            Assert.IsTrue(manifold.Pipe12.PipeHasSegmentFlow(false, false, false));
             Assert.IsTrue(manifold.Pipe13.PipeHasSegmentFlow(false, false, false, false, false));
             Assert.IsTrue(manifold.Pipe14.PipeHasSegmentFlow(true, true, true));
         }
