@@ -322,6 +322,41 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(manifold.Pipe10.PipeIsNotFailed());
         }
 
+        [Test]
+        public void TestSegmentsLength()
+        {
+            var manifold = new Manifold();
+
+            Assert.IsTrue(manifold.Pipe1.PipeSegmentsHasLength(5, 95, 5));
+            Assert.IsTrue(manifold.Pipe2.PipeSegmentsHasLength(5, 95, 5));
+            Assert.IsTrue(manifold.Pipe3.PipeSegmentsHasLength(5, 50, 5, 97, 5));
+            Assert.IsTrue(manifold.Pipe4.PipeSegmentsHasLength(5, 108, 5));
+            Assert.IsTrue(manifold.Pipe5.PipeSegmentsHasLength(5, 61, 5, 79, 5));
+            Assert.IsTrue(manifold.Pipe6.PipeSegmentsHasLength(5, 82, 5));
+            Assert.IsTrue(manifold.Pipe7.PipeSegmentsHasLength(5, 58, 5));
+            Assert.IsTrue(manifold.Pipe8.PipeSegmentsHasLength(5, 100, 5));
+            Assert.IsTrue(manifold.Pipe9.PipeSegmentsHasLength(5, 105, 5));
+            Assert.IsTrue(manifold.Pipe10.PipeSegmentsHasLength(5, 58, 5));
+        }
+
+        [Test]
+        public void TestInvertedSegmentsLength()
+        {
+            var manifold = new Manifold();
+            manifold.InvertSourceDestination();
+
+            Assert.IsTrue(manifold.Pipe1.PipeSegmentsHasLength(5, 95, 5));
+            Assert.IsTrue(manifold.Pipe2.PipeSegmentsHasLength(5, 95, 5));
+            Assert.IsTrue(manifold.Pipe3.PipeSegmentsHasLength(5, 50, 5, 97, 5));
+            Assert.IsTrue(manifold.Pipe4.PipeSegmentsHasLength(5, 108, 5));
+            Assert.IsTrue(manifold.Pipe5.PipeSegmentsHasLength(5, 61, 5, 79, 5));
+            Assert.IsTrue(manifold.Pipe6.PipeSegmentsHasLength(5, 82, 5));
+            Assert.IsTrue(manifold.Pipe7.PipeSegmentsHasLength(5, 58, 5));
+            Assert.IsTrue(manifold.Pipe8.PipeSegmentsHasLength(5, 100, 5));
+            Assert.IsTrue(manifold.Pipe9.PipeSegmentsHasLength(5, 105, 5));
+            Assert.IsTrue(manifold.Pipe10.PipeSegmentsHasLength(5, 58, 5));
+        }
+
         #endregion
     }
 }

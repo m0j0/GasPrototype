@@ -90,5 +90,23 @@ namespace Prototype.Test.PipeFlowScheme
         {
             return pipe.Segments.Count == 0;
         }
+
+        public static bool PipeSegmentsHasLength(this IPipe pipe, params double[] lengths)
+        {
+            if (pipe.Segments.Count != lengths.Length)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < pipe.Segments.Count; i++)
+            {
+                if (pipe.Segments[i].Length != lengths[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
