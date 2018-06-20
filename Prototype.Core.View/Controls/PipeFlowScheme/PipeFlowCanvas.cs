@@ -23,12 +23,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public double GetTop(IFlowControl control)
         {
-            return GetTop((UIElement) control);
+            var top = GetTop((UIElement)control);
+            return double.IsNaN(top) ? 0 : top;
         }
 
         public double GetLeft(IFlowControl control)
         {
-            return GetLeft((UIElement) control);
+            var left = GetLeft((UIElement) control);
+            return double.IsNaN(left) ? 0 : left;
         }
 
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)

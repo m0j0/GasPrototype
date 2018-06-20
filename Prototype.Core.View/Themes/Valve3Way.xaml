@@ -49,7 +49,7 @@
                         <Trigger Property="Rotation" Value="Rotate270">
                             <Setter TargetName="MainControl" Property="LayoutTransform">
                                 <Setter.Value>
-                                    <RotateTransform Angle="90" />
+                                    <RotateTransform Angle="270" />
                                 </Setter.Value>
                             </Setter>
 

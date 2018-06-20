@@ -146,7 +146,7 @@ namespace Prototype.Core.Controls
         private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs args)
         {
-            var valve = (Valve)dependencyObject;
+            var valve = (Valve3Way)dependencyObject;
             var model = args.NewValue as IValveVm;
 
             if (model == null)

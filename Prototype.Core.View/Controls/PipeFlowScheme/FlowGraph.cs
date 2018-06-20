@@ -140,7 +140,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             continue;
                         }
 
-                        var vertex = (Vertex)cnnToVertex[pipeConnector];
+                        var vertex = cnnToVertex[pipeConnector] as Vertex;
+                        if (vertex == null)
+                        {
+                            continue; // TODO !! !!
+                        }
                         if (vertex.Valve != null)
                         {
                             throw new InvalidOperationException();

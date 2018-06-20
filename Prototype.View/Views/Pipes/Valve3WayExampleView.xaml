@@ -6,12 +6,27 @@
              xmlns:local="clr-namespace:Prototype.Views.Pipes"
              xmlns:btsr="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static btsr:DesignBootstrapper.Valve3WayExampleVm}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <PipeFlowCanvas>
-        <Valve3Way Canvas.Left="20" Canvas.Top="38" />
-        <Valve3Way Canvas.Left="120" Canvas.Top="38" Rotation="Rotate90" />
-        <Valve3Way Canvas.Left="220" Canvas.Top="38" Rotation="Rotate180" />
-        <Valve3Way Canvas.Left="320" Canvas.Top="38" Rotation="Rotate270" />
+        <Pipe Canvas.Top="57" Width="44" Type="Destination" />
+        <Pipe Canvas.Left="39" Canvas.Top="21" Height="41" Orientation="Vertical" Type="Destination" />
+        <Pipe Canvas.Left="39" Canvas.Top="57" Height="39" Orientation="Vertical" Type="Source" />
+        <Valve3Way Canvas.Left="20" Canvas.Top="38" ValveVm="{Binding ValveVm1}" />
+
+        <Pipe Canvas.Left="97" Canvas.Top="57" Width="47" Type="Source" />
+        <Pipe Canvas.Left="139" Canvas.Top="57" Width="46" Type="Destination" />
+        <Pipe Canvas.Left="139" Canvas.Top="21" Orientation="Vertical" Height="41" Type="Destination" />
+        <Valve3Way Canvas.Left="120" Canvas.Top="38" Rotation="Rotate90" ValveVm="{Binding ValveVm2}" />
+
+        <Pipe Canvas.Left="236" Canvas.Top="21" Orientation="Vertical" Height="41" Type="Source" />
+        <Pipe Canvas.Left="236" Canvas.Top="57" Orientation="Vertical" Height="41" Type="Destination" />
+        <Pipe Canvas.Left="236" Canvas.Top="57" Width="47" Type="Destination" />
+        <Valve3Way Canvas.Left="220" Canvas.Top="38" Rotation="Rotate180" ValveVm="{Binding ValveVm3}" />
+
+        <Valve3Way Canvas.Left="340" Canvas.Top="41" Rotation="Rotate270" ValveVm="{Binding ValveVm4}" />
+        <Pipe Canvas.Left="358" Canvas.Top="57" Width="62" Type="Source" />
+        <Pipe Canvas.Left="320" Canvas.Top="57" Width="43" Type="Destination" />
+        <Pipe Canvas.Left="358" Canvas.Top="57" Orientation="Vertical" Height="41" Type="Destination" />
 
     </PipeFlowCanvas>
 </UserControl>
