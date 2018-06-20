@@ -56,6 +56,9 @@ namespace Prototype.Core.Controls
             "ValveVm", typeof(IValveVm), typeof(Valve3Way),
             new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
 
+        public static readonly DependencyProperty UseAuxiliaryPathWhenOpenedProperty = DependencyProperty.Register(
+            "UseAuxiliaryPathWhenOpened", typeof(bool), typeof(Valve3Way), new PropertyMetadata(default(bool)));
+
         #endregion
 
         #region Events
@@ -93,6 +96,12 @@ namespace Prototype.Core.Controls
         {
             get { return (IValveVm)GetValue(ValveModelProperty); }
             set { SetValue(ValveModelProperty, value); }
+        }
+
+        public bool UseAuxiliaryPathWhenOpened
+        {
+            get { return (bool) GetValue(UseAuxiliaryPathWhenOpenedProperty); }
+            set { SetValue(UseAuxiliaryPathWhenOpenedProperty, value); }
         }
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;

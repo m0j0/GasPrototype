@@ -11,10 +11,10 @@ namespace Prototype.ViewModels.Pipes
         {
             ValveVm1 = new ValveVm("Valve1") { State = ValveState.Opened };
             ValveVm2 = new ValveVm("Valve2") { State = ValveState.Opened };
-            ValveVm3 = new ValveVm("Valve3") { State = ValveState.Opened };
-            ValveVm4 = new ValveVm("Valve4") { State = ValveState.Opened };
-            ValveVm5 = new ValveVm("Valve5") { State = ValveState.Closed };
-            ValveVm6 = new ValveVm("Valve6") { State = ValveState.Closed };
+            ValveVm3 = new ValveVm("Valve3") { State = ValveState.Closed };
+            ValveVm4 = new ValveVm("Valve4") { State = ValveState.Closed };
+            ValveVm5 = new ValveVm("Valve5") { State = ValveState.Opened };
+            ValveVm6 = new ValveVm("Valve6") { State = ValveState.Opened };
             ValveVm7 = new ValveVm("Valve7") { State = ValveState.Closed };
             ValveVm8 = new ValveVm("Valve8") { State = ValveState.Closed };
         }
