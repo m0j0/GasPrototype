@@ -37,7 +37,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     public interface IValve : IFlowControl
     {
-        bool CanPassFlow(IPipeSegment startPipeSegment, IPipeSegment endPipeSegment);
+        bool CanPassFlow(IPipeSegment pipeSegment);
 
         event EventHandler StateChanged;
     }

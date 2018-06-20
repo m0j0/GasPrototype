@@ -21,10 +21,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal abstract class VertexBase : IVertex
     {
+        protected readonly FlowGraph Graph;
         protected readonly List<IVertex> AdjacentVertices = new List<IVertex>();
 
-        protected VertexBase(IPipeConnector connector)
+        protected VertexBase(FlowGraph graph, IPipeConnector connector)
         {
+            Graph = graph;
             Connector = connector;
             PipeSegments = new List<IPipeSegment>();
         }
@@ -56,21 +58,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class SourceVertex : VertexBase
     {
-        public SourceVertex(IPipeConnector connector) : base(connector)
+        public SourceVertex(FlowGraph graph, IPipeConnector connector) : base(graph, connector)
         {
         }
     }
 
     internal class DestinationVertex : VertexBase
     {
-        public DestinationVertex(IPipeConnector connector) : base(connector)
+        public DestinationVertex(FlowGraph graph, IPipeConnector connector) : base(graph, connector)
         {
         }
     }
 
     internal class Vertex : VertexBase
     {
-        public Vertex(IPipeConnector connector) : base(connector)
+        public Vertex(FlowGraph graph, IPipeConnector connector) : base(graph, connector)
         {
         }
 
@@ -78,12 +80,19 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public override IEnumerable<IVertex> GetAdjacentVertices()
         {
-            if (Valve != null && !Valve.CanPassFlow(null, null))
+            foreach (var adjacentVertex in AdjacentVertices)
             {
-                return Enumerable.Empty<IVertex>();
-            }
+                var edge = Graph.FindEdge(this, adjacentVertex);
+                if (edge?.PipeSegment == null)
+                {
+                    throw new InvalidOperationException();
+                }
 
-            return base.GetAdjacentVertices();
+                if (Valve == null || Valve.CanPassFlow(edge.PipeSegment))
+                {
+                    yield return adjacentVertex;
+                }
+            }
         }
 
         public override string ToString()

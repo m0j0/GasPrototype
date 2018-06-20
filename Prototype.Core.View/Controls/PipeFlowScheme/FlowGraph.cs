@@ -83,7 +83,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                         var bridgeConnector = new BridgePipeConnector(intersectionRect, pipe2);
                         connectors.Add(bridgeConnector);
-                        cnnToVertex[bridgeConnector] = new Vertex(bridgeConnector);
+                        cnnToVertex[bridgeConnector] = new Vertex(this, bridgeConnector);
 
                         continue;
                     }
@@ -95,7 +95,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     if (existingConnector == null)
                     {
                         connectors.Add(connector);
-                        cnnToVertex[connector] = new Vertex(connector);
+                        cnnToVertex[connector] = new Vertex(this, connector);
                     }
                 }
 
@@ -171,7 +171,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     var connector = new PipeConnector(intersectionRect);
                     connector.AddPipe(pipe);
-                    cnnToVertex[connector] = new Vertex(connector) {Valve = valve.Valve};
+                    cnnToVertex[connector] = new Vertex(this, connector) {Valve = valve.Valve};
                 }
             }
 
@@ -286,13 +286,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             switch (pipe.Direction)
             {
                 case PipeDirection.None:
-                    vertex = new Vertex(connector);
+                    vertex = new Vertex(this, connector);
                     break;
                 case PipeDirection.Forward:
-                    vertex = isStartVertex ? (IVertex) new SourceVertex(connector) : new DestinationVertex(connector);
+                    vertex = isStartVertex ? (IVertex) new SourceVertex(this, connector) : new DestinationVertex(this, connector);
                     break;
                 case PipeDirection.Backward:
-                    vertex = isStartVertex ? new DestinationVertex(connector) : (IVertex)new SourceVertex(connector);
+                    vertex = isStartVertex ? new DestinationVertex(this, connector) : (IVertex)new SourceVertex(this, connector);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -391,6 +391,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     }
                 }
             }
+        }
+
+        public Edge FindEdge(IVertex startVertex, IVertex endVertex)
+        {
+            return _edges.Single(e => e.Equals(startVertex, endVertex));
         }
     }
 }

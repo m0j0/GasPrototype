@@ -242,7 +242,7 @@ namespace Prototype.ViewModels
                 return;
             }
 
-            _screenManager.ShowScreenAsync<Manifold2Vm>();
+            _screenManager.ShowScreenAsync<Valve3WayExampleVm>();
         }
 
         Task<bool> INavigableViewModel.OnNavigatingFromAsync(INavigationContext context)

@@ -186,7 +186,7 @@ namespace Prototype.Test.PipeFlowScheme
             return _container;
         }
 
-        bool IValve.CanPassFlow(IPipeSegment startPipeSegment, IPipeSegment endPipeSegment)
+        bool IValve.CanPassFlow(IPipeSegment pipeSegment)
         {
             return CanPassFlow;
         }
