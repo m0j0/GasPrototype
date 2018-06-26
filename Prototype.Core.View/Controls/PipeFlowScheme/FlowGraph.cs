@@ -5,11 +5,23 @@ using System.Windows;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    internal class FlowGraph
+    public interface IFlowGraph
+    {
+        IPipe FindPipe(IPipeSegment segment);
+
+        Rect GetAbsoluteRect(IPipe pipe);
+
+        Rect GetAbsoluteRect(IValve valve);
+    }
+
+    internal class FlowGraph : IFlowGraph
     {
         private bool _isSchemeFailed;
         private IReadOnlyCollection<IVertex> _vertices;
         private IReadOnlyCollection<Edge> _edges;
+
+        private IReadOnlyCollection<GraphPipe> _pipes;
+        private IReadOnlyCollection<GraphValve> _valves;
 
         public FlowGraph(ISchemeContainer container, IEnumerable<IPipe> pipes,
             IEnumerable<IValve> valves)
@@ -17,6 +29,29 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             SplitPipesToSegments(container, pipes, valves);
             
             InvalidateFlow();
+        }
+
+        public IPipe FindPipe(IPipeSegment segment)
+        {
+            foreach (var pipe in _pipes)
+            {
+                if (pipe.Pipe.Segments.Contains(segment))
+                {
+                    return pipe.Pipe;
+                }
+            }
+
+            return null;
+        }
+
+        public Rect GetAbsoluteRect(IPipe pipe)
+        {
+            return _pipes.Single(p => p.Pipe == pipe).Rect;
+        }
+
+        public Rect GetAbsoluteRect(IValve valve)
+        {
+            return _valves.Single(v => v.Valve == valve).Rect;
         }
 
         private void SplitPipesToSegments(ISchemeContainer container, IEnumerable<IPipe> pipeControls,
@@ -34,6 +69,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 pipes.Add(new GraphPipe(container, pipeControl));
             }
             var valves = valveControls.Where(v => v.IsVisible).Select(v => new GraphValve(container, v)).ToArray();
+
+            _pipes = pipes.ToArray();
+            _valves = valves.ToArray();
 
             var connectors = new List<IPipeConnector>();
             var cnnToVertex = new Dictionary<IPipeConnector, IVertex>();

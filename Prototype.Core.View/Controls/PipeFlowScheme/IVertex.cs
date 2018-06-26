@@ -88,7 +88,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     throw new InvalidOperationException();
                 }
 
-                if (Valve == null || Valve.CanPassFlow(edge.PipeSegment))
+                if (Valve == null || Valve.CanPassFlow(Graph, edge.PipeSegment))
                 {
                     yield return adjacentVertex;
                 }

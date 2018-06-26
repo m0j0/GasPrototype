@@ -72,7 +72,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #region Properties
 
-        private IPipe Pipe { get; }
+        public IPipe Pipe { get; }
 
         public Rect Rect { get; }
 
