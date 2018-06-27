@@ -11,7 +11,7 @@ namespace Prototype.ViewModels.Pipes
     {
         public PipesExampleVm()
         {
-            OpenValve = new ValveVm {State = ValveState.Opened};
+            OpenValve = new ValveVm {State = ValveState.Open};
             ClosedValve = new ValveVm {State = ValveState.Closed};
             NotPresentedValve = new ValveVm {IsPresent = false};
         }

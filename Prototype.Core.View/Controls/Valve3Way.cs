@@ -115,7 +115,7 @@ namespace Prototype.Core.Controls
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 
-        bool IValve3Way.IsOpen => State == ValveState.Opened;
+        bool IValve3Way.IsOpen => State == ValveState.Open;
 
         #endregion
 

@@ -9,7 +9,7 @@ namespace Prototype.ViewModels.Pipes
     {
         public Manifold4Vm()
         {
-            ValveVm1 = new ValveVm("Valve1") { State = ValveState.Opened };
+            ValveVm1 = new ValveVm("Valve1") { State = ValveState.Open };
             ValveVm2 = new ValveVm("Valve2") { State = ValveState.Closed };
             ValveVm3 = new ValveVm("Valve3") { State = ValveState.Closed };
         }

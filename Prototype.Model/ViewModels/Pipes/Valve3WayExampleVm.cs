@@ -9,7 +9,7 @@ namespace Prototype.ViewModels.Pipes
     {
         public Valve3WayExampleVm()
         {
-            OpenValveVm = new ValveVm("OpenValve") { State = ValveState.Opened };
+            OpenValveVm = new ValveVm("OpenValve") { State = ValveState.Open };
             ClosedValveVm = new ValveVm("ClosedValve") { State = ValveState.Closed };
         }
 

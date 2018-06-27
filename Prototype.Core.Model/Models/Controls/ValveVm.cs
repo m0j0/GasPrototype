@@ -43,12 +43,12 @@ namespace Prototype.Core.Models.GasPanel
 
         private void Open()
         {
-            State = ValveState.Opened;
+            State = ValveState.Open;
         }
 
         private bool CanOpen()
         {
-            return State != ValveState.Opened;
+            return State != ValveState.Open;
         }
 
         public ICommand CloseCommand { get; }

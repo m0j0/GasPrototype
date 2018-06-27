@@ -106,7 +106,7 @@ namespace Prototype.Core.Controls
 
         public bool CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {
-            return State == ValveState.Opened;
+            return State == ValveState.Open;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

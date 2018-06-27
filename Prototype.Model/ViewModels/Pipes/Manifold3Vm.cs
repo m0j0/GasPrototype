@@ -11,13 +11,13 @@ namespace Prototype.ViewModels.Pipes
 
         public Manifold3Vm()
         {
-            ValveFinal1Vm = new ValveVm("ValveFinal1") {State = ValveState.Opened};
-            ValveFinal2Vm = new ValveVm("ValveFinal2") {State = ValveState.Opened};
-            ValveFinal3Vm = new ValveVm("ValveFinal3") {State = ValveState.Opened};
-            ValveFinal4Vm = new ValveVm("ValveFinal4") {State = ValveState.Opened};
-            ValveFinal5Vm = new ValveVm("ValveFinal5") {State = ValveState.Opened};
-            ValveFinal6Vm = new ValveVm("ValveFinal6") {State = ValveState.Opened};
-            ValveFinal7Vm = new ValveVm("ValveFinal7") {State = ValveState.Opened};
+            ValveFinal1Vm = new ValveVm("ValveFinal1") {State = ValveState.Open};
+            ValveFinal2Vm = new ValveVm("ValveFinal2") {State = ValveState.Open};
+            ValveFinal3Vm = new ValveVm("ValveFinal3") {State = ValveState.Open};
+            ValveFinal4Vm = new ValveVm("ValveFinal4") {State = ValveState.Open};
+            ValveFinal5Vm = new ValveVm("ValveFinal5") {State = ValveState.Open};
+            ValveFinal6Vm = new ValveVm("ValveFinal6") {State = ValveState.Open};
+            ValveFinal7Vm = new ValveVm("ValveFinal7") {State = ValveState.Open};
             
             N2BottomPurgeValveVm = new ValveVm("N2BottomPurge") {State = ValveState.Closed};
 

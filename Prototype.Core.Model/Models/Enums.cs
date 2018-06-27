@@ -4,7 +4,7 @@
     {
         Unknown = 0,
         Closed = 1,
-        Opened = 2
+        Open = 2
     }
 
 }

@@ -8,7 +8,7 @@
         <ResourceDictionary Source="Button.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <models:ValveState x:Key="ValveStateOpened">Opened</models:ValveState>
+    <models:ValveState x:Key="ValveStateOpened">Open</models:ValveState>
     <models:ValveState x:Key="ValveStateClosed">Closed</models:ValveState>
     <models:ValveState x:Key="ValveStateUnknown">Unknown</models:ValveState>
 

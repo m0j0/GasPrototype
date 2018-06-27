@@ -23,7 +23,7 @@ namespace Prototype.ViewModels.Pipes
             {
                 _valves[i] = new ValveVm
                 {
-                    State = random.Next() % 2 == 0 ? ValveState.Opened : ValveState.Closed,
+                    State = random.Next() % 2 == 0 ? ValveState.Open : ValveState.Closed,
                     IsPresent = random.Next() % 10 != 0
                 };
             }

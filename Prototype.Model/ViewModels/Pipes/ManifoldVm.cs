@@ -9,14 +9,14 @@ namespace Prototype.ViewModels.Pipes
     {
         public ManifoldVm()
         {
-            ValveVm1 = new ValveVm("Valve1") {State = ValveState.Opened};
-            ValveVm2 = new ValveVm("Valve2") {State = ValveState.Opened};
-            ValveVm3 = new ValveVm("Valve3") {State = ValveState.Opened};
-            ValveVm4 = new ValveVm("Valve4") {State = ValveState.Opened};
-            ValveVm5 = new ValveVm("Valve5") {State = ValveState.Opened};
-            ValveVm6 = new ValveVm("Valve6") {State = ValveState.Opened};
-            ValveVm7 = new ValveVm("Valve7") {State = ValveState.Opened};
-            ValveVm8 = new ValveVm("Valve8") {State = ValveState.Opened};
+            ValveVm1 = new ValveVm("Valve1") {State = ValveState.Open};
+            ValveVm2 = new ValveVm("Valve2") {State = ValveState.Open};
+            ValveVm3 = new ValveVm("Valve3") {State = ValveState.Open};
+            ValveVm4 = new ValveVm("Valve4") {State = ValveState.Open};
+            ValveVm5 = new ValveVm("Valve5") {State = ValveState.Open};
+            ValveVm6 = new ValveVm("Valve6") {State = ValveState.Open};
+            ValveVm7 = new ValveVm("Valve7") {State = ValveState.Open};
+            ValveVm8 = new ValveVm("Valve8") {State = ValveState.Open};
         }
 
         public string DisplayName => "Manifold";
