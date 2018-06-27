@@ -57,10 +57,10 @@ namespace Prototype.Core.Controls
             new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
 
         public static readonly DependencyProperty PathWhenOpenedProperty = DependencyProperty.Register(
-            "PathWhenOpened", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath)));
+            "PathWhenOpened", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath), OnStatePropertyChangedCallback));
 
         public static readonly DependencyProperty PathWhenClosedProperty = DependencyProperty.Register(
-            "PathWhenClosed", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath)));
+            "PathWhenClosed", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath), OnStatePropertyChangedCallback));
 
         #endregion
 
