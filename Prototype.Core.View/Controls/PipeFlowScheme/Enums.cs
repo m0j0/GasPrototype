@@ -16,6 +16,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Chemical = 2
     }
 
+    public enum Valve3WayFlowPath
+    {
+        Direct,
+        UpperAuxiliary,
+        LowerAuxiliary
+    }
+
     internal enum PipeDirection
     {
         None,

@@ -11,44 +11,44 @@
         <Pipe Canvas.Left="36" Canvas.Top="21" Height="41" Orientation="Vertical" Type="Source" />
         <Pipe Canvas.Left="36" Canvas.Top="57" Height="41" Orientation="Vertical" Type="Destination" />
         <Pipe Canvas.Left="36" Canvas.Top="57" Width="47" Type="Destination" />
-        <Valve3Way Canvas.Left="20" Canvas.Top="38" ValveVm="{Binding ValveVm1}" />
+        <Valve3Way Canvas.Left="20" Canvas.Top="38" ValveVm="{Binding OpenValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
 
         <Pipe Canvas.Left="139" Canvas.Top="54" Width="39" Type="Source" />
         <Pipe Canvas.Left="101" Canvas.Top="54" Width="43" Type="Destination" />
         <Pipe Canvas.Left="139" Canvas.Top="54" Height="41" Orientation="Vertical" Type="Destination" />
-        <Valve3Way Canvas.Left="120" Canvas.Top="38" Rotation="Rotate90" ValveVm="{Binding ValveVm2}" />
+        <Valve3Way Canvas.Left="120" Canvas.Top="38" Rotation="Rotate90" ValveVm="{Binding OpenValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
 
         <Pipe Canvas.Left="200" Canvas.Top="57" Width="44" Type="Destination"  />
         <Pipe Canvas.Left="239" Canvas.Top="21" Height="41" Orientation="Vertical" Type="Destination" />
         <Pipe Canvas.Left="239" Canvas.Top="57" Height="39" Orientation="Vertical" Type="Source" />
-        <Valve3Way Canvas.Left="220" Canvas.Top="38" Rotation="Rotate180" ValveVm="{Binding ValveVm3}" />
+        <Valve3Way Canvas.Left="220" Canvas.Top="38" Rotation="Rotate180" ValveVm="{Binding OpenValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
 
         <Pipe Canvas.Left="290" Canvas.Top="60" Width="47" Type="Source" />
         <Pipe Canvas.Left="332" Canvas.Top="60" Width="46" Type="Destination" />
         <Pipe Canvas.Left="332" Canvas.Top="24" Height="41" Orientation="Vertical" Type="Destination" />
-        <Valve3Way Canvas.Left="313" Canvas.Top="41" Rotation="Rotate270" ValveVm="{Binding ValveVm4}" />
-
-<!---->
+        <Valve3Way Canvas.Left="313" Canvas.Top="41" Rotation="Rotate270" ValveVm="{Binding OpenValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
         
-        <Pipe Canvas.Left="36" Canvas.Top="121" Height="41" Orientation="Vertical" Type="Source" />
-        <Pipe Canvas.Left="36" Canvas.Top="157" Height="41" Orientation="Vertical" Type="Destination" />
-        <Pipe Canvas.Left="36" Canvas.Top="157" Width="47" Type="Destination" />
-        <Valve3Way Canvas.Left="20" Canvas.Top="138" ValveVm="{Binding ValveVm5}" UseAuxiliaryPathWhenOpened="True" IsPrimaryPathFlowInverted="True" />
+        <Pipe Canvas.Left="436" Canvas.Top="21" Height="41" Orientation="Vertical" Type="Source" />
+        <Pipe Canvas.Left="436" Canvas.Top="57" Height="41" Orientation="Vertical" Type="Destination" />
+        <Pipe Canvas.Left="436" Canvas.Top="57" Width="47" Type="Destination" />
+        <Valve3Way Canvas.Left="420" Canvas.Top="38" ValveVm="{Binding ClosedValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
 
-        <Pipe Canvas.Left="139" Canvas.Top="154" Width="39" Type="Source" />
-        <Pipe Canvas.Left="101" Canvas.Top="154" Width="43" Type="Destination" />
-        <Pipe Canvas.Left="139" Canvas.Top="154" Height="41" Orientation="Vertical" Type="Destination" />
-        <Valve3Way Canvas.Left="120" Canvas.Top="138" Rotation="Rotate90" ValveVm="{Binding ValveVm6}" />
+        <Pipe Canvas.Left="539" Canvas.Top="54" Width="39" Type="Source" />
+        <Pipe Canvas.Left="501" Canvas.Top="54" Width="43" Type="Destination" />
+        <Pipe Canvas.Left="539" Canvas.Top="54" Height="41" Orientation="Vertical" Type="Destination" />
+        <Valve3Way Canvas.Left="520" Canvas.Top="38" Rotation="Rotate90" ValveVm="{Binding ClosedValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
 
-        <Pipe Canvas.Left="200" Canvas.Top="157" Width="44" Type="Destination"  />
-        <Pipe Canvas.Left="239" Canvas.Top="121" Height="41" Orientation="Vertical" Type="Destination" />
-        <Pipe Canvas.Left="239" Canvas.Top="157" Height="39" Orientation="Vertical" Type="Source" />
-        <Valve3Way Canvas.Left="220" Canvas.Top="138" Rotation="Rotate180" ValveVm="{Binding ValveVm7}" />
+        <Pipe Canvas.Left="600" Canvas.Top="57" Width="44" Type="Destination"  />
+        <Pipe Canvas.Left="639" Canvas.Top="21" Height="41" Orientation="Vertical" Type="Destination" />
+        <Pipe Canvas.Left="639" Canvas.Top="57" Height="39" Orientation="Vertical" Type="Source" />
+        <Valve3Way Canvas.Left="620" Canvas.Top="38" Rotation="Rotate180" ValveVm="{Binding ClosedValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
 
-        <Pipe Canvas.Left="290" Canvas.Top="160" Width="47" Type="Source" />
-        <Pipe Canvas.Left="332" Canvas.Top="160" Width="46" Type="Destination" />
-        <Pipe Canvas.Left="332" Canvas.Top="124" Height="41" Orientation="Vertical" Type="Destination" />
-        <Valve3Way Canvas.Left="313" Canvas.Top="141" Rotation="Rotate270" ValveVm="{Binding ValveVm8}" />
+        <Pipe Canvas.Left="690" Canvas.Top="60" Width="47" Type="Source" />
+        <Pipe Canvas.Left="732" Canvas.Top="60" Width="46" Type="Destination" />
+        <Pipe Canvas.Left="732" Canvas.Top="24" Height="41" Orientation="Vertical" Type="Destination" />
+        <Valve3Way Canvas.Left="713" Canvas.Top="41" Rotation="Rotate270" ValveVm="{Binding ClosedValveVm}" PathWhenOpened="Direct" PathWhenClosed="UpperAuxiliary" />
+
+        <!---->
 
     </PipeFlowCanvas>
 </UserControl>

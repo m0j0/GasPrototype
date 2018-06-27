@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -15,86 +12,12 @@ using Prototype.Core.Models;
 
 namespace Prototype.Core.Controls
 {
-    public sealed class Valve3Way : Control, IValve
+    public sealed class Valve3Way : Control, IValve3Way
     {
-        private static class Valve3WayModel
-        {
-            enum StandardPosition
-            {
-                PrimaryUpper,
-                PrimaryLower,
-                Auxiliary
-            }
-
-            private static readonly Dictionary<Rotation, Rect> PrimaryUpperPipeRects;
-            private static readonly Dictionary<Rotation, Rect> PrimaryLowerPipeRects;
-            private static readonly Dictionary<Rotation, Rect> AuxiliaryPipeRects;
-
-            static Valve3WayModel()
-            {
-                PrimaryUpperPipeRects = new Dictionary<Rotation, Rect>
-                {
-                    [Rotation.Rotate0] = new Rect(16, 0, 5, 24),
-                    [Rotation.Rotate90] = new Rect(19, 16, 24, 5),
-                    [Rotation.Rotate180] = new Rect(19, 19, 5, 24),
-                    [Rotation.Rotate270] = new Rect(0, 19, 24, 5)
-                };
-                PrimaryLowerPipeRects = new Dictionary<Rotation, Rect>
-                {
-                    [Rotation.Rotate0] = new Rect(16, 19, 5, 24),
-                    [Rotation.Rotate90] = new Rect(0, 16, 24, 5),
-                    [Rotation.Rotate180] = new Rect(19, 0, 5, 24),
-                    [Rotation.Rotate270] = new Rect(19, 19, 24, 5)
-                };
-                AuxiliaryPipeRects = new Dictionary<Rotation, Rect>
-                {
-                    [Rotation.Rotate0] = new Rect(16, 19, 24, 5),
-                    [Rotation.Rotate90] = new Rect(19, 16, 5, 24),
-                    [Rotation.Rotate180] = new Rect(0, 19, 24, 5),
-                    [Rotation.Rotate270] = new Rect(19, 0, 5, 24)
-                };
-            }
-
-            public static Rect GetPrimaryUpperPipeRect(Rotation rotation)
-            {
-                return PrimaryUpperPipeRects[rotation];
-            }
-
-            public static Rect GetPrimaryLowerPipeRect(Rotation rotation)
-            {
-                return PrimaryLowerPipeRects[rotation];
-            }
-
-            public static Rect GetAuxiliaryPipeRect(Rotation rotation)
-            {
-                return AuxiliaryPipeRects[rotation];
-            }
-
-            public static bool CanPrimaryUpperPipePassFlow(Valve3Way valve)
-            {
-                return true;
-            }
-
-            public static bool CanPrimaryLowerPipePassFlow(Valve3Way valve)
-            {
-                return valve.State == ValveState.Opened;
-            }
-
-            public static bool CanAuxiliaryPipePassFlow(Valve3Way valve)
-            {
-                return valve.State == ValveState.Closed;
-            }
-
-            public static bool IsIntersection(Rect graphPipe, Rect standardRect)
-            {
-                var intersection = Common.FindIntersection(graphPipe, standardRect);
-                return intersection == standardRect;
-            }
-        }
-
         #region Fields
 
         private static readonly EventHandler SizeChangedHandler;
+        private readonly Valve3WayModel _model;
 
         #endregion
 
@@ -102,14 +25,14 @@ namespace Prototype.Core.Controls
 
         static Valve3Way()
         {
-
-
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve3Way), new FrameworkPropertyMetadata(typeof(Valve3Way)));
             SizeChangedHandler = OnSizeChanged;
         }
 
         public Valve3Way()
         {
+            _model = new Valve3WayModel(this);
+
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -133,11 +56,11 @@ namespace Prototype.Core.Controls
             "ValveVm", typeof(IValveVm), typeof(Valve3Way),
             new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
 
-        public static readonly DependencyProperty UseAuxiliaryPathWhenOpenedProperty = DependencyProperty.Register(
-            "UseAuxiliaryPathWhenOpened", typeof(bool), typeof(Valve3Way), new PropertyMetadata(default(bool)));
+        public static readonly DependencyProperty PathWhenOpenedProperty = DependencyProperty.Register(
+            "PathWhenOpened", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath)));
 
-        public static readonly DependencyProperty IsPrimaryPathFlowInvertedProperty = DependencyProperty.Register(
-            "IsPrimaryPathFlowInverted", typeof(bool), typeof(Valve3Way), new PropertyMetadata(default(bool)));
+        public static readonly DependencyProperty PathWhenClosedProperty = DependencyProperty.Register(
+            "PathWhenClosed", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath)));
 
         #endregion
 
@@ -178,16 +101,16 @@ namespace Prototype.Core.Controls
             set { SetValue(ValveModelProperty, value); }
         }
 
-        public bool UseAuxiliaryPathWhenOpened
+        public Valve3WayFlowPath PathWhenOpened
         {
-            get { return (bool) GetValue(UseAuxiliaryPathWhenOpenedProperty); }
-            set { SetValue(UseAuxiliaryPathWhenOpenedProperty, value); }
+            get { return (Valve3WayFlowPath) GetValue(PathWhenOpenedProperty); }
+            set { SetValue(PathWhenOpenedProperty, value); }
         }
 
-        public bool IsPrimaryPathFlowInverted
+        public Valve3WayFlowPath PathWhenClosed
         {
-            get { return (bool) GetValue(IsPrimaryPathFlowInvertedProperty); }
-            set { SetValue(IsPrimaryPathFlowInvertedProperty, value); }
+            get { return (Valve3WayFlowPath) GetValue(PathWhenClosedProperty); }
+            set { SetValue(PathWhenClosedProperty, value); }
         }
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
@@ -203,31 +126,8 @@ namespace Prototype.Core.Controls
 
         public bool CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {
-            var pipe = graph.FindPipe(pipeSegment);
-
-            var valveAbsoluteRect = graph.GetAbsoluteRect(this);
-            var intersectedPipeAbsoluteRect = graph.GetAbsoluteRect(pipe);
-            var valveOffset = new Vector(-valveAbsoluteRect.TopLeft.X, -valveAbsoluteRect.TopLeft.Y);
-
-            intersectedPipeAbsoluteRect.Offset(valveOffset);
-            
-            if (Valve3WayModel.IsIntersection(intersectedPipeAbsoluteRect, Valve3WayModel.GetPrimaryUpperPipeRect(Rotation)))
-            {
-                return Valve3WayModel.CanPrimaryUpperPipePassFlow(this);
-            }
-            if (Valve3WayModel.IsIntersection(intersectedPipeAbsoluteRect, Valve3WayModel.GetPrimaryLowerPipeRect(Rotation)))
-            {
-                return Valve3WayModel.CanPrimaryLowerPipePassFlow(this);
-            }
-            if (Valve3WayModel.IsIntersection(intersectedPipeAbsoluteRect, Valve3WayModel.GetAuxiliaryPipeRect(Rotation)))
-            {
-                return Valve3WayModel.CanAuxiliaryPipePassFlow(this);
-            }
-            
-            return false;
+            return _model.CanPassFlow(graph, pipeSegment);
         }
-
-
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -277,10 +177,6 @@ namespace Prototype.Core.Controls
             valve.Bind(() => v => v.Visibility)
                 .To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
         }
-
-        #endregion
-
-        #region Flow logic
 
         #endregion
     }
