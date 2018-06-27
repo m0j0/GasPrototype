@@ -17,6 +17,81 @@ namespace Prototype.Core.Controls
 {
     public sealed class Valve3Way : Control, IValve
     {
+        private static class Valve3WayModel
+        {
+            enum StandardPosition
+            {
+                PrimaryUpper,
+                PrimaryLower,
+                Auxiliary
+            }
+
+            private static readonly Dictionary<Rotation, Rect> PrimaryUpperPipeRects;
+            private static readonly Dictionary<Rotation, Rect> PrimaryLowerPipeRects;
+            private static readonly Dictionary<Rotation, Rect> AuxiliaryPipeRects;
+
+            static Valve3WayModel()
+            {
+                PrimaryUpperPipeRects = new Dictionary<Rotation, Rect>
+                {
+                    [Rotation.Rotate0] = new Rect(16, 0, 5, 24),
+                    [Rotation.Rotate90] = new Rect(19, 16, 24, 5),
+                    [Rotation.Rotate180] = new Rect(19, 19, 5, 24),
+                    [Rotation.Rotate270] = new Rect(0, 19, 24, 5)
+                };
+                PrimaryLowerPipeRects = new Dictionary<Rotation, Rect>
+                {
+                    [Rotation.Rotate0] = new Rect(16, 19, 5, 24),
+                    [Rotation.Rotate90] = new Rect(0, 16, 24, 5),
+                    [Rotation.Rotate180] = new Rect(19, 0, 5, 24),
+                    [Rotation.Rotate270] = new Rect(19, 19, 24, 5)
+                };
+                AuxiliaryPipeRects = new Dictionary<Rotation, Rect>
+                {
+                    [Rotation.Rotate0] = new Rect(16, 19, 24, 5),
+                    [Rotation.Rotate90] = new Rect(19, 16, 5, 24),
+                    [Rotation.Rotate180] = new Rect(0, 19, 24, 5),
+                    [Rotation.Rotate270] = new Rect(19, 0, 5, 24)
+                };
+            }
+
+            public static Rect GetPrimaryUpperPipeRect(Rotation rotation)
+            {
+                return PrimaryUpperPipeRects[rotation];
+            }
+
+            public static Rect GetPrimaryLowerPipeRect(Rotation rotation)
+            {
+                return PrimaryLowerPipeRects[rotation];
+            }
+
+            public static Rect GetAuxiliaryPipeRect(Rotation rotation)
+            {
+                return AuxiliaryPipeRects[rotation];
+            }
+
+            public static bool CanPrimaryUpperPipePassFlow(Valve3Way valve)
+            {
+                return true;
+            }
+
+            public static bool CanPrimaryLowerPipePassFlow(Valve3Way valve)
+            {
+                return valve.State == ValveState.Opened;
+            }
+
+            public static bool CanAuxiliaryPipePassFlow(Valve3Way valve)
+            {
+                return valve.State == ValveState.Closed;
+            }
+
+            public static bool IsIntersection(Rect graphPipe, Rect standardRect)
+            {
+                var intersection = Common.FindIntersection(graphPipe, standardRect);
+                return intersection == standardRect;
+            }
+        }
+
         #region Fields
 
         private static readonly EventHandler SizeChangedHandler;
@@ -27,6 +102,8 @@ namespace Prototype.Core.Controls
 
         static Valve3Way()
         {
+
+
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve3Way), new FrameworkPropertyMetadata(typeof(Valve3Way)));
             SizeChangedHandler = OnSizeChanged;
         }
@@ -133,24 +210,21 @@ namespace Prototype.Core.Controls
             var valveOffset = new Vector(-valveAbsoluteRect.TopLeft.X, -valveAbsoluteRect.TopLeft.Y);
 
             intersectedPipeAbsoluteRect.Offset(valveOffset);
-
-            var intersection = Common.FindIntersection(intersectedPipeAbsoluteRect, GetPrimaryUpperPipeRect(Rotation));
-            if (intersection == GetPrimaryUpperPipeRect(Rotation))
+            
+            if (Valve3WayModel.IsIntersection(intersectedPipeAbsoluteRect, Valve3WayModel.GetPrimaryUpperPipeRect(Rotation)))
             {
-                return CanPrimaryUpperPipePassFlow();
+                return Valve3WayModel.CanPrimaryUpperPipePassFlow(this);
             }
-            intersection = Common.FindIntersection(intersectedPipeAbsoluteRect, GetPrimaryLowerPipeRect(Rotation));
-            if (intersection == GetPrimaryLowerPipeRect(Rotation))
+            if (Valve3WayModel.IsIntersection(intersectedPipeAbsoluteRect, Valve3WayModel.GetPrimaryLowerPipeRect(Rotation)))
             {
-                return CanPrimaryLowerPipePassFlow();
+                return Valve3WayModel.CanPrimaryLowerPipePassFlow(this);
             }
-            intersection = Common.FindIntersection(intersectedPipeAbsoluteRect, GetAuxiliaryPipeRect(Rotation));
-            if (intersection == GetAuxiliaryPipeRect(Rotation))
+            if (Valve3WayModel.IsIntersection(intersectedPipeAbsoluteRect, Valve3WayModel.GetAuxiliaryPipeRect(Rotation)))
             {
-                return CanAuxiliaryPipePassFlow();
+                return Valve3WayModel.CanAuxiliaryPipePassFlow(this);
             }
-
-            return State == ValveState.Opened;
+            
+            return false;
         }
 
 
@@ -207,72 +281,6 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Flow logic
-
-        private static Rect GetPrimaryUpperPipeRect(Rotation rotation)
-        {
-            switch (rotation)
-            {
-                case Rotation.Rotate0:
-                    return new Rect(19, 0, 5, 24);
-                case Rotation.Rotate90:
-                    return new Rect(5, 5, 100, 5);
-                case Rotation.Rotate180:
-                    return new Rect(5, 5, 100, 5);
-                case Rotation.Rotate270:
-                    return new Rect(5, 5, 100, 5);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(rotation), rotation, null);
-            }
-        }
-
-        private static Rect GetPrimaryLowerPipeRect(Rotation rotation)
-        {
-            switch (rotation)
-            {
-                case Rotation.Rotate0:
-                    return new Rect(19, 19, 5, 24);
-                case Rotation.Rotate90:
-                    return new Rect(5, 5, 100, 5);
-                case Rotation.Rotate180:
-                    return new Rect(5, 5, 100, 5);
-                case Rotation.Rotate270:
-                    return new Rect(5, 5, 100, 5);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(rotation), rotation, null);
-            }
-        }
-
-        private static Rect GetAuxiliaryPipeRect(Rotation rotation)
-        {
-            switch (rotation)
-            {
-                case Rotation.Rotate0:
-                    return new Rect(0, 19, 24, 5);
-                case Rotation.Rotate90:
-                    return new Rect(5, 5, 100, 5);
-                case Rotation.Rotate180:
-                    return new Rect(5, 5, 100, 5);
-                case Rotation.Rotate270:
-                    return new Rect(5, 5, 100, 5);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(rotation), rotation, null);
-            }
-        }
-
-        private bool CanPrimaryUpperPipePassFlow()
-        {
-            return true;
-        }
-
-        private bool CanPrimaryLowerPipePassFlow()
-        {
-            return State == ValveState.Opened;
-        }
-
-        private bool CanAuxiliaryPipePassFlow()
-        {
-            return State == ValveState.Closed;
-        }
 
         #endregion
     }
