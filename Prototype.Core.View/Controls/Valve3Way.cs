@@ -56,8 +56,8 @@ namespace Prototype.Core.Controls
             "ValveVm", typeof(IValveVm), typeof(Valve3Way),
             new PropertyMetadata(default(IValveVm), ValveVmPropertyChangedCallback));
 
-        public static readonly DependencyProperty PathWhenOpenedProperty = DependencyProperty.Register(
-            "PathWhenOpened", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath), OnStatePropertyChangedCallback));
+        public static readonly DependencyProperty PathWhenOpenProperty = DependencyProperty.Register(
+            "PathWhenOpen", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath), OnStatePropertyChangedCallback));
 
         public static readonly DependencyProperty PathWhenClosedProperty = DependencyProperty.Register(
             "PathWhenClosed", typeof(Valve3WayFlowPath), typeof(Valve3Way), new PropertyMetadata(default(Valve3WayFlowPath), OnStatePropertyChangedCallback));
@@ -101,10 +101,10 @@ namespace Prototype.Core.Controls
             set { SetValue(ValveModelProperty, value); }
         }
 
-        public Valve3WayFlowPath PathWhenOpened
+        public Valve3WayFlowPath PathWhenOpen
         {
-            get { return (Valve3WayFlowPath) GetValue(PathWhenOpenedProperty); }
-            set { SetValue(PathWhenOpenedProperty, value); }
+            get { return (Valve3WayFlowPath) GetValue(PathWhenOpenProperty); }
+            set { SetValue(PathWhenOpenProperty, value); }
         }
 
         public Valve3WayFlowPath PathWhenClosed
@@ -114,6 +114,8 @@ namespace Prototype.Core.Controls
         }
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
+
+        bool IValve3Way.IsOpen => State == ValveState.Opened;
 
         #endregion
 

@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Prototype.Core.Controls.PipeFlowScheme;
+using Prototype.Core.Models;
 
 namespace Prototype.Test.PipeFlowScheme
 {
@@ -19,6 +21,8 @@ namespace Prototype.Test.PipeFlowScheme
                     return pipe.Top;
                 case TestValve valve:
                     return valve.Top;
+                case TestValve3Way valve:
+                    return valve.Top;
                 default:
                     throw new ArgumentException();
             }
@@ -31,6 +35,8 @@ namespace Prototype.Test.PipeFlowScheme
                 case TestPipe pipe:
                     return pipe.Left;
                 case TestValve valve:
+                    return valve.Left;
+                case TestValve3Way valve:
                     return valve.Left;
                 default:
                     throw new ArgumentException();
@@ -189,6 +195,82 @@ namespace Prototype.Test.PipeFlowScheme
         bool IValve.CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {
             return CanPassFlow;
+        }
+    }
+
+    internal class TestValve3Way : IValve3Way
+    {
+        private readonly ISchemeContainer _container;
+        private readonly Valve3WayModel _model;
+
+        public TestValve3Way(ISchemeContainer container)
+        {
+            _container = container;
+            _model = new Valve3WayModel(this);
+        }
+
+        public double Width
+        {
+            get
+            {
+                switch (Rotation)
+                {
+                    case Rotation.Rotate0:
+                    case Rotation.Rotate180:
+                        return 40;
+                    case Rotation.Rotate90:
+                    case Rotation.Rotate270:
+                        return 43;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public double Height
+        {
+            get
+            {
+                switch (Rotation)
+                {
+                    case Rotation.Rotate0:
+                    case Rotation.Rotate180:
+                        return 43;
+                    case Rotation.Rotate90:
+                    case Rotation.Rotate270:
+                        return 40;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public bool IsVisible { get; set; } = true;
+
+        public double Top { get; set; }
+
+        public double Left { get; set; }
+
+        public Valve3WayFlowPath PathWhenOpen { get; set; }
+
+        public Valve3WayFlowPath PathWhenClosed { get; set; }
+
+        public Rotation Rotation { get; set; }
+
+        public bool IsOpen { get; set; }
+
+        public event EventHandler SchemeChanged;
+
+        public event EventHandler StateChanged;
+
+        public ISchemeContainer GetContainer()
+        {
+            return _container;
+        }
+
+        bool IValve.CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
+        {
+            return _model.CanPassFlow(graph, pipeSegment);
         }
     }
 }

@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using Prototype.Core.Models;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal interface IValve3Way : IValve
     {
-        Valve3WayFlowPath PathWhenOpened { get; }
+        Valve3WayFlowPath PathWhenOpen { get; }
 
         Valve3WayFlowPath PathWhenClosed { get; }
 
         Rotation Rotation { get; }
 
-        ValveState State { get; }
+        bool IsOpen { get; }
     }
 
     internal sealed class Valve3WayModel
@@ -75,50 +70,38 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public static bool CanPrimaryUpperPipePassFlow(IValve3Way valve)
         {
-            switch (valve.State)
+            if (valve.IsOpen)
             {
-                case ValveState.Opened:
-                    return valve.PathWhenOpened == Valve3WayFlowPath.Direct ||
-                           valve.PathWhenOpened == Valve3WayFlowPath.UpperAuxiliary;
-                case ValveState.Closed:
-                case ValveState.Unknown:
-                    return valve.PathWhenClosed == Valve3WayFlowPath.Direct ||
-                           valve.PathWhenClosed == Valve3WayFlowPath.UpperAuxiliary;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                return valve.PathWhenOpen == Valve3WayFlowPath.Direct ||
+                       valve.PathWhenOpen == Valve3WayFlowPath.UpperAuxiliary;
             }
+
+            return valve.PathWhenClosed == Valve3WayFlowPath.Direct ||
+                   valve.PathWhenClosed == Valve3WayFlowPath.UpperAuxiliary;
         }
 
         public static bool CanPrimaryLowerPipePassFlow(IValve3Way valve)
         {
-            switch (valve.State)
+            if (valve.IsOpen)
             {
-                case ValveState.Opened:
-                    return valve.PathWhenOpened == Valve3WayFlowPath.Direct ||
-                           valve.PathWhenOpened == Valve3WayFlowPath.LowerAuxiliary;
-                case ValveState.Closed:
-                case ValveState.Unknown:
-                    return valve.PathWhenClosed == Valve3WayFlowPath.Direct ||
-                           valve.PathWhenClosed == Valve3WayFlowPath.LowerAuxiliary;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                return valve.PathWhenOpen == Valve3WayFlowPath.Direct ||
+                       valve.PathWhenOpen == Valve3WayFlowPath.LowerAuxiliary;
             }
+
+            return valve.PathWhenClosed == Valve3WayFlowPath.Direct ||
+                   valve.PathWhenClosed == Valve3WayFlowPath.LowerAuxiliary;
         }
 
         public static bool CanAuxiliaryPipePassFlow(IValve3Way valve)
         {
-            switch (valve.State)
+            if (valve.IsOpen)
             {
-                case ValveState.Opened:
-                    return valve.PathWhenOpened == Valve3WayFlowPath.UpperAuxiliary ||
-                           valve.PathWhenOpened == Valve3WayFlowPath.LowerAuxiliary;
-                case ValveState.Closed:
-                case ValveState.Unknown:
-                    return valve.PathWhenClosed == Valve3WayFlowPath.UpperAuxiliary ||
-                           valve.PathWhenClosed == Valve3WayFlowPath.LowerAuxiliary;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                return valve.PathWhenOpen == Valve3WayFlowPath.UpperAuxiliary ||
+                       valve.PathWhenOpen == Valve3WayFlowPath.LowerAuxiliary;
             }
+
+            return valve.PathWhenClosed == Valve3WayFlowPath.UpperAuxiliary ||
+                   valve.PathWhenClosed == Valve3WayFlowPath.LowerAuxiliary;
         }
 
         public static bool IsIntersection(Rect graphPipe, Rect standardRect)

@@ -1,0 +1,84 @@
+﻿using System;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using MugenMvvmToolkit;
+using NUnit.Framework;
+using Prototype.Core.Controls.PipeFlowScheme;
+
+namespace Prototype.Test.PipeFlowScheme
+{
+    [TestFixture]
+    internal class Valve3WayTests : UnitTestBase
+    {
+        #region Nested types
+
+        private class Manifold
+        {
+            private Manifold()
+            {
+            }
+
+            public TestPipe PipeUpper { get; private set; }
+            public TestPipe PipeLower { get; private set; }
+            public TestPipe PipeAuxiliary { get; private set; }
+
+            public TestValve3Way Valve { get; private set; }
+
+            public static Manifold CreateManifold(Rotation rotation, PipeType upperPipeType, PipeType lowerPipeType, PipeType auxiliaryPipeType, Valve3WayFlowPath pathWhenOpen,
+                Valve3WayFlowPath pathWhenClosed, bool isValveOpen)
+            {
+                var manifold = new Manifold();
+                var container = new TestContainer();
+
+                switch (rotation)
+                {
+                    case Rotation.Rotate0:
+                        container.Add(manifold.PipeUpper = new TestPipe(container) {Left = 36, Top = 21, Height = 41, Orientation = Orientation.Vertical, Type = upperPipeType });
+                        container.Add(manifold.PipeLower = new TestPipe(container) {Left = 36, Top = 57, Height = 41, Orientation = Orientation.Vertical, Type = lowerPipeType });
+                        container.Add(manifold.PipeAuxiliary = new TestPipe(container) {Left = 36, Top = 57, Width = 47, Type = auxiliaryPipeType });
+                        container.Add(manifold.Valve = new TestValve3Way(container) {Left = 20, Top = 38, PathWhenOpen = pathWhenOpen, PathWhenClosed = pathWhenClosed, IsOpen = isValveOpen});
+                        break;
+                    case Rotation.Rotate90:
+                        break;
+                    case Rotation.Rotate180:
+                        break;
+                    case Rotation.Rotate270:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(rotation), rotation, null);
+                }
+
+                container.CreateGraph();
+                return manifold;
+            }
+        }
+
+        #endregion
+
+        #region Set up
+
+        [SetUp]
+        public void SetUp()
+        {
+            Initialize(new MugenContainer());
+        }
+
+        #endregion
+
+        #region Tests
+
+        [Test]
+        public void TestAllValvesClosed()
+        {
+            var manifold = Manifold.CreateManifold(Rotation.Rotate0, PipeType.Source, PipeType.Destination, PipeType.Destination, Valve3WayFlowPath.Direct,
+                Valve3WayFlowPath.UpperAuxiliary, true);
+
+            Assert.IsTrue(manifold.PipeUpper.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.PipeLower.PipeHasSegmentFlow(true, true, true));
+            Assert.IsTrue(manifold.PipeAuxiliary.PipeHasSegmentFlow(true, false, false));
+        }
+        
+
+        #endregion
+    }
+}
