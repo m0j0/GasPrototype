@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
                     xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model"
-                    xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model">
+                    xmlns:gasPanel="clr-namespace:Prototype.Core.Models.GasPanel;assembly=Prototype.Core.Model"
+                    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="Button.xaml" />
@@ -20,19 +21,25 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:Valve3Way">
                     <Canvas x:Name="MainControl">
-                        <Canvas>
-                            <Canvas.RenderTransform>
-                                <MatrixTransform Matrix="-1 0 0 1 40 0"/>
-                            </Canvas.RenderTransform>
+                        <Path Fill="#FF8B8D8E"
+                              Data="M40 24H21v19h2v-3.551A18.53 18.53 0 0 0 36.449 26H40v-2zm0-5v-2h-3.551A18.53 18.53 0 0 0 23 3.551V0h-2v19h19zM16 43V0h-2v3.551C5.957 5.561 0 12.835 0 21.5c0 8.665 5.957 15.939 14 17.949V43h2z" />
+                        <Path Stroke="#FFC3C5C2"
+                              Data="M35.236 24.5c-1.243 6.984-6.752 12.493-13.736 13.736V24.5h13.736zm0-6H21.5V4.764c6.984 1.243 12.493 6.752 13.736 13.736zM15.5 4.764v33.472c-8.03-1.428-14-8.447-14-16.736 0-8.29 5.97-15.308 14-16.736z" />
+                        <Path Fill="#FFC3C5C1" Data="M21 19h14v-2H21v2zm0 5v2h14v-2H21z" />
+                        <Path Fill="#FFC3C5C1" Data="M23 24h-2v14h2V24zm0-5V5h-2v14h2zm-7 19V5h-2v33h2z" />
 
-                            <Path Fill="#FF8B8D8E" Data="M0 24 L19 24 L19 43 L17 43 L17 39.4488744 C10.3980016 37.798978 5.20102197 32.6019984 3.55112562 26 L0 26 L1.2246468e-16 24 Z M4.2862638e-16 19 L5.5109106e-16 17 L3.55112562 17 C5.20102197 10.3980016 10.3980016 5.20102197 17 3.55112562 L17 0 L19 0 L19 19 L0 19 Z M24 43 L24 0 L26 0 L26 3.55112562 C34.0425239 5.56102171 40 12.8347893 40 21.5 C40 30.1652107 34.0425239 37.4389783 26 39.4488744 L26 43 L24 43 Z"/>
-                            <Path Stroke="#FFC3C5C2" Data="M4.76378295 24.5 C6.00706196 31.4838304 11.5161696 36.992938 18.5 38.236217 L18.5 24.5 L4.76378295 24.5 Z M4.76378295 18.5 L18.5 18.5 L18.5 4.76378295 C11.5161696 6.00706196 6.00706196 11.5161696 4.76378295 18.5 Z M24.5 4.76372301 L24.5 38.236277 C32.5308897 36.8082239 38.5 29.7893097 38.5 21.5 C38.5 13.2106903 32.5308897 6.19177614 24.5 4.76372301 Z"/>
-                            <Path  Fill="#FFC3C5C1" Data="M19 19 L5 19 L5 17 L19 17 L19 19 Z M19 24 L19 26 L5 26 L5 24 L19 24 Z"/>
-                            <Path  Fill="#FFC3C5C1" Data="M17 24 L19 24 L19 38 L17 38 L17 24 Z M17 19 L17 5 L19 5 L19 19 L17 19 Z M24 38 L24 5 L26 5 L26 38 L24 38 Z"/>
-                        </Canvas>
+                        <TextBlock x:Name="UpperTextBlock" Canvas.Top="-10" Canvas.Left="25" Text="U" Visibility="Collapsed" />
+                        <TextBlock x:Name="LowerTextBlock" Canvas.Top="35" Canvas.Left="25" Text="L" Visibility="Collapsed" />
+                        <TextBlock x:Name="AuxiliaryTextBlock" Canvas.Top="20" Canvas.Left="40" Text="A" Visibility="Collapsed" />
                     </Canvas>
 
                     <ControlTemplate.Triggers>
+                        <Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                            <Setter TargetName="UpperTextBlock" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="LowerTextBlock" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="AuxiliaryTextBlock" Property="Visibility" Value="Visible" />
+                        </Trigger>
+
                         <Trigger Property="Rotation" Value="Rotate90">
                             <Setter TargetName="MainControl" Property="LayoutTransform">
                                 <Setter.Value>

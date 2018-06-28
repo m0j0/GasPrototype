@@ -48,7 +48,7 @@
 
         <Pipe Canvas.Left="39" Canvas.Top="439" Width="112" Type="Destination" />
         <Pipe Canvas.Left="146" Canvas.Top="439" Width="135" />
-        <Pipe Canvas.Left="146" Canvas.Top="439" Orientation="Vertical" Height="20" Type="Source" />
+        <Pipe Canvas.Left="146" Canvas.Top="439" Orientation="Vertical" Height="40" Type="Source" />
         <Pipe Canvas.Left="276" Canvas.Top="439" Orientation="Vertical" Height="213" />
         <Pipe Canvas.Left="190" Canvas.Top="569" Width="91" Type="Destination" />
         <Pipe Canvas.Left="190" Canvas.Top="647" Width="91" Type="Destination" />
@@ -71,8 +71,7 @@
         <Pipe Canvas.Left="393" Canvas.Top="439" Width="76" />
         <Pipe Canvas.Left="464" Canvas.Top="439" Width="176" />
 
-        <Valve Canvas.Left="85" Canvas.Top="422" ValveVm="{Binding DownStreamInvValveVm}" />
-        <Valve Canvas.Left="174" Canvas.Top="422" ValveVm="{Binding DownStreamValveVm}" />
+        <Valve3Way Canvas.Left="127" Canvas.Top="423" Rotation="Rotate90" PathWhenOpen="UpperAuxiliary" PathWhenClosed="LowerAuxiliary" ValveVm="{Binding DownStreamValveVm}" />
         <Valve Canvas.Left="332" Canvas.Top="422" ValveVm="{Binding VacuumValveVm}" />
         <Valve Canvas.Left="404" Canvas.Top="422" ValveVm="{Binding ByPassValveVm}" />
         <Valve Canvas.Left="475" Canvas.Top="422" ValveVm="{Binding ByPassValve2Vm}" />
