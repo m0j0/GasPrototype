@@ -29,11 +29,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void DepthFirstSearch(Stack<IVertex> visited)
         {
-            var vertices = _getAdjacentVertices(visited.Peek());
+            var lastVisited = visited.Peek();
+            var vertices = _getAdjacentVertices(lastVisited);
 
             foreach (var vertex in vertices)
             {
                 if (visited.Contains(vertex))
+                {
+                    continue;
+                }
+
+                if (!_getAdjacentVertices(vertex).Contains(lastVisited))
                 {
                     continue;
                 }

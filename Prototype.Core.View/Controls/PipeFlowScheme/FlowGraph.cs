@@ -233,10 +233,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     var edge = new Edge(startVertex, endVertex);
 
                     startVertex.AddAdjacentVertex(endVertex);
-                    if (edge.IsBidirectional)
-                    {
-                        endVertex.AddAdjacentVertex(startVertex);
-                    }
+                    endVertex.AddAdjacentVertex(startVertex);
 
                     edges.Add(edge);
                 }

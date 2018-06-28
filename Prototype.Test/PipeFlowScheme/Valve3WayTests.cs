@@ -98,8 +98,8 @@ namespace Prototype.Test.PipeFlowScheme
         [Test]
         public void Test_Rotate0_Direct_UpperAuxiliary_Open()
         {
-            var manifold = Manifold.CreateManifold(Rotation.Rotate0, PipeType.Source, PipeType.Destination, PipeType.Destination, Valve3WayFlowPath.Direct,
-                Valve3WayFlowPath.UpperAuxiliary, true);
+            var manifold = Manifold.CreateManifold(Rotation.Rotate0, PipeType.Source, PipeType.Destination, PipeType.Destination, 
+                Valve3WayFlowPath.Direct, Valve3WayFlowPath.UpperAuxiliary, true);
 
             Assert.IsTrue(manifold.PipeUpper.PipeHasSegmentFlow(true, true, true));
             Assert.IsTrue(manifold.PipeLower.PipeHasSegmentFlow(true, true, true));
@@ -109,12 +109,24 @@ namespace Prototype.Test.PipeFlowScheme
         [Test]
         public void Test_Rotate0_Direct_UpperAuxiliary_Closed()
         {
-            var manifold = Manifold.CreateManifold(Rotation.Rotate0, PipeType.Source, PipeType.Destination, PipeType.Destination, Valve3WayFlowPath.Direct,
-                Valve3WayFlowPath.UpperAuxiliary, false);
+            var manifold = Manifold.CreateManifold(Rotation.Rotate0, PipeType.Source, PipeType.Destination, PipeType.Destination, 
+                Valve3WayFlowPath.Direct, Valve3WayFlowPath.UpperAuxiliary, false);
 
             Assert.IsTrue(manifold.PipeUpper.PipeHasSegmentFlow(true, true, true));
             Assert.IsTrue(manifold.PipeLower.PipeHasSegmentFlow(true, false, false));
             Assert.IsTrue(manifold.PipeAuxiliary.PipeHasSegmentFlow(true, true, true));
+        }
+
+
+        [Test]
+        public void Test_Rotate0_LowerAuxiliary_UpperAuxiliary_Open()
+        {
+            var manifold = Manifold.CreateManifold(Rotation.Rotate0, PipeType.Source, PipeType.Destination, PipeType.Destination, 
+                Valve3WayFlowPath.LowerAuxiliary, Valve3WayFlowPath.UpperAuxiliary, true);
+
+            Assert.IsTrue(manifold.PipeUpper.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.PipeLower.PipeHasSegmentFlow(false, false, false));
+            Assert.IsTrue(manifold.PipeAuxiliary.PipeHasSegmentFlow(false, false, false));
         }
 
         #endregion

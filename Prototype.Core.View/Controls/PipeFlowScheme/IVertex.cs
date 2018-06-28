@@ -103,35 +103,27 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class Edge
     {
-
         public Edge(IVertex startVertex, IVertex endVertex)
         {
             StartVertex = startVertex;
             EndVertex = endVertex;
-            IsBidirectional = !(startVertex is SourceVertex || endVertex is DestinationVertex);
         }
 
         public IVertex StartVertex { get; }
         public IVertex EndVertex { get; }
-        public bool IsBidirectional { get; }
 
         public IPipeSegment PipeSegment { get; set; }
 
         public bool Equals(IVertex startVertex, IVertex endVertex)
         {
-            if (IsBidirectional)
-            {
-                return StartVertex == startVertex && EndVertex == endVertex ||
-                       EndVertex == startVertex && StartVertex == endVertex;
-            }
-
-            return StartVertex == startVertex && EndVertex == endVertex;
+            return StartVertex == startVertex && EndVertex == endVertex ||
+                   EndVertex == startVertex && StartVertex == endVertex;
         }
 
 
         public override string ToString()
         {
-            return $"Start: {StartVertex} End: {EndVertex} Bi: {IsBidirectional}";
+            return $"Start: {StartVertex} End: {EndVertex}";
         }
     }
 }
