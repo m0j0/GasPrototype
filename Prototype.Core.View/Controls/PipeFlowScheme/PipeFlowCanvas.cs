@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
@@ -12,6 +13,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private static readonly EventHandler OnValveStateChangedEventHandler = OnValveStateChanged;
 
         private FlowGraph _scheme;
+        private bool _isInvalidateCalled;
 
         public PipeFlowCanvas()
         {
@@ -52,7 +54,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 UnsubscribePositionChangedEvents(visualRemoved);
             }
 
-            InvalidateScheme();
+            InvalidateScheme(false);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -62,8 +64,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 SubscribePositionChangedEvents(child);
             }
 
-            // TODO optimize when there is no changes
-            InvalidateScheme();
+            InvalidateScheme(true);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -121,11 +122,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             switch (sender)
             {
                 case IFlowControl flowControl:
-                    ((PipeFlowCanvas) flowControl.GetContainer()).InvalidateScheme();
+                    ((PipeFlowCanvas) flowControl.GetContainer()).InvalidateScheme(false);
                     break;
 
                 case PipeFlowCanvas canvas:
-                    canvas.InvalidateScheme();
+                    canvas.InvalidateScheme(false);
                     break;
 
                 default:
@@ -138,9 +139,29 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var valve = (IValve) sender;
             ((PipeFlowCanvas) valve.GetContainer()).InvalidateSchemeFlow();
         }
-
-        private void InvalidateScheme()
+        
+        private void InvalidateScheme(bool isFirstLoad)
         {
+            if (isFirstLoad)
+            {
+                InvalidateSchemeImpl();
+                return;
+            }
+
+            if (_isInvalidateCalled)
+            {
+                return;
+            }
+
+            // hack to avoid massive pack of calls to one
+            _isInvalidateCalled = true;
+            Dispatcher.InvokeAsync(InvalidateSchemeImpl, DispatcherPriority.Background);
+        }
+
+        private void InvalidateSchemeImpl()
+        {
+            _isInvalidateCalled = false;
+
             var pipes = new List<IPipe>();
             var valves = new List<IValve>();
 
@@ -157,6 +178,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
+            // TODO optimize when there is no changes
             _scheme = new FlowGraph(this, pipes, valves);
 
             SchemeChanged?.Invoke(this, EventArgs.Empty);
