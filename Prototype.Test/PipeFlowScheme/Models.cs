@@ -122,7 +122,7 @@ namespace Prototype.Test.PipeFlowScheme
 
         public PipeType Type { get; set; }
 
-        public IList<IPipeSegment> Segments { get; set; }
+        public IList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();
 
         public event EventHandler SchemeChanged;
 

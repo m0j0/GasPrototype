@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using MugenMvvmToolkit;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Models.GasPanel;
 
@@ -44,8 +47,7 @@ namespace Prototype.Core.Controls
             "Type", typeof(PipeType), typeof(Pipe), new PropertyMetadata(default(PipeType)));
 
         public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
-            "Segments", typeof(IList<IPipeSegment>), typeof(Pipe),
-            new PropertyMetadata(default(IReadOnlyCollection<IPipeSegment>)));
+            "Segments", typeof(IList<IPipeSegment>), typeof(Pipe), new PropertyMetadata(new List<IPipeSegment>()));
 
         #endregion
 
@@ -80,7 +82,7 @@ namespace Prototype.Core.Controls
         public IList<IPipeSegment> Segments
         {
             get { return (IList<IPipeSegment>) GetValue(SegmentsProperty); }
-            set { SetValue(SegmentsProperty, value); }
+            set { SetValue(SegmentsProperty, value is INotifyCollectionChanged ? value : new ObservableCollection<IPipeSegment>(value)); }
         }
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
