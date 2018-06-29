@@ -15,10 +15,8 @@ namespace Prototype.Core.Design.Pipes
         
         private ModelItem _modelItem;
         private IPipe _pipe;
-        private ISchemeContainer _container;
 
         private FailType _failType;
-        private PipeType _pipeType;
 
         #endregion
 
@@ -39,22 +37,6 @@ namespace Prototype.Core.Design.Pipes
             }
         }
 
-        public PipeType PipeType
-        {
-            get => _pipeType;
-            set
-            {
-                if (value == _pipeType)
-                {
-                    return;
-                }
-
-                _pipeType = value;
-                UpdatePipeType(value);
-                OnPropertyChanged();
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -65,8 +47,6 @@ namespace Prototype.Core.Design.Pipes
             _modelItem.PropertyChanged += ModelItemOnPropertyChanged;
             _pipe = (IPipe) _modelItem.View.PlatformObject;
             _pipe.SchemeChanged += OnSchemeChanged;
-            _container = _pipe.GetContainer();
-            _container.SchemeChanged += OnSchemeChanged;
 
             SynchronizeValues();
         }
@@ -77,13 +57,11 @@ namespace Prototype.Core.Design.Pipes
             _modelItem = null;
             _pipe.SchemeChanged -= OnSchemeChanged;
             _pipe = null;
-            _container.SchemeChanged -= OnSchemeChanged;
-            _container = null;
         }
 
         private void OnSchemeChanged(object sender, EventArgs e)
         {
-            SynchronizeFailType();
+            SynchronizeValues();
         }
 
         private void ModelItemOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -94,9 +72,6 @@ namespace Prototype.Core.Design.Pipes
         private void SynchronizeValues()
         {
             SynchronizeFailType();
-            
-            SetPipeType((PipeType) _modelItem.Properties[nameof(Pipe.Type)].ComputedValue);
-            OnPropertyChanged(nameof(PipeType));
         }
 
         private void SynchronizeFailType()
@@ -114,28 +89,6 @@ namespace Prototype.Core.Design.Pipes
         {
             _failType = failType;
             OnPropertyChanged(nameof(FailType));
-        }
-
-        private void SetPipeType(PipeType pipeType)
-        {
-            _pipeType = pipeType;
-            OnPropertyChanged(nameof(PipeType));
-        }
-
-        private void UpdatePipeType(PipeType pipeType)
-        {
-            switch (pipeType)
-            {
-                case PipeType.Regular:
-                    _modelItem.Properties[nameof(Pipe.Type)].ClearValue();
-                    break;
-                case PipeType.Source:
-                case PipeType.Destination:
-                    _modelItem.Properties[nameof(Pipe.Type)].SetValue(pipeType);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(pipeType), pipeType, null);
-            }
         }
 
         #endregion

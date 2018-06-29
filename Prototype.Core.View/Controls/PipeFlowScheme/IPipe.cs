@@ -9,8 +9,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         double GetTop(IFlowControl control);
 
         double GetLeft(IFlowControl control);
-
-        event EventHandler SchemeChanged;
     }
 
     public interface IFlowControl

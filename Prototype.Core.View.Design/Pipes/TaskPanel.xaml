@@ -8,31 +8,8 @@
              Width="250" x:ClassModifier="internal">
     <Border BorderBrush="Black" BorderThickness="2" Background="White">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
             <TextBlock Grid.Row="0"
                        Text="{Binding FailType, StringFormat=Fail status: {0}}" />
-
-            <GroupBox Grid.Row="1"
-                      Header="Pipe type">
-                <StackPanel>
-                    <StackPanel.Resources>
-                        <PipeType x:Key="Regular">Regular</PipeType>
-                        <PipeType x:Key="Source">Source</PipeType>
-                        <PipeType x:Key="Destination">Destination</PipeType>
-                    </StackPanel.Resources>
-
-                    <RadioButton Content="Regular"
-                                 IsChecked="{Binding Path=PipeType, Mode=TwoWay, Converter={x:Static EnumEqualityConverter.Instance}, ConverterParameter={StaticResource Regular}}" />
-                    <RadioButton Content="Source"
-                                 IsChecked="{Binding Path=PipeType, Mode=TwoWay, Converter={x:Static EnumEqualityConverter.Instance}, ConverterParameter={StaticResource Source}}" />
-                    <RadioButton Content="Destination"
-                                 IsChecked="{Binding Path=PipeType, Mode=TwoWay, Converter={x:Static EnumEqualityConverter.Instance}, ConverterParameter={StaticResource Destination}}" />
-                </StackPanel>
-            </GroupBox>
         </Grid>
     </Border>
 </UserControl>

@@ -21,8 +21,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Unloaded += OnUnloaded;
         }
 
-        public event EventHandler SchemeChanged;
-
         public double GetTop(IFlowControl control)
         {
             var top = GetTop((UIElement)control);
@@ -183,8 +181,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
             _scheme = new FlowGraph(this, pipes, valves);
-
-            SchemeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void InvalidateSchemeFlow()
