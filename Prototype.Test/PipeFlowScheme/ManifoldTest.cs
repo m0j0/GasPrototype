@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 using MugenMvvmToolkit;
 using NUnit.Framework;
@@ -355,6 +356,35 @@ namespace Prototype.Test.PipeFlowScheme
             Assert.IsTrue(manifold.Pipe8.PipeSegmentsHasLength(5, 100, 5));
             Assert.IsTrue(manifold.Pipe9.PipeSegmentsHasLength(5, 105, 5));
             Assert.IsTrue(manifold.Pipe10.PipeSegmentsHasLength(5, 58, 5));
+        }
+
+        [Test]
+        public void TestGraphsEquality()
+        {
+            var manifold = new Manifold();
+
+            var pipes = manifold.Container.GetPipes().ToArray();
+            var valves = manifold.Container.GetValves().ToArray();
+
+            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+
+            manifold.Pipe1.Height += 1;
+            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            
+            manifold.Pipe1.Height -= 1;
+            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+
+            manifold.Pipe1.Top += 1;
+            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            
+            manifold.Pipe1.Top -= 1;
+            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+
+            manifold.Valve1.Top += 1;
+            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            
+            manifold.Valve1.Top -= 1;
+            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
         }
 
         #endregion

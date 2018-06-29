@@ -150,6 +150,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             UpdateDirection();
         }
 
+        public bool Equals(ISchemeContainer container, IPipe pipe)
+        {
+            if (Pipe != pipe)
+            {
+                return false;
+            }
+
+            if (Rect != Common.GetAbsoluteRect(container, pipe))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private void UpdateDirection()
         {
             if (StartConnector == null || 

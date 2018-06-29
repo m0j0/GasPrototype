@@ -178,7 +178,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            // TODO optimize when there is no changes
+            if (_scheme != null && _scheme.Equals(this, pipes, valves))
+            {
+                return;
+            }
             _scheme = new FlowGraph(this, pipes, valves);
 
             SchemeChanged?.Invoke(this, EventArgs.Empty);

@@ -20,8 +20,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private IReadOnlyCollection<IVertex> _vertices;
         private IReadOnlyCollection<Edge> _edges;
 
-        private IReadOnlyCollection<GraphPipe> _pipes;
-        private IReadOnlyCollection<GraphValve> _valves;
+        private IReadOnlyList<GraphPipe> _pipes;
+        private IReadOnlyList<GraphValve> _valves;
 
         public FlowGraph(ISchemeContainer container, IEnumerable<IPipe> pipes,
             IEnumerable<IValve> valves)
@@ -52,6 +52,37 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public Rect GetAbsoluteRect(IValve valve)
         {
             return _valves.Single(v => v.Valve == valve).Rect;
+        }
+
+        public bool Equals(ISchemeContainer container, IReadOnlyList<IPipe> pipes, IReadOnlyList<IValve> valves)
+        {
+            if (_pipes.Count != pipes.Count)
+            {
+                return false;
+            }
+
+            if (_valves.Count != valves.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < _pipes.Count; i++)
+            {
+                if (!_pipes[i].Equals(container, pipes[i]))
+                {
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < _valves.Count; i++)
+            {
+                if (!_valves[i].Equals(container, valves[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void SplitPipesToSegments(ISchemeContainer container, IEnumerable<IPipe> pipeControls,
