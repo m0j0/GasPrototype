@@ -385,6 +385,18 @@ namespace Prototype.Test.PipeFlowScheme
             
             manifold.Valve1.Top -= 1;
             Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+
+            manifold.Pipe1.IsVisible = false;
+            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+
+            manifold.Pipe1.IsVisible = true;
+            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+
+            manifold.Valve1.IsVisible = false;
+            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            
+            manifold.Valve1.IsVisible = true;
+            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
         }
 
         #endregion

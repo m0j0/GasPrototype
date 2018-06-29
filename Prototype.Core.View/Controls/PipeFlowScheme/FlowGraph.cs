@@ -68,7 +68,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             for (int i = 0; i < _pipes.Count; i++)
             {
-                if (!_pipes[i].Equals(container, pipes[i]))
+                if (!pipes[i].IsVisible || !_pipes[i].Equals(container, pipes[i]))
                 {
                     return false;
                 }
@@ -76,7 +76,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             for (int i = 0; i < _valves.Count; i++)
             {
-                if (!_valves[i].Equals(container, valves[i]))
+                if (!valves[i].IsVisible || !_valves[i].Equals(container, valves[i]))
                 {
                     return false;
                 }
