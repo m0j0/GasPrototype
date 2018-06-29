@@ -5,9 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using MugenMvvmToolkit;
 using Prototype.Core.Controls.PipeFlowScheme;
-using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls
 {
@@ -16,6 +14,7 @@ namespace Prototype.Core.Controls
         #region Fields
 
         private static readonly EventHandler SizeChangedHandler;
+        private static readonly DependencyProperty[] SubscribedProperties;
 
         #endregion
 
@@ -25,6 +24,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
             SizeChangedHandler = OnSizeChanged;
+            SubscribedProperties = new[] {HeightProperty, WidthProperty, OrientationProperty, VisibilityProperty, TypeProperty};
         }
 
         public Pipe()
@@ -98,40 +98,27 @@ namespace Prototype.Core.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            DependencyPropertyDescriptor
-                .FromProperty(HeightProperty, typeof(Pipe))
-                .AddValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(WidthProperty, typeof(Pipe))
-                .AddValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Pipe))
-                .AddValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Pipe))
-                .AddValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(TypeProperty, typeof(Pipe))
-                .AddValueChanged(this, SizeChangedHandler);
+            if (!(Parent is ISchemeContainer))
+            {
+                throw new InvalidOperationException("Pipe can be placed only on ISchemeContainer");
+            }
+
+            foreach (var property in SubscribedProperties)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Pipe))
+                    .AddValueChanged(this, SizeChangedHandler);
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            DependencyPropertyDescriptor
-                .FromProperty(HeightProperty, typeof(Pipe))
-                .RemoveValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(WidthProperty, typeof(Pipe))
-                .RemoveValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Pipe))
-                .RemoveValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Pipe))
-                .RemoveValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(TypeProperty, typeof(Pipe))
-                .RemoveValueChanged(this, SizeChangedHandler);
+            foreach (var property in SubscribedProperties)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Pipe))
+                    .RemoveValueChanged(this, SizeChangedHandler);
+            }
         }
 
         private static void OnSizeChanged(object sender, EventArgs e)

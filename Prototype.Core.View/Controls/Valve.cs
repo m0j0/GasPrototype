@@ -17,6 +17,7 @@ namespace Prototype.Core.Controls
         #region Fields
 
         private static readonly EventHandler SizeChangedHandler;
+        private static readonly DependencyProperty[] SubscribedProperties;
 
         #endregion
 
@@ -26,6 +27,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve), new FrameworkPropertyMetadata(typeof(Valve)));
             SizeChangedHandler = OnSizeChanged;
+            SubscribedProperties = new[] { HeightProperty, WidthProperty, OrientationProperty, VisibilityProperty };
         }
 
         public Valve()
@@ -73,14 +75,14 @@ namespace Prototype.Core.Controls
         }
 
         [Category("Model")]
-        public ValveState State
+        internal ValveState State
         {
             get { return (ValveState) GetValue(StateProperty); }
             set { SetValue(StateProperty, value); }
         }
 
         [Category("Model")]
-        public IReadOnlyCollection<INamedCommand> MenuCommands
+        internal IReadOnlyCollection<INamedCommand> MenuCommands
         {
             get { return (IReadOnlyCollection<INamedCommand>) GetValue(MenuCommandsProperty); }
             set { SetValue(MenuCommandsProperty, value); }
@@ -111,22 +113,22 @@ namespace Prototype.Core.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Valve))
-                .AddValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Valve))
-                .AddValueChanged(this, SizeChangedHandler);
+            foreach (var property in SubscribedProperties)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Valve))
+                    .AddValueChanged(this, SizeChangedHandler);
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            DependencyPropertyDescriptor
-                .FromProperty(OrientationProperty, typeof(Valve))
-                .RemoveValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Valve))
-                .RemoveValueChanged(this, SizeChangedHandler);
+            foreach (var property in SubscribedProperties)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Valve))
+                    .RemoveValueChanged(this, SizeChangedHandler);
+            }
         }
 
         private static void OnSizeChanged(object sender, EventArgs e)

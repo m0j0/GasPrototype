@@ -17,6 +17,7 @@ namespace Prototype.Core.Controls
         #region Fields
 
         private static readonly EventHandler SizeChangedHandler;
+        private static readonly DependencyProperty[] SubscribedProperties;
         private readonly Valve3WayModel _model;
 
         #endregion
@@ -27,6 +28,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve3Way), new FrameworkPropertyMetadata(typeof(Valve3Way)));
             SizeChangedHandler = OnSizeChanged;
+            SubscribedProperties = new[] { HeightProperty, WidthProperty, RotationProperty, VisibilityProperty };
         }
 
         public Valve3Way()
@@ -133,22 +135,22 @@ namespace Prototype.Core.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            DependencyPropertyDescriptor
-                .FromProperty(RotationProperty, typeof(Valve3Way))
-                .AddValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Valve3Way))
-                .AddValueChanged(this, SizeChangedHandler);
+            foreach (var property in SubscribedProperties)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Valve3Way))
+                    .AddValueChanged(this, SizeChangedHandler);
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            DependencyPropertyDescriptor
-                .FromProperty(RotationProperty, typeof(Valve3Way))
-                .RemoveValueChanged(this, SizeChangedHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(VisibilityProperty, typeof(Valve3Way))
-                .RemoveValueChanged(this, SizeChangedHandler);
+            foreach (var property in SubscribedProperties)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Valve3Way))
+                    .RemoveValueChanged(this, SizeChangedHandler);
+            }
         }
 
         private static void OnSizeChanged(object sender, EventArgs e)

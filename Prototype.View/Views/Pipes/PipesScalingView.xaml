@@ -32,16 +32,14 @@
 
             <Pipe Canvas.ZIndex="3" Canvas.Left="97" Canvas.Top="36" />
             <Pipe Canvas.ZIndex="3" Canvas.Left="44" Canvas.Top="10" Orientation="Vertical" />
-            <Valve Canvas.ZIndex="1" Canvas.Left="28" Canvas.Top="10" State="Open" />
-            <Valve Canvas.ZIndex="1" Canvas.Left="97" Canvas.Top="20" State="Open" Orientation="Horizontal" />
+            <Valve Canvas.ZIndex="1" Canvas.Left="28" Canvas.Top="10" />
+            <Valve Canvas.ZIndex="1" Canvas.Left="97" Canvas.Top="20" Orientation="Horizontal" />
             <Pipe Canvas.Left="100" Canvas.Top="68" SubstanceType="Gas"/>
             <Pipe Canvas.Left="100" Canvas.Top="82" SubstanceType="Chemical"/>
             <Pipe Canvas.Left="100" Canvas.Top="96" SubstanceType="Purge"/>
 
-            <Valve Canvas.Left="205" Canvas.Top="14" 
-                   State="Closed"/>
-            <Valve Canvas.Left="205" Canvas.Top="64"
-                   State="Unknown"/>
+            <Valve Canvas.Left="205" Canvas.Top="14" />
+            <Valve Canvas.Left="205" Canvas.Top="64"/>
         </Canvas>
     </Grid>
 </UserControl>
