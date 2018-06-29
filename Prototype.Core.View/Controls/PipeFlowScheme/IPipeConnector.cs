@@ -108,26 +108,26 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             var side = Side.All;
-            if (_pipes.Any(p => p != null &&
-                                p.Rect.Left < Rect.Left))
+            if (_pipes.Any(p => p != null && p.Rect.Left < Rect.Left) ||
+                pipe.Orientation == Orientation.Horizontal && IsEndConnector())
             {
                 side = side & ~Side.Left;
             }
 
-            if (_pipes.Any(p => p != null &&
-                                p.Rect.Top < Rect.Top))
+            if (_pipes.Any(p => p != null && p.Rect.Top < Rect.Top) ||
+                pipe.Orientation == Orientation.Vertical && IsEndConnector())
             {
                 side = side & ~Side.Top;
             }
 
-            if (_pipes.Any(p => p != null &&
-                                p.Rect.Right > Rect.Right))
+            if (_pipes.Any(p => p != null && p.Rect.Right > Rect.Right) ||
+                pipe.Orientation == Orientation.Horizontal && IsEndConnector())
             {
                 side = side & ~Side.Right;
             }
 
-            if (_pipes.Any(p => p != null &&
-                                p.Rect.Bottom > Rect.Bottom))
+            if (_pipes.Any(p => p != null && p.Rect.Bottom > Rect.Bottom) ||
+                pipe.Orientation == Orientation.Vertical && IsEndConnector())
             {
                 side = side & ~Side.Bottom;
             }

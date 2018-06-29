@@ -57,19 +57,21 @@
 
             <DataTemplate x:Key="BridgeSegmentTemplate"
                           DataType="pipeFlowScheme:BridgeSegment">
-                <!--<Border x:Name="MainControl"
-                        BorderThickness="1"
-                        BorderBrush="Red" Background="#8B8D8E"
-                        Width="5" Height="{Binding Length}" />-->
 
-                <Path x:Name="MainControl" Fill="Green" Stroke="Red" StrokeThickness="0.25"
-                      Data="M0 20l4-4v-5L0 7V0h1v6.586l4 4v5.828l-4 4V27H0v-7zm5-9.414v5.828l-4 4L0 20l4-4v-5L0 7V0h1v6.586l4 4zM4 21l4-4v-7L4 6V0h1v5.586l4 4v7.828l-4 4V27H4v-6z" />
+                <Canvas x:Name="MainControl">
+                    <Polyline Points="2.5 0 2.5 6 6.5 11 6.5 16 2.5 21 2.5 27" FillRule="evenodd" StrokeThickness="4" Stroke="{Binding HasFlow, Converter={x:Static converters:HasFlowToColorConverter.Instance}}"/>
+                    <Path Fill="#FF514F52" Data="M4 0 L5 0 L5 5.17157288 C5 5.56939761 5.15803526 5.95092848 5.43933983 6.23223305 L8.26776695 9.06066017 C8.7366079 9.52950112 9 10.1653859 9 10.8284271 L9 16.1715729 C9 16.8346141 8.7366079 17.4704989 8.26776695 17.9393398 L5.43933983 20.767767 C5.15803526 21.0490715 5 21.4306024 5 21.8284271 L5 27 L4 27 L4 21.8284271 C4 21.1653859 4.2633921 20.5295011 4.73223305 20.0606602 L7.56066017 17.232233 C7.84196474 16.9509285 8 16.5693976 8 16.1715729 L8 10.8284271 C8 10.4306024 7.84196474 10.0490715 7.56066017 9.76776695 L4.73223305 6.93933983 C4.2633921 6.47049888 4 5.8346141 4 5.17157288 L4 0 Z"/>
+                    <Path Fill="#FF514F52" Data="M0 0 L1 0 L1 6.17157288 C1 6.56939761 1.15803526 6.95092848 1.43933983 7.23223305 L4.26776695 10.0606602 C4.7366079 10.5295011 5 11.1653859 5 11.8284271 L5 15.1715729 C5 15.8346141 4.7366079 16.4704989 4.26776695 16.9393398 L1.43933983 19.767767 C1.15803526 20.0490715 1 20.4306024 1 20.8284271 L1 27 L0 27 L0 20.8284271 C-1.11022302e-16 20.1653859 0.263392101 19.5295011 0.732233047 19.0606602 L3.56066017 16.232233 C3.84196474 15.9509285 4 15.5693976 4 15.1715729 L4 11.8284271 C4 11.4306024 3.84196474 11.0490715 3.56066017 10.767767 L0.732233047 7.93933983 C0.263392101 7.47049888 1.83186799e-15 6.8346141 1.77635684e-15 6.17157288 L0 0 Z"/>
+                </Canvas>
 
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding Orientation}" Value="Horizontal">
-                        <Setter TargetName="MainControl" Property="LayoutTransform">
+                        <Setter TargetName="MainControl" Property="RenderTransform">
                             <Setter.Value>
-                                <RotateTransform Angle="90" />
+                                <TransformGroup>
+                                    <RotateTransform Angle="-90" />
+                                    <TranslateTransform Y="5" />
+                                </TransformGroup>
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
