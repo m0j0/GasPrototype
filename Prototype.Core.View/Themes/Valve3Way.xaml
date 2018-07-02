@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
-                    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework">
+                    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
+                    xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
-        <ResourceDictionary Source="Button.xaml" />
+        <ResourceDictionary Source="ContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="controls:Valve3Way">
@@ -25,6 +26,22 @@
                         <TextBlock x:Name="UpperTextBlock" Canvas.Top="-10" Canvas.Left="25" Text="U" Visibility="Collapsed" />
                         <TextBlock x:Name="LowerTextBlock" Canvas.Top="35" Canvas.Left="25" Text="L" Visibility="Collapsed" />
                         <TextBlock x:Name="AuxiliaryTextBlock" Canvas.Top="20" Canvas.Left="40" Text="A" Visibility="Collapsed" />
+
+                        <Canvas.ContextMenu>
+                            <ContextMenu ItemsSource="{TemplateBinding MenuCommands}" 
+                                         Style="{StaticResource PopupMenuRegularStyle}">
+                                <ContextMenu.ItemTemplate>
+                                    <DataTemplate DataType="models:NamedCommand">
+                                        <TextBlock Text="{Binding DisplayName}" />
+                                    </DataTemplate>
+                                </ContextMenu.ItemTemplate>
+                                <ContextMenu.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Command" Value="{Binding Command}" />
+                                    </Style>
+                                </ContextMenu.ItemContainerStyle>
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
                     </Canvas>
 
                     <ControlTemplate.Triggers>

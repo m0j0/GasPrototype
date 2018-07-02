@@ -4,6 +4,7 @@
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/AttrTable.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/AttrTableCb.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/ContextMenu.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Pipe.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Valve.xaml" />
         <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Valve3Way.xaml" />
