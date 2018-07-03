@@ -380,7 +380,7 @@
         <Setter Property="ItemsSource" Value="{Binding Items}" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
-                <DataTemplate>
+                <DataTemplate DataType="models:MenuItem">
                     <TextBlock Text="{Binding Text}" />
                 </DataTemplate>
             </Setter.Value>

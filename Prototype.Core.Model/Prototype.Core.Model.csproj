@@ -43,11 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IMenuItem.cs" />
+    <Compile Include="Interfaces\IMenu.cs" />
     <Compile Include="Interfaces\INamedCommand.cs" />
     <Compile Include="Interfaces\Controls\IValveVm.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Controls\ValveVm.cs" />
+    <Compile Include="Models\Menu.cs" />
     <Compile Include="Models\NamedCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
