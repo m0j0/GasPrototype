@@ -47,13 +47,12 @@ namespace Prototype.Core.Controls
         public static readonly DependencyProperty RotationProperty = DependencyProperty.Register(
             "Rotation", typeof(Rotation), typeof(Valve3Way), new PropertyMetadata(Rotation.Rotate0));
 
-        public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
+        internal static readonly DependencyProperty StateProperty = DependencyProperty.Register(
             "State", typeof(ValveState), typeof(Valve3Way),
             new PropertyMetadata(ValveState.Unknown, OnStatePropertyChangedCallback));
 
-        public static readonly DependencyProperty MenuCommandsProperty = DependencyProperty.Register(
-            "MenuCommands", typeof(IReadOnlyCollection<INamedCommand>), typeof(Valve3Way),
-            new PropertyMetadata(default(IReadOnlyCollection<INamedCommand>)));
+        internal static readonly DependencyProperty MenuProperty = DependencyProperty.Register(
+            "Menu", typeof(IMenu), typeof(Valve3Way), new PropertyMetadata(default(IMenu)));
 
         public static readonly DependencyProperty ValveModelProperty = DependencyProperty.Register(
             "ValveVm", typeof(IValveVm), typeof(Valve3Way),
@@ -76,27 +75,26 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Properties
-        
+
+        [Category("Layout")]
         public Rotation Rotation
         {
             get { return (Rotation) GetValue(RotationProperty); }
             set { SetValue(RotationProperty, value); }
         }
 
-        [Category("Model")]
-        public ValveState State
+        internal ValveState State
         {
             get { return (ValveState)GetValue(StateProperty); }
             set { SetValue(StateProperty, value); }
         }
 
-        [Category("Model")]
-        public IReadOnlyCollection<INamedCommand> MenuCommands
+        public IMenu Menu
         {
-            get { return (IReadOnlyCollection<INamedCommand>)GetValue(MenuCommandsProperty); }
-            set { SetValue(MenuCommandsProperty, value); }
+            get { return (IMenu) GetValue(MenuProperty); }
+            set { SetValue(MenuProperty, value); }
         }
-
+        
         [Category("Model")]
         public IValveVm ValveVm
         {
@@ -104,12 +102,14 @@ namespace Prototype.Core.Controls
             set { SetValue(ValveModelProperty, value); }
         }
 
+        [Category("Model")]
         public Valve3WayFlowPath PathWhenOpen
         {
             get { return (Valve3WayFlowPath) GetValue(PathWhenOpenProperty); }
             set { SetValue(PathWhenOpenProperty, value); }
         }
 
+        [Category("Model")]
         public Valve3WayFlowPath PathWhenClosed
         {
             get { return (Valve3WayFlowPath) GetValue(PathWhenClosedProperty); }
@@ -181,13 +181,13 @@ namespace Prototype.Core.Controls
             if (model == null)
             {
                 BindingOperations.ClearBinding(valve, StateProperty);
-                BindingOperations.ClearBinding(valve, MenuCommandsProperty);
+                BindingOperations.ClearBinding(valve, MenuProperty);
                 BindingOperations.ClearBinding(valve, VisibilityProperty);
                 return;
             }
 
             CoreViewExtensions.SetOneTimeBinding(valve, StateProperty, nameof(IValveVm.State), model);
-            CoreViewExtensions.SetOneTimeBinding(valve, MenuCommandsProperty, nameof(IValveVm.Commands), model);
+            CoreViewExtensions.SetOneTimeBinding(valve, MenuProperty, nameof(IValveVm.Menu), model);
             CoreViewExtensions.SetOneTimeBinding(valve, VisibilityProperty, nameof(IValveVm.IsPresent), model, CoreViewExtensions.BooleanToVisibilityConverterInstance);
         }
 

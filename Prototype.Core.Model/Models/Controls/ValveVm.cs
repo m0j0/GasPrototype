@@ -9,9 +9,7 @@ namespace Prototype.Core.Models.GasPanel
     public class ValveVm : NotifyPropertyChangedBase, IValveVm
     {
         #region Fields
-
-        private readonly NamedCommand[] _commands;
-        private readonly string _name;
+        
         private bool _isPresent = true;
         private ValveState _state = ValveState.Unknown;
 
@@ -21,18 +19,16 @@ namespace Prototype.Core.Models.GasPanel
 
         public ValveVm(string name = "")
         {
-            _name = name;
+            Name = name;
 
             OpenCommand = new RelayCommand(Open, CanOpen, this);
             CloseCommand = new RelayCommand(Close, CanClose, this);
             HideCommand = new RelayCommand(Hide, CanHide, this);
 
-            _commands = new[]
-            {
-                new NamedCommand("Open", OpenCommand),
-                new NamedCommand("Close", CloseCommand),
-                new NamedCommand("Hide", HideCommand),
-            };
+            Menu = new Menu("Commands", 
+                new MenuItem("Open", OpenCommand),
+                new MenuItem("Close", CloseCommand),
+                new MenuItem("Hide", HideCommand));
         }
 
         #endregion
@@ -107,15 +103,9 @@ namespace Prototype.Core.Models.GasPanel
             }
         }
 
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
-        public IReadOnlyCollection<INamedCommand> Commands
-        {
-            get { return _commands; }
-        }
+        public IMenu Menu { get; }
 
         #endregion
     }

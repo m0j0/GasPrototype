@@ -104,7 +104,7 @@
                                                    Foreground="White" />
                                     </Border>
 
-                                    <ItemsControl ItemsSource="{TemplateBinding MenuCommands}" Margin="2">
+                                    <ItemsControl ItemsSource="{TemplateBinding Menu}" Margin="2">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical" />

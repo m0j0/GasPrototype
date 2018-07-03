@@ -12,6 +12,6 @@ namespace Prototype.Core.Interfaces.Controls
 
         string Name { get; }
 
-        IReadOnlyCollection<INamedCommand> Commands { get; }
+        IMenu Menu { get; }
     }
 }

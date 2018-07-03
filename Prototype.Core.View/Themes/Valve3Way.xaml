@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
                     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
-                    xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model">
+                    xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model"
+                    xmlns:markupExtensions="clr-namespace:Prototype.Core.MarkupExtensions">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="ContextMenu.xaml" />
@@ -28,19 +29,8 @@
                         <TextBlock x:Name="AuxiliaryTextBlock" Canvas.Top="20" Canvas.Left="40" Text="A" Visibility="Collapsed" />
 
                         <Canvas.ContextMenu>
-                            <ContextMenu ItemsSource="{TemplateBinding MenuCommands}" 
-                                         Style="{StaticResource PopupMenuRegularStyle}">
-                                <ContextMenu.ItemTemplate>
-                                    <DataTemplate DataType="models:NamedCommand">
-                                        <TextBlock Text="{Binding DisplayName}" />
-                                    </DataTemplate>
-                                </ContextMenu.ItemTemplate>
-                                <ContextMenu.ItemContainerStyle>
-                                    <Style TargetType="MenuItem">
-                                        <Setter Property="Command" Value="{Binding Command}" />
-                                    </Style>
-                                </ContextMenu.ItemContainerStyle>
-                            </ContextMenu>
+                            <ContextMenu DataContext="{TemplateBinding Menu}"
+                                         Style="{StaticResource PopupMenuRegularStyle}" />
                         </Canvas.ContextMenu>
                     </Canvas>
 

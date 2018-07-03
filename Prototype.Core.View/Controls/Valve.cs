@@ -40,16 +40,15 @@ namespace Prototype.Core.Controls
 
         #region Dependency properties
 
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
+        internal static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
             "Orientation", typeof(Orientation), typeof(Valve), new PropertyMetadata(Orientation.Horizontal));
 
-        public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
+        internal static readonly DependencyProperty StateProperty = DependencyProperty.Register(
             "State", typeof(ValveState), typeof(Valve),
             new PropertyMetadata(ValveState.Unknown, OnStatePropertyChangedCallback));
 
-        public static readonly DependencyProperty MenuCommandsProperty = DependencyProperty.Register(
-            "MenuCommands", typeof(IReadOnlyCollection<INamedCommand>), typeof(Valve),
-            new PropertyMetadata(default(IReadOnlyCollection<INamedCommand>)));
+        internal static readonly DependencyProperty MenuProperty = DependencyProperty.Register(
+            "Menu", typeof(IMenu), typeof(Valve), new PropertyMetadata(default(IMenu)));
 
         public static readonly DependencyProperty ValveModelProperty = DependencyProperty.Register(
             "ValveVm", typeof(IValveVm), typeof(Valve),
@@ -73,19 +72,17 @@ namespace Prototype.Core.Controls
             get { return (Orientation) GetValue(OrientationProperty); }
             set { SetValue(OrientationProperty, value); }
         }
-
-        [Category("Model")]
+        
         internal ValveState State
         {
             get { return (ValveState) GetValue(StateProperty); }
             set { SetValue(StateProperty, value); }
         }
 
-        [Category("Model")]
-        internal IReadOnlyCollection<INamedCommand> MenuCommands
+        internal IMenu Menu
         {
-            get { return (IReadOnlyCollection<INamedCommand>) GetValue(MenuCommandsProperty); }
-            set { SetValue(MenuCommandsProperty, value); }
+            get { return (IMenu) GetValue(MenuProperty); }
+            set { SetValue(MenuProperty, value); }
         }
 
         [Category("Model")]
@@ -158,13 +155,13 @@ namespace Prototype.Core.Controls
             if (model == null)
             {
                 BindingOperations.ClearBinding(valve, StateProperty);
-                BindingOperations.ClearBinding(valve, MenuCommandsProperty);
+                BindingOperations.ClearBinding(valve, MenuProperty);
                 BindingOperations.ClearBinding(valve, VisibilityProperty);
                 return;
             }
 
             CoreViewExtensions.SetOneTimeBinding(valve, StateProperty, nameof(IValveVm.State), model);
-            CoreViewExtensions.SetOneTimeBinding(valve, MenuCommandsProperty, nameof(IValveVm.Commands), model);
+            CoreViewExtensions.SetOneTimeBinding(valve, MenuProperty, nameof(IValveVm.Menu), model);
             CoreViewExtensions.SetOneTimeBinding(valve, VisibilityProperty, nameof(IValveVm.IsPresent), model, CoreViewExtensions.BooleanToVisibilityConverterInstance);
         }
 
