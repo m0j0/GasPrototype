@@ -122,14 +122,11 @@ namespace Prototype.Core.Controls
 
         bool IValve3Way.IsOpen => State == ValveState.Open;
 
+        ISchemeContainer IFlowControl.SchemeContainer { get; set; }
+
         #endregion
 
         #region Methods
-
-        public ISchemeContainer GetContainer()
-        {
-            return (ISchemeContainer)Parent;
-        }
 
         public bool CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {

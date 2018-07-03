@@ -1,41 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    public sealed class PipeFlowCanvas : Canvas, ISchemeContainer
+    public sealed class PipeFlowCanvas : Canvas, ISchemeContainerOwner
     {
-        private static readonly EventHandler OnFlowControlPositionChangedEventHandler = OnFlowControlPositionChanged;
-        private static readonly EventHandler OnValveStateChangedEventHandler = OnValveStateChanged;
-
-        private FlowGraph _scheme;
-        private bool _isInvalidateCalled;
+        private readonly SchemeContainer _schemeContainer;
 
         public PipeFlowCanvas()
         {
+            _schemeContainer = new SchemeContainer(this);
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
+
+        public IEnumerable<IFlowControl> ChildrenFlowControls => Children.OfType<IFlowControl>();
 
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
 
-            if (!IsLoaded)
+            var addedFlowControl = visualAdded as IFlowControl;
+            var removedFlowControl = visualRemoved as IFlowControl;
+
+            if (addedFlowControl != null || removedFlowControl != null)
+            {
+                _schemeContainer.OnVisualChildrenChanged(addedFlowControl, removedFlowControl);
+            }
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _schemeContainer.OnLoaded();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            _schemeContainer.OnUnloaded();
+        }
+    }
+
+    public sealed class SchemeContainer : ISchemeContainer
+    {
+        private static readonly EventHandler OnFlowControlSchemeChangedEventHandler = OnFlowControlSchemeChanged;
+        private static readonly EventHandler OnValveStateChangedEventHandler = OnValveStateChanged;
+
+        private readonly ISchemeContainerOwner _owner;
+        private FlowGraph _scheme;
+        private bool _isInvalidateCalled;
+
+        public SchemeContainer(ISchemeContainerOwner owner)
+        {
+            Should.NotBeNull(owner, nameof(owner));
+            _owner = owner;
+        }
+
+        public void OnVisualChildrenChanged(IFlowControl visualAdded, IFlowControl visualRemoved)
+        {
+            if (!_owner.IsLoaded)
             {
                 return;
             }
 
-            if (visualAdded is IFlowControl)
+            if (visualAdded != null)
             {
                 SubscribePositionChangedEvents(visualAdded);
             }
 
-            if (visualRemoved is IFlowControl)
+            if (visualRemoved != null)
             {
                 UnsubscribePositionChangedEvents(visualRemoved);
             }
@@ -43,9 +81,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             InvalidateScheme(false);
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        public void OnLoaded()
         {
-            foreach (DependencyObject child in Children)
+            foreach (var child in _owner.ChildrenFlowControls)
             {
                 SubscribePositionChangedEvents(child);
             }
@@ -53,65 +91,64 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             InvalidateScheme(true);
         }
 
-        private void OnUnloaded(object sender, RoutedEventArgs e)
+        public void OnUnloaded()
         {
-            foreach (DependencyObject child in Children)
+            foreach (var child in _owner.ChildrenFlowControls)
             {
                 UnsubscribePositionChangedEvents(child);
             }
         }
 
-        private void SubscribePositionChangedEvents(DependencyObject element)
+        private void SubscribePositionChangedEvents(IFlowControl element)
         {
             switch (element)
             {
                 case IPipe pipe:
-                    pipe.SchemeChanged += OnFlowControlPositionChangedEventHandler;
+                    pipe.SchemeChanged += OnFlowControlSchemeChangedEventHandler;
                     break;
+
                 case IValve valve:
-                    valve.SchemeChanged += OnFlowControlPositionChangedEventHandler;
+                    valve.SchemeChanged += OnFlowControlSchemeChangedEventHandler;
                     valve.StateChanged += OnValveStateChangedEventHandler;
-                    break;
-            }
-        }
-
-        private void UnsubscribePositionChangedEvents(DependencyObject element)
-        {
-            switch (element)
-            {
-                case IPipe pipe:
-                    pipe.SchemeChanged -= OnFlowControlPositionChangedEventHandler;
-                    break;
-                case IValve valve:
-                    valve.SchemeChanged -= OnFlowControlPositionChangedEventHandler;
-                    valve.StateChanged -= OnValveStateChangedEventHandler;
-                    break;
-            }
-        }
-
-        private static void OnFlowControlPositionChanged(object sender, EventArgs e)
-        {
-            switch (sender)
-            {
-                case IFlowControl flowControl:
-                    ((PipeFlowCanvas) flowControl.GetContainer()).InvalidateScheme(false);
-                    break;
-
-                case PipeFlowCanvas canvas:
-                    canvas.InvalidateScheme(false);
                     break;
 
                 default:
-                    throw new ArgumentException(nameof(sender));
+                    throw new ArgumentException(nameof(element));
             }
+        }
+
+        private void UnsubscribePositionChangedEvents(IFlowControl element)
+        {
+            switch (element)
+            {
+                case IPipe pipe:
+                    pipe.SchemeChanged -= OnFlowControlSchemeChangedEventHandler;
+                    break;
+
+                case IValve valve:
+                    valve.SchemeChanged -= OnFlowControlSchemeChangedEventHandler;
+                    valve.StateChanged -= OnValveStateChangedEventHandler;
+                    break;
+
+                default:
+                    throw new ArgumentException(nameof(element));
+            }
+        }
+
+        private static void OnFlowControlSchemeChanged(object sender, EventArgs e)
+        {
+            var flowControl = (IFlowControl) sender;
+            var schemeContainer = (SchemeContainer) flowControl.SchemeContainer;
+            schemeContainer.InvalidateScheme(false);
         }
 
         private static void OnValveStateChanged(object sender, EventArgs e)
         {
-            var valve = (IValve) sender;
-            ((PipeFlowCanvas) valve.GetContainer()).InvalidateSchemeFlow();
+            var valve = (IValve)sender;
+            var schemeContainer = (SchemeContainer)valve.SchemeContainer;
+            schemeContainer.InvalidateSchemeFlow();
         }
-        
+
         private void InvalidateScheme(bool isFirstLoad)
         {
             if (isFirstLoad)
@@ -127,7 +164,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             // hack to avoid massive pack of calls to one
             _isInvalidateCalled = true;
-            Dispatcher.InvokeAsync(InvalidateSchemeImpl, DispatcherPriority.Background);
+            Dispatcher.CurrentDispatcher.InvokeAsync(InvalidateSchemeImpl, DispatcherPriority.Background);
         }
 
         private void InvalidateSchemeImpl()
@@ -137,8 +174,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var pipes = new List<IPipe>();
             var valves = new List<IValve>();
 
-            foreach (var child in Children)
+            foreach (var child in _owner.ChildrenFlowControls)
             {
+                child.SchemeContainer = this;
+
                 if (child is IPipe pipe)
                 {
                     pipes.Add(pipe);
@@ -161,10 +200,5 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             _scheme.InvalidateFlow();
         }
-    }
-
-    public sealed class SchemeContainer
-    {
-
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Prototype.Core.Controls.PipeFlowScheme;
-using Prototype.Core.Models;
 
 namespace Prototype.Test.PipeFlowScheme
 {
@@ -37,13 +35,12 @@ namespace Prototype.Test.PipeFlowScheme
 
     internal class TestPipe : IPipe
     {
-        private readonly ISchemeContainer _container;
         private double? _width;
         private double? _height;
 
         public TestPipe(ISchemeContainer container)
         {
-            _container = container;
+            SchemeContainer = container;
             Orientation = Orientation.Horizontal;
         }
 
@@ -85,6 +82,8 @@ namespace Prototype.Test.PipeFlowScheme
 
         public bool IsVisible { get; set; } = true;
 
+        public ISchemeContainer SchemeContainer { get; set; }
+
         public double Top { get; set; }
 
         public double Left { get; set; }
@@ -96,20 +95,13 @@ namespace Prototype.Test.PipeFlowScheme
         public IList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();
 
         public event EventHandler SchemeChanged;
-
-        public ISchemeContainer GetContainer()
-        {
-            return _container;
-        }
     }
 
     internal class TestValve : IValve
     {
-        private readonly ISchemeContainer _container;
-
         public TestValve(ISchemeContainer container)
         {
-            _container = container;
+            SchemeContainer = container;
         }
 
         public double Width
@@ -148,6 +140,8 @@ namespace Prototype.Test.PipeFlowScheme
 
         public bool IsVisible { get; set; } = true;
 
+        public ISchemeContainer SchemeContainer { get; set; }
+
         public Orientation Orientation { get; set; }
 
         public double Top { get; set; }
@@ -160,11 +154,6 @@ namespace Prototype.Test.PipeFlowScheme
 
         public event EventHandler StateChanged;
 
-        public ISchemeContainer GetContainer()
-        {
-            return _container;
-        }
-
         bool IValve.CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {
             return CanPassFlow;
@@ -173,12 +162,11 @@ namespace Prototype.Test.PipeFlowScheme
 
     internal class TestValve3Way : IValve3Way
     {
-        private readonly ISchemeContainer _container;
         private readonly Valve3WayModel _model;
 
         public TestValve3Way(ISchemeContainer container)
         {
-            _container = container;
+            SchemeContainer = container;
             _model = new Valve3WayModel(this);
         }
 
@@ -222,6 +210,8 @@ namespace Prototype.Test.PipeFlowScheme
 
         public bool IsVisible { get; set; } = true;
 
+        public ISchemeContainer SchemeContainer { get; set; }
+
         public double Top { get; set; }
 
         public double Left { get; set; }
@@ -237,11 +227,6 @@ namespace Prototype.Test.PipeFlowScheme
         public event EventHandler SchemeChanged;
 
         public event EventHandler StateChanged;
-
-        public ISchemeContainer GetContainer()
-        {
-            return _container;
-        }
 
         bool IValve.CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {

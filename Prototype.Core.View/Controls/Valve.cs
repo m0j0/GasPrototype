@@ -99,14 +99,11 @@ namespace Prototype.Core.Controls
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 
+        ISchemeContainer IFlowControl.SchemeContainer { get; set; }
+
         #endregion
 
         #region Methods
-
-        public ISchemeContainer GetContainer()
-        {
-            return (ISchemeContainer) Parent;
-        }
 
         public bool CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {

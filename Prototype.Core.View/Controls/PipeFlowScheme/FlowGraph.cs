@@ -16,6 +16,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     internal class FlowGraph : IFlowGraph
     {
+        private readonly ISchemeContainer _container;
+
         private bool _isSchemeFailed;
         private IReadOnlyCollection<IVertex> _vertices;
         private IReadOnlyCollection<Edge> _edges;
@@ -26,6 +28,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public FlowGraph(ISchemeContainer container, IEnumerable<IPipe> pipes,
             IEnumerable<IValve> valves)
         {
+            _container = container;
             SplitPipesToSegments(container, pipes, valves);
             
             InvalidateFlow();
@@ -411,6 +414,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             if (_isSchemeFailed)
             {
                 return;
+            }
+
+            foreach (var pipe in _pipes)
+            {
+                if (pipe.Pipe.SchemeContainer != _container)
+                {
+                    throw new InvalidOperationException(" ! ! ! ! ! !");
+                }
+            }
+            foreach (var valve in _valves)
+            {
+                if (valve.Valve.SchemeContainer != _container)
+                {
+                    throw new InvalidOperationException(" ! ! ! ! ! !");
+                }
             }
 
             foreach (var edge in _edges)

@@ -90,18 +90,15 @@ namespace Prototype.Core.Controls
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 
+        ISchemeContainer IFlowControl.SchemeContainer { get; set; }
+
         #endregion
 
         #region Methods
 
-        public ISchemeContainer GetContainer()
-        {
-            return (ISchemeContainer) Parent;
-        }
-
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!(Parent is ISchemeContainer))
+            if (!(Parent is ISchemeContainerOwner))
             {
                 throw new InvalidOperationException("Pipe can be placed only on ISchemeContainer");
             }

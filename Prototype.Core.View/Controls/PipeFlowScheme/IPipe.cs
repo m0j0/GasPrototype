@@ -9,13 +9,20 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
     }
 
+    public interface ISchemeContainerOwner
+    {
+        IEnumerable<IFlowControl> ChildrenFlowControls { get; }
+
+        bool IsLoaded { get; }
+    }
+
     public interface IFlowControl
     {
         Rect LayoutRect { get; }
 
         bool IsVisible { get; }
 
-        ISchemeContainer GetContainer();
+        ISchemeContainer SchemeContainer { get; set; }
 
         event EventHandler SchemeChanged;
     }
