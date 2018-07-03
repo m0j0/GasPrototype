@@ -332,7 +332,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 pipe.SetPipeSegments(allSegments);
             }
 
-            _isSchemeFailed = pipes.Any(pipe => pipe.IsFailed);
+            _isSchemeFailed = !pipes.All(pipe => pipe.FailType == FailType.None || pipe.FailType == FailType.DeadPath);
             _vertices = cnnToVertex.Values.ToArray();
             _edges = edges.Where(edge => edge.PipeSegment != null).ToArray();
         }
