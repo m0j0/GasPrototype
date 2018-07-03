@@ -21,18 +21,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Unloaded += OnUnloaded;
         }
 
-        public double GetTop(IFlowControl control)
-        {
-            var top = GetTop((UIElement)control);
-            return double.IsNaN(top) ? 0 : top;
-        }
-
-        public double GetLeft(IFlowControl control)
-        {
-            var left = GetLeft((UIElement) control);
-            return double.IsNaN(left) ? 0 : left;
-        }
-
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
@@ -85,13 +73,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     valve.StateChanged += OnValveStateChangedEventHandler;
                     break;
             }
-
-            DependencyPropertyDescriptor
-                .FromProperty(TopProperty, typeof(DependencyObject))
-                .AddValueChanged(element, OnFlowControlPositionChangedEventHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(LeftProperty, typeof(DependencyObject))
-                .AddValueChanged(element, OnFlowControlPositionChangedEventHandler);
         }
 
         private void UnsubscribePositionChangedEvents(DependencyObject element)
@@ -106,13 +87,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     valve.StateChanged -= OnValveStateChangedEventHandler;
                     break;
             }
-
-            DependencyPropertyDescriptor
-                .FromProperty(TopProperty, typeof(DependencyObject))
-                .RemoveValueChanged(element, OnFlowControlPositionChangedEventHandler);
-            DependencyPropertyDescriptor
-                .FromProperty(LeftProperty, typeof(DependencyObject))
-                .RemoveValueChanged(element, OnFlowControlPositionChangedEventHandler);
         }
 
         private static void OnFlowControlPositionChanged(object sender, EventArgs e)
@@ -187,5 +161,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             _scheme.InvalidateFlow();
         }
+    }
+
+    public sealed class SchemeContainer
+    {
+
     }
 }

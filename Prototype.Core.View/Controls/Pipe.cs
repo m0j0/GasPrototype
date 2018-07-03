@@ -25,7 +25,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
             SizeChangedHandler = OnSizeChanged;
-            SubscribedProperties = new[] {HeightProperty, WidthProperty, OrientationProperty, VisibilityProperty, TypeProperty};
+            SubscribedProperties = new[] {OrientationProperty, VisibilityProperty, TypeProperty};
         }
 
         public Pipe()
@@ -128,6 +128,13 @@ namespace Prototype.Core.Controls
         {
             var pipe = (Pipe) sender;
             pipe.SchemeChanged?.Invoke(pipe, EventArgs.Empty);
+        }
+
+        protected override Size ArrangeOverride(Size arrangeBounds)
+        {
+            SchemeChanged?.Invoke(this, EventArgs.Empty);
+
+            return base.ArrangeOverride(arrangeBounds);
         }
 
         #endregion

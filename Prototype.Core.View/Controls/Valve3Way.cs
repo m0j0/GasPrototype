@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
@@ -28,7 +29,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve3Way), new FrameworkPropertyMetadata(typeof(Valve3Way)));
             SizeChangedHandler = OnSizeChanged;
-            SubscribedProperties = new[] { HeightProperty, WidthProperty, RotationProperty, VisibilityProperty };
+            SubscribedProperties = new[] { RotationProperty, VisibilityProperty };
         }
 
         public Valve3Way()
@@ -167,6 +168,13 @@ namespace Prototype.Core.Controls
             valve.StateChanged?.Invoke(valve, EventArgs.Empty);
         }
 
+        protected override Size ArrangeOverride(Size arrangeBounds)
+        {
+            SchemeChanged?.Invoke(this, EventArgs.Empty);
+
+            return base.ArrangeOverride(arrangeBounds);
+        }
+
         private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs args)
         {
@@ -175,6 +183,9 @@ namespace Prototype.Core.Controls
 
             if (model == null)
             {
+                BindingOperations.ClearBinding(valve, StateProperty);
+                BindingOperations.ClearBinding(valve, MenuCommandsProperty);
+                BindingOperations.ClearBinding(valve, VisibilityProperty);
                 return;
             }
 

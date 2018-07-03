@@ -9,7 +9,6 @@ using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
 using Prototype.Core.Interfaces.Controls;
 using Prototype.Core.Models;
-using Prototype.Core.Models.GasPanel;
 
 namespace Prototype.Core.Controls
 {
@@ -28,7 +27,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve), new FrameworkPropertyMetadata(typeof(Valve)));
             SizeChangedHandler = OnSizeChanged;
-            SubscribedProperties = new[] { HeightProperty, WidthProperty, OrientationProperty, VisibilityProperty };
+            SubscribedProperties = new[] { OrientationProperty, VisibilityProperty };
         }
 
         public Valve()
@@ -146,6 +145,13 @@ namespace Prototype.Core.Controls
             valve.StateChanged?.Invoke(valve, EventArgs.Empty);
         }
 
+        protected override Size ArrangeOverride(Size arrangeBounds)
+        {
+            SchemeChanged?.Invoke(this, EventArgs.Empty);
+
+            return base.ArrangeOverride(arrangeBounds);
+        }
+
         private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs args)
         {
@@ -154,6 +160,9 @@ namespace Prototype.Core.Controls
 
             if (model == null)
             {
+                BindingOperations.ClearBinding(valve, StateProperty);
+                BindingOperations.ClearBinding(valve, MenuCommandsProperty);
+                BindingOperations.ClearBinding(valve, VisibilityProperty);
                 return;
             }
 
