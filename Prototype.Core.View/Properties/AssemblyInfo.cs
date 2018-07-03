@@ -45,3 +45,4 @@ using System.Windows.Markup;
 
 [assembly: InternalsVisibleTo("Prototype.Test")]
 [assembly: InternalsVisibleTo("Prototype.Core.View.Design")]
+[assembly: InternalsVisibleTo("Prototype.Core.Converters")]

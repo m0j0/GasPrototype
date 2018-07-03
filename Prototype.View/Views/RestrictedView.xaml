@@ -6,10 +6,10 @@
              xmlns:viewModels="clr-namespace:Prototype.ViewModels;assembly=Prototype.Model"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:RestrictedVm}"
              d:DesignHeight="300" d:DesignWidth="300"
-             IsEnabled="{DataBinding '!IsReadOnly'}">
+             IsEnabled="{Binding IsReadOnly, Converter={x:Static InverseBooleanConverter.Instance}}">
     <StackPanel Orientation="Horizontal">
         <TextBlock Text="Content: " />
-        <TextBox Width="200" Text="{DataBinding Content, Mode=TwoWay}" />
+        <TextBox Width="200" Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </StackPanel>
 </UserControl>
 

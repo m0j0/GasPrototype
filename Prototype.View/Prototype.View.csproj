@@ -38,14 +38,8 @@
     <Reference Include="MugenMvvmToolkit, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MugenMvvmToolkit.6.5.0\lib\net45\MugenMvvmToolkit.dll</HintPath>
     </Reference>
-    <Reference Include="MugenMvvmToolkit.Binding, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MugenMvvmToolkit.Binding.6.5.0\lib\net45\MugenMvvmToolkit.Binding.dll</HintPath>
-    </Reference>
     <Reference Include="MugenMvvmToolkit.WPF, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MugenMvvmToolkit.WPF.6.5.0\lib\net45\MugenMvvmToolkit.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="MugenMvvmToolkit.WPF.Binding, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MugenMvvmToolkit.WPF.Binding.6.5.0\lib\net45\MugenMvvmToolkit.WPF.Binding.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -71,12 +65,6 @@
     <Compile Include="DesignBootstrapper.cs" />
     <Compile Include="Infrastructure\AttachedProperties.cs" />
     <Compile Include="Modules\ViewModule.cs" />
-    <Compile Include="Views\AttrList\CbExampleView.xaml.cs">
-      <DependentUpon>CbExampleView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AttrList\VmExampleView.xaml.cs">
-      <DependentUpon>VmExampleView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CfmApplicationView.xaml.cs">
       <DependentUpon>CfmApplicationView.xaml</DependentUpon>
     </Compile>
@@ -135,14 +123,6 @@
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\AttrList\CbExampleView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AttrList\VmExampleView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\CfmApplicationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

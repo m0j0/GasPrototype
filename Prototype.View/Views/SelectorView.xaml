@@ -9,13 +9,13 @@
     <Grid>
         <ContentPresenter Grid.Row="0"
                           Content="{ViewModelToViewBinding Path=SelectedVm}"
-                          View.Visible="{DataBinding 'SelectedVm != null'}" />
+                          View.Visible="{Binding SelectedVm, Converter={x:Static IsNotNullConverter.Instance}}" />
 
         <StackPanel Grid.Row="0"
-                    View.Visible="{DataBinding 'SelectedVm == null'}">
+                    View.Visible="{Binding SelectedVm, Converter={x:Static IsNullConverter.Instance}}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Parameter:" VerticalAlignment="Center" />
-                <TextBox Text="{DataBinding Parameter, Mode=TwoWay}" Width="200" />
+                <TextBox Text="{Binding Parameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" />
             </StackPanel>
             <Button Content="Open composite view model"
                     Command="{Binding SelectCompositeVmCommand}" />

@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using MugenMvvmToolkit;
-using MugenMvvmToolkit.Binding.Infrastructure;
 using MugenMvvmToolkit.Interfaces;
 using MugenMvvmToolkit.Interfaces.ViewModels;
 using MugenMvvmToolkit.ViewModels;
-using MugenMvvmToolkit.WPF.Binding.Modules;
 using MugenMvvmToolkit.WPF.Infrastructure;
 using Prototype.ViewModels;
-using Prototype.ViewModels.AttrList;
 using Prototype.ViewModels.Pipes;
 
 namespace Prototype
@@ -50,8 +47,6 @@ namespace Prototype
             assemblies.Add(typeof(MainVm).Assembly);
             assemblies.Add(typeof(MugenContainer).Assembly);
             assemblies.Add(typeof(WpfDesignBootstrapperBase).Assembly);
-            assemblies.Add(typeof(DataBinding).Assembly);
-            assemblies.Add(typeof(WpfDataBindingModule).Assembly);
         }
 
         private static DesignBootstrapper CreateInstance()
@@ -127,16 +122,6 @@ namespace Prototype
         public static PipesConnectionsVm PipesConnectionsVm
         {
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<PipesConnectionsVm>()); }
-        }
-
-        public static VmExampleVm VmExampleVm
-        {
-            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<VmExampleVm>()); }
-        }
-
-        public static CbExampleVm CbExampleVm
-        {
-            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<CbExampleVm>()); }
         }
 
         public static Valve3WayExampleVm Valve3WayExampleVm

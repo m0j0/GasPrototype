@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using MugenMvvmToolkit.Binding;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
 using Prototype.Core.Interfaces.Controls;
@@ -176,10 +175,9 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            valve.Bind(() => v => v.State).To(model, () => (m, ctx) => m.State).Build();
-            valve.Bind(() => v => v.MenuCommands).To(model, () => (m, ctx) => m.Commands).Build();
-            valve.Bind(() => v => v.Visibility)
-                .To(model, () => (m, ctx) => m.IsPresent ? Visibility.Visible : Visibility.Collapsed).Build();
+            CoreViewExtensions.SetOneTimeBinding(valve, StateProperty, nameof(IValveVm.State), model);
+            CoreViewExtensions.SetOneTimeBinding(valve, MenuCommandsProperty, nameof(IValveVm.Commands), model);
+            CoreViewExtensions.SetOneTimeBinding(valve, VisibilityProperty, nameof(IValveVm.IsPresent), model, CoreViewExtensions.BooleanToVisibilityConverterInstance);
         }
 
         #endregion

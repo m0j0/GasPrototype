@@ -12,7 +12,6 @@ using MugenMvvmToolkit.Models;
 using MugenMvvmToolkit.ViewModels;
 using Prototype.Infrastructure;
 using Prototype.Interfaces;
-using Prototype.ViewModels.AttrList;
 using Prototype.ViewModels.Pipes;
 
 namespace Prototype.ViewModels
@@ -65,8 +64,6 @@ namespace Prototype.ViewModels
                     new MenuItemModel("Manifold 3", _screenManager.ShowScreenAsync<Manifold3Vm>),
                     new MenuItemModel("Manifold 4", _screenManager.ShowScreenAsync<Manifold4Vm>),
                     new MenuItemModel("Valve3Way example", _screenManager.ShowScreenAsync<Valve3WayExampleVm>),
-                    new MenuItemModel("TieListFrame example VM", _screenManager.ShowScreenAsync<VmExampleVm>),
-                    new MenuItemModel("TieListFrame example CB", _screenManager.ShowScreenAsync<CbExampleVm>),
                 }),
                 new MenuItemModel("Popups", new List<MenuItemModel>
                 {
