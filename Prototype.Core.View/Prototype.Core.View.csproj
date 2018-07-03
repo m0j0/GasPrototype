@@ -72,7 +72,6 @@
     <Compile Include="MarkupExtensions\TransparentColorExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateSelectors\PipeSegmentTemplateSelector.cs" />
-    <Compile Include="Themes\Colors.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj">
@@ -81,6 +80,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Themes\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Common.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

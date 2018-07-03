@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="ColorCgaDarkBlue">#255B7F</Color>
+    <Color x:Key="ColorCgaBlue">#1140E5</Color>
+    <Color x:Key="ColorCgaBlue1">#0B2F90</Color>
+    <Color x:Key="ColorCgaMagenta">#FF00AA</Color>
+    <Color x:Key="ColorCgaMediumBlue">#467793</Color>
+    <Color x:Key="ColorCgaMediumBlue1">#4599C3</Color>
+    <Color x:Key="ColorCgaMediumBlue2">#6893A8</Color>
+    <Color x:Key="ColorCgaMediumBlue3">#ADC5D3</Color>
+    <Color x:Key="ColorCgaLightBlue">#A3DBE8</Color>
+    <Color x:Key="ColorCgaLightBlue1">#D0DBEA</Color>
+    <Color x:Key="ColorCgaLightBlue2">#D5E3EA</Color>
+    <Color x:Key="ColorCgaLightBlue3">#E3EEF0</Color>
+    <Color x:Key="ColorCgaDarkGreen">#007700</Color>
+    <Color x:Key="ColorCgaGreen">#7AB800</Color>
+    <Color x:Key="ColorCgaLightGreen">#CAE399</Color>
+    <Color x:Key="ColorCgaBeige">#FFD9B3</Color>
+    <Color x:Key="ColorCgaRed">#CD202C</Color>
+    <Color x:Key="ColorCgaYellow">#FECB00</Color>
+    <Color x:Key="ColorCgaOrange">#E98300</Color>
+    <Color x:Key="ColorCgaLightRed">#F1B1B7</Color>
+    <Color x:Key="ColorCgaDarkGray">#4D4F53</Color>
+    <Color x:Key="ColorCgaMediumGray1">#8B8D8E</Color>
+    <Color x:Key="ColorCgaMediumGray2">#C3C5C1</Color>
+    <Color x:Key="ColorCgaLightGray">#E0E1DD</Color>
+
+    <SolidColorBrush x:Key="SolidBrushCgaDarkBlue" Color="{StaticResource ColorCgaDarkBlue}" />
+    <SolidColorBrush x:Key="SolidBrushCgaBlue" Color="{StaticResource ColorCgaBlue}" />
+    <SolidColorBrush x:Key="SolidBrushCgaBlue1" Color="{StaticResource ColorCgaBlue1}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMagenta" Color="{StaticResource ColorCgaMagenta}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMediumBlue" Color="{StaticResource ColorCgaMediumBlue}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMediumBlue1" Color="{StaticResource ColorCgaMediumBlue1}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMediumBlue2" Color="{StaticResource ColorCgaMediumBlue2}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMediumBlue3" Color="{StaticResource ColorCgaMediumBlue3}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightBlue" Color="{StaticResource ColorCgaLightBlue}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightBlue1" Color="{StaticResource ColorCgaLightBlue1}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightBlue2" Color="{StaticResource ColorCgaLightBlue2}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightBlue3" Color="{StaticResource ColorCgaLightBlue3}" />
+    <SolidColorBrush x:Key="SolidBrushCgaDarkGreen" Color="{StaticResource ColorCgaDarkGreen}" />
+    <SolidColorBrush x:Key="SolidBrushCgaGreen" Color="{StaticResource ColorCgaGreen}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightGreen" Color="{StaticResource ColorCgaLightGreen}" />
+    <SolidColorBrush x:Key="SolidBrushCgaBeige" Color="{StaticResource ColorCgaBeige}" />
+    <SolidColorBrush x:Key="SolidBrushCgaRed" Color="{StaticResource ColorCgaRed}" />
+    <SolidColorBrush x:Key="SolidBrushCgaYellow" Color="{StaticResource ColorCgaYellow}" />
+    <SolidColorBrush x:Key="SolidBrushCgaOrange" Color="{StaticResource ColorCgaOrange}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightRed" Color="{StaticResource ColorCgaLightRed}" />
+    <SolidColorBrush x:Key="SolidBrushCgaDarkGray" Color="{StaticResource ColorCgaDarkGray}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMediumGray1" Color="{StaticResource ColorCgaMediumGray1}" />
+    <SolidColorBrush x:Key="SolidBrushCgaMediumGray2" Color="{StaticResource ColorCgaMediumGray2}" />
+    <SolidColorBrush x:Key="SolidBrushCgaLightGray" Color="{StaticResource ColorCgaLightGray}" />
+
+</ResourceDictionary>

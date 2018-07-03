@@ -1,62 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:Prototype.Core.Converters"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <FontFamily x:Key="DefaultFontFamily">Segoe UI</FontFamily>
     <system:Double x:Key="DefaultFontSize">14</system:Double>
-
-    <Color x:Key="AmatColorDarkBlue">#255B7F</Color>
-    <Color x:Key="AmatColorBlue">#1140E5</Color>
-    <Color x:Key="AmatColorBlue1">#0B2F90</Color>
-    <Color x:Key="AmatColorMagenta">#FF00AA</Color>
-    <Color x:Key="AmatColorMediumBlue">#467793</Color>
-    <Color x:Key="AmatColorMediumBlue1">#4599C3</Color>
-    <Color x:Key="AmatColorMediumBlue2">#6893A8</Color>
-    <Color x:Key="AmatColorMediumBlue3">#ADC5D3</Color>
-    <Color x:Key="AmatColorLightBlue">#A3DBE8</Color>
-    <Color x:Key="AmatColorLightBlue1">#D0DBEA</Color>
-    <Color x:Key="AmatColorLightBlue2">#D5E3EA</Color>
-    <Color x:Key="AmatColorLightBlue3">#E3EEF0</Color>
-    <Color x:Key="AmatColorDarkGreen">#007700</Color>
-    <Color x:Key="AmatColorGreen">#7AB800</Color>
-    <Color x:Key="AmatColorLightGreen">#CAE399</Color>
-    <Color x:Key="AmatColorBeige">#FFD9B3</Color>
-    <Color x:Key="AmatColorRed">#CD202C</Color>
-    <Color x:Key="AmatColorYellow">#FECB00</Color>
-    <Color x:Key="AmatColorOrange">#E98300</Color>
-    <Color x:Key="AmatColorLightRed">#F1B1B7</Color>
-    <Color x:Key="AmatColorDarkGray">#4D4F53</Color>
-    <Color x:Key="AmatColorMediumGray1">#8B8D8E</Color>
-    <Color x:Key="AmatColorMediumGray2">#C3C5C1</Color>
-    <Color x:Key="AmatColorLightGray">#E0E1DD</Color>
-
-    <SolidColorBrush x:Key="SolidColorBrushAmatDarkBlue" Color="{StaticResource AmatColorDarkBlue}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatBlue" Color="{StaticResource AmatColorBlue}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatBlue1" Color="{StaticResource AmatColorBlue1}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMagenta" Color="{StaticResource AmatColorMagenta}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMediumBlue" Color="{StaticResource AmatColorMediumBlue}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMediumBlue1" Color="{StaticResource AmatColorMediumBlue1}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMediumBlue2" Color="{StaticResource AmatColorMediumBlue2}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMediumBlue3" Color="{StaticResource AmatColorMediumBlue3}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightBlue" Color="{StaticResource AmatColorLightBlue}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightBlue1" Color="{StaticResource AmatColorLightBlue1}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightBlue2" Color="{StaticResource AmatColorLightBlue2}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightBlue3" Color="{StaticResource AmatColorLightBlue3}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatDarkGreen" Color="{StaticResource AmatColorDarkGreen}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatGreen" Color="{StaticResource AmatColorGreen}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightGreen" Color="{StaticResource AmatColorLightGreen}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatBeige" Color="{StaticResource AmatColorBeige}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatRed" Color="{StaticResource AmatColorRed}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatYellow" Color="{StaticResource AmatColorYellow}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatOrange" Color="{StaticResource AmatColorOrange}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightRed" Color="{StaticResource AmatColorLightRed}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatDarkGray" Color="{StaticResource AmatColorDarkGray}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMediumGray1" Color="{StaticResource AmatColorMediumGray1}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatMediumGray2" Color="{StaticResource AmatColorMediumGray2}" />
-    <SolidColorBrush x:Key="SolidColorBrushAmatLightGray" Color="{StaticResource AmatColorLightGray}" />
 
     <Style x:Key="WindowRegularStyle" TargetType="{x:Type Window}">
         <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}" />

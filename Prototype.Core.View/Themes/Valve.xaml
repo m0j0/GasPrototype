@@ -94,8 +94,8 @@
                                PlacementTarget="{Binding ElementName=MainControl}"
                                StaysOpen="False">
                             <Border BorderThickness="1"
-                                    BorderBrush="{StaticResource SolidColorBrushAmatDarkBlue}"
-                                    Background="{StaticResource SolidColorBrushAmatMediumBlue2}">
+                                    BorderBrush="{StaticResource SolidBrushCgaDarkBlue}"
+                                    Background="{StaticResource SolidBrushCgaMediumBlue2}">
 
                                 <StackPanel Orientation="Vertical">
                                     <Border Height="31" HorizontalAlignment="Stretch">
