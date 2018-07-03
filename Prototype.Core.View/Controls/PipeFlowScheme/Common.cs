@@ -64,12 +64,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    intersectionRect.Height == Common.PipeWidth;
         }
 
-        internal static Rect GetAbsoluteRect(ISchemeContainer container, IFlowControl control)
-        {
-            // TODO var layoutSlot = LayoutInformation.GetLayoutSlot((FrameworkElement) control);
-            return new Rect(container.GetLeft(control), container.GetTop(control), control.Width, control.Height);
-        }
-
         internal static double GetLength(Rect rect, Orientation orientation)
         {
             switch (orientation)

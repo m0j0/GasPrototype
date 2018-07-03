@@ -366,37 +366,37 @@ namespace Prototype.Test.PipeFlowScheme
             var pipes = manifold.Container.GetPipes().ToArray();
             var valves = manifold.Container.GetValves().ToArray();
 
-            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
 
             manifold.Pipe1.Height += 1;
-            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsFalse(manifold.Graph.Equals(pipes, valves));
             
             manifold.Pipe1.Height -= 1;
-            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
 
             manifold.Pipe1.Top += 1;
-            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsFalse(manifold.Graph.Equals(pipes, valves));
             
             manifold.Pipe1.Top -= 1;
-            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
 
             manifold.Valve1.Top += 1;
-            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsFalse(manifold.Graph.Equals(pipes, valves));
             
             manifold.Valve1.Top -= 1;
-            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
 
             manifold.Pipe1.IsVisible = false;
-            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsFalse(manifold.Graph.Equals(pipes, valves));
 
             manifold.Pipe1.IsVisible = true;
-            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
 
             manifold.Valve1.IsVisible = false;
-            Assert.IsFalse(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsFalse(manifold.Graph.Equals(pipes, valves));
             
             manifold.Valve1.IsVisible = true;
-            Assert.IsTrue(manifold.Graph.Equals(manifold.Container, pipes, valves));
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
         }
 
         #endregion

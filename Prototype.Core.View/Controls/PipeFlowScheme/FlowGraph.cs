@@ -54,7 +54,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return _valves.Single(v => v.Valve == valve).Rect;
         }
 
-        public bool Equals(ISchemeContainer container, IReadOnlyList<IPipe> pipes, IReadOnlyList<IValve> valves)
+        public bool Equals(IReadOnlyList<IPipe> pipes, IReadOnlyList<IValve> valves)
         {
             if (_pipes.Count != pipes.Count)
             {
@@ -68,7 +68,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             for (int i = 0; i < _pipes.Count; i++)
             {
-                if (!pipes[i].IsVisible || !_pipes[i].Equals(container, pipes[i]))
+                if (!pipes[i].IsVisible || !_pipes[i].Equals(pipes[i]))
                 {
                     return false;
                 }
@@ -76,7 +76,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             for (int i = 0; i < _valves.Count; i++)
             {
-                if (!valves[i].IsVisible || !_valves[i].Equals(container, valves[i]))
+                if (!valves[i].IsVisible || !_valves[i].Equals(valves[i]))
                 {
                     return false;
                 }

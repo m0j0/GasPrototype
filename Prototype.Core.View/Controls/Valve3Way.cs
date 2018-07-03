@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media.Imaging;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
@@ -113,6 +114,8 @@ namespace Prototype.Core.Controls
             get { return (Valve3WayFlowPath) GetValue(PathWhenClosedProperty); }
             set { SetValue(PathWhenClosedProperty, value); }
         }
+
+        Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 

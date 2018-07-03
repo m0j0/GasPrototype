@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Prototype.Core.Controls.PipeFlowScheme;
 
 namespace Prototype.Core.Controls
@@ -84,6 +85,8 @@ namespace Prototype.Core.Controls
             get { return (IList<IPipeSegment>) GetValue(SegmentsProperty); }
             set { SetValue(SegmentsProperty, value is INotifyCollectionChanged ? value : new ObservableCollection<IPipeSegment>(value)); }
         }
+
+        Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 

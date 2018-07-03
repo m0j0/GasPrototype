@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public interface ISchemeContainer
     {
-        double GetTop(IFlowControl control);
-
-        double GetLeft(IFlowControl control);
     }
 
     public interface IFlowControl
     {
-        double Width { get; }
-
-        double Height { get; }
+        Rect LayoutRect { get; }
 
         bool IsVisible { get; }
 

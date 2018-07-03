@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Prototype.Core.Controls.PipeFlowScheme;
@@ -12,39 +13,7 @@ namespace Prototype.Test.PipeFlowScheme
     internal class TestContainer : ISchemeContainer
     {
         private readonly List<IFlowControl> _controls = new List<IFlowControl>();
-
-        public double GetTop(IFlowControl control)
-        {
-            switch (control)
-            {
-                case TestPipe pipe:
-                    return pipe.Top;
-                case TestValve valve:
-                    return valve.Top;
-                case TestValve3Way valve:
-                    return valve.Top;
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
-        public double GetLeft(IFlowControl control)
-        {
-            switch (control)
-            {
-                case TestPipe pipe:
-                    return pipe.Left;
-                case TestValve valve:
-                    return valve.Left;
-                case TestValve3Way valve:
-                    return valve.Left;
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
-        public event EventHandler SchemeChanged;
-
+        
         public void Add(IFlowControl flowControl)
         {
             _controls.Add(flowControl);
@@ -112,6 +81,8 @@ namespace Prototype.Test.PipeFlowScheme
             set => _height = value;
         }
 
+        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
+
         public bool IsVisible { get; set; } = true;
 
         public double Top { get; set; }
@@ -172,6 +143,8 @@ namespace Prototype.Test.PipeFlowScheme
                 }
             }
         }
+
+        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
 
         public bool IsVisible { get; set; } = true;
 
@@ -244,6 +217,8 @@ namespace Prototype.Test.PipeFlowScheme
                 }
             }
         }
+
+        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
 
         public bool IsVisible { get; set; } = true;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
@@ -94,6 +95,8 @@ namespace Prototype.Core.Controls
             get { return (IValveVm) GetValue(ValveModelProperty); }
             set { SetValue(ValveModelProperty, value); }
         }
+
+        Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 

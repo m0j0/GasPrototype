@@ -62,7 +62,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public GraphPipe(ISchemeContainer container, IPipe pipe)
         {
-            Rect = Common.GetAbsoluteRect(container, pipe);
+            Rect = pipe.LayoutRect;
             Pipe = pipe;
             _connectors = new List<IPipeConnector>();
             _comparer = new ConnectorComparer(this);
@@ -150,14 +150,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             UpdateDirection();
         }
 
-        public bool Equals(ISchemeContainer container, IPipe pipe)
+        public bool Equals(IPipe pipe)
         {
             if (Pipe != pipe)
             {
                 return false;
             }
 
-            if (Rect != Common.GetAbsoluteRect(container, pipe))
+            if (Rect != pipe.LayoutRect)
             {
                 return false;
             }

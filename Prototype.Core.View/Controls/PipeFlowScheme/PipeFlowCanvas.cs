@@ -176,7 +176,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            if (_scheme != null && _scheme.Equals(this, pipes, valves))
+            if (_scheme != null && _scheme.Equals(pipes, valves))
             {
                 return;
             }

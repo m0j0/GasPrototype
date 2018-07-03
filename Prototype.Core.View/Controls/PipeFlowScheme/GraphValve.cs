@@ -6,7 +6,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         public GraphValve(ISchemeContainer container, IValve valve)
         {
-            Rect = Common.GetAbsoluteRect(container, valve);
+            Rect = valve.LayoutRect;
             Valve = valve;
         }
 
@@ -16,14 +16,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public IPipeConnector Connector { get; set; }
 
-        public bool Equals(ISchemeContainer container, IValve valve)
+        public bool Equals(IValve valve)
         {
             if (Valve != valve)
             {
                 return false;
             }
 
-            if (Rect != Common.GetAbsoluteRect(container, valve))
+            if (Rect != valve.LayoutRect)
             {
                 return false;
             }
