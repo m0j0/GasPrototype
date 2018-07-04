@@ -9,118 +9,18 @@
 
     <Style x:Key="PopupMenuRegularStyle" TargetType="ContextMenu">
         <Style.Resources>
-            <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0" />
-                        <GradientStop Color="#CCC" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
+            <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource ColorCgaMediumBlue}" />
+            <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource ColorCgaLightBlue3}" />
 
-            <LinearGradientBrush x:Key="HorizontalNormalBrush" StartPoint="0,0" EndPoint="1,0">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0" />
-                        <GradientStop Color="#CCC" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
+            <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="{StaticResource ColorCgaLightBlue1}" />
+            <SolidColorBrush x:Key="HeaderForegroundBrush" Color="Black" />
 
-            <LinearGradientBrush x:Key="LightBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0" />
-                        <GradientStop Color="#EEE" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
+            <SolidColorBrush x:Key="ItemBackgroundBrushMouseOver" Color="{StaticResource ColorCgaMediumBlue2}" />
+            <SolidColorBrush x:Key="ItemForegroundBrush" Color="Black" />
+            <SolidColorBrush x:Key="ItemForegroundBrushDisabled" Color="Gray" />
+            <SolidColorBrush x:Key="ItemForegroundBrushMouseOver" Color="White" />
 
-            <LinearGradientBrush x:Key="HorizontalLightBrush" StartPoint="0,0" EndPoint="1,0">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0" />
-                        <GradientStop Color="#EEE" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="DarkBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0" />
-                        <GradientStop Color="#AAA" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#BBB" Offset="0.0" />
-                        <GradientStop Color="#EEE" Offset="0.1" />
-                        <GradientStop Color="#EEE" Offset="0.9" />
-                        <GradientStop Color="#FFF" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
-
-            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
-
-            <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
-
-            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD" />
-
-            <!-- Border Brushes -->
-
-            <LinearGradientBrush x:Key="NormalBorderBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#CCC" Offset="0.0" />
-                        <GradientStop Color="#444" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="HorizontalNormalBorderBrush" StartPoint="0,0" EndPoint="1,0">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#CCC" Offset="0.0" />
-                        <GradientStop Color="#444" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="DefaultedBorderBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#777" Offset="0.0" />
-                        <GradientStop Color="#000" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <LinearGradientBrush x:Key="PressedBorderBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#444" Offset="0.0" />
-                        <GradientStop Color="#888" Offset="1.0" />
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-
-            <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
-
-            <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
-
-            <SolidColorBrush x:Key="LightBorderBrush" Color="#AAA" />
-
-            <!-- Miscellaneous Brushes -->
-            <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
-
-            <SolidColorBrush x:Key="LightColorBrush" Color="#DDD" />
+            <SolidColorBrush x:Key="SeparatorBrush" Color="{StaticResource ColorCgaMediumBlue2}" />
 
             <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}"
                    TargetType="Separator">
@@ -129,7 +29,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Separator">
-                            <Border BorderBrush="{StaticResource SolidBorderBrush}"
+                            <Border BorderBrush="{StaticResource SeparatorBrush}"
                                     BorderThickness="1" />
                         </ControlTemplate>
                     </Setter.Value>
@@ -137,26 +37,26 @@
             </Style>
 
             <!-- TopLevelHeader -->
-            <ControlTemplate x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}"
+            <!--<ControlTemplate x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}"
                              TargetType="MenuItem">
-                <Border Name="Border">
+                <Border x:Name="Border">
                     <Grid>
                         <ContentPresenter
-                            Margin="6,3,6,3"
+                            Margin="0,2,0,2"
                             ContentSource="Header"
                             RecognizesAccessKey="True" />
                         <Popup
-                            Name="Popup"
+                            x:Name="Popup"
                             Placement="Bottom"
                             IsOpen="{TemplateBinding IsSubmenuOpen}"
                             AllowsTransparency="True"
                             Focusable="False"
                             PopupAnimation="Fade">
                             <Border
-                                Name="SubmenuBorder"
+                                x:Name="SubmenuBorder"
                                 SnapsToDevicePixels="True"
-                                Background="{StaticResource WindowBackgroundBrush}"
-                                BorderBrush="{StaticResource SolidBorderBrush}"
+                                Background="{StaticResource BackgroundBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
                                 BorderThickness="1">
                                 <StackPanel
                                     IsItemsHost="True"
@@ -171,7 +71,7 @@
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="true">
                         <Setter TargetName="Border" Property="Background"
-                                Value="{StaticResource NormalBrush}" />
+                                Value="{StaticResource ItemBackgroundBrushPressed}" />
                         <Setter TargetName="Border" Property="BorderBrush"
                                 Value="Transparent" />
                     </Trigger>
@@ -180,16 +80,15 @@
                         <Setter TargetName="SubmenuBorder" Property="Padding" Value="0,0,0,3" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource ItemForegroundBrushDisabled}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
-            </ControlTemplate>
-            <!-- TopLevelItem -->
+            </ControlTemplate>-->
 
-            <ControlTemplate
-                x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}"
-                TargetType="MenuItem">
-                <Border Name="Border">
+            <!-- TopLevelItem -->
+            <!--<ControlTemplate x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}"
+                             TargetType="MenuItem">
+                <Border x:Name="Border">
                     <Grid>
                         <ContentPresenter
                             Margin="6,3,6,3"
@@ -200,91 +99,49 @@
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsHighlighted" Value="true">
                         <Setter TargetName="Border" Property="Background"
-                                Value="{StaticResource NormalBrush}" />
-                        <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
+                                Value="{StaticResource ItemBackgroundBrushPressed}" />
+                        <Setter TargetName="Border" Property="BorderBrush" Value="Green" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
                         <Setter Property="Foreground"
-                                Value="{StaticResource DisabledForegroundBrush}" />
+                                Value="{StaticResource ItemForegroundBrushDisabled}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
-            </ControlTemplate>
+            </ControlTemplate>-->
+
 
             <!-- SubmenuItem -->
-
-            <ControlTemplate
-                x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}"
-                TargetType="MenuItem">
-                <Border Name="Border">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Icon" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Shortcut" />
-                            <ColumnDefinition Width="13" />
-                        </Grid.ColumnDefinitions>
-                        <ContentPresenter
-                            Name="Icon"
+            <ControlTemplate x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}"
+                             TargetType="MenuItem">
+                <Border x:Name="Border"
+                        Height="36">
+                    <!--<ContentPresenter
+                            x:Name="Icon"
                             Margin="6,0,6,0"
                             VerticalAlignment="Center"
-                            ContentSource="Icon" />
-                        <Border
-                            Name="Check"
-                            Width="13" Height="13"
-                            Visibility="Collapsed"
-                            Margin="6,0,6,0"
-                            Background="{StaticResource NormalBrush}"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource NormalBorderBrush}">
-                            <Path
-                                Name="CheckMark"
-                                Width="7" Height="7"
-                                Visibility="Hidden"
-                                SnapsToDevicePixels="False"
-                                Stroke="{StaticResource GlyphBrush}"
-                                StrokeThickness="2"
-                                Data="M 0 0 L 7 7 M 0 7 L 7 0" />
-                        </Border>
-                        <ContentPresenter
-                            Name="HeaderHost"
-                            Grid.Column="1"
-                            ContentSource="Header"
-                            RecognizesAccessKey="True" />
-                        <TextBlock x:Name="InputGestureText"
-                                   Grid.Column="2"
-                                   Text="{TemplateBinding InputGestureText}"
-                                   Margin="5,2,0,2"
-                                   DockPanel.Dock="Right" />
-                    </Grid>
+                            ContentSource="Icon" />-->
+                    <ContentPresenter x:Name="HeaderHost"
+                                      ContentSource="Header"
+                                      Margin="15,0" VerticalAlignment="Center" RecognizesAccessKey="True" />
                 </Border>
                 <ControlTemplate.Triggers>
-                    <Trigger Property="Icon" Value="{x:Null}">
-                        <Setter TargetName="Icon" Property="Visibility" Value="Hidden" />
-                    </Trigger>
-                    <Trigger Property="IsChecked" Value="true">
-                        <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
-                    </Trigger>
-                    <Trigger Property="IsCheckable" Value="true">
-                        <Setter TargetName="Check" Property="Visibility" Value="Visible" />
-                        <Setter TargetName="Icon" Property="Visibility" Value="Hidden" />
-                    </Trigger>
                     <Trigger Property="IsHighlighted" Value="true">
                         <Setter TargetName="Border" Property="Background"
-                                Value="{StaticResource SelectedBackgroundBrush}" />
+                                Value="{StaticResource ItemBackgroundBrushMouseOver}" />
+                        <Setter Property="Foreground"
+                                Value="{StaticResource ItemForegroundBrushMouseOver}" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource ItemForegroundBrushDisabled}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
 
             <!-- SubmenuHeader -->
-
-            <ControlTemplate
-                x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}"
-                TargetType="MenuItem">
-                <Border Name="Border">
-                    <Grid>
+            <!--<ControlTemplate x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}"
+                             TargetType="MenuItem">
+                <Border x:Name="Border">
+                    <Grid ShowGridLines="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Icon" />
                             <ColumnDefinition Width="*" />
@@ -292,12 +149,12 @@
                             <ColumnDefinition Width="13" />
                         </Grid.ColumnDefinitions>
                         <ContentPresenter
-                            Name="Icon"
+                            x:Name="Icon"
                             Margin="6,0,6,0"
                             VerticalAlignment="Center"
                             ContentSource="Icon" />
                         <ContentPresenter
-                            Name="HeaderHost"
+                            x:Name="HeaderHost"
                             Grid.Column="1"
                             ContentSource="Header"
                             RecognizesAccessKey="True" />
@@ -323,8 +180,8 @@
                             <Border
                                 Name="SubmenuBorder"
                                 SnapsToDevicePixels="True"
-                                Background="{StaticResource WindowBackgroundBrush}"
-                                BorderBrush="{StaticResource SolidBorderBrush}"
+                                Background="{StaticResource BackgroundBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
                                 BorderThickness="1">
                                 <StackPanel
                                     IsItemsHost="True"
@@ -339,42 +196,17 @@
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="true">
                         <Setter TargetName="Border" Property="Background"
-                                Value="{StaticResource SelectedBackgroundBrush}" />
+                                Value="{StaticResource ItemBackgroundBrushPressed}" />
                     </Trigger>
                     <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="True">
                         <Setter TargetName="SubmenuBorder" Property="CornerRadius" Value="4" />
                         <Setter TargetName="SubmenuBorder" Property="Padding" Value="0,3,0,3" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource ItemForegroundBrushDisabled}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
-            </ControlTemplate>
-
-            <!-- MenuItem Style -->
-
-            <Style x:Key="{x:Type MenuItem}" TargetType="MenuItem">
-                <Setter Property="OverridesDefaultStyle" Value="True" />
-                <Style.Triggers>
-                    <Trigger Property="Role" Value="TopLevelHeader">
-                        <Setter Property="Template"
-                                Value="{StaticResource {x:Static MenuItem.TopLevelHeaderTemplateKey}}" />
-                        <Setter Property="Grid.IsSharedSizeScope" Value="true" />
-                    </Trigger>
-                    <Trigger Property="Role" Value="TopLevelItem">
-                        <Setter Property="Template"
-                                Value="{StaticResource {x:Static MenuItem.TopLevelItemTemplateKey}}" />
-                    </Trigger>
-                    <Trigger Property="Role" Value="SubmenuHeader">
-                        <Setter Property="Template"
-                                Value="{StaticResource {x:Static MenuItem.SubmenuHeaderTemplateKey}}" />
-                    </Trigger>
-                    <Trigger Property="Role" Value="SubmenuItem">
-                        <Setter Property="Template"
-                                Value="{StaticResource {x:Static MenuItem.SubmenuItemTemplateKey}}" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+            </ControlTemplate>-->
         </Style.Resources>
 
         <Setter Property="ItemsSource" Value="{Binding Items}" />
@@ -396,14 +228,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Border x:Name="Border"
+                            MinWidth="200"
                             BorderThickness="1"
-                            BorderBrush="{StaticResource SolidBrushCgaDarkBlue}"
-                            Background="{StaticResource SolidBrushCgaMediumBlue2}">
+                            BorderBrush="{StaticResource BorderBrush}"
+                            Background="{StaticResource BackgroundBrush}">
                         <StackPanel Orientation="Vertical">
-                            <Border Height="31" HorizontalAlignment="Stretch">
+                            <Border Height="36" HorizontalAlignment="Stretch"
+                                    BorderThickness="0 0 0 1"
+                                    BorderBrush="{StaticResource BorderBrush}"
+                                    Background="{StaticResource HeaderBackgroundBrush}">
                                 <TextBlock Text="{Binding Header}"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
-                                           Foreground="White" />
+                                           Margin="15,0" VerticalAlignment="Center"
+                                           Foreground="{StaticResource HeaderForegroundBrush}" />
                             </Border>
 
                             <StackPanel IsItemsHost="True"
