@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Media;
 using Prototype.Core.Controls.PipeFlowScheme;
 using Prototype.Core.Interfaces;
 using Prototype.Core.Interfaces.Controls;
@@ -144,6 +145,12 @@ namespace Prototype.Core.Controls
             SchemeChanged?.Invoke(this, EventArgs.Empty);
 
             return base.ArrangeOverride(arrangeBounds);
+        }
+
+        protected override HitTestResult HitTestCore(PointHitTestParameters hitTestParameters)
+        {
+            var rect = new Rect(new Point(), RenderSize);
+            return rect.Contains(hitTestParameters.HitPoint) ? new PointHitTestResult(this, hitTestParameters.HitPoint) : null;
         }
 
         private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject,

@@ -12,6 +12,12 @@
     <Style TargetType="controls:Valve3Way">
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="43" />
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu DataContext="{Binding PlacementTarget.Menu, RelativeSource={x:Static RelativeSource.Self}}"
+                             Style="{StaticResource PopupMenuRegularStyle}" />
+            </Setter.Value>
+        </Setter>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -27,11 +33,6 @@
                         <TextBlock x:Name="UpperTextBlock" Canvas.Top="-10" Canvas.Left="25" Text="U" Visibility="Collapsed" />
                         <TextBlock x:Name="LowerTextBlock" Canvas.Top="35" Canvas.Left="25" Text="L" Visibility="Collapsed" />
                         <TextBlock x:Name="AuxiliaryTextBlock" Canvas.Top="20" Canvas.Left="40" Text="A" Visibility="Collapsed" />
-
-                        <Canvas.ContextMenu>
-                            <ContextMenu DataContext="{TemplateBinding Menu}"
-                                         Style="{StaticResource PopupMenuRegularStyle}" />
-                        </Canvas.ContextMenu>
                     </Canvas>
 
                     <ControlTemplate.Triggers>
