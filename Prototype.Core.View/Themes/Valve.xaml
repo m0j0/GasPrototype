@@ -4,7 +4,7 @@
                     xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
-        <ResourceDictionary Source="Button.xaml" />
+        <ResourceDictionary Source="ContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="controls:Valve">
@@ -86,42 +86,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:Valve">
-                    <Grid>
-                        <ContentControl x:Name="MainControl" />
-
-                        <Popup x:Name="PopupControl"
-                               Width="200"
-                               PlacementTarget="{Binding ElementName=MainControl}"
-                               StaysOpen="False">
-                            <Border BorderThickness="1"
-                                    BorderBrush="{StaticResource SolidBrushCgaDarkBlue}"
-                                    Background="{StaticResource SolidBrushCgaMediumBlue2}">
-
-                                <StackPanel Orientation="Vertical">
-                                    <Border Height="31" HorizontalAlignment="Stretch">
-                                        <TextBlock Text="Commands"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
-                                                   Foreground="White" />
-                                    </Border>
-
-                                    <ItemsControl ItemsSource="{TemplateBinding Menu}" Margin="2">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Vertical" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate DataType="models:MenuItem">
-                                                <Button Style="{StaticResource DropdownButtonStyle}"
-                                                        Command="{Binding Command}"
-                                                        Content="{Binding Text}" />
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </Border>
-                        </Popup>
-                    </Grid>
+                    <ContentControl x:Name="MainControl">
+                        <ContentControl.ContextMenu>
+                            <ContextMenu DataContext="{TemplateBinding Menu}"
+                                         Style="{StaticResource PopupMenuRegularStyle}" />
+                        </ContentControl.ContextMenu>
+                    </ContentControl>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="Orientation" Value="Horizontal">
@@ -149,21 +119,6 @@
                             <Setter TargetName="MainControl" Property="ContentTemplate"
                                     Value="{StaticResource UnknownValveTemplate}" />
                         </Trigger>
-
-                        <EventTrigger RoutedEvent="UIElement.MouseUp">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <BooleanAnimationUsingKeyFrames
-                                            Storyboard.TargetName="PopupControl"
-                                            Storyboard.TargetProperty="IsOpen">
-                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
-                                        </BooleanAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
