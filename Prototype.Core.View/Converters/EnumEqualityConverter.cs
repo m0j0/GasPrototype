@@ -7,11 +7,7 @@ namespace Prototype.Core.Converters
     public sealed class EnumEqualityConverter : IValueConverter
     {
         public static readonly EnumEqualityConverter Instance = new EnumEqualityConverter();
-
-        private EnumEqualityConverter()
-        {
-        }
-
+        
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return Equals(value, parameter);
