@@ -4,28 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prototype="clr-namespace:Prototype"
+        xmlns:infrastructure="clr-namespace:Prototype.Infrastructure"
+        xmlns:interfaces="clr-namespace:Prototype.Core.Interfaces;assembly=Prototype.Core.Model"
         mc:Ignorable="d" Style="{StaticResource WindowRegularStyle}"
         d:DataContext="{x:Static prototype:DesignBootstrapper.MainVm}"
         Title="{Binding DisplayName}"
         Height="850" Width="1200" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.Resources>
+            <Style x:Key="MenuItemContainerStyle" TargetType="MenuItem">
+                <Setter Property="Command" Value="{Binding Command}" />
+            </Style>
+            <infrastructure:MenuItemContainerStyleSelector x:Key="MenuItemContainerStyleSelector" ItemStyle="{StaticResource MenuItemContainerStyle}" />
+
+            <HierarchicalDataTemplate x:Key="MenuHeaderTemplate" DataType="interfaces:IMenu" ItemsSource="{Binding Path=Items}">
+                <TextBlock Text="{Binding Header}" />
+            </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate x:Key="MenuItemTemplate" DataType="interfaces:IMenuItem">
+                <TextBlock Text="{Binding Text}" />
+            </HierarchicalDataTemplate>
+
+            <infrastructure:MenuItemTemplateSelector x:Key="MenuItemTemplateSelector"
+                                                     HeaderTemplate="{StaticResource MenuHeaderTemplate}" ItemTemplate="{StaticResource MenuItemTemplate}" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
-            <Menu.ItemContainerStyle>
-                <Style TargetType="{x:Type MenuItem}">
-                    <Setter Property="Command" Value="{Binding Command}" />
-                </Style>
-            </Menu.ItemContainerStyle>
-            <Menu.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                    <TextBlock Text="{Binding Caption}" />
-                </HierarchicalDataTemplate>
-            </Menu.ItemTemplate>
-        </Menu>
+        <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}"
+              ItemTemplateSelector="{StaticResource MenuItemTemplateSelector}"
+              ItemContainerStyleSelector="{StaticResource MenuItemContainerStyleSelector}" />
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -42,8 +51,7 @@
                 <Button Content="Close selected"
                         Command="{Binding CloseSelectedCommand}" />
 
-                <TextBlock View.Bind="Text $'Selected screen: {SelectedItem.DisplayName}'" />
-                <!--<TextBlock Text="{Binding SelectedItem.DisplayName, StringFormat=Selected screen: {0}}" />-->
+                <TextBlock Text="{Binding SelectedItem.DisplayName, StringFormat=Selected screen: {0}}" />
             </StackPanel>
 
             <Border Grid.Row="1"

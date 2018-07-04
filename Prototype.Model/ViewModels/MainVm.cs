@@ -10,6 +10,8 @@ using MugenMvvmToolkit.Interfaces.Presenters;
 using MugenMvvmToolkit.Interfaces.ViewModels;
 using MugenMvvmToolkit.Models;
 using MugenMvvmToolkit.ViewModels;
+using Prototype.Core.Interfaces;
+using Prototype.Core.Models;
 using Prototype.Infrastructure;
 using Prototype.Interfaces;
 using Prototype.ViewModels.Pipes;
@@ -21,11 +23,6 @@ namespace Prototype.ViewModels
         #region Fields
 
         private readonly IScreenManager _screenManager;
-
-        private readonly IList<MenuItemModel> _menuItems;
-        private readonly ICommand _closeSelectedCommand;
-        private readonly ICommand _forwardCommand;
-        private readonly ICommand _backCommand;
 
         private readonly List<IScreenViewModel> _backViewModels = new List<IScreenViewModel>();
         private readonly List<IScreenViewModel> _forwardViewModels = new List<IScreenViewModel>();
@@ -45,36 +42,30 @@ namespace Prototype.ViewModels
             var presenter = new DynamicMultiViewModelPresenter(this);
             viewModelPresenter.DynamicPresenters.Add(presenter);
 
-            _backCommand = new RelayCommand(Back, CanBack, this);
-            _forwardCommand = new RelayCommand(Forward, CanForward, this);
-            _closeSelectedCommand = new RelayCommand(CloseSelected, CanCloseSelected, this);
+            BackCommand = new RelayCommand(Back, CanBack, this);
+            ForwardCommand = new RelayCommand(Forward, CanForward, this);
+            CloseSelectedCommand = new RelayCommand(CloseSelected, CanCloseSelected, this);
 
-            _menuItems = new List<MenuItemModel>
+            MenuItems = new List<IMenu>
             {
-                new MenuItemModel("Screens", new List<MenuItemModel>
-                {
-                    new MenuItemModel("Cfm application", _screenManager.ShowScreenAsync<CfmApplicationVm>),
-                    new MenuItemModel("Settings", _screenManager.ShowScreenAsync<SettingsVm>),
-                    new MenuItemModel("Pipes", _screenManager.ShowScreenAsync<PipesExampleVm>),
-                    new MenuItemModel("Pipes performance", _screenManager.ShowScreenAsync<PipesPerformanceVm>),
-                    new MenuItemModel("Pipes scaling", _screenManager.ShowScreenAsync<PipesScalingVm>),
-                    new MenuItemModel("Pipes connections", _screenManager.ShowScreenAsync<PipesConnectionsVm>),
-                    new MenuItemModel("Manifold", _screenManager.ShowScreenAsync<ManifoldVm>),
-                    new MenuItemModel("Manifold 2", _screenManager.ShowScreenAsync<Manifold2Vm>),
-                    new MenuItemModel("Manifold 3", _screenManager.ShowScreenAsync<Manifold3Vm>),
-                    new MenuItemModel("Manifold 4", _screenManager.ShowScreenAsync<Manifold4Vm>),
-                    new MenuItemModel("Valve3Way example", _screenManager.ShowScreenAsync<Valve3WayExampleVm>),
-                }),
-                new MenuItemModel("Popups", new List<MenuItemModel>
-                {
-                    new MenuItemModel("Cfm application", () => _screenManager.ShowPopupAsync<CfmApplicationVm>()),
-                    new MenuItemModel("Settings", () => _screenManager.ShowPopupAsync<SettingsVm>())
-                }),
-                new MenuItemModel("Unique popups", new List<MenuItemModel>
-                {
-                    new MenuItemModel("Cfm application", () => _screenManager.ShowPopupAsync<CfmApplicationVm>(true)),
-                    new MenuItemModel("Settings", () => _screenManager.ShowPopupAsync<SettingsVm>(true))
-                })
+                new Menu("Screens",
+                    new MenuItem("Cfm application", new AsyncRelayCommand(_screenManager.ShowScreenAsync<CfmApplicationVm>)),
+                    new MenuItem("Settings", new AsyncRelayCommand(_screenManager.ShowScreenAsync<SettingsVm>)),
+                    new MenuItem("Pipes", new AsyncRelayCommand(_screenManager.ShowScreenAsync<PipesExampleVm>)),
+                    new MenuItem("Pipes performance", new AsyncRelayCommand(_screenManager.ShowScreenAsync<PipesPerformanceVm>)),
+                    new MenuItem("Pipes scaling", new AsyncRelayCommand(_screenManager.ShowScreenAsync<PipesScalingVm>)),
+                    new MenuItem("Pipes connections", new AsyncRelayCommand(_screenManager.ShowScreenAsync<PipesConnectionsVm>)),
+                    new MenuItem("Manifold", new AsyncRelayCommand(_screenManager.ShowScreenAsync<ManifoldVm>)),
+                    new MenuItem("Manifold 2", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Manifold2Vm>)),
+                    new MenuItem("Manifold 3", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Manifold3Vm>)),
+                    new MenuItem("Manifold 4", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Manifold4Vm>)),
+                    new MenuItem("Valve3Way example", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Valve3WayExampleVm>))),
+                new Menu("Popups",
+                    new MenuItem("Cfm application", new AsyncRelayCommand(() => _screenManager.ShowPopupAsync<CfmApplicationVm>())),
+                    new MenuItem("Settings", new AsyncRelayCommand(() => _screenManager.ShowPopupAsync<SettingsVm>()))),
+                new Menu("Unique popups",
+                    new MenuItem("Cfm application", new AsyncRelayCommand(() => _screenManager.ShowPopupAsync<CfmApplicationVm>(true))),
+                    new MenuItem("Settings", new AsyncRelayCommand(() => _screenManager.ShowPopupAsync<SettingsVm>(true))))
             };
 
             if (IsDesignMode)
@@ -87,10 +78,7 @@ namespace Prototype.ViewModels
 
         #region Commands
 
-        public ICommand BackCommand
-        {
-            get { return _backCommand; }
-        }
+        public ICommand BackCommand { get; }
 
         private void Back()
         {
@@ -114,10 +102,7 @@ namespace Prototype.ViewModels
             return _backViewModels.Count > 0;
         }
 
-        public ICommand ForwardCommand
-        {
-            get { return _forwardCommand; }
-        }
+        public ICommand ForwardCommand { get; }
 
         private void Forward()
         {
@@ -141,10 +126,7 @@ namespace Prototype.ViewModels
             return _forwardViewModels.Count > 0;
         }
 
-        public ICommand CloseSelectedCommand
-        {
-            get { return _closeSelectedCommand; }
-        }
+        public ICommand CloseSelectedCommand { get; }
 
         private void CloseSelected()
         {
@@ -165,10 +147,7 @@ namespace Prototype.ViewModels
             get { return "Main view model"; }
         }
 
-        public IList<MenuItemModel> MenuItems
-        {
-            get { return _menuItems; }
-        }
+        public IList<IMenu> MenuItems { get; }
 
         #endregion
 

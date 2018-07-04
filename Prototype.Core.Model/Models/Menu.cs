@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using MugenMvvmToolkit.Models;
 using Prototype.Core.Interfaces;
 
 namespace Prototype.Core.Models
 {
-    public sealed class Menu : IMenu
+    public sealed class Menu : NotifyPropertyChangedBase, IMenu
     {
         public Menu(string header, params IMenuItem[] menuItems)
         {
@@ -18,7 +19,7 @@ namespace Prototype.Core.Models
         public IReadOnlyCollection<IMenuItem> Items { get; }
     }
 
-    public sealed class MenuItem : IMenuItem
+    public sealed class MenuItem : NotifyPropertyChangedBase, IMenuItem
     {
         public MenuItem(string text, ICommand command)
         {

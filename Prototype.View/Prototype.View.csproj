@@ -64,6 +64,7 @@
     <Compile Include="Infrastructure\AccessConverter.cs" />
     <Compile Include="DesignBootstrapper.cs" />
     <Compile Include="Infrastructure\AttachedProperties.cs" />
+    <Compile Include="Infrastructure\MenuItemSelectors.cs" />
     <Compile Include="Modules\ViewModule.cs" />
     <Compile Include="Views\CfmApplicationView.xaml.cs">
       <DependentUpon>CfmApplicationView.xaml</DependentUpon>
