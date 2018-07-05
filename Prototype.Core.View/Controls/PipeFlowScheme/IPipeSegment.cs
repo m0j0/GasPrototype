@@ -14,6 +14,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         Orientation Orientation { get; }
 
+        SubstanceType SubstanceType { get; }
+
         bool HasFlow { get; set; }
     }
 
@@ -21,10 +23,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         private bool _hasFlow;
 
-        public ConnectorSegment(Point startPoint, Orientation orientation, Side side)
+        public ConnectorSegment(Point startPoint, Orientation orientation, SubstanceType substanceType, Side side)
         {
             StartPoint = startPoint;
             Orientation = orientation;
+            SubstanceType = substanceType;
             Side = side;
         }
 
@@ -33,6 +36,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public double Length => Common.PipeWidth;
 
         public Orientation Orientation { get; }
+
+        public SubstanceType SubstanceType { get; }
 
         public bool HasFlow
         {
@@ -56,10 +61,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         private bool _hasFlow;
 
-        public BridgeSegment(Point startPoint, Orientation orientation)
+        public BridgeSegment(Point startPoint, Orientation orientation, SubstanceType substanceType)
         {
             StartPoint = startPoint;
             Orientation = orientation;
+            SubstanceType = substanceType;
         }
 
         public Point StartPoint { get; }
@@ -67,6 +73,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public double Length => Common.BridgeLength;
 
         public Orientation Orientation { get; }
+
+        public SubstanceType SubstanceType { get; }
 
         public bool HasFlow
         {
@@ -88,11 +96,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         private bool _hasFlow;
 
-        public LineSegment(Point startPoint, double length, Orientation orientation)
+        public LineSegment(Point startPoint, double length, Orientation orientation, SubstanceType substanceType)
         {
             StartPoint = startPoint;
             Length = length;
             Orientation = orientation;
+            SubstanceType = substanceType;
         }
 
         public Point StartPoint { get; }
@@ -100,6 +109,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public double Length { get; }
 
         public Orientation Orientation { get; }
+
+        public SubstanceType SubstanceType { get; }
 
         public bool HasFlow
         {
@@ -134,6 +145,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public Orientation Orientation { get; }
 
         public FailType FailType { get; }
+
+        SubstanceType IPipeSegment.SubstanceType { get; }
 
         bool IPipeSegment.HasFlow { get; set; }
     }

@@ -64,9 +64,9 @@
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Valve3Way.cs" />
     <Compile Include="Converters\FailedSegmentFailTypeConverter.cs" />
-    <Compile Include="Converters\HasFlowToColorConverter.cs" />
+    <Compile Include="Converters\PipeColorConverter.cs" />
     <Compile Include="Converters\IsNullConverter.cs" />
-    <Compile Include="Converters\PipeBorderThicknessConverter.cs" />
+    <Compile Include="Converters\PipeConnectorBorderThicknessConverter.cs" />
     <Compile Include="Converters\EnumEqualityConverter.cs" />
     <Compile Include="CoreViewExtensions.cs" />
     <Compile Include="MarkupExtensions\ContextMenuEx.cs" />

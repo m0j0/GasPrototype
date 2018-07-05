@@ -25,7 +25,7 @@ namespace Prototype.Core.Controls
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
             SizeChangedHandler = OnSizeChanged;
-            SubscribedProperties = new[] {OrientationProperty, VisibilityProperty, TypeProperty};
+            SubscribedProperties = new[] {OrientationProperty, VisibilityProperty, SubstanceTypeProperty, TypeProperty};
         }
 
         public Pipe()

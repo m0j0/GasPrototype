@@ -90,12 +90,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 return new LineSegment(new Point(s1.StartPoint.X + s1.Length, 0),
                     s2.StartPoint.X - (s1.StartPoint.X + s1.Length),
-                    pipe.Orientation);
+                    pipe.Orientation,
+                    pipe.Pipe.SubstanceType);
             }
 
             return new LineSegment(new Point(0, s1.StartPoint.Y + s1.Length),
                 s2.StartPoint.Y - (s1.StartPoint.Y + s1.Length),
-                pipe.Orientation);
+                pipe.Orientation,
+                pipe.Pipe.SubstanceType);
         }
 
         #endregion

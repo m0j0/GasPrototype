@@ -90,6 +90,8 @@ namespace Prototype.Test.PipeFlowScheme
 
         public Orientation Orientation { get; set; }
 
+        SubstanceType IPipe.SubstanceType { get; }
+
         public PipeType Type { get; set; }
 
         public IList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();

@@ -31,6 +31,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         Orientation Orientation { get; }
 
+        SubstanceType SubstanceType { get; }
+
         PipeType Type { get; }
 
         IList<IPipeSegment> Segments { get; set; }

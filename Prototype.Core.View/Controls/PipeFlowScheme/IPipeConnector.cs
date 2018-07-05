@@ -42,7 +42,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 new Point(
                     Rect.Left - pipe.Rect.Left - Common.GetBridgeHorizontalConnectorOffset(pipe.Orientation),
                     Rect.Top - pipe.Rect.Top - Common.GetBridgeVerticalConnectorOffset(pipe.Orientation)),
-                pipe.Orientation
+                pipe.Orientation,
+                pipe.Pipe.SubstanceType
             );
         }
 
@@ -135,6 +136,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return new ConnectorSegment(
                 new Point(Rect.Left - pipe.Rect.Left, Rect.Top - pipe.Rect.Top),
                 pipe.Orientation,
+                pipe.Pipe.SubstanceType,
                 side
             );
         }
