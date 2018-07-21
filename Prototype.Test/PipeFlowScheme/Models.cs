@@ -80,6 +80,8 @@ namespace Prototype.Test.PipeFlowScheme
 
         public Rect LayoutRect => new Rect(Left, Top, Width, Height);
 
+        public Vector Offset { get; set; }
+
         public bool IsVisible { get; set; } = true;
 
         public ISchemeContainer SchemeContainer { get; set; }
@@ -139,6 +141,8 @@ namespace Prototype.Test.PipeFlowScheme
         }
 
         public Rect LayoutRect => new Rect(Left, Top, Width, Height);
+
+        public Vector Offset { get; set; }
 
         public bool IsVisible { get; set; } = true;
 
@@ -209,6 +213,8 @@ namespace Prototype.Test.PipeFlowScheme
         }
 
         public Rect LayoutRect => new Rect(Left, Top, Width, Height);
+
+        public Vector Offset { get; set; }
 
         public bool IsVisible { get; set; } = true;
 

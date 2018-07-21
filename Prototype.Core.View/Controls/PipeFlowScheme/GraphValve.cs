@@ -6,7 +6,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         public GraphValve(ISchemeContainer container, IValve valve)
         {
-            Rect = valve.LayoutRect;
+            Rect = new Rect(valve.LayoutRect.Location + valve.Offset, valve.LayoutRect.Size);
             Valve = valve;
         }
 

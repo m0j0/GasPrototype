@@ -88,6 +88,8 @@ namespace Prototype.Core.Controls
 
         Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
 
+        Vector IFlowControl.Offset { get; set; }
+
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 
         ISchemeContainer IFlowControl.SchemeContainer { get; set; }

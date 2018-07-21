@@ -129,6 +129,11 @@ namespace Prototype
             get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<Valve3WayExampleVm>()); }
         }
 
+        public static NestedParentVm NestedParentVm
+        {
+            get { return CreateInstance().GetDesignViewModel(provider => provider.GetViewModel<NestedParentVm>()); }
+        }
+
         #endregion
     }
 }

@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="Prototype.Views.Pipes.NestedChildView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:pipes="clr-namespace:Prototype.ViewModels.Pipes;assembly=Prototype.Model"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance pipes:NestedChildVm}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <PipeFlowCanvas IsChildContainer="True">
+        <Pipe Canvas.Left="16" Orientation="Vertical" Height="165" />
+        <Valve Canvas.Top="53" Orientation="Vertical" ValveVm="{Binding ValveVm}" />
+    </PipeFlowCanvas>
+</UserControl>

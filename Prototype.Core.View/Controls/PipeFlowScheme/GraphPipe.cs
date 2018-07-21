@@ -62,7 +62,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public GraphPipe(ISchemeContainer container, IPipe pipe)
         {
-            Rect = pipe.LayoutRect;
+            Rect = new Rect(pipe.LayoutRect.Location + pipe.Offset, pipe.LayoutRect.Size);
             Pipe = pipe;
             _connectors = new List<IPipeConnector>();
             _comparer = new ConnectorComparer(this);

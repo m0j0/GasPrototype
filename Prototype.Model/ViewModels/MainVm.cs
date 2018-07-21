@@ -59,7 +59,8 @@ namespace Prototype.ViewModels
                     new MenuItem("Manifold 2", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Manifold2Vm>)),
                     new MenuItem("Manifold 3", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Manifold3Vm>)),
                     new MenuItem("Manifold 4", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Manifold4Vm>)),
-                    new MenuItem("Valve3Way example", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Valve3WayExampleVm>))),
+                    new MenuItem("Valve3Way example", new AsyncRelayCommand(_screenManager.ShowScreenAsync<Valve3WayExampleVm>)),
+                    new MenuItem("Nested schemes", new AsyncRelayCommand(_screenManager.ShowScreenAsync<NestedParentVm>))),
                 new Menu("Popups",
                     new MenuItem("Cfm application", new AsyncRelayCommand(() => _screenManager.ShowPopupAsync<CfmApplicationVm>())),
                     new MenuItem("Settings", new AsyncRelayCommand(() => _screenManager.ShowPopupAsync<SettingsVm>()))),
@@ -218,7 +219,7 @@ namespace Prototype.ViewModels
                 return;
             }
 
-            _screenManager.ShowScreenAsync<Valve3WayExampleVm>();
+            _screenManager.ShowScreenAsync<NestedParentVm>();
         }
 
         Task<bool> INavigableViewModel.OnNavigatingFromAsync(INavigationContext context)

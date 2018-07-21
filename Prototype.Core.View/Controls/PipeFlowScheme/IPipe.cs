@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,14 +12,20 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
     public interface ISchemeContainerOwner
     {
-        IEnumerable<IFlowControl> ChildrenFlowControls { get; }
+        IEnumerable ChildrenControls { get; }
+
+        Rect LayoutRect { get; }
 
         bool IsLoaded { get; }
+
+        bool IsChildContainer { get; }
     }
 
     public interface IFlowControl
     {
         Rect LayoutRect { get; }
+
+        Vector Offset { get; set; }
 
         bool IsVisible { get; }
 

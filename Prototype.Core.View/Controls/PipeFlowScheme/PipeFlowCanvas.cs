@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using System.Windows.Threading;
 using MugenMvvmToolkit;
 
@@ -20,12 +23,40 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             Unloaded += OnUnloaded;
         }
 
-        public IEnumerable<IFlowControl> ChildrenFlowControls => Children.OfType<IFlowControl>();
+        public IEnumerable ChildrenControls => FindVisualChildren(this);
+
+        // TODO
+        public static IEnumerable FindVisualChildren(DependencyObject depObj)
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+
+                    yield return child;
+
+                    if (child is ISchemeContainerOwner)
+                    {
+                        // TODO
+                        yield break;
+                    }
+                    foreach (var childOfChild in FindVisualChildren(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+
+        Rect ISchemeContainerOwner.LayoutRect => LayoutInformation.GetLayoutSlot(this);
+
+        public bool IsChildContainer { get; set; }
 
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
-
+            
             var addedFlowControl = visualAdded as IFlowControl;
             var removedFlowControl = visualRemoved as IFlowControl;
 
@@ -68,6 +99,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
+            if (_owner.IsChildContainer)
+            {
+                return; // TODO
+            }
+
             if (visualAdded != null)
             {
                 SubscribePositionChangedEvents(visualAdded);
@@ -83,9 +119,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void OnLoaded()
         {
-            foreach (var child in _owner.ChildrenFlowControls)
+            if (_owner.IsChildContainer)
             {
-                SubscribePositionChangedEvents(child);
+                return; // TODO
+            }
+
+            foreach (var child in _owner.ChildrenControls)
+            {
+                // TODO
+                if (child is IFlowControl flowControl)
+                {
+                    SubscribePositionChangedEvents(flowControl);
+                }
             }
 
             InvalidateScheme(true);
@@ -93,9 +138,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void OnUnloaded()
         {
-            foreach (var child in _owner.ChildrenFlowControls)
+            if (_owner.IsChildContainer)
             {
-                UnsubscribePositionChangedEvents(child);
+                return; // TODO
+            }
+
+            foreach (var child in _owner.ChildrenControls)
+            {
+                // TODO
+                if (child is IFlowControl flowControl)
+                {
+                    UnsubscribePositionChangedEvents(flowControl);
+                }
             }
         }
 
@@ -139,7 +193,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             var flowControl = (IFlowControl) sender;
             var schemeContainer = (SchemeContainer) flowControl.SchemeContainer;
-            schemeContainer.InvalidateScheme(false);
+            schemeContainer?.InvalidateScheme(false);
         }
 
         private static void OnValveStateChanged(object sender, EventArgs e)
@@ -174,26 +228,52 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var pipes = new List<IPipe>();
             var valves = new List<IValve>();
 
-            foreach (var child in _owner.ChildrenFlowControls)
-            {
-                child.SchemeContainer = this;
-
-                if (child is IPipe pipe)
-                {
-                    pipes.Add(pipe);
-                }
-
-                if (child is IValve valve)
-                {
-                    valves.Add(valve);
-                }
-            }
+            GatherControls(this, pipes, valves, _owner);
 
             if (_scheme != null && _scheme.Equals(pipes, valves))
             {
                 return;
             }
             _scheme = new FlowGraph(this, pipes, valves);
+        }
+
+        private void GatherControls(SchemeContainer schemeContainer, List<IPipe> pipes, List<IValve> valves, ISchemeContainerOwner owner)
+        {
+            foreach (var child in owner.ChildrenControls)
+            {
+                if (child is ISchemeContainerOwner childOwner && childOwner.IsChildContainer)
+                {
+                    GatherControls(schemeContainer, pipes, valves, childOwner);
+                }
+
+                if (child is IPipe pipe)
+                {
+                    if (schemeContainer._owner != owner)
+                    {
+                        // TODO
+                        var frameworkElement = ((PipeFlowCanvas)owner).Parent as FrameworkElement;
+                        var loc = LayoutInformation.GetLayoutSlot(frameworkElement);
+                        pipe.Offset = new Vector(loc.X, loc.Y);
+                    }
+
+                    pipe.SchemeContainer = schemeContainer;
+                    pipes.Add(pipe);
+                }
+
+                if (child is IValve valve)
+                {
+                    if (schemeContainer._owner != owner)
+                    {
+                        // TODO
+                        var frameworkElement = ((PipeFlowCanvas)owner).Parent as FrameworkElement;
+                        var loc = LayoutInformation.GetLayoutSlot(frameworkElement);
+                        valve.Offset = new Vector(loc.X, loc.Y);
+                    }
+
+                    valve.SchemeContainer = schemeContainer;
+                    valves.Add(valve);
+                }
+            }
         }
 
         private void InvalidateSchemeFlow()

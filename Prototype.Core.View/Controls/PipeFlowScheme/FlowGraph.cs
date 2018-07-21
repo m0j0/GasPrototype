@@ -273,7 +273,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            ValidateVerticesAccessibility(pipes, cnnToVertex);
+            //ValidateVerticesAccessibility(pipes, cnnToVertex);
             
             foreach (var pipe in pipes)
             {
@@ -332,7 +332,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 pipe.SetPipeSegments(allSegments);
             }
 
-            _isSchemeFailed = !pipes.All(pipe => pipe.FailType == FailType.None || pipe.FailType == FailType.DeadPath);
+            _isSchemeFailed = _pipes.Any(pipe => pipe.IsFailed);//!pipes.All(pipe => pipe.FailType == FailType.None || pipe.FailType == FailType.DeadPath);
             _vertices = cnnToVertex.Values.ToArray();
             _edges = edges.Where(edge => edge.PipeSegment != null).ToArray();
         }
