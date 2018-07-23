@@ -158,11 +158,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
-            if (_owner.IsChildContainer)
-            {
-                return; // TODO
-            }
-
             if (visualAdded != null)
             {
                 SubscribePositionChangedEvents(visualAdded);
@@ -178,11 +173,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void OnLoaded()
         {
-            if (_owner.IsChildContainer)
-            {
-                return; // TODO
-            }
-
             foreach (var child in _owner.ChildrenControls)
             {
                 // TODO
@@ -197,11 +187,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void OnUnloaded()
         {
-            if (_owner.IsChildContainer)
-            {
-                return; // TODO
-            }
-
             foreach (var child in _owner.ChildrenControls)
             {
                 // TODO
