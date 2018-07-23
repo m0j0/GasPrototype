@@ -1,37 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using Prototype.Core.Controls.PipeFlowScheme;
 
 namespace Prototype.Core.Controls
 {
-    public sealed class Pipe : Control, IPipe
+    public sealed class Pipe : FlowControlBase, IPipe
     {
-        #region Fields
-
-        private static readonly EventHandler SizeChangedHandler;
-        private static readonly DependencyProperty[] SubscribedProperties;
-
-        #endregion
-
         #region Constructors
 
         static Pipe()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
-            SizeChangedHandler = OnSizeChanged;
-            SubscribedProperties = new[] {OrientationProperty, VisibilityProperty, SubstanceTypeProperty, TypeProperty};
-        }
-
-        public Pipe()
-        {
-            Loaded += OnLoaded;
-            Unloaded += OnUnloaded;
+            AddSubscribedProperties(typeof(Pipe), OrientationProperty, VisibilityProperty, SubstanceTypeProperty, TypeProperty);
         }
 
         #endregion
@@ -49,12 +33,6 @@ namespace Prototype.Core.Controls
 
         public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
             "Segments", typeof(IList<IPipeSegment>), typeof(Pipe), new PropertyMetadata(new List<IPipeSegment>()));
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler SchemeChanged;
 
         #endregion
 
@@ -84,56 +62,6 @@ namespace Prototype.Core.Controls
         {
             get { return (IList<IPipeSegment>) GetValue(SegmentsProperty); }
             set { SetValue(SegmentsProperty, value is INotifyCollectionChanged ? value : new ObservableCollection<IPipeSegment>(value)); }
-        }
-
-        Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
-
-        Vector IFlowControl.Offset { get; set; }
-
-        bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
-
-        ISchemeContainer IFlowControl.SchemeContainer { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (!(Parent is ISchemeContainerOwner))
-            {
-                throw new InvalidOperationException("Pipe can be placed only on ISchemeContainer");
-            }
-
-            foreach (var property in SubscribedProperties)
-            {
-                DependencyPropertyDescriptor
-                    .FromProperty(property, typeof(Pipe))
-                    .AddValueChanged(this, SizeChangedHandler);
-            }
-        }
-
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            foreach (var property in SubscribedProperties)
-            {
-                DependencyPropertyDescriptor
-                    .FromProperty(property, typeof(Pipe))
-                    .RemoveValueChanged(this, SizeChangedHandler);
-            }
-        }
-
-        private static void OnSizeChanged(object sender, EventArgs e)
-        {
-            var pipe = (Pipe) sender;
-            pipe.SchemeChanged?.Invoke(pipe, EventArgs.Empty);
-        }
-
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            SchemeChanged?.Invoke(this, EventArgs.Empty);
-
-            return base.ArrangeOverride(arrangeBounds);
         }
 
         #endregion

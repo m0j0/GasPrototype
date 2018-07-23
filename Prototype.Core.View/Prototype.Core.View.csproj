@@ -53,6 +53,7 @@
     <Compile Include="Controls\PipeFlowScheme\Common.cs" />
     <Compile Include="Controls\PipeFlowScheme\DepthFirstDirectedPaths.cs" />
     <Compile Include="Controls\PipeFlowScheme\Enums.cs" />
+    <Compile Include="Controls\PipeFlowScheme\FlowControlBase.cs" />
     <Compile Include="Controls\PipeFlowScheme\GraphPipe.cs" />
     <Compile Include="Controls\PipeFlowScheme\GraphValve.cs" />
     <Compile Include="Controls\PipeFlowScheme\IVertex.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Controls\PipeFlowScheme\IPipeConnector.cs" />
     <Compile Include="Controls\Pipe.cs" />
     <Compile Include="Controls\PipeFlowScheme\Valve3WayModel.cs" />
+    <Compile Include="Controls\PipeFlowScheme\ValveBase.cs" />
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Valve3Way.cs" />
     <Compile Include="Converters\FailedSegmentFailTypeConverter.cs" />
