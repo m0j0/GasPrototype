@@ -6,7 +6,7 @@
              xmlns:pipes="clr-namespace:Prototype.ViewModels.Pipes;assembly=Prototype.Model"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance pipes:NestedChildVm}"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Canvas FlowSchemeSettings.ContainerType="Child">
+    <Canvas>
         <Pipe Canvas.Left="26" Orientation="Vertical" Height="165" />
         <Valve Canvas.Left="10" Canvas.Top="53" Orientation="Vertical" ValveVm="{Binding ValveVm}" />
     </Canvas>

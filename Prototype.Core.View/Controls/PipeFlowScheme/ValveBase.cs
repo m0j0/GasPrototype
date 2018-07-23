@@ -68,13 +68,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         protected static void OnStatePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var valve = (ValveBase) d;
-            valve.StateChanged?.Invoke(valve, EventArgs.Empty);
-            if (valve._containerOwner == null)
-            {
-                return;
-            }
-            var schemeContainer = FlowSchemeSettings.GetContainer(valve._containerOwner);
-            schemeContainer?.InvalidateSchemeFlow();
+            valve.SchemeContainer?.InvalidateSchemeFlow();
         }
 
         private static void ValveVmPropertyChangedCallback(DependencyObject dependencyObject,

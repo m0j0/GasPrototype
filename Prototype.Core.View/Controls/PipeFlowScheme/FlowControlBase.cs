@@ -13,6 +13,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private static readonly Dictionary<Type, DependencyProperty[]> SubscribedProperties = new Dictionary<Type, DependencyProperty[]>();
         private static readonly EventHandler SizeChangedHandler;
+        
+        protected SchemeContainer2 SchemeContainer;
         private Vector _offset;
 
         #endregion
@@ -69,9 +71,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return base.ArrangeOverride(arrangeBounds);
         }
 
-
-        protected FrameworkElement _containerOwner;
-
         protected override void OnVisualParentChanged(DependencyObject oldParent)
         {
             base.OnVisualParentChanged(oldParent);
@@ -80,17 +79,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 return;
             }
+
             if (oldParent == null)
             {
-
+                TryAddControlToScheme();
             }
             else
             {
-                // TODO
+                SchemeContainer?.Remove(this);
             }
         }
 
-        private void AddControlToContainer(FrameworkElement containerOwner)
+        private SchemeContainer2 GetContainer(FrameworkElement containerOwner)
         {
             var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
             if (schemeContainer == null)
@@ -99,27 +99,34 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 FlowSchemeSettings.SetContainer(containerOwner, schemeContainer);
             }
 
-            schemeContainer.Add(this);
+            return schemeContainer;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            TryAddControlToScheme();
+
             foreach (var property in SubscribedProperties[GetType()])
             {
                 DependencyPropertyDescriptor
                     .FromProperty(property, typeof(Pipe))
                     .AddValueChanged(this, SizeChangedHandler);
             }
-            
-            FrameworkElement containerOwner = null;
-            var parent = VisualParent as FrameworkElement;
+        }
+
+        private void TryAddControlToScheme()
+        {
+            var containerOwner = VisualParent as FrameworkElement;
+
+            bool useExternalContainer = false;
+            var parent = containerOwner;
             var offset = new Vector();
             while (parent != null)
             {
-                if (FlowSchemeSettings.GetContainerType(parent) == ContainerType.Main ||
-                    FlowSchemeSettings.GetContainerType(parent) == ContainerType.Child)
+                if (FlowSchemeSettings.GetShowFlow(parent))
                 {
                     containerOwner = parent;
+                    useExternalContainer = true;
                 }
 
                 var layout = LayoutInformation.GetLayoutSlot(parent);
@@ -127,31 +134,19 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 offset.Y += layout.Y;
                 parent = parent.Parent as FrameworkElement;
             }
-
-            if (containerOwner == null)
+            
+            if (useExternalContainer)
             {
-                throw new InvalidOperationException("Can't place flow control without container.");
+                _offset = offset;
             }
 
-            if (FlowSchemeSettings.GetContainerType(containerOwner) == ContainerType.Child)
+            var container = GetContainer(containerOwner);
+            if (SchemeContainer != null && SchemeContainer != container)
             {
-                if (DesignerProperties.GetIsInDesignMode(this))
-                {
-                    AddControlToContainer(containerOwner);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Can't find main container for child container.");
-                }
-            }
 
-            _containerOwner = containerOwner;
-            _offset = offset;
-
-            if (_containerOwner != null)
-            {
-                AddControlToContainer(_containerOwner);
             }
+            SchemeContainer = container;
+            SchemeContainer.Add(this);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -168,6 +163,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             var control = (FlowControlBase) sender;
             control.SchemeChanged?.Invoke(control, EventArgs.Empty);
+            control.SchemeContainer?.InvalidateScheme();
         }
 
         #endregion

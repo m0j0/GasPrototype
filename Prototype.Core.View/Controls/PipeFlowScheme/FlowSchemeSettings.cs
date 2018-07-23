@@ -10,17 +10,17 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public static class FlowSchemeSettings
     {
-        public static readonly DependencyProperty ContainerTypeProperty = DependencyProperty.RegisterAttached(
-            "ContainerType", typeof(ContainerType), typeof(FlowSchemeSettings), new PropertyMetadata(default(ContainerType)));
+        public static readonly DependencyProperty ShowFlowProperty = DependencyProperty.RegisterAttached(
+            "ShowFlow", typeof(bool), typeof(FlowSchemeSettings), new PropertyMetadata(default(bool)));
 
-        public static void SetContainerType(DependencyObject element, ContainerType value)
+        public static void SetShowFlow(DependencyObject element, bool value)
         {
-            element.SetValue(ContainerTypeProperty, value);
+            element.SetValue(ShowFlowProperty, value);
         }
 
-        public static ContainerType GetContainerType(DependencyObject element)
+        public static bool GetShowFlow(DependencyObject element)
         {
-            return (ContainerType) element.GetValue(ContainerTypeProperty);
+            return (bool) element.GetValue(ShowFlowProperty);
         }
 
         internal static readonly DependencyProperty ContainerProperty = DependencyProperty.RegisterAttached(
@@ -37,7 +37,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
     }
 
-    internal sealed class SchemeContainer2 : ISchemeContainer
+    public sealed class SchemeContainer2 : ISchemeContainer
     {
         private List<IFlowControl> _controls = new List<IFlowControl>();
 
@@ -54,6 +54,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             _controls.Remove(flowControl);
             InvalidateScheme();
+        }
+
+        public void InvalidateIfNotExists(IFlowControl flowControl)
+        {
+
         }
 
         public void InvalidateScheme()
