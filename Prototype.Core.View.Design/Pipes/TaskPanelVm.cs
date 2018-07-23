@@ -46,7 +46,6 @@ namespace Prototype.Core.Design.Pipes
             _modelItem = modelItem;
             _modelItem.PropertyChanged += ModelItemOnPropertyChanged;
             _pipe = (IPipe) _modelItem.View.PlatformObject;
-            _pipe.SchemeChanged += OnSchemeChanged;
 
             SynchronizeValues();
         }
@@ -55,13 +54,7 @@ namespace Prototype.Core.Design.Pipes
         {
             _modelItem.PropertyChanged -= ModelItemOnPropertyChanged;
             _modelItem = null;
-            _pipe.SchemeChanged -= OnSchemeChanged;
             _pipe = null;
-        }
-
-        private void OnSchemeChanged(object sender, EventArgs e)
-        {
-            SynchronizeValues();
         }
 
         private void ModelItemOnPropertyChanged(object sender, PropertyChangedEventArgs e)

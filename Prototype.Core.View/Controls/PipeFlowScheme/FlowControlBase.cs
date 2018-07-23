@@ -14,7 +14,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private static readonly Dictionary<Type, DependencyProperty[]> SubscribedProperties = new Dictionary<Type, DependencyProperty[]>();
         private static readonly EventHandler SizeChangedHandler;
         
-        protected SchemeContainer2 SchemeContainer;
+        protected ISchemeContainer SchemeContainer;
         private Vector _offset;
 
         #endregion
@@ -34,12 +34,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #endregion
 
-        #region Events
-
-        public event EventHandler SchemeChanged;
-
-        #endregion
-
         #region Properties
 
         Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
@@ -47,8 +41,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Vector IFlowControl.Offset => _offset;
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
-
-        ISchemeContainer IFlowControl.SchemeContainer { get; set; }
 
         #endregion
 
@@ -66,7 +58,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
-            SchemeChanged?.Invoke(this, EventArgs.Empty);
+            SchemeContainer?.InvalidateScheme();
 
             return base.ArrangeOverride(arrangeBounds);
         }
@@ -82,20 +74,25 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             if (oldParent == null)
             {
-                TryAddControlToScheme();
+                AddControlToScheme();
             }
             else
             {
                 SchemeContainer?.Remove(this);
+
+                if (VisualParent != null)
+                {
+                    AddControlToScheme();
+                }
             }
         }
 
-        private SchemeContainer2 GetContainer(FrameworkElement containerOwner)
+        private ISchemeContainer GetContainer(FrameworkElement containerOwner)
         {
             var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
             if (schemeContainer == null)
             {
-                schemeContainer = new SchemeContainer2();
+                schemeContainer = new SchemeContainer();
                 FlowSchemeSettings.SetContainer(containerOwner, schemeContainer);
             }
 
@@ -104,7 +101,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            TryAddControlToScheme();
+            AddControlToScheme();
 
             foreach (var property in SubscribedProperties[GetType()])
             {
@@ -114,7 +111,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        private void TryAddControlToScheme()
+        private void AddControlToScheme()
         {
             var containerOwner = VisualParent as FrameworkElement;
 
@@ -123,7 +120,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var offset = new Vector();
             while (parent != null)
             {
-                if (FlowSchemeSettings.GetShowFlow(parent))
+                if (FlowSchemeSettings.GetIsFlowSchemeContainer(parent))
                 {
                     containerOwner = parent;
                     useExternalContainer = true;
@@ -140,12 +137,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 _offset = offset;
             }
 
-            var container = GetContainer(containerOwner);
-            if (SchemeContainer != null && SchemeContainer != container)
-            {
-
-            }
-            SchemeContainer = container;
+            SchemeContainer = GetContainer(containerOwner);
             SchemeContainer.Add(this);
         }
 
@@ -162,7 +154,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private static void OnSizeChanged(object sender, EventArgs e)
         {
             var control = (FlowControlBase) sender;
-            control.SchemeChanged?.Invoke(control, EventArgs.Empty);
             control.SchemeContainer?.InvalidateScheme();
         }
 

@@ -7,7 +7,7 @@
              xmlns:models="clr-namespace:Prototype.Core.Models;assembly=Prototype.Core.Model"
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold2Vm}"
              d:DesignHeight="500" d:DesignWidth="500">
-    <PipeFlowCanvas>
+    <Canvas>
         <Pipe Canvas.Left="57" Canvas.Top="60" Orientation="Vertical" Height="105" Type="Source" />
         <Pipe Canvas.Left="214" Canvas.Top="60" Orientation="Vertical" Height="105" Type="Source" />
         <Pipe Canvas.Left="57" Canvas.Top="160" Width="162" />
@@ -31,7 +31,7 @@
         <TextBlock Text="Connection 2" Canvas.Left="180" Canvas.Top="165" />
         <TextBlock Text="Connection 3" Canvas.Left="186" Canvas.Top="294" />
         <TextBlock Text="Destination" Canvas.Left="190" Canvas.Top="378" />
-    </PipeFlowCanvas>
+    </Canvas>
 </UserControl>
 
 

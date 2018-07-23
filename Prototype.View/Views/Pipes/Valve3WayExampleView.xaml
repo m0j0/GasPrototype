@@ -7,7 +7,7 @@
              xmlns:btsr="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static btsr:DesignBootstrapper.Valve3WayExampleVm}"
              d:DesignHeight="300" d:DesignWidth="600">
-    <PipeFlowCanvas>
+    <Canvas>
         <Pipe Canvas.Left="36" Canvas.Top="21" Height="41" Orientation="Vertical" Type="Source" />
         <Pipe Canvas.Left="36" Canvas.Top="57" Height="41" Orientation="Vertical" Type="Destination" />
         <Pipe Canvas.Left="36" Canvas.Top="57" Width="47" Type="Destination" />
@@ -50,6 +50,6 @@
 
         <!---->
 
-    </PipeFlowCanvas>
+    </Canvas>
 </UserControl>
 

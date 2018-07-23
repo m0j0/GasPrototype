@@ -7,7 +7,7 @@
              xmlns:btsp="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.Manifold4Vm}"
              d:DesignHeight="500" d:DesignWidth="500">
-    <PipeFlowCanvas>
+    <Canvas>
         <Pipe Canvas.Left="82" Canvas.Top="10" Height="261" Orientation="Vertical" Type="Source" />
         <Pipe Canvas.Left="82" Canvas.Top="266" Width="139" />
         <Pipe Canvas.Left="216" Canvas.Top="10" Height="261" Orientation="Vertical" Type="Destination" />
@@ -17,5 +17,5 @@
         <Valve Canvas.Left="66" Canvas.Top="86" Orientation="Vertical" ValveVm="{Binding ValveVm1}" />
         <Valve Canvas.Left="200" Canvas.Top="86" Orientation="Vertical" ValveVm="{Binding ValveVm2}" />
         <Valve Canvas.Left="135" Canvas.Top="136" Orientation="Vertical" ValveVm="{Binding ValveVm3}" />
-    </PipeFlowCanvas>
+    </Canvas>
 </UserControl>

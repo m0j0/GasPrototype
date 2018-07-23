@@ -6,7 +6,7 @@
              xmlns:btsp="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static btsp:DesignBootstrapper.ManifoldVm}"
              d:DesignHeight="500" d:DesignWidth="500">
-    <PipeFlowCanvas>
+    <Canvas>
         <Pipe Canvas.Left="30" Canvas.Top="111" Orientation="Vertical" Height="165" Type="Source" SubstanceType="Chemical" />
         <Pipe Canvas.Left="30" Canvas.Top="111" Width="156" SubstanceType="Chemical" />
         <Pipe Canvas.Left="441" Canvas.Top="111" Orientation="Vertical" Height="165" Type="Source" />
@@ -35,5 +35,5 @@
         <TextBlock Canvas.Left="40" Text="Source" Canvas.Top="260"/>
         <TextBlock Canvas.Left="131" Text="Source" Canvas.Top="263"/>
         <TextBlock Canvas.Left="388" Text="Source" Canvas.Top="260"/>
-    </PipeFlowCanvas>
+    </Canvas>
 </UserControl>

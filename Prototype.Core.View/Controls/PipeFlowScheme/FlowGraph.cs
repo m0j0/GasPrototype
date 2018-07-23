@@ -5,15 +5,6 @@ using System.Windows;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
-    public interface IFlowGraph
-    {
-        IPipe FindPipe(IPipeSegment segment);
-
-        Rect GetAbsoluteRect(IPipe pipe);
-
-        Rect GetAbsoluteRect(IValve valve);
-    }
-
     internal class FlowGraph : IFlowGraph
     {
         private readonly ISchemeContainer _container;
@@ -414,21 +405,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             if (_isSchemeFailed)
             {
                 return;
-            }
-
-            foreach (var pipe in _pipes)
-            {
-                if (pipe.Pipe.SchemeContainer != _container)
-                {
-                    throw new InvalidOperationException(" ! ! ! ! ! !");
-                }
-            }
-            foreach (var valve in _valves)
-            {
-                if (valve.Valve.SchemeContainer != _container)
-                {
-                    throw new InvalidOperationException(" ! ! ! ! ! !");
-                }
             }
 
             foreach (var edge in _edges)

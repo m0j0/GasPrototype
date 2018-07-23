@@ -49,12 +49,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #endregion
 
-        #region Events
-
-        public event EventHandler StateChanged;
-
-        #endregion
-
         #region Methods
 
         public abstract bool CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment);

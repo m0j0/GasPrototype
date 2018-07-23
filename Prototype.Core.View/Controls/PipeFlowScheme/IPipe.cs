@@ -8,17 +8,22 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public interface ISchemeContainer
     {
+        void Add(IFlowControl flowControl);
+
+        void Remove(IFlowControl flowControl);
+
+        void InvalidateScheme();
+
+        void InvalidateSchemeFlow();
     }
 
-    public interface ISchemeContainerOwner
+    public interface IFlowGraph
     {
-        IEnumerable ChildrenControls { get; }
+        IPipe FindPipe(IPipeSegment segment);
 
-        Rect LayoutRect { get; }
+        Rect GetAbsoluteRect(IPipe pipe);
 
-        bool IsLoaded { get; }
-
-        bool IsChildContainer { get; }
+        Rect GetAbsoluteRect(IValve valve);
     }
 
     public interface IFlowControl
@@ -28,10 +33,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Vector Offset { get; }
 
         bool IsVisible { get; }
-
-        ISchemeContainer SchemeContainer { get; set; }
-
-        event EventHandler SchemeChanged;
     }
 
     public interface IPipe : IFlowControl
@@ -48,7 +49,5 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     public interface IValve : IFlowControl
     {
         bool CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment);
-
-        event EventHandler StateChanged;
     }
 }

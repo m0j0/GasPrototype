@@ -17,6 +17,21 @@ namespace Prototype.Test.PipeFlowScheme
             _controls.Add(flowControl);
         }
 
+        public void Remove(IFlowControl flowControl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InvalidateScheme()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InvalidateSchemeFlow()
+        {
+            throw new NotImplementedException();
+        }
+
         public FlowGraph CreateGraph()
         {
             return new FlowGraph(this, _controls.OfType<IPipe>(), _controls.OfType<IValve>());
@@ -97,8 +112,6 @@ namespace Prototype.Test.PipeFlowScheme
         public PipeType Type { get; set; }
 
         public IList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();
-
-        public event EventHandler SchemeChanged;
     }
 
     internal class TestValve : IValve
@@ -155,10 +168,6 @@ namespace Prototype.Test.PipeFlowScheme
         public double Left { get; set; }
 
         public bool CanPassFlow { get; set; }
-
-        public event EventHandler SchemeChanged;
-
-        public event EventHandler StateChanged;
 
         bool IValve.CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {
@@ -231,10 +240,6 @@ namespace Prototype.Test.PipeFlowScheme
         public Rotation Rotation { get; set; }
 
         public bool IsOpen { get; set; }
-
-        public event EventHandler SchemeChanged;
-
-        public event EventHandler StateChanged;
 
         bool IValve.CanPassFlow(IFlowGraph graph, IPipeSegment pipeSegment)
         {

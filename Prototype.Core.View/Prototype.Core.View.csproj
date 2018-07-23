@@ -58,10 +58,10 @@
     <Compile Include="Controls\PipeFlowScheme\GraphPipe.cs" />
     <Compile Include="Controls\PipeFlowScheme\GraphValve.cs" />
     <Compile Include="Controls\PipeFlowScheme\IVertex.cs" />
-    <Compile Include="Controls\PipeFlowScheme\PipeFlowCanvas.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />
     <Compile Include="Controls\PipeFlowScheme\IPipeConnector.cs" />
     <Compile Include="Controls\Pipe.cs" />
+    <Compile Include="Controls\PipeFlowScheme\SchemeContainer.cs" />
     <Compile Include="Controls\PipeFlowScheme\Valve3WayModel.cs" />
     <Compile Include="Controls\PipeFlowScheme\ValveBase.cs" />
     <Compile Include="Controls\Valve.cs" />
