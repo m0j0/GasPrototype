@@ -25,7 +25,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         Rect LayoutRect { get; }
 
-        Vector Offset { get; set; }
+        Vector Offset { get; }
 
         bool IsVisible { get; }
 

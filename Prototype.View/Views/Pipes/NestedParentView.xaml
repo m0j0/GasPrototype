@@ -7,7 +7,7 @@
              xmlns:prototype="clr-namespace:Prototype"
              mc:Ignorable="d" d:DataContext="{x:Static prototype:DesignBootstrapper.NestedParentVm}"
              d:DesignHeight="600" d:DesignWidth="600">
-    <PipeFlowCanvas>
+    <Canvas FlowSchemeSettings.ContainerType="Main">
         <Pipe Canvas.Left="291" Canvas.Top="6" Orientation="Vertical" Height="80" Type="Source" />
         <Pipe Canvas.Left="291" Canvas.Top="241" Orientation="Vertical" Height="80" Type="Destination" />
         <Pipe Canvas.Left="74" Canvas.Top="81" Width="478" />
@@ -15,8 +15,8 @@
         <Valve Canvas.Left="275" Canvas.Top="21" Orientation="Vertical" ValveVm="{Binding SourceValveVm}" />
         <Valve Canvas.Left="275" Canvas.Top="261" Orientation="Vertical" ValveVm="{Binding DestinationValveVm}" />
 
-        <local:NestedChildView Canvas.Left="58" Canvas.Top="81" DataContext="{Binding ChildVm1}"/>
-        <local:NestedChildView Canvas.Left="258" Canvas.Top="81" DataContext="{Binding ChildVm2}"/>
-        <local:NestedChildView Canvas.Left="531" Canvas.Top="81" DataContext="{Binding ChildVm3}"/>
-    </PipeFlowCanvas>
+        <local:NestedChildView Canvas.Left="48" Canvas.Top="81" DataContext="{Binding ChildVm1}"/>
+        <local:NestedChildView Canvas.Left="248" Canvas.Top="81" DataContext="{Binding ChildVm2}"/>
+        <local:NestedChildView Canvas.Left="521" Canvas.Top="81" DataContext="{Binding ChildVm3}"/>
+    </Canvas>
 </UserControl>

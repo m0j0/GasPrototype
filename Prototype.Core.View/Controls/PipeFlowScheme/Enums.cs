@@ -2,6 +2,12 @@
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
+    public enum ContainerType
+    {
+        Main,
+        Child
+    }
+
     public enum PipeType
     {
         Regular,

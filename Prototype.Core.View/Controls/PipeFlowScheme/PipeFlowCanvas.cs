@@ -306,14 +306,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (child is IPipe pipe)
                 {
                     pipe.SchemeContainer = schemeContainer;
-                    pipe.Offset = offset;
+                    //pipe.Offset = offset;
                     pipes.Add(pipe);
                 }
 
                 if (child is IValve valve)
                 {
                     valve.SchemeContainer = schemeContainer;
-                    valve.Offset = offset;
+                    //valve.Offset = offset;
                     valves.Add(valve);
                 }
             }

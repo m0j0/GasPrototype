@@ -13,6 +13,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private static readonly Dictionary<Type, DependencyProperty[]> SubscribedProperties = new Dictionary<Type, DependencyProperty[]>();
         private static readonly EventHandler SizeChangedHandler;
+        private Vector _offset;
 
         #endregion
 
@@ -41,7 +42,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         Rect IFlowControl.LayoutRect => LayoutInformation.GetLayoutSlot(this);
 
-        Vector IFlowControl.Offset { get; set; }
+        Vector IFlowControl.Offset => _offset;
 
         bool IFlowControl.IsVisible => Visibility == Visibility.Visible;
 
@@ -61,6 +62,46 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             SubscribedProperties[type] = properties;
         }
 
+        protected override Size ArrangeOverride(Size arrangeBounds)
+        {
+            SchemeChanged?.Invoke(this, EventArgs.Empty);
+
+            return base.ArrangeOverride(arrangeBounds);
+        }
+
+
+        protected FrameworkElement _containerOwner;
+
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
+            base.OnVisualParentChanged(oldParent);
+
+            if (!IsLoaded)
+            {
+                return;
+            }
+            if (oldParent == null)
+            {
+
+            }
+            else
+            {
+                // TODO
+            }
+        }
+
+        private void AddControlToContainer(FrameworkElement containerOwner)
+        {
+            var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
+            if (schemeContainer == null)
+            {
+                schemeContainer = new SchemeContainer2();
+                FlowSchemeSettings.SetContainer(containerOwner, schemeContainer);
+            }
+
+            schemeContainer.Add(this);
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             foreach (var property in SubscribedProperties[GetType()])
@@ -68,6 +109,48 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 DependencyPropertyDescriptor
                     .FromProperty(property, typeof(Pipe))
                     .AddValueChanged(this, SizeChangedHandler);
+            }
+            
+            FrameworkElement containerOwner = null;
+            var parent = VisualParent as FrameworkElement;
+            var offset = new Vector();
+            while (parent != null)
+            {
+                if (FlowSchemeSettings.GetContainerType(parent) == ContainerType.Main ||
+                    FlowSchemeSettings.GetContainerType(parent) == ContainerType.Child)
+                {
+                    containerOwner = parent;
+                }
+
+                var layout = LayoutInformation.GetLayoutSlot(parent);
+                offset.X += layout.X;
+                offset.Y += layout.Y;
+                parent = parent.Parent as FrameworkElement;
+            }
+
+            if (containerOwner == null)
+            {
+                throw new InvalidOperationException("Can't place flow control without container.");
+            }
+
+            if (FlowSchemeSettings.GetContainerType(containerOwner) == ContainerType.Child)
+            {
+                if (DesignerProperties.GetIsInDesignMode(this))
+                {
+                    AddControlToContainer(containerOwner);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Can't find main container for child container.");
+                }
+            }
+
+            _containerOwner = containerOwner;
+            _offset = offset;
+
+            if (_containerOwner != null)
+            {
+                AddControlToContainer(_containerOwner);
             }
         }
 
@@ -85,13 +168,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             var control = (FlowControlBase) sender;
             control.SchemeChanged?.Invoke(control, EventArgs.Empty);
-        }
-
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            SchemeChanged?.Invoke(this, EventArgs.Empty);
-
-            return base.ArrangeOverride(arrangeBounds);
         }
 
         #endregion
