@@ -14,41 +14,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public sealed class PipeFlowCanvas : Canvas, ISchemeContainerOwner
     {
-        private readonly SchemeContainer _schemeContainer;
+        private SchemeContainer _schemeContainer;
 
         public PipeFlowCanvas()
         {
-            _schemeContainer = new SchemeContainer(this);
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
 
-        public IEnumerable ChildrenControls => FindVisualChildren(this);
-
-        // TODO
-        public static IEnumerable FindVisualChildren(DependencyObject depObj)
-        {
-            if (depObj != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-
-                    yield return child;
-
-                    if (child is ISchemeContainerOwner)
-                    {
-                        // TODO
-                        yield break;
-                    }
-                    foreach (var childOfChild in FindVisualChildren(child))
-                    {
-                        yield return childOfChild;
-                    }
-                }
-            }
-        }
-
+        public IEnumerable ChildrenControls => Children;
+        
         Rect ISchemeContainerOwner.LayoutRect => LayoutInformation.GetLayoutSlot(this);
 
         public bool IsChildContainer { get; set; }
@@ -56,6 +31,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+
+            if (_schemeContainer == null)
+            {
+                return;
+            }
             
             var addedFlowControl = visualAdded as IFlowControl;
             var removedFlowControl = visualRemoved as IFlowControl;
@@ -68,13 +48,76 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (IsChildContainer)
+            {
+                var parentContainer = FindParentContainer();
+                if (parentContainer == null)
+                {
+                    if (ServiceProvider.IsDesignMode)
+                    {
+                        _schemeContainer = new SchemeContainer(this);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    var parentContainerOwner = (PipeFlowCanvas) parentContainer.Owner;
+                    parentContainerOwner._schemeContainer.AddChildContainer(new OwnerOffsetPair(this, parentContainer.Offset));
+                    _schemeContainer = parentContainerOwner._schemeContainer;
+                    return;
+                }
+            }
+            else
+            {
+
+                _schemeContainer = new SchemeContainer(this);
+            }
             _schemeContainer.OnLoaded();
+        }
+
+        private OwnerOffsetPair FindParentContainer()
+        {
+            var parent = Parent as FrameworkElement;
+            var offset = new Vector();
+            while (parent != null)
+            {
+                if (parent is ISchemeContainerOwner owner)
+                {
+                    if (!owner.IsChildContainer)
+                    {
+                        return new OwnerOffsetPair(owner, offset);
+                    }
+                }
+
+                var layout = LayoutInformation.GetLayoutSlot(parent);
+                offset.X += layout.X;
+                offset.Y += layout.Y;
+                parent = parent.Parent as FrameworkElement;
+            }
+
+            return null;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            _schemeContainer.OnUnloaded();
+            _schemeContainer?.OnUnloaded();
         }
+    }
+
+    public class OwnerOffsetPair
+    {
+        public OwnerOffsetPair(ISchemeContainerOwner owner, Vector offset)
+        {
+            Owner = owner;
+            Offset = offset;
+        }
+
+        public ISchemeContainerOwner Owner { get; }
+        public Vector Offset { get; }
+
     }
 
     public sealed class SchemeContainer : ISchemeContainer
@@ -82,6 +125,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private static readonly EventHandler OnFlowControlSchemeChangedEventHandler = OnFlowControlSchemeChanged;
         private static readonly EventHandler OnValveStateChangedEventHandler = OnValveStateChanged;
 
+        private readonly List<OwnerOffsetPair> _children = new List<OwnerOffsetPair>();
         private readonly ISchemeContainerOwner _owner;
         private FlowGraph _scheme;
         private bool _isInvalidateCalled;
@@ -151,6 +195,20 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     UnsubscribePositionChangedEvents(flowControl);
                 }
             }
+        }
+
+        public void AddChildContainer(OwnerOffsetPair pair)
+        {
+            _children.Add(pair);
+            foreach (var child in pair.Owner.ChildrenControls)
+            {
+                // TODO
+                if (child is IFlowControl flowControl)
+                {
+                    SubscribePositionChangedEvents(flowControl);
+                }
+            }
+            InvalidateScheme(false);
         }
 
         private void SubscribePositionChangedEvents(IFlowControl element)
@@ -228,7 +286,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var pipes = new List<IPipe>();
             var valves = new List<IValve>();
 
-            GatherControls(this, pipes, valves, _owner);
+            GatherControls(this, pipes, valves, _owner, new Vector());
+            foreach (var pair in _children)
+            {
+                GatherControls(this, pipes, valves, pair.Owner, pair.Offset);
+            }
 
             if (_scheme != null && _scheme.Equals(pipes, valves))
             {
@@ -237,40 +299,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             _scheme = new FlowGraph(this, pipes, valves);
         }
 
-        private void GatherControls(SchemeContainer schemeContainer, List<IPipe> pipes, List<IValve> valves, ISchemeContainerOwner owner)
+        private void GatherControls(SchemeContainer schemeContainer, List<IPipe> pipes, List<IValve> valves, ISchemeContainerOwner owner, Vector offset)
         {
             foreach (var child in owner.ChildrenControls)
             {
-                if (child is ISchemeContainerOwner childOwner && childOwner.IsChildContainer)
-                {
-                    GatherControls(schemeContainer, pipes, valves, childOwner);
-                }
-
                 if (child is IPipe pipe)
                 {
-                    if (schemeContainer._owner != owner)
-                    {
-                        // TODO
-                        var frameworkElement = ((PipeFlowCanvas)owner).Parent as FrameworkElement;
-                        var loc = LayoutInformation.GetLayoutSlot(frameworkElement);
-                        pipe.Offset = new Vector(loc.X, loc.Y);
-                    }
-
                     pipe.SchemeContainer = schemeContainer;
+                    pipe.Offset = offset;
                     pipes.Add(pipe);
                 }
 
                 if (child is IValve valve)
                 {
-                    if (schemeContainer._owner != owner)
-                    {
-                        // TODO
-                        var frameworkElement = ((PipeFlowCanvas)owner).Parent as FrameworkElement;
-                        var loc = LayoutInformation.GetLayoutSlot(frameworkElement);
-                        valve.Offset = new Vector(loc.X, loc.Y);
-                    }
-
                     valve.SchemeContainer = schemeContainer;
+                    valve.Offset = offset;
                     valves.Add(valve);
                 }
             }
