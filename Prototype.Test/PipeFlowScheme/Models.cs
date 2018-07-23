@@ -19,7 +19,7 @@ namespace Prototype.Test.PipeFlowScheme
 
         public void Remove(IFlowControl flowControl)
         {
-            throw new NotImplementedException();
+            _controls.Remove(flowControl);
         }
 
         public void InvalidateScheme()
