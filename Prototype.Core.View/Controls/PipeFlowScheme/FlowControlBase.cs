@@ -51,7 +51,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #region Methods
 
-        protected static void AddSubscribedProperties(Type type, params DependencyProperty[] properties)
+        protected static void SetSubscribedProperties(Type type, params DependencyProperty[] properties)
         {
             if (SubscribedProperties.ContainsKey(type))
             {

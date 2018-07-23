@@ -13,7 +13,7 @@ namespace Prototype.Core.Controls
         static Valve()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve), new FrameworkPropertyMetadata(typeof(Valve)));
-            AddSubscribedProperties(typeof(Valve), OrientationProperty, VisibilityProperty);
+            SetSubscribedProperties(typeof(Valve), OrientationProperty, VisibilityProperty);
         }
 
         #endregion

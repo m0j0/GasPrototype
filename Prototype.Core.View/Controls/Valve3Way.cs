@@ -19,7 +19,7 @@ namespace Prototype.Core.Controls
         static Valve3Way()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Valve3Way), new FrameworkPropertyMetadata(typeof(Valve3Way)));
-            AddSubscribedProperties(typeof(Valve3Way), RotationProperty, VisibilityProperty);
+            SetSubscribedProperties(typeof(Valve3Way), RotationProperty, VisibilityProperty);
         }
 
         public Valve3Way()
