@@ -46,7 +46,7 @@
                         </Trigger>
 
                         <Trigger Property="Rotation" Value="Rotate90">
-                            <Setter TargetName="MainControl" Property="RenderTransform">
+                            <Setter TargetName="MainControl" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="90" />
                                 </Setter.Value>
@@ -57,7 +57,7 @@
                         </Trigger>
 
                         <Trigger Property="Rotation" Value="Rotate180">
-                            <Setter TargetName="MainControl" Property="RenderTransform">
+                            <Setter TargetName="MainControl" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="180" />
                                 </Setter.Value>
@@ -65,7 +65,7 @@
                         </Trigger>
 
                         <Trigger Property="Rotation" Value="Rotate270">
-                            <Setter TargetName="MainControl" Property="RenderTransform">
+                            <Setter TargetName="MainControl" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="270" />
                                 </Setter.Value>

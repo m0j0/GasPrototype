@@ -100,7 +100,7 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="Orientation" Value="Horizontal">
-                            <Setter TargetName="MainControl" Property="RenderTransform">
+                            <Setter TargetName="MainControl" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="90" />
                                 </Setter.Value>
