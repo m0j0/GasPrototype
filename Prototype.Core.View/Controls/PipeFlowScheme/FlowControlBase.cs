@@ -113,6 +113,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private void AddControlToScheme()
         {
+            if (SchemeContainer != null)
+            {
+                return;
+            }
+
             var containerOwner = VisualParent as FrameworkElement;
 
             bool useExternalContainer = false;
