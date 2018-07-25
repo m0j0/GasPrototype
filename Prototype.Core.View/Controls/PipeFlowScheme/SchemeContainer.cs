@@ -1,17 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using System.Windows.Threading;
+using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal sealed class SchemeContainer : ISchemeContainer
     {
-        private readonly List<IFlowControl> _controls = new List<IFlowControl>();
-
+        private readonly HashSet<IFlowControl> _controls = new HashSet<IFlowControl>();
         private FlowGraph _scheme;
         private bool _isInvalidateCalled;
 
+        public SchemeContainer(FrameworkElement containerOwner)
+        {
+            Should.NotBeNull(containerOwner, nameof(containerOwner));
+
+            GatherChildrenFlowControls(containerOwner);
+            InvalidateSchemeImpl();
+        }
+
         public void Add(IFlowControl flowControl)
         {
+            if (_controls.Contains(flowControl))
+            {
+                throw new InvalidOperationException("Can't add control twice.");
+            }
+
             _controls.Add(flowControl);
             InvalidateScheme();
         }
@@ -66,6 +85,38 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             _scheme = new FlowGraph(this, pipes, valves);
+        }
+
+        private void GatherChildrenFlowControls(FrameworkElement containerOwner)
+        {
+            var li = LayoutInformation.GetLayoutSlot(containerOwner);
+            var offset = new Vector(-li.X, -li.Y);
+            ProcessChildren(containerOwner, offset);
+        }
+
+        private void ProcessChildren(FrameworkElement element, Vector offset)
+        {
+            if (element == null)
+            {
+                return;
+            }
+
+            var li = LayoutInformation.GetLayoutSlot(element);
+            offset.X += li.X;
+            offset.Y += li.Y;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                var child = VisualTreeHelper.GetChild(element, i) as FrameworkElement;
+
+                if (child is IFlowControl flowControl)
+                {
+                    flowControl.SetContrainer(this, offset);
+                    _controls.Add(flowControl);
+                }
+
+                ProcessChildren(child, offset);
+            }
         }
     }
 }

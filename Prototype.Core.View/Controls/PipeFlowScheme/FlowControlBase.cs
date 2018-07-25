@@ -46,6 +46,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #region Methods
 
+        public void SetContrainer(ISchemeContainer container, Vector offset)
+        {
+            SchemeContainer = container;
+            _offset = offset;
+        }
+
         protected static void SetSubscribedProperties(Type type, params DependencyProperty[] properties)
         {
             if (SubscribedProperties.ContainsKey(type))
@@ -87,18 +93,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        private ISchemeContainer GetContainer(FrameworkElement containerOwner)
-        {
-            var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
-            if (schemeContainer == null)
-            {
-                schemeContainer = new SchemeContainer();
-                FlowSchemeSettings.SetContainer(containerOwner, schemeContainer);
-            }
-
-            return schemeContainer;
-        }
-
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             AddControlToScheme();
@@ -109,6 +103,22 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     .FromProperty(property, typeof(Pipe))
                     .AddValueChanged(this, SizeChangedHandler);
             }
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var property in SubscribedProperties[GetType()])
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(property, typeof(Pipe))
+                    .RemoveValueChanged(this, SizeChangedHandler);
+            }
+        }
+
+        private static void OnSizeChanged(object sender, EventArgs e)
+        {
+            var control = (FlowControlBase) sender;
+            control.SchemeContainer?.InvalidateScheme();
         }
 
         private void AddControlToScheme()
@@ -128,38 +138,31 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (FlowSchemeSettings.GetIsFlowSchemeContainer(parent))
                 {
                     containerOwner = parent;
-                    useExternalContainer = true;
+                    break;
                 }
 
                 var layout = LayoutInformation.GetLayoutSlot(parent);
                 offset.X += layout.X;
                 offset.Y += layout.Y;
                 parent = parent.Parent as FrameworkElement;
+                useExternalContainer = true;
             }
-            
+
             if (useExternalContainer)
             {
                 _offset = offset;
             }
 
-            SchemeContainer = GetContainer(containerOwner);
-            SchemeContainer.Add(this);
-        }
-
-        private void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            foreach (var property in SubscribedProperties[GetType()])
+            var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
+            if (schemeContainer == null)
             {
-                DependencyPropertyDescriptor
-                    .FromProperty(property, typeof(Pipe))
-                    .RemoveValueChanged(this, SizeChangedHandler);
+                schemeContainer = new SchemeContainer(containerOwner);
+                FlowSchemeSettings.SetContainer(containerOwner, schemeContainer);
+                return;
             }
-        }
 
-        private static void OnSizeChanged(object sender, EventArgs e)
-        {
-            var control = (FlowControlBase) sender;
-            control.SchemeContainer?.InvalidateScheme();
+            SchemeContainer = schemeContainer;
+            SchemeContainer.Add(this);
         }
 
         #endregion

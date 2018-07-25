@@ -48,7 +48,32 @@ namespace Prototype.Test.PipeFlowScheme
         }
     }
 
-    internal class TestPipe : IPipe
+    internal abstract class FlowControlBase : IFlowControl
+    {
+        public abstract double Left { get; set; }
+
+        public abstract double Top { get; set; }
+
+        public abstract double Width { get; set; }
+
+        public abstract double Height { get; set; }
+
+        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
+        
+        public Vector Offset { get; set; }
+
+        public bool IsVisible { get; set; } = true;
+
+        public ISchemeContainer SchemeContainer { get; set; }
+
+        public void SetContrainer(ISchemeContainer container, Vector offset)
+        {
+            SchemeContainer = container;
+            Offset = offset;
+        }
+    }
+
+    internal class TestPipe : FlowControlBase, IPipe
     {
         private double? _width;
         private double? _height;
@@ -59,7 +84,7 @@ namespace Prototype.Test.PipeFlowScheme
             Orientation = Orientation.Horizontal;
         }
 
-        public double Width
+        public override double Width
         {
             get
             {
@@ -76,7 +101,7 @@ namespace Prototype.Test.PipeFlowScheme
             set => _width = value;
         }
 
-        public double Height
+        public override double Height
         {
             get
             {
@@ -93,17 +118,9 @@ namespace Prototype.Test.PipeFlowScheme
             set => _height = value;
         }
 
-        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
+        public override double Top { get; set; }
 
-        public Vector Offset { get; set; }
-
-        public bool IsVisible { get; set; } = true;
-
-        public ISchemeContainer SchemeContainer { get; set; }
-
-        public double Top { get; set; }
-
-        public double Left { get; set; }
+        public override double Left { get; set; }
 
         public Orientation Orientation { get; set; }
 
@@ -114,14 +131,14 @@ namespace Prototype.Test.PipeFlowScheme
         public IList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();
     }
 
-    internal class TestValve : IValve
+    internal class TestValve : FlowControlBase, IValve
     {
         public TestValve(ISchemeContainer container)
         {
             SchemeContainer = container;
         }
 
-        public double Width
+        public override double Width
         {
             get
             {
@@ -135,9 +152,10 @@ namespace Prototype.Test.PipeFlowScheme
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            set { throw new NotImplementedException(); }
         }
 
-        public double Height
+        public override double Height
         {
             get
             {
@@ -151,21 +169,14 @@ namespace Prototype.Test.PipeFlowScheme
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            set { throw new NotImplementedException(); }
         }
-
-        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
-
-        public Vector Offset { get; set; }
-
-        public bool IsVisible { get; set; } = true;
-
-        public ISchemeContainer SchemeContainer { get; set; }
 
         public Orientation Orientation { get; set; }
 
-        public double Top { get; set; }
+        public override double Top { get; set; }
 
-        public double Left { get; set; }
+        public override double Left { get; set; }
 
         public bool CanPassFlow { get; set; }
 
@@ -175,7 +186,7 @@ namespace Prototype.Test.PipeFlowScheme
         }
     }
 
-    internal class TestValve3Way : IValve3Way
+    internal class TestValve3Way : FlowControlBase, IValve3Way
     {
         private readonly Valve3WayModel _model;
 
@@ -185,7 +196,7 @@ namespace Prototype.Test.PipeFlowScheme
             _model = new Valve3WayModel(this);
         }
 
-        public double Width
+        public override double Width
         {
             get
             {
@@ -201,9 +212,10 @@ namespace Prototype.Test.PipeFlowScheme
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            set { throw new NotImplementedException(); }
         }
 
-        public double Height
+        public override double Height
         {
             get
             {
@@ -219,19 +231,12 @@ namespace Prototype.Test.PipeFlowScheme
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            set { throw new NotImplementedException(); }
         }
 
-        public Rect LayoutRect => new Rect(Left, Top, Width, Height);
+        public override double Top { get; set; }
 
-        public Vector Offset { get; set; }
-
-        public bool IsVisible { get; set; } = true;
-
-        public ISchemeContainer SchemeContainer { get; set; }
-
-        public double Top { get; set; }
-
-        public double Left { get; set; }
+        public override double Left { get; set; }
 
         public Valve3WayFlowPath PathWhenOpen { get; set; }
 

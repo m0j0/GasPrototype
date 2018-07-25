@@ -33,6 +33,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         Vector Offset { get; }
 
         bool IsVisible { get; }
+
+        void SetContrainer(ISchemeContainer container, Vector offset);
     }
 
     public interface IPipe : IFlowControl
