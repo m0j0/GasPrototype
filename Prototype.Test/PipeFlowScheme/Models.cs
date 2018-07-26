@@ -34,7 +34,7 @@ namespace Prototype.Test.PipeFlowScheme
 
         public FlowGraph CreateGraph()
         {
-            return new FlowGraph(this, _controls.OfType<IPipe>(), _controls.OfType<IValve>());
+            return new FlowGraph(_controls.OfType<IPipe>(), _controls.OfType<IValve>());
         }
 
         public IEnumerable<TestPipe> GetPipes()

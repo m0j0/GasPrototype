@@ -60,7 +60,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #region Constructors
 
-        public GraphPipe(ISchemeContainer container, IPipe pipe)
+        public GraphPipe(IPipe pipe)
         {
             Rect = new Rect(pipe.LayoutRect.Location + pipe.Offset, pipe.LayoutRect.Size);
             Pipe = pipe;

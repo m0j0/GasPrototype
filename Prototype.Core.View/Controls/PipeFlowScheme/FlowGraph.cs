@@ -7,8 +7,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal class FlowGraph : IFlowGraph
     {
-        private readonly ISchemeContainer _container;
-
         private bool _isSchemeFailed;
         private IReadOnlyCollection<IVertex> _vertices;
         private IReadOnlyCollection<Edge> _edges;
@@ -16,11 +14,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private IReadOnlyList<GraphPipe> _pipes;
         private IReadOnlyList<GraphValve> _valves;
 
-        public FlowGraph(ISchemeContainer container, IEnumerable<IPipe> pipes,
-            IEnumerable<IValve> valves)
+        public FlowGraph(IEnumerable<IPipe> pipes, IEnumerable<IValve> valves)
         {
-            _container = container;
-            SplitPipesToSegments(container, pipes, valves);
+            SplitPipesToSegments(pipes, valves);
             
             InvalidateFlow();
         }
@@ -79,8 +75,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return true;
         }
 
-        private void SplitPipesToSegments(ISchemeContainer container, IEnumerable<IPipe> pipeControls,
-            IEnumerable<IValve> valveControls)
+        private void SplitPipesToSegments(IEnumerable<IPipe> pipeControls, IEnumerable<IValve> valveControls)
         {
             var pipes = new List<GraphPipe>();
             foreach (var pipeControl in pipeControls)
@@ -91,9 +86,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     continue;
                 }
 
-                pipes.Add(new GraphPipe(container, pipeControl));
+                pipes.Add(new GraphPipe(pipeControl));
             }
-            var valves = valveControls.Where(v => v.IsVisible).Select(v => new GraphValve(container, v)).ToArray();
+            var valves = valveControls.Where(v => v.IsVisible).Select(v => new GraphValve(v)).ToArray();
 
             _pipes = pipes.ToArray();
             _valves = valves.ToArray();
@@ -264,7 +259,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            //ValidateVerticesAccessibility(pipes, cnnToVertex);
+            ValidateVerticesAccessibility(pipes, cnnToVertex);
             
             foreach (var pipe in pipes)
             {
@@ -323,7 +318,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 pipe.SetPipeSegments(allSegments);
             }
 
-            _isSchemeFailed = _pipes.Any(pipe => pipe.IsFailed);//!pipes.All(pipe => pipe.FailType == FailType.None || pipe.FailType == FailType.DeadPath);
+            _isSchemeFailed = _pipes.Any(pipe => pipe.IsFailed);
             _vertices = cnnToVertex.Values.ToArray();
             _edges = edges.Where(edge => edge.PipeSegment != null).ToArray();
         }
