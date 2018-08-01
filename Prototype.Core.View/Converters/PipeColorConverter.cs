@@ -8,8 +8,6 @@ namespace Prototype.Core.Converters
 {
     internal sealed class PipeColorConverter : IMultiValueConverter
     {
-        public static readonly PipeColorConverter Instance = new PipeColorConverter();
-
         private static readonly Brush HasFlowBrush = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0xFF));
         private static readonly Brush GasBrush = new SolidColorBrush(Color.FromRgb(0x8B, 0x8D, 0x8E));
         private static readonly Brush PurgeBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));

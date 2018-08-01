@@ -8,12 +8,9 @@ namespace Prototype.Core.Converters
 {
     internal class PipeConnectorBorderThicknessConverter : IValueConverter
     {
-        public static readonly PipeConnectorBorderThicknessConverter Instance = new PipeConnectorBorderThicknessConverter();
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var connector = (ConnectorSegment) value;
-            var side = connector.Side;
+            var side = (Side) value;
             return new Thickness(
                 side.HasFlagEx(Side.Left) ? 1 : 0,
                 side.HasFlagEx(Side.Top) ? 1 : 0,

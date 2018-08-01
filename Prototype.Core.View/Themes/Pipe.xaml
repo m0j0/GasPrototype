@@ -14,6 +14,9 @@
             <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource ColorCgaDarkGray}" />
             <sys:Double x:Key="PipeWidth">5</sys:Double>
             <sys:Double x:Key="DefaultPipeLength">100</sys:Double>
+            <converters:FailedSegmentFailTypeConverter x:Key="FailedSegmentFailTypeConverter" />
+            <converters:PipeColorConverter x:Key="PipeColorConverter" />
+            <converters:PipeConnectorBorderThicknessConverter x:Key="PipeConnectorBorderThicknessConverter" />
 
             <DataTemplate x:Key="LineSegmentTemplate"
                           DataType="pipeFlowScheme:LineSegment">
@@ -22,7 +25,7 @@
                         BorderBrush="{StaticResource BorderBrush}"
                         Height="{StaticResource PipeWidth}" Width="{Binding Length}">
                     <Border.Background>
-                        <MultiBinding Converter="{x:Static converters:PipeColorConverter.Instance}">
+                        <MultiBinding Converter="{StaticResource PipeColorConverter}">
                             <Binding Path="SubstanceType" />
                             <Binding Path="HasFlow" />
                         </MultiBinding>
@@ -41,13 +44,13 @@
             <!---->
 
             <DataTemplate x:Key="ConnectorSegmentTemplate"
-                          DataType="pipeFlowScheme:LineSegment">
+                          DataType="pipeFlowScheme:ConnectorSegment">
                 <Border x:Name="MainControl"
-                        BorderThickness="{Binding Converter={x:Static converters:PipeConnectorBorderThicknessConverter.Instance}}"
+                        BorderThickness="{Binding Side, Converter={StaticResource PipeConnectorBorderThicknessConverter}}"
                         BorderBrush="{StaticResource BorderBrush}"
                         Height="{StaticResource PipeWidth}" Width="{Binding Length}">
                     <Border.Background>
-                        <MultiBinding Converter="{x:Static converters:PipeColorConverter.Instance}">
+                        <MultiBinding Converter="{StaticResource PipeColorConverter}">
                             <Binding Path="SubstanceType" />
                             <Binding Path="HasFlow" />
                         </MultiBinding>
@@ -69,7 +72,7 @@
                 <Canvas x:Name="MainControl">
                     <Polyline Points="2.5 0 2.5 6 6.5 11 6.5 16 2.5 21 2.5 27" FillRule="evenodd" StrokeThickness="4">
                         <Polyline.Stroke>
-                            <MultiBinding Converter="{x:Static converters:PipeColorConverter.Instance}">
+                            <MultiBinding Converter="{StaticResource PipeColorConverter}">
                                 <Binding Path="SubstanceType" />
                                 <Binding Path="HasFlow" />
                             </MultiBinding>
@@ -100,7 +103,7 @@
             <DataTemplate x:Key="FailedSegmentTemplate"
                           DataType="pipeFlowScheme:FailedSegment">
                 <Border x:Name="MainControl"
-                        Background="{Binding FailType, Converter={x:Static converters:FailedSegmentFailTypeConverter.Instance}}"
+                        Background="{Binding FailType, Converter={StaticResource FailedSegmentFailTypeConverter}}"
                         Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
 
                 <DataTemplate.Triggers>

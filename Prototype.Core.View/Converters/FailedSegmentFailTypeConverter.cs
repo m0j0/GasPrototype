@@ -9,13 +9,11 @@ namespace Prototype.Core.Converters
 {
     internal class FailedSegmentFailTypeConverter : IValueConverter
     {
-        public static readonly FailedSegmentFailTypeConverter Instance = new FailedSegmentFailTypeConverter();
+        private static readonly Dictionary<FailType, Brush> Brushes;
 
-        private static Dictionary<FailType, Brush> _brushes;
-
-        private FailedSegmentFailTypeConverter()
+        static FailedSegmentFailTypeConverter()
         {
-            _brushes = new Dictionary<FailType, Brush>
+            Brushes = new Dictionary<FailType, Brush>
             {
                 [FailType.WrongSize] = new SolidColorBrush(Colors.Red),
                 [FailType.IntersectionIsNotSupported] = new SolidColorBrush(Colors.Green),
@@ -28,7 +26,7 @@ namespace Prototype.Core.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var failType = (FailType) value;
-            if (_brushes.TryGetValue(failType, out Brush brush))
+            if (Brushes.TryGetValue(failType, out Brush brush))
             {
                 return brush;
             }
