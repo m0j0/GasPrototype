@@ -80,7 +80,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var pipes = new List<GraphPipe>();
             foreach (var pipeControl in pipeControls)
             {
-                pipeControl.Segments.Clear();
+                if (pipeControl.Segments != null)
+                {
+                    pipeControl.Segments = null;
+                }
+
                 if (!pipeControl.IsVisible)
                 {
                     continue;

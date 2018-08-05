@@ -128,7 +128,7 @@ namespace Prototype.Test.PipeFlowScheme
 
         public PipeType Type { get; set; }
 
-        public IList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();
+        public IReadOnlyList<IPipeSegment> Segments { get; set; } = new List<IPipeSegment>();
     }
 
     internal class TestValve : FlowControlBase, IValve

@@ -15,13 +15,21 @@ namespace Prototype.Core.Converters
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var hasFlow = (bool) values[1];
+            return GetSubstanceColor((SubstanceType) values[0], (bool) values[1]);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Brush GetSubstanceColor(SubstanceType substanceType, bool hasFlow)
+        {
             if (hasFlow)
             {
                 return HasFlowBrush;
             }
-
-            var substanceType = (SubstanceType) values[0];
+            
             switch (substanceType)
             {
                 case SubstanceType.Gas:
@@ -31,13 +39,8 @@ namespace Prototype.Core.Converters
                 case SubstanceType.Chemical:
                     return ChemicalBrush;
                 default:
-                    throw new ArgumentOutOfRangeException("substanceType");
+                    throw new ArgumentOutOfRangeException(nameof(substanceType));
             }
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -113,7 +113,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             UpdateDirection();
         }
 
-        public void SetPipeSegments(IList<IPipeSegment> segments)
+        public void SetPipeSegments(IReadOnlyList<IPipeSegment> segments)
         {
             Pipe.Segments = segments;
         }

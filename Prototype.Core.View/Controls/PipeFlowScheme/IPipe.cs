@@ -45,7 +45,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         PipeType Type { get; }
 
-        IList<IPipeSegment> Segments { get; set; }
+        IReadOnlyList<IPipeSegment> Segments { get; set; }
     }
 
     public interface IValve : IFlowControl

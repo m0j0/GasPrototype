@@ -127,8 +127,19 @@
         <Setter Property="Height" Value="{StaticResource PipeWidth}" />
         <Setter Property="MinHeight" Value="{StaticResource PipeWidth}" />
         <Setter Property="MaxHeight" Value="{StaticResource PipeWidth}" />
+        
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="{StaticResource PipeWidth}" />
+                <Setter Property="MinWidth" Value="{StaticResource PipeWidth}" />
+                <Setter Property="MaxWidth" Value="{StaticResource PipeWidth}" />
+                <Setter Property="Height" Value="{StaticResource DefaultPipeLength}" />
+                <Setter Property="MinHeight" Value="0" />
+                <Setter Property="MaxHeight" Value="{x:Static sys:Double.PositiveInfinity}" />
+            </Trigger>
+        </Style.Triggers>
 
-        <Setter Property="Template">
+        <!--<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:Pipe">
                     <ItemsControl ItemsSource="{TemplateBinding Segments}"
@@ -158,6 +169,6 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 </ResourceDictionary>

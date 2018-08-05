@@ -1,21 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Prototype.Core.Controls.PipeFlowScheme;
+using Prototype.Core.Converters;
+using LineSegment = Prototype.Core.Controls.PipeFlowScheme.LineSegment;
 
 namespace Prototype.Core.Controls
 {
     public sealed class Pipe : FlowControlBase, IPipe
     {
+        #region Constants
+
+        // TODO move
+        internal const double PipeWidth = 5;
+        private const double PipeBorderWidth = 1;
+        private const double PipeSubstanceWidth = 3;
+
+        #endregion
+
+        #region Fields
+
+        private IReadOnlyList<IPipeSegment> _segments;
+
+        #endregion
         #region Constructors
 
         static Pipe()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
-            SetSubscribedProperties(typeof(Pipe), OrientationProperty, VisibilityProperty, SubstanceTypeProperty, TypeProperty);
+            SetSubscribedProperties(typeof(Pipe), OrientationProperty, VisibilityProperty, SubstanceTypeProperty,
+                TypeProperty);
         }
 
         #endregion
@@ -31,9 +50,6 @@ namespace Prototype.Core.Controls
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
             "Type", typeof(PipeType), typeof(Pipe), new PropertyMetadata(default(PipeType)));
 
-        public static readonly DependencyProperty SegmentsProperty = DependencyProperty.Register(
-            "Segments", typeof(IList<IPipeSegment>), typeof(Pipe), new PropertyMetadata(new List<IPipeSegment>()));
-
         #endregion
 
         #region Properties
@@ -42,7 +58,8 @@ namespace Prototype.Core.Controls
         public Orientation Orientation
         {
             get { return (Orientation) GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
+            set { SetValue(OrientationProperty, value);
+            }
         }
 
         [Category("Model")]
@@ -58,12 +75,71 @@ namespace Prototype.Core.Controls
             set { SetValue(TypeProperty, value); }
         }
 
-        public IList<IPipeSegment> Segments
+        public IReadOnlyList<IPipeSegment> Segments
         {
-            get { return (IList<IPipeSegment>) GetValue(SegmentsProperty); }
-            set { SetValue(SegmentsProperty, value is INotifyCollectionChanged ? value : new ObservableCollection<IPipeSegment>(value)); }
+            get => _segments;
+            set
+            {
+                _segments = value;
+                InvalidateVisual();
+            }
         }
 
         #endregion
+        
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            if (Segments == null || Segments.Count == 0)
+            {
+                return;
+            }
+            
+            foreach (var segment in Segments)
+            {
+                segment.PropertyChanged += (sender, args) => InvalidateVisual();
+                DrawSegment(drawingContext, segment);
+            }
+        }
+
+        private void DrawSegment(DrawingContext drawingContext, IPipeSegment segment)
+        {
+            DrawPipeSegment(drawingContext, segment);
+            switch (segment)
+            {
+                case LineSegment lineSegment:
+                  //  DrawPipeSegment(drawingContext, lineSegment);
+
+                    return;
+            }
+        }
+
+        private static void DrawPipeSegment(DrawingContext drawingContext, IPipeSegment pipeSegment)
+        {
+            var borderBrush = new SolidColorBrush(Color.FromRgb(0x4D, 0x4F, 0x53));
+            var substanceBrush = PipeColorConverter.GetSubstanceColor(pipeSegment.SubstanceType, pipeSegment.HasFlow);
+
+            if (pipeSegment is FailedSegment)
+            {
+                substanceBrush = new SolidColorBrush(Colors.GreenYellow);
+            }
+
+            switch (pipeSegment.Orientation)
+            {
+                case Orientation.Horizontal:
+                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y, pipeSegment.Length, PipeBorderWidth));
+                    drawingContext.DrawRectangle(substanceBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y + PipeBorderWidth, pipeSegment.Length, PipeSubstanceWidth));
+                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y + PipeBorderWidth + PipeSubstanceWidth, pipeSegment.Length, PipeBorderWidth));
+                    break;
+
+                case Orientation.Vertical:
+                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y, PipeBorderWidth, pipeSegment.Length));
+                    drawingContext.DrawRectangle(substanceBrush, null, new Rect(pipeSegment.StartPoint.X + PipeBorderWidth, pipeSegment.StartPoint.Y, PipeSubstanceWidth, pipeSegment.Length));
+                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X + PipeBorderWidth + PipeSubstanceWidth, pipeSegment.StartPoint.Y, PipeBorderWidth, pipeSegment.Length));
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 }
