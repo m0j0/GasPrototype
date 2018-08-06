@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using MugenMvvmToolkit;
 
 namespace Prototype.Core.Controls.PipeFlowScheme
 {
@@ -13,7 +15,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private static readonly Dictionary<Type, DependencyProperty[]> SubscribedProperties = new Dictionary<Type, DependencyProperty[]>();
         private static readonly EventHandler SizeChangedHandler;
-        
+        private static readonly PropertyInfo PreviousArrangeRectProperty;
+
         protected ISchemeContainer SchemeContainer;
         private Vector _offset;
 
@@ -24,6 +27,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         static FlowControlBase()
         {
             SizeChangedHandler = OnSizeChanged;
+
+            PreviousArrangeRectProperty = typeof(UIElement).GetProperty("PreviousArrangeRect", BindingFlags.Instance | BindingFlags.NonPublic);
+            Should.NotBeNull(PreviousArrangeRectProperty, nameof(PreviousArrangeRectProperty));
         }
 
         protected FlowControlBase()
@@ -64,7 +70,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
-            SchemeContainer?.InvalidateScheme();
+            if (SchemeContainer != null)
+            {
+                var previousArrangeRect = PreviousArrangeRectProperty.GetValueEx<Rect>(this);
+                if (previousArrangeRect.Size != arrangeBounds)
+                {
+                    SchemeContainer.InvalidateScheme();
+                }
+            }
 
             return base.ArrangeOverride(arrangeBounds);
         }
