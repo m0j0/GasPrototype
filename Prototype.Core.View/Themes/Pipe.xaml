@@ -1,124 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:converters="clr-namespace:Prototype.Core.Converters"
-                    xmlns:templateSelectors="clr-namespace:Prototype.Core.TemplateSelectors"
-                    xmlns:pipeFlowScheme="clr-namespace:Prototype.Core.Controls.PipeFlowScheme">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- WPF Designer doesn't respect these properties from code-behind, so we set them here -->
     <Style TargetType="controls:Pipe">
         <Style.Resources>
-            <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource ColorCgaDarkGray}" />
             <sys:Double x:Key="PipeWidth">5</sys:Double>
             <sys:Double x:Key="DefaultPipeLength">100</sys:Double>
-            <converters:FailedSegmentFailTypeConverter x:Key="FailedSegmentFailTypeConverter" />
-            <converters:PipeColorConverter x:Key="PipeColorConverter" />
-            <converters:PipeConnectorBorderThicknessConverter x:Key="PipeConnectorBorderThicknessConverter" />
-
-            <DataTemplate x:Key="LineSegmentTemplate"
-                          DataType="pipeFlowScheme:LineSegment">
-                <Border x:Name="MainControl"
-                        BorderThickness="0,1"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        Height="{StaticResource PipeWidth}" Width="{Binding Length}">
-                    <Border.Background>
-                        <MultiBinding Converter="{StaticResource PipeColorConverter}">
-                            <Binding Path="SubstanceType" />
-                            <Binding Path="HasFlow" />
-                        </MultiBinding>
-                    </Border.Background>
-                </Border>
-
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
-                        <Setter TargetName="MainControl" Property="BorderThickness" Value="1,0" />
-                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="{StaticResource PipeWidth}" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-
-            <!---->
-
-            <DataTemplate x:Key="ConnectorSegmentTemplate"
-                          DataType="pipeFlowScheme:ConnectorSegment">
-                <Border x:Name="MainControl"
-                        BorderThickness="{Binding Side, Converter={StaticResource PipeConnectorBorderThicknessConverter}}"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        Height="{StaticResource PipeWidth}" Width="{Binding Length}">
-                    <Border.Background>
-                        <MultiBinding Converter="{StaticResource PipeColorConverter}">
-                            <Binding Path="SubstanceType" />
-                            <Binding Path="HasFlow" />
-                        </MultiBinding>
-                    </Border.Background>
-                </Border>
-
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
-                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="{StaticResource PipeWidth}" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-
-            <!---->
-
-            <DataTemplate x:Key="BridgeSegmentTemplate"
-                          DataType="pipeFlowScheme:BridgeSegment">
-                <Canvas x:Name="MainControl">
-                    <Polyline Points="2.5 0 2.5 6 6.5 11 6.5 16 2.5 21 2.5 27" FillRule="evenodd" StrokeThickness="4">
-                        <Polyline.Stroke>
-                            <MultiBinding Converter="{StaticResource PipeColorConverter}">
-                                <Binding Path="SubstanceType" />
-                                <Binding Path="HasFlow" />
-                            </MultiBinding>
-                        </Polyline.Stroke>
-                    </Polyline>
-                    <Path Fill="{StaticResource BorderBrush}"
-                          Data="M4 0 L5 0 L5 5.17157288 C5 5.56939761 5.15803526 5.95092848 5.43933983 6.23223305 L8.26776695 9.06066017 C8.7366079 9.52950112 9 10.1653859 9 10.8284271 L9 16.1715729 C9 16.8346141 8.7366079 17.4704989 8.26776695 17.9393398 L5.43933983 20.767767 C5.15803526 21.0490715 5 21.4306024 5 21.8284271 L5 27 L4 27 L4 21.8284271 C4 21.1653859 4.2633921 20.5295011 4.73223305 20.0606602 L7.56066017 17.232233 C7.84196474 16.9509285 8 16.5693976 8 16.1715729 L8 10.8284271 C8 10.4306024 7.84196474 10.0490715 7.56066017 9.76776695 L4.73223305 6.93933983 C4.2633921 6.47049888 4 5.8346141 4 5.17157288 L4 0 Z" />
-                    <Path Fill="{StaticResource BorderBrush}"
-                          Data="M0 0 L1 0 L1 6.17157288 C1 6.56939761 1.15803526 6.95092848 1.43933983 7.23223305 L4.26776695 10.0606602 C4.7366079 10.5295011 5 11.1653859 5 11.8284271 L5 15.1715729 C5 15.8346141 4.7366079 16.4704989 4.26776695 16.9393398 L1.43933983 19.767767 C1.15803526 20.0490715 1 20.4306024 1 20.8284271 L1 27 L0 27 L0 20.8284271 C-1.11022302e-16 20.1653859 0.263392101 19.5295011 0.732233047 19.0606602 L3.56066017 16.232233 C3.84196474 15.9509285 4 15.5693976 4 15.1715729 L4 11.8284271 C4 11.4306024 3.84196474 11.0490715 3.56066017 10.767767 L0.732233047 7.93933983 C0.263392101 7.47049888 1.83186799e-15 6.8346141 1.77635684e-15 6.17157288 L0 0 Z" />
-                </Canvas>
-
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding Orientation}" Value="Horizontal">
-                        <Setter TargetName="MainControl" Property="RenderTransform">
-                            <Setter.Value>
-                                <TransformGroup>
-                                    <RotateTransform Angle="-90" />
-                                    <TranslateTransform Y="5" />
-                                </TransformGroup>
-                            </Setter.Value>
-                        </Setter>
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-
-            <!---->
-
-            <DataTemplate x:Key="FailedSegmentTemplate"
-                          DataType="pipeFlowScheme:FailedSegment">
-                <Border x:Name="MainControl"
-                        Background="{Binding FailType, Converter={StaticResource FailedSegmentFailTypeConverter}}"
-                        Height="{StaticResource PipeWidth}" Width="{Binding Length}" />
-
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding Orientation}" Value="Vertical">
-                        <Setter TargetName="MainControl" Property="Height" Value="{Binding Length}" />
-                        <Setter TargetName="MainControl" Property="Width" Value="{StaticResource PipeWidth}" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-
-            <templateSelectors:PipeSegmentTemplateSelector x:Key="PipeSegmentTemplateSelector"
-                                                           ConnectorTemplate="{StaticResource ConnectorSegmentTemplate}"
-                                                           BridgeTemplate="{StaticResource BridgeSegmentTemplate}"
-                                                           LineTemplate="{StaticResource LineSegmentTemplate}"
-                                                           FailedTemplate="{StaticResource FailedSegmentTemplate}" />
         </Style.Resources>
 
         <Setter Property="Width" Value="{StaticResource DefaultPipeLength}" />
@@ -127,7 +19,7 @@
         <Setter Property="Height" Value="{StaticResource PipeWidth}" />
         <Setter Property="MinHeight" Value="{StaticResource PipeWidth}" />
         <Setter Property="MaxHeight" Value="{StaticResource PipeWidth}" />
-        
+
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="{StaticResource PipeWidth}" />
@@ -138,37 +30,5 @@
                 <Setter Property="MaxHeight" Value="{x:Static sys:Double.PositiveInfinity}" />
             </Trigger>
         </Style.Triggers>
-
-        <!--<Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="controls:Pipe">
-                    <ItemsControl ItemsSource="{TemplateBinding Segments}"
-                                  ItemTemplateSelector="{StaticResource PipeSegmentTemplateSelector}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Canvas />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemContainerStyle>
-                            <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.Left" Value="{Binding Path=StartPoint.X, Mode=OneTime}" />
-                                <Setter Property="Canvas.Top" Value="{Binding Path=StartPoint.Y, Mode=OneTime}" />
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
-                    </ItemsControl>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Width" Value="{StaticResource PipeWidth}" />
-                            <Setter Property="MinWidth" Value="{StaticResource PipeWidth}" />
-                            <Setter Property="MaxWidth" Value="{StaticResource PipeWidth}" />
-                            <Setter Property="Height" Value="{StaticResource DefaultPipeLength}" />
-                            <Setter Property="MinHeight" Value="0" />
-                            <Setter Property="MaxHeight" Value="{x:Static sys:Double.PositiveInfinity}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>-->
     </Style>
 </ResourceDictionary>

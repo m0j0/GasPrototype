@@ -66,15 +66,11 @@
     <Compile Include="Controls\PipeFlowScheme\ValveBase.cs" />
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Valve3Way.cs" />
-    <Compile Include="Converters\FailedSegmentFailTypeConverter.cs" />
-    <Compile Include="Converters\PipeColorConverter.cs" />
     <Compile Include="Converters\IsNullConverter.cs" />
-    <Compile Include="Converters\PipeConnectorBorderThicknessConverter.cs" />
     <Compile Include="Converters\EnumEqualityConverter.cs" />
     <Compile Include="CoreViewExtensions.cs" />
     <Compile Include="MarkupExtensions\ContextMenuEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TemplateSelectors\PipeSegmentTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj">
