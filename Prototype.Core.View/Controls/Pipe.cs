@@ -17,6 +17,12 @@ namespace Prototype.Core.Controls
     {
         #region Fields
 
+        private static readonly Brush PipeBorderBrush = new SolidColorBrush(Color.FromRgb(0x4D, 0x4F, 0x53));
+        private static readonly Brush HasFlowBrush = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0xFF));
+        private static readonly Brush GasBrush = new SolidColorBrush(Color.FromRgb(0x8B, 0x8D, 0x8E));
+        private static readonly Brush PurgeBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
+        private static readonly Brush ChemicalBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0x9B, 0xFF));
+
         private readonly PropertyChangedEventHandler _segmentPropertyChangedHandler;
         private IReadOnlyList<IPipeSegment> _segments;
 
@@ -88,10 +94,13 @@ namespace Prototype.Core.Controls
                 }
 
                 _segments = value;
+
                 if (_segments != null)
-                foreach (var segment in _segments)
                 {
-                    segment.PropertyChanged += _segmentPropertyChangedHandler;
+                    foreach (var segment in _segments)
+                    {
+                        segment.PropertyChanged += _segmentPropertyChangedHandler;
+                    }
                 }
 
                 InvalidateVisual();
@@ -114,19 +123,19 @@ namespace Prototype.Core.Controls
                 switch (seg)
                 {
                     case LineSegment segment:
-                        DrawPipeSegment(drawingContext, segment);
+                        DrawLineSegment(drawingContext, segment);
                         continue;
 
                     case ConnectorSegment segment:
-                        DrawPipeSegment(drawingContext, segment);
+                        DrawConnectorSegment(drawingContext, segment);
                         continue;
 
                     case BridgeSegment segment:
-                        DrawPipeSegment(drawingContext, segment);
+                        DrawBridgeSegment(drawingContext, segment);
                         continue;
 
                     case FailedSegment segment:
-                        DrawPipeSegment(drawingContext, segment);
+                        DrawLineSegment(drawingContext, segment);
                         continue;
 
                     default:
@@ -135,34 +144,24 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void DrawPipeSegment(DrawingContext drawingContext, IPipeSegment pipeSegment)
+        private static void DrawLineSegment(DrawingContext drawingContext, IPipeSegment segment)
         {
-            var borderBrush = new SolidColorBrush(Color.FromRgb(0x4D, 0x4F, 0x53));
-            var substanceBrush = PipeColorConverter.GetSubstanceColor(pipeSegment.SubstanceType, pipeSegment.HasFlow);
+            var substanceBrush = segment is FailedSegment ? 
+                new SolidColorBrush(Colors.GreenYellow) : 
+                GetSubstanceColor(segment.SubstanceType, segment.HasFlow);
 
-            if (pipeSegment is FailedSegment)
-            {
-                substanceBrush = new SolidColorBrush(Colors.GreenYellow);
-            }
-
-/*            var vector = pipeSegment.Orientation == Orientation.Horizontal ? new Vector(pipeSegment.Length, Common.PipeWidth) : new Vector(Common.PipeWidth, pipeSegment.Length);
-            drawingContext.DrawRectangle(substanceBrush, 
-                new Pen(borderBrush, 1) { }, 
-                new Rect(pipeSegment.StartPoint, vector) );
-
-            return;*/
-            switch (pipeSegment.Orientation)
+            switch (segment.Orientation)
             {
                 case Orientation.Horizontal:
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y, pipeSegment.Length, Common.PipeBorderWidth));
-                    drawingContext.DrawRectangle(substanceBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y + Common.PipeBorderWidth, pipeSegment.Length, Common.PipeSubstanceWidth));
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y + Common.PipeBorderWidth + Common.PipeSubstanceWidth, pipeSegment.Length, Common.PipeBorderWidth));
+                    DrawHorizontalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, 0);
+                    DrawHorizontalLine(drawingContext, substanceBrush, segment.StartPoint, segment.Length, Common.PipeSubstanceWidth, Common.PipeBorderWidth);
+                    DrawHorizontalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, Common.PipeEndBorderOffset);
                     break;
 
                 case Orientation.Vertical:
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X, pipeSegment.StartPoint.Y, Common.PipeBorderWidth, pipeSegment.Length));
-                    drawingContext.DrawRectangle(substanceBrush, null, new Rect(pipeSegment.StartPoint.X + Common.PipeBorderWidth, pipeSegment.StartPoint.Y, Common.PipeSubstanceWidth, pipeSegment.Length));
-                    drawingContext.DrawRectangle(borderBrush, null, new Rect(pipeSegment.StartPoint.X + Common.PipeBorderWidth + Common.PipeSubstanceWidth, pipeSegment.StartPoint.Y, Common.PipeBorderWidth, pipeSegment.Length));
+                    DrawVerticalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, 0);
+                    DrawVerticalLine(drawingContext, substanceBrush, segment.StartPoint, segment.Length, Common.PipeSubstanceWidth, Common.PipeBorderWidth);
+                    DrawVerticalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, Common.PipeEndBorderOffset);
                     break;
 
                 default:
@@ -170,9 +169,66 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void DrawHorizontalLine(DrawingContext drawingContext, Brush brush, double width)
+        private void DrawConnectorSegment(DrawingContext drawingContext, ConnectorSegment segment)
         {
+            var substanceBrush = GetSubstanceColor(segment.SubstanceType, segment.HasFlow);
 
+            DrawHorizontalLine(drawingContext, substanceBrush, segment.StartPoint, segment.Length, Common.PipeWidth, 0);
+
+            if (segment.Side.HasFlagEx(Side.Left))
+            {
+                DrawVerticalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, 0);
+            }
+
+            if (segment.Side.HasFlagEx(Side.Top))
+            {
+                DrawHorizontalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, 0);
+            }
+
+            if (segment.Side.HasFlagEx(Side.Right))
+            {
+                DrawVerticalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, Common.PipeEndBorderOffset);
+            }
+
+            if (segment.Side.HasFlagEx(Side.Bottom))
+            {
+                DrawHorizontalLine(drawingContext, PipeBorderBrush, segment.StartPoint, segment.Length, Common.PipeBorderWidth, Common.PipeEndBorderOffset);
+            }
+        }
+
+        private void DrawBridgeSegment(DrawingContext drawingContext, BridgeSegment segment)
+        {
+            DrawLineSegment(drawingContext, segment);
+        }
+
+        private static void DrawHorizontalLine(DrawingContext drawingContext, Brush brush, Point startPoint, double width, double height, double heightOffset)
+        {
+            drawingContext.DrawRectangle(brush, null, new Rect(startPoint.X, startPoint.Y + heightOffset, width, height));
+        }
+
+        private static void DrawVerticalLine(DrawingContext drawingContext, Brush brush, Point startPoint, double height, double width, double widthOffset)
+        {
+            drawingContext.DrawRectangle(brush, null, new Rect(startPoint.X + widthOffset, startPoint.Y, width, height));
+        }
+
+        private static Brush GetSubstanceColor(SubstanceType substanceType, bool hasFlow)
+        {
+            if (hasFlow)
+            {
+                return HasFlowBrush;
+            }
+
+            switch (substanceType)
+            {
+                case SubstanceType.Gas:
+                    return GasBrush;
+                case SubstanceType.Purge:
+                    return PurgeBrush;
+                case SubstanceType.Chemical:
+                    return ChemicalBrush;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(substanceType));
+            }
         }
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
