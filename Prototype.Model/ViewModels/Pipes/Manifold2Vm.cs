@@ -11,8 +11,8 @@ namespace Prototype.ViewModels.Pipes
 
         public Manifold2Vm()
         {
-            ValveVm1 = new ValveVm("Valve1") {State = ValveState.Open};
-            ValveVm2 = new ValveVm("Valve2") {State = ValveState.Closed};
+            ValveVm1 = new ValveVm("Valve1") {State = ValveState.Closed};
+            ValveVm2 = new ValveVm("Valve2") {State = ValveState.Open};
         }
 
         #endregion
