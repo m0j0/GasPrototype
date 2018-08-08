@@ -37,7 +37,7 @@
             <Pipe Canvas.Left="126" Canvas.Top="39" Orientation="Vertical" />
             <Pipe Canvas.Left="77" Canvas.Top="25" Orientation="Vertical" />
             <Pipe Canvas.Left="2" Canvas.Top="145" Width="60" />
-            <Pipe Canvas.Left="106" Canvas.Top="120" Width="40" />
+            <Pipe Canvas.Left="106" Canvas.Top="120" Width="50" />
         </Canvas>
     </Grid>
 </UserControl>
