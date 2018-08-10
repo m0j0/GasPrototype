@@ -137,6 +137,23 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                    pipe2.Rect.Bottom > intersectionRect.Bottom;
         }
 
+        public static bool IsEnoughSpaceForBridgeConnection(GraphPipe pipe, Rect intersectionRect)
+        {
+            const double bridgeSpace = BridgeOffset + PipeWidth; // PipeWidth for start/end connectors
+
+            switch (pipe.Orientation)
+            {
+                case Orientation.Horizontal:
+                    return intersectionRect.Left - pipe.Rect.Left >= bridgeSpace &&
+                           pipe.Rect.Right - intersectionRect.Right >= bridgeSpace;
+                case Orientation.Vertical:
+                    return intersectionRect.Top - pipe.Rect.Top >= bridgeSpace &&
+                           pipe.Rect.Bottom - intersectionRect.Bottom >= bridgeSpace;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public static bool IsCornerConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)
         {
             bool IsUpperLeft(GraphPipe p1, GraphPipe p2)

@@ -144,6 +144,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                             continue;
                         }
 
+                        if (!Common.IsEnoughSpaceForBridgeConnection(pipe2, intersectionRect))
+                        {
+                            pipe2.FailType = FailType.NotEnoughSpaceForBridgeConnection;
+                            continue;
+                        }
+
                         var bridgeConnector = new BridgePipeConnector(intersectionRect, pipe2);
                         connectors.Add(bridgeConnector);
                         cnnToVertex[bridgeConnector] = new Vertex(this, bridgeConnector);
@@ -269,7 +275,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            ValidateVerticesAccessibility(pipes, cnnToVertex);
+            //ValidateVerticesAccessibility(pipes, cnnToVertex);
             
             foreach (var pipe in pipes)
             {
