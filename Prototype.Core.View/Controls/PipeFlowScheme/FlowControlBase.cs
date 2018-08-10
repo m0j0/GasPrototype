@@ -19,6 +19,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         protected ISchemeContainer SchemeContainer;
         private Vector _offset;
+        private Rect _previousArrangeRect;
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
+            LayoutUpdated += OnLayoutUpdated;
         }
 
         #endregion
@@ -66,20 +68,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             SubscribedProperties[type] = properties;
-        }
-
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            if (SchemeContainer != null)
-            {
-                var previousArrangeRect = PreviousArrangeRectProperty.GetValueEx<Rect>(this);
-                if (previousArrangeRect.Size != arrangeBounds)
-                {
-                    SchemeContainer.InvalidateScheme();
-                }
-            }
-
-            return base.ArrangeOverride(arrangeBounds);
         }
 
         protected override void OnVisualParentChanged(DependencyObject oldParent)
@@ -125,6 +113,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 DependencyPropertyDescriptor
                     .FromProperty(property, typeof(Pipe))
                     .RemoveValueChanged(this, SizeChangedHandler);
+            }
+        }
+
+        private void OnLayoutUpdated(object sender, EventArgs e)
+        {
+            var currentArrangeRect = PreviousArrangeRectProperty.GetValueEx<Rect>(this);
+            if (currentArrangeRect != _previousArrangeRect)
+            {
+                _previousArrangeRect = currentArrangeRect;
+                SchemeContainer?.InvalidateScheme();
             }
         }
 
