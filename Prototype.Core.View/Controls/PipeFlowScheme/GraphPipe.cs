@@ -63,6 +63,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public GraphPipe(IPipe pipe)
         {
             Rect = new Rect(pipe.LayoutRect.Location + pipe.Offset, pipe.LayoutRect.Size);
+            IsVisible = pipe.IsVisible;
             Pipe = pipe;
             _connectors = new List<IPipeConnector>();
             _comparer = new ConnectorComparer(this);
@@ -83,6 +84,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public FailType FailType { get; set; }
 
         public bool IsFailed => FailType != FailType.None;
+
+        public bool IsVisible { get; }
 
         public PipeDirection Direction { get; private set; }
 
@@ -153,6 +156,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public bool Equals(IPipe pipe)
         {
             if (Pipe != pipe)
+            {
+                return false;
+            }
+
+            if (IsVisible != pipe.IsVisible)
             {
                 return false;
             }

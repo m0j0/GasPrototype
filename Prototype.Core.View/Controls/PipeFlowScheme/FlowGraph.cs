@@ -58,7 +58,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             for (int i = 0; i < _pipes.Count; i++)
             {
-                if (!pipes[i].IsVisible || !_pipes[i].Equals(pipes[i]))
+                if (!_pipes[i].Equals(pipes[i]))
                 {
                     return false;
                 }
@@ -66,7 +66,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             for (int i = 0; i < _valves.Count; i++)
             {
-                if (!valves[i].IsVisible || !_valves[i].Equals(valves[i]))
+                if (!_valves[i].Equals(valves[i]))
                 {
                     return false;
                 }
@@ -85,14 +85,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     pipeControl.Segments = null;
                 }
 
-                if (!pipeControl.IsVisible)
-                {
-                    continue;
-                }
-
                 pipes.Add(new GraphPipe(pipeControl));
             }
-            var valves = valveControls.Where(v => v.IsVisible).Select(v => new GraphValve(v)).ToArray();
+            var valves = valveControls.Select(v => new GraphValve(v)).ToArray();
 
             _pipes = pipes.ToArray();
             _valves = valves.ToArray();
@@ -103,6 +98,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe1 in pipes)
             {
+                if (!pipe1.IsVisible)
+                {
+                    continue;
+                }
+
                 if (!Common.IsSizeValid(pipe1))
                 {
                     pipe1.FailType = FailType.WrongSize;
@@ -112,7 +112,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 foreach (var pipe2 in pipes)
                 {
                     if (pipe1 == pipe2 ||
-                        pipe2.IsFailed)
+                        pipe2.IsFailed ||
+                        !pipe2.IsVisible)
                     {
                         continue;
                     }
@@ -165,7 +166,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             
             foreach (var pipe in pipes)
             {
-                if (pipe.IsFailed)
+                if (pipe.IsFailed || !pipe.IsVisible)
                 {
                     continue;
                 }
@@ -183,13 +184,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe in pipes)
             {
-                if (pipe.IsFailed)
+                if (pipe.IsFailed || !pipe.IsVisible)
                 {
                     continue;
                 }
                 
                 foreach (var valve in valves)
                 {
+                    if (!valve.IsVisible)
+                    {
+                        continue;
+                    }
+
                     if (valve.Connector != null)
                     {
                         continue;
@@ -239,11 +245,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe in pipes)
             {
-                if (pipe.IsFailed)
+                if (pipe.IsFailed || !pipe.IsVisible)
                 {
                     continue;
                 }
-                
+
                 if (pipe.Connectors.Count < 2)
                 {
                     throw new Exception("!!!");
@@ -285,7 +291,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe in pipes)
             {
-                if (pipe.IsFailed)
+                if (pipe.IsFailed || !pipe.IsVisible)
                 {
                     continue;
                 }

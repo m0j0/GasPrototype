@@ -49,6 +49,10 @@ namespace Prototype.Test.PipeFlowScheme
 
         public static bool PipeHasSegmentFlow(this IPipe pipe, params bool[] segmentTypes)
         {
+            if (pipe.Segments == null)
+            {
+                return segmentTypes.Length == 0;
+            }
             if (pipe.Segments.Count != segmentTypes.Length)
             {
                 return false;
@@ -88,7 +92,7 @@ namespace Prototype.Test.PipeFlowScheme
 
         public static bool PipeIsEmpty(this IPipe pipe)
         {
-            return pipe.Segments.Count == 0;
+            return pipe.Segments == null || pipe.Segments.Count == 0;
         }
 
         public static bool PipeSegmentsHasLength(this IPipe pipe, params double[] lengths)

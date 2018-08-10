@@ -7,6 +7,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public GraphValve(IValve valve)
         {
             Rect = new Rect(valve.LayoutRect.Location + valve.Offset, valve.LayoutRect.Size);
+            IsVisible = valve.IsVisible;
             Valve = valve;
         }
 
@@ -16,9 +17,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public IPipeConnector Connector { get; set; }
 
+        public bool IsVisible { get; }
+
         public bool Equals(IValve valve)
         {
             if (Valve != valve)
+            {
+                return false;
+            }
+
+            if (IsVisible != valve.IsVisible)
             {
                 return false;
             }

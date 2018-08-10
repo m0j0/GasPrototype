@@ -36,7 +36,7 @@ namespace Prototype.Core.Controls
         static Pipe()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Pipe), new FrameworkPropertyMetadata(typeof(Pipe)));
-            SetSubscribedProperties(typeof(Pipe), OrientationProperty, VisibilityProperty, SubstanceTypeProperty, TypeProperty);
+            SetSubscribedProperties(typeof(Pipe), OrientationProperty, SubstanceTypeProperty, TypeProperty);
 
             BridgeSegmentGeometry1 = new PathGeometry
             {
