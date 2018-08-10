@@ -415,6 +415,12 @@ namespace Prototype.Test.PipeFlowScheme
             manifold.Valve1.IsVisible = false;
             manifold.UpdateGraph();
             Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
+            
+            manifold.Pipe1.Type = PipeType.Regular;
+            Assert.IsFalse(manifold.Graph.Equals(pipes, valves));
+
+            manifold.Pipe1.Type = PipeType.Source;
+            Assert.IsTrue(manifold.Graph.Equals(pipes, valves));
         }
 
         #endregion

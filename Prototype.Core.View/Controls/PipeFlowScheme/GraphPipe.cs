@@ -64,6 +64,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             Rect = new Rect(pipe.LayoutRect.Location + pipe.Offset, pipe.LayoutRect.Size);
             IsVisible = pipe.IsVisible;
+            Type = pipe.Type;
             Pipe = pipe;
             _connectors = new List<IPipeConnector>();
             _comparer = new ConnectorComparer(this);
@@ -79,7 +80,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public Orientation Orientation => Pipe.Orientation;
 
-        public PipeType Type => Pipe.Type;
+        public PipeType Type { get; }
 
         public FailType FailType { get; set; }
 
@@ -161,6 +162,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             if (IsVisible != pipe.IsVisible)
+            {
+                return false;
+            }
+
+            if (Type != pipe.Type)
             {
                 return false;
             }
