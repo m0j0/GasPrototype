@@ -76,18 +76,12 @@ namespace Prototype.Test.PipeFlowScheme
                 return false;
             }
 
-            var failedSegment = pipe.Segments[0] as FailedSegment;
-            if (failedSegment == null)
-            {
-                return false;
-            }
-
-            return failedSegment.FailType == failType;
+            return pipe.Segments.Any(segment => segment is LineSegment lineSegment && lineSegment.FailType != FailType.None);
         }
 
         public static bool PipeIsNotFailed(this IPipe pipe)
         {
-            return pipe.Segments.Any(segment => !(segment is FailedSegment));
+            return pipe.Segments.Any(segment => !(segment is LineSegment lineSegment && lineSegment.FailType != FailType.None));
         }
 
         public static bool PipeIsEmpty(this IPipe pipe)

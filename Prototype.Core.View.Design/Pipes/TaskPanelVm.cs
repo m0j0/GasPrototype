@@ -74,7 +74,7 @@ namespace Prototype.Core.Design.Pipes
                 return;
             }
 
-            var failedSegment = _pipe.Segments.OfType<FailedSegment>().SingleOrDefault();
+            var failedSegment = _pipe.Segments.OfType<LineSegment>().SingleOrDefault(segment => segment.FailType != FailType.None);
             SetFailType(_pipe.Segments.Count == 1 && failedSegment != null ? failedSegment.FailType : FailType.None);
         }
 

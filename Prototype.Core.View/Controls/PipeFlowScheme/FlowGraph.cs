@@ -276,22 +276,29 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             //ValidateVerticesAccessibility(pipes, cnnToVertex);
-            
+
+            foreach (var pipe in pipes)
+            {
+                for (var i = 0; i < pipe.Connectors.Count - 1; i++)
+                {
+                    var c1 = pipe.Connectors[i];
+                    var c2 = pipe.Connectors[i + 1];
+
+                    if (c1 is BridgePipeConnector && 
+                        c2 is BridgePipeConnector &&
+                        !Common.IsEnoughSpaceBetweenBridgeConnectors(c1, c2))
+                    {
+                        // TODO merge connectors
+                        pipe.FailType = FailType.BothSourceDestination;
+                    }
+                }
+            }
+
             foreach (var pipe in pipes)
             {
                 if (pipe.IsFailed)
                 {
-                    var result = new List<IPipeSegment>();
-
-                    result.Add(
-                        new FailedSegment(
-                            new Point(0, 0),
-                            Common.GetLength(pipe.Rect, pipe.Orientation),
-                            pipe.Orientation,
-                            pipe.FailType)
-                    );
-
-                    pipe.SetPipeSegments(result);
+                    pipe.SetPipeSegments(Common.CreateFailedSegments(pipe));
                 }
             }
 

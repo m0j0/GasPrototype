@@ -103,6 +103,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 pipe.Pipe.SubstanceType);
         }
 
+        internal static IReadOnlyList<IPipeSegment> CreateFailedSegments(GraphPipe pipe)
+        {
+            var result = new List<IPipeSegment>
+            {
+                new LineSegment(
+                    new Point(0, 0),
+                    Common.GetLength(pipe.Rect, pipe.Orientation),
+                    pipe.Orientation,
+                    pipe.Pipe.SubstanceType,
+                    pipe.FailType)
+            };
+
+            return result;
+        }
+
         #endregion
 
         #region Intersections
@@ -152,6 +167,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public static bool IsEnoughSpaceBetweenBridgeConnectors(IPipeConnector c1, IPipeConnector c2)
+        {
+            // TODO
+            var hor = c2.Rect.Left - c1.Rect.Left;
+            var ver = c2.Rect.Top - c1.Rect.Top;
+            return (hor == 0 || hor >= 27) && (ver == 0 || ver >= 27);
         }
 
         public static bool IsCornerConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)

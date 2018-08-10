@@ -179,9 +179,6 @@ namespace Prototype.Core.Controls
                     case BridgeSegment segment:
                         DrawBridgeSegment(drawingContext, segment);
                         continue;
-
-                    case FailedSegment segment:
-                        DrawLineSegment(drawingContext, segment);
                         continue;
 
                     default:
@@ -190,9 +187,11 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void DrawLineSegment(DrawingContext drawingContext, IPipeSegment segment)
+        private static void DrawLineSegment(DrawingContext drawingContext, LineSegment segment)
         {
-            var substanceBrush = segment is FailedSegment ? new SolidColorBrush(Colors.GreenYellow) : GetSubstanceColor(segment.SubstanceType, segment.HasFlow);
+            var substanceBrush = segment.FailType != FailType.None
+                ? new SolidColorBrush(Colors.GreenYellow)
+                : GetSubstanceColor(segment.SubstanceType, segment.HasFlow);
 
             switch (segment.Orientation)
             {

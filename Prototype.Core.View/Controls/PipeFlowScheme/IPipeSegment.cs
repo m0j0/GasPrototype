@@ -96,12 +96,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         private bool _hasFlow;
 
-        public LineSegment(Point startPoint, double length, Orientation orientation, SubstanceType substanceType)
+        public LineSegment(Point startPoint, double length, Orientation orientation, SubstanceType substanceType, FailType failType = FailType.None)
         {
+            if (length < 0)
+            {
+                throw new ArgumentException("Length should be positive.");
+            }
+
             StartPoint = startPoint;
             Length = length;
             Orientation = orientation;
             SubstanceType = substanceType;
+            FailType = failType;
         }
 
         public Point StartPoint { get; }
@@ -111,6 +117,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         public Orientation Orientation { get; }
 
         public SubstanceType SubstanceType { get; }
+
+        public FailType FailType { get; }
 
         public bool HasFlow
         {
@@ -126,28 +134,5 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 OnPropertyChanged();
             }
         }
-    }
-
-    internal class FailedSegment : NotifyPropertyChangedBase, IPipeSegment
-    {
-        public FailedSegment(Point startPoint, double length, Orientation orientation, FailType failType)
-        {
-            StartPoint = startPoint;
-            Length = length;
-            Orientation = orientation;
-            FailType = failType;
-        }
-
-        public Point StartPoint { get; }
-
-        public double Length { get; }
-
-        public Orientation Orientation { get; }
-
-        public FailType FailType { get; }
-
-        SubstanceType IPipeSegment.SubstanceType { get; }
-
-        bool IPipeSegment.HasFlow { get; set; }
     }
 }
