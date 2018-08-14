@@ -8,10 +8,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     public interface ISchemeContainer
     {
-        void Add(IFlowControl flowControl);
-
-        void Remove(IFlowControl flowControl);
-
         void InvalidateScheme();
 
         void InvalidateSchemeFlow();

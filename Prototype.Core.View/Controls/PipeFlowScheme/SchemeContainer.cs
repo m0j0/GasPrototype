@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
@@ -12,33 +9,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal sealed class SchemeContainer : ISchemeContainer
     {
-        private readonly HashSet<IFlowControl> _controls = new HashSet<IFlowControl>();
+        private readonly FrameworkElement _containerOwner;
         private FlowGraph _scheme;
         private bool _isInvalidateCalled;
 
         public SchemeContainer(FrameworkElement containerOwner)
         {
             Should.NotBeNull(containerOwner, nameof(containerOwner));
+            _containerOwner = containerOwner;
 
-            GatherChildrenFlowControls(containerOwner);
             InvalidateSchemeImpl();
-        }
-
-        public void Add(IFlowControl flowControl)
-        {
-            if (_controls.Contains(flowControl))
-            {
-                throw new InvalidOperationException("Can't add control twice.");
-            }
-
-            _controls.Add(flowControl);
-            InvalidateScheme();
-        }
-
-        public void Remove(IFlowControl flowControl)
-        {
-            _controls.Remove(flowControl);
-            InvalidateScheme();
         }
 
         public void InvalidateScheme()
@@ -62,10 +42,13 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         {
             _isInvalidateCalled = false;
 
+            var controls = new List<IFlowControl>();
+            GatherChildrenFlowControls(_containerOwner, controls);
+
             var pipes = new List<IPipe>();
             var valves = new List<IValve>();
 
-            foreach (var flowControl in _controls)
+            foreach (var flowControl in controls)
             {
                 switch (flowControl)
                 {
@@ -87,14 +70,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             _scheme = new FlowGraph(pipes, valves);
         }
 
-        private void GatherChildrenFlowControls(FrameworkElement containerOwner)
+        private void GatherChildrenFlowControls(FrameworkElement containerOwner, List<IFlowControl> flowControls)
         {
             var li = LayoutInformation.GetLayoutSlot(containerOwner);
             var offset = new Vector(-li.X, -li.Y);
-            ProcessChildren(containerOwner, offset);
+            ProcessChildren(containerOwner, offset, flowControls);
         }
 
-        private void ProcessChildren(FrameworkElement element, Vector offset)
+        private void ProcessChildren(FrameworkElement element, Vector offset, List<IFlowControl> flowControls)
         {
             if (element == null)
             {
@@ -112,10 +95,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 if (child is IFlowControl flowControl)
                 {
                     flowControl.SetContrainer(this, offset);
-                    _controls.Add(flowControl);
+                    flowControls.Add(flowControl);
                 }
 
-                ProcessChildren(child, offset);
+                ProcessChildren(child, offset, flowControls);
             }
         }
     }

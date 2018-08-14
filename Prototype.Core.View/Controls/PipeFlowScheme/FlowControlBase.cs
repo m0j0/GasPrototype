@@ -85,12 +85,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
             else
             {
-                SchemeContainer?.Remove(this);
-
-                if (VisualParent != null)
-                {
-                    AddControlToScheme();
-                }
+                SchemeContainer?.InvalidateScheme();
             }
         }
 
@@ -140,10 +135,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             var containerOwner = VisualParent as FrameworkElement;
-
-            bool useExternalContainer = false;
+            
             var parent = containerOwner;
-            var offset = new Vector();
             while (parent != null)
             {
                 if (FlowSchemeSettings.GetIsFlowSchemeContainer(parent))
@@ -151,17 +144,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     containerOwner = parent;
                     break;
                 }
-
-                var layout = LayoutInformation.GetLayoutSlot(parent);
-                offset.X += layout.X;
-                offset.Y += layout.Y;
+                
                 parent = parent.Parent as FrameworkElement;
-                useExternalContainer = true;
-            }
-
-            if (useExternalContainer)
-            {
-                _offset = offset;
             }
 
             var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
@@ -171,9 +155,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 FlowSchemeSettings.SetContainer(containerOwner, schemeContainer);
                 return;
             }
-
-            SchemeContainer = schemeContainer;
-            SchemeContainer.Add(this);
+            
+            schemeContainer.InvalidateScheme();
         }
 
         #endregion
