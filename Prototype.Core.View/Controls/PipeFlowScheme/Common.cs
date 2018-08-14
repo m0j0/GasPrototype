@@ -25,6 +25,26 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         #endregion
 
+        #region Common
+
+        private static bool AreClose(double value1, double value2)
+        {
+            const double DBL_EPSILON = 2.2204460492503131e-016;
+
+            //in case they are Infinities (then epsilon check does not work)
+            if (value1 == value2)
+            {
+                return true;
+            }
+
+            // This computes (|value1-value2| / (|value1| + |value2| + 10.0)) < DBL_EPSILON
+            double eps = (Math.Abs(value1) + Math.Abs(value2) + 10.0) * DBL_EPSILON;
+            double delta = value1 - value2;
+            return (-eps < delta) && (eps > delta);
+        }
+
+        #endregion
+
         #region Size methods
 
         internal static double GetBridgeHorizontalConnectorOffset(Orientation pipeOrientation)
@@ -53,9 +73,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             switch (orientation)
             {
                 case Orientation.Horizontal:
-                    return rect.Height == PipeWidth && rect.Width > 10;
+                    return AreClose(rect.Height, PipeWidth) && rect.Width > 10;
                 case Orientation.Vertical:
-                    return rect.Width == PipeWidth && rect.Height > 10;
+                    return AreClose(rect.Width, PipeWidth) && rect.Height > 10;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null);
             }
@@ -63,8 +83,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         internal static bool IsIntersectionSizeValid(Rect intersectionRect)
         {
-            return intersectionRect.Width == Common.PipeWidth &&
-                   intersectionRect.Height == Common.PipeWidth;
+            return AreClose(intersectionRect.Width, PipeWidth) &&
+                   AreClose(intersectionRect.Height, PipeWidth);
         }
 
         internal static double GetLength(Rect rect, Orientation orientation)
@@ -109,7 +129,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             {
                 new LineSegment(
                     new Point(0, 0),
-                    Common.GetLength(pipe.Rect, pipe.Orientation),
+                    GetLength(pipe.Rect, pipe.Orientation),
                     pipe.Orientation,
                     pipe.Pipe.SubstanceType,
                     pipe.FailType)
@@ -175,56 +195,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             var hor = c2.Rect.Left - c1.Rect.Left;
             var ver = c2.Rect.Top - c1.Rect.Top;
             return (hor == 0 || hor >= 27) && (ver == 0 || ver >= 27);
-        }
-
-        public static bool IsCornerConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)
-        {
-            bool IsUpperLeft(GraphPipe p1, GraphPipe p2)
-            {
-                return p1.Rect.TopLeft == p2.Rect.TopLeft &&
-                       p1.Rect.TopLeft == intersectionRect.TopLeft;
-            }
-
-            bool IsUpperRight(GraphPipe p1, GraphPipe p2)
-            {
-                return p1.Rect.TopRight == p2.Rect.TopRight &&
-                       p1.Rect.TopRight == intersectionRect.TopRight;
-            }
-
-            bool IsLowerLeft(GraphPipe p1, GraphPipe p2)
-            {
-                return p1.Rect.BottomLeft == p2.Rect.BottomLeft &&
-                       p1.Rect.BottomLeft == intersectionRect.BottomLeft;
-            }
-
-            bool IsLowerRight(GraphPipe p1, GraphPipe p2)
-            {
-                return p1.Rect.BottomRight == p2.Rect.BottomRight &&
-                       p1.Rect.BottomRight == intersectionRect.BottomRight;
-            }
-
-            return IsUpperLeft(pipe1, pipe2) || IsUpperLeft(pipe2, pipe1) ||
-                   IsUpperRight(pipe1, pipe2) || IsUpperRight(pipe2, pipe1) ||
-                   IsLowerLeft(pipe1, pipe2) || IsLowerLeft(pipe2, pipe1) ||
-                   IsLowerRight(pipe1, pipe2) || IsLowerRight(pipe2, pipe1);
-        }
-
-        public static bool IsSerialConnection(GraphPipe pipe1, GraphPipe pipe2, Rect intersectionRect)
-        {
-            bool IsVertical(GraphPipe p1, GraphPipe p2)
-            {
-                return p1.Rect.BottomRight == p2.Rect.TopLeft + Common.ConnectorVector &&
-                       p1.Rect.BottomLeft == intersectionRect.BottomLeft;
-            }
-
-            bool IsHorizontal(GraphPipe p1, GraphPipe p2)
-            {
-                return p1.Rect.BottomRight == p2.Rect.TopLeft + Common.ConnectorVector &&
-                       p1.Rect.BottomRight == intersectionRect.BottomRight;
-            }
-
-            return IsVertical(pipe1, pipe2) || IsVertical(pipe2, pipe1) ||
-                   IsHorizontal(pipe1, pipe2) || IsHorizontal(pipe2, pipe1);
         }
 
         #endregion
