@@ -199,18 +199,18 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             switch (c1.Pipe.Orientation)
             {
                 case Orientation.Horizontal:
-                    spaceLength = Math.Abs(c2.Rect.Left - c1.Rect.Left);
+                    spaceLength = Math.Abs(c2.Rect.Left - c1.Rect.Right);
                     break;
 
                 case Orientation.Vertical:
-                    spaceLength = Math.Abs(c2.Rect.Top - c1.Rect.Top);
+                    spaceLength = Math.Abs(c2.Rect.Top - c1.Rect.Bottom);
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            return spaceLength > (BridgeOffset + c1.ExtraLength + c2.ExtraLength);
+            return spaceLength > (BridgeOffset * 2 + c1.ExtraLength + c2.ExtraLength);
         }
 
         #endregion
