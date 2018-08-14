@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -19,8 +20,7 @@ namespace Prototype.Core.Controls
         private static readonly Brush GasBrush = new SolidColorBrush(Color.FromRgb(0x8B, 0x8D, 0x8E));
         private static readonly Brush PurgeBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
         private static readonly Brush ChemicalBrush = new SolidColorBrush(Color.FromRgb(0xFF, 0x9B, 0xFF));
-
-        private static readonly Dictionary<Brush, Pen> BridgeSubstancePens = new Dictionary<Brush, Pen>();
+        
         private static readonly Geometry BridgeSegmentGeometry1;
         private static readonly Geometry BridgeSegmentGeometry2;
         private static readonly Geometry BridgeSegmentGeometry3;
@@ -179,7 +179,6 @@ namespace Prototype.Core.Controls
                     case BridgeSegment segment:
                         DrawBridgeSegment(drawingContext, segment);
                         continue;
-                        continue;
 
                     default:
                         throw new NotSupportedException("Invalid segment type");
@@ -191,7 +190,7 @@ namespace Prototype.Core.Controls
         {
             var substanceBrush = segment.FailType != FailType.None
                 ? new SolidColorBrush(Colors.GreenYellow)
-                : GetSubstanceColor(segment.SubstanceType, segment.HasFlow);
+                : GetSubstanceBrush(segment.SubstanceType, segment.HasFlow);
 
             switch (segment.Orientation)
             {
@@ -212,9 +211,27 @@ namespace Prototype.Core.Controls
             }
         }
 
+        private static Geometry CreateGeometryByPoints(string points)
+        {
+            var collection = PointCollection.Parse(points);
+            return new PathGeometry
+            {
+                FillRule = FillRule.EvenOdd,
+                Figures =
+                {
+                    new PathFigure(
+                        collection[0],
+                        new[]
+                        {
+                            new PolyLineSegment(collection.Skip(1), true)
+                        }, false)
+                }
+            };
+        }
+
         private static void DrawConnectorSegment(DrawingContext drawingContext, ConnectorSegment segment)
         {
-            var substanceBrush = GetSubstanceColor(segment.SubstanceType, segment.HasFlow);
+            var substanceBrush = GetSubstanceBrush(segment.SubstanceType, segment.HasFlow);
 
             DrawHorizontalLine(drawingContext, substanceBrush, segment.StartPoint, segment.Length, Common.PipeWidth, 0);
 
@@ -248,9 +265,35 @@ namespace Prototype.Core.Controls
                 drawingContext.PushTransform(HorizontalBridgeTransform);
             }
 
-            drawingContext.DrawGeometry(null, GetBridgeSegmentSubstancePen(GetSubstanceColor(segment.SubstanceType, segment.HasFlow)), BridgeSegmentGeometry1);
-            drawingContext.DrawGeometry(PipeBorderBrush, null, BridgeSegmentGeometry2);
-            drawingContext.DrawGeometry(PipeBorderBrush, null, BridgeSegmentGeometry3);
+            var substanceBrush = GetSubstanceBrush(segment.SubstanceType, segment.HasFlow);
+
+            //
+            var leftPart1 = CreateGeometryByPoints(".521 0 .521 1.84 4.28 5.923 4.5 7 8.6 7 8.485 5.456 4.561 .869 4.561 0");
+            var leftPart2 = Geometry.Parse("M5,0.00165509581 C5,0.419788971 5.15803526,0.820797172 5.43933983,1.11646247 L8.26776695,4.08928214 C8.7366079,4.58205764 9,5.25040464 9,5.94729443 L9,7 L8,7 L8,5.94729443 C8,5.52916056 7.84196474,5.12815235 7.56066017,4.83248706 L4.73223305,1.85966739 C4.2633921,1.36689189 4,0.696889793 4,0 L5,0.00165509581 Z");
+            var leftPart3 = Geometry.Parse("M1,0 L1,1.05270557 C1,1.47083944 1.15803526,1.87184765 1.43933983,2.16751294 L4.26776695,5.14033261 C4.7366079,5.63310811 5,6.30311021 5,7 L4,7 C4,6.58186612 3.84196474,6.17920283 3.56066017,5.88353753 L0.732233047,2.91071786 C0.263392101,2.41794236 1.83186799e-15,1.74959536 1.77635684e-15,1.05270557 L0,0 L1,0 Z");
+            drawingContext.DrawGeometry(substanceBrush, null, leftPart1);
+            drawingContext.DrawGeometry(PipeBorderBrush, null, leftPart2);
+            drawingContext.DrawGeometry(PipeBorderBrush, null, leftPart3);
+            //
+
+            //
+            drawingContext.PushTransform(new TranslateTransform { X = 4, Y = 7 });
+            drawingContext.DrawRectangle(PipeBorderBrush, null, new Rect(0, 0, 1, 3));
+            drawingContext.DrawRectangle(substanceBrush, null, new Rect(1, 0, 3, 3));
+            drawingContext.DrawRectangle(PipeBorderBrush, null, new Rect(4, 0, 1, 3));
+            drawingContext.Pop();
+            //
+
+            //
+            drawingContext.PushTransform(new TranslateTransform { X = 0, Y = 10 });
+            var rightPart1 = CreateGeometryByPoints("4.469 0 4.469 .814 .447 5.491 .447 7 4.661 7 4.661 5.983 8.429 1.668 8.429 0");
+            var rightPart2 = Geometry.Parse("M9,0 L9,1.05270557 C9,1.74959536 8.7366079,2.41794236 8.26776695,2.91071786 L5.43933983,5.88353753 C5.15803526,6.17920283 5,6.58186612 5,7 L4,7 C4,6.30311021 4.2633921,5.63310811 4.73223305,5.14033261 L7.56066017,2.16751294 C7.84196474,1.87184765 8,1.47083944 8,1.05270557 L8,0 L9,0 Z");
+            var rightPart3 = Geometry.Parse("M5,0 C5,0.696889793 4.7366079,1.36689189 4.26776695,1.85966739 L1.43933983,4.83248706 C1.15803526,5.12815235 1,5.52916056 1,5.94729443 L1,7 L0,7 L0,5.94729443 C-1.11022302e-16,5.25040464 0.263392101,4.58205764 0.732233047,4.08928214 L3.56066017,1.11646247 C3.84196474,0.820797172 4,0.418133876 4,0 L5,0 Z");
+            drawingContext.DrawGeometry(substanceBrush, null, rightPart1);
+            drawingContext.DrawGeometry(PipeBorderBrush, null, rightPart2);
+            drawingContext.DrawGeometry(PipeBorderBrush, null, rightPart3);
+            drawingContext.Pop();
+            //
 
             drawingContext.Pop();
 
@@ -270,18 +313,7 @@ namespace Prototype.Core.Controls
             drawingContext.DrawRectangle(brush, null, new Rect(startPoint.X + widthOffset, startPoint.Y, width, height));
         }
 
-        private static Pen GetBridgeSegmentSubstancePen(Brush brush)
-        {
-            if (!BridgeSubstancePens.TryGetValue(brush, out Pen pen))
-            {
-                pen = new Pen(brush, 4);
-                BridgeSubstancePens[brush] = pen;
-            }
-
-            return pen;
-        }
-
-        private static Brush GetSubstanceColor(SubstanceType substanceType, bool hasFlow)
+        private static Brush GetSubstanceBrush(SubstanceType substanceType, bool hasFlow)
         {
             if (hasFlow)
             {
