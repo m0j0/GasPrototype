@@ -278,14 +278,14 @@ namespace Prototype.Core.Controls
 
             //
             drawingContext.PushTransform(new TranslateTransform { X = 4, Y = 7 });
-            drawingContext.DrawRectangle(PipeBorderBrush, null, new Rect(0, 0, 1, 3));
-            drawingContext.DrawRectangle(substanceBrush, null, new Rect(1, 0, 3, 3));
-            drawingContext.DrawRectangle(PipeBorderBrush, null, new Rect(4, 0, 1, 3));
+            drawingContext.DrawRectangle(PipeBorderBrush, null, new Rect(0, 0, 1, 3 + segment.ExtraLength));
+            drawingContext.DrawRectangle(substanceBrush, null, new Rect(1, 0, 3, 3 + segment.ExtraLength));
+            drawingContext.DrawRectangle(PipeBorderBrush, null, new Rect(4, 0, 1, 3 + segment.ExtraLength));
             drawingContext.Pop();
             //
 
             //
-            drawingContext.PushTransform(new TranslateTransform { X = 0, Y = 10 });
+            drawingContext.PushTransform(new TranslateTransform { X = 0, Y = 10 + segment.ExtraLength });
             var rightPart1 = CreateGeometryByPoints("4.469 0 4.469 .814 .447 5.491 .447 7 4.661 7 4.661 5.983 8.429 1.668 8.429 0");
             var rightPart2 = Geometry.Parse("M9,0 L9,1.05270557 C9,1.74959536 8.7366079,2.41794236 8.26776695,2.91071786 L5.43933983,5.88353753 C5.15803526,6.17920283 5,6.58186612 5,7 L4,7 C4,6.30311021 4.2633921,5.63310811 4.73223305,5.14033261 L7.56066017,2.16751294 C7.84196474,1.87184765 8,1.47083944 8,1.05270557 L8,0 L9,0 Z");
             var rightPart3 = Geometry.Parse("M5,0 C5,0.696889793 4.7366079,1.36689189 4.26776695,1.85966739 L1.43933983,4.83248706 C1.15803526,5.12815235 1,5.52916056 1,5.94729443 L1,7 L0,7 L0,5.94729443 C-1.11022302e-16,5.25040464 0.263392101,4.58205764 0.732233047,4.08928214 L3.56066017,1.11646247 C3.84196474,0.820797172 4,0.418133876 4,0 L5,0 Z");

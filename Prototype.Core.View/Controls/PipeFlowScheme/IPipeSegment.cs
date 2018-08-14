@@ -61,20 +61,23 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         private bool _hasFlow;
 
-        public BridgeSegment(Point startPoint, Orientation orientation, SubstanceType substanceType)
+        public BridgeSegment(Point startPoint, Orientation orientation, SubstanceType substanceType, double extraLength)
         {
             StartPoint = startPoint;
             Orientation = orientation;
             SubstanceType = substanceType;
+            ExtraLength = extraLength;
         }
 
         public Point StartPoint { get; }
 
-        public double Length => Common.BridgeLength;
+        public double Length => Common.BridgeLength + ExtraLength;
 
         public Orientation Orientation { get; }
 
         public SubstanceType SubstanceType { get; }
+
+        public double ExtraLength { get; }
 
         public bool HasFlow
         {

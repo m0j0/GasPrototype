@@ -90,7 +90,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public PipeDirection Direction { get; private set; }
 
-        public IReadOnlyList<IPipeConnector> Connectors => _connectors;
+        public IList<IPipeConnector> Connectors => _connectors;
 
         public PipeConnector StartConnector { get; private set; }
 

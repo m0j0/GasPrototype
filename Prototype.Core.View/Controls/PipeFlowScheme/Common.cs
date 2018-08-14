@@ -189,12 +189,28 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        public static bool IsEnoughSpaceBetweenBridgeConnectors(IPipeConnector c1, IPipeConnector c2)
+        public static bool IsEnoughSpaceBetweenBridgeConnectors(BridgePipeConnector c1, BridgePipeConnector c2, out double spaceLength)
         {
-            // TODO
-            var hor = c2.Rect.Left - c1.Rect.Left;
-            var ver = c2.Rect.Top - c1.Rect.Top;
-            return (hor == 0 || hor >= 27) && (ver == 0 || ver >= 27);
+            if (c1.Pipe.Orientation != c2.Pipe.Orientation)
+            {
+                throw new ArgumentException("Connectors should have the same orientaion.");
+            }
+
+            switch (c1.Pipe.Orientation)
+            {
+                case Orientation.Horizontal:
+                    spaceLength = Math.Abs(c2.Rect.Left - c1.Rect.Left);
+                    break;
+
+                case Orientation.Vertical:
+                    spaceLength = Math.Abs(c2.Rect.Top - c1.Rect.Top);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return spaceLength > (BridgeOffset + c1.ExtraLength + c2.ExtraLength);
         }
 
         #endregion

@@ -31,6 +31,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public GraphPipe Pipe { get; }
 
+        public double ExtraLength { get; set; }
+
         public IPipeSegment CreateSegment(GraphPipe pipe)
         {
             if (pipe != Pipe)
@@ -43,7 +45,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     Rect.Left - pipe.Rect.Left - Common.GetBridgeHorizontalConnectorOffset(pipe.Orientation),
                     Rect.Top - pipe.Rect.Top - Common.GetBridgeVerticalConnectorOffset(pipe.Orientation)),
                 pipe.Orientation,
-                pipe.Pipe.SubstanceType
+                pipe.Pipe.SubstanceType,
+                ExtraLength
             );
         }
 

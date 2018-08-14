@@ -147,6 +147,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         if (!Common.IsEnoughSpaceForBridgeConnection(pipe2, intersectionRect))
                         {
                             pipe2.FailType = FailType.NotEnoughSpaceForBridgeConnection;
+                            Common.IsEnoughSpaceForBridgeConnection(pipe2, intersectionRect);
                             continue;
                         }
 
@@ -251,6 +252,24 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe in pipes)
             {
+                for (var i = 0; i < pipe.Connectors.Count - 1; i++)
+                {
+                    var c1 = pipe.Connectors[i];
+                    var c2 = pipe.Connectors[i + 1];
+
+                    if (c1 is BridgePipeConnector bc1 &&
+                        c2 is BridgePipeConnector bc2 &&
+                        !Common.IsEnoughSpaceBetweenBridgeConnectors(bc1, bc2, out double spaceLength))
+                    {
+                        bc1.ExtraLength = spaceLength;
+                        pipe.Connectors.RemoveAt(i + 1);
+                        i--;
+                    }
+                }
+            }
+
+            foreach (var pipe in pipes)
+            {
                 if (pipe.IsFailed || !pipe.IsVisible)
                 {
                     continue;
@@ -276,23 +295,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             //ValidateVerticesAccessibility(pipes, cnnToVertex);
-
-            foreach (var pipe in pipes)
-            {
-                for (var i = 0; i < pipe.Connectors.Count - 1; i++)
-                {
-                    var c1 = pipe.Connectors[i];
-                    var c2 = pipe.Connectors[i + 1];
-
-                    if (c1 is BridgePipeConnector && 
-                        c2 is BridgePipeConnector &&
-                        !Common.IsEnoughSpaceBetweenBridgeConnectors(c1, c2))
-                    {
-                        // TODO merge connectors
-                        pipe.FailType = FailType.BothSourceDestination;
-                    }
-                }
-            }
 
             foreach (var pipe in pipes)
             {
