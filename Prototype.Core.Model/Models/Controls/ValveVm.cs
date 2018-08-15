@@ -37,7 +37,7 @@ namespace Prototype.Core.Models.GasPanel
 
         public ICommand OpenCommand { get; }
 
-        private void Open()
+        public void Open()
         {
             State = ValveState.Open;
         }
@@ -49,7 +49,7 @@ namespace Prototype.Core.Models.GasPanel
 
         public ICommand CloseCommand { get; }
 
-        private void Close()
+        public void Close()
         {
             State = ValveState.Closed;
         }

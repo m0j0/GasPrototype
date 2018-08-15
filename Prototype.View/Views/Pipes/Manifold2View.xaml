@@ -25,6 +25,7 @@
                ValveVm="{Binding ValveVm2}" />
 
         <CheckBox IsChecked="{Binding IsValve2Present}" Content="Is Valve 2 present" />
+        <Button Content="Invert valves" Canvas.Left="144" Width="75" Command="{Binding InvertValvesCommand}" />
         <TextBlock Text="Source 1" Canvas.Left="36" Canvas.Top="44" />
         <TextBlock Text="Source 2" Canvas.Left="193" Canvas.Top="44" />
         <TextBlock Text="Connection 1" Canvas.Left="79" Canvas.Top="144" />

@@ -1,4 +1,6 @@
-﻿using MugenMvvmToolkit.ViewModels;
+﻿using System.Windows.Input;
+using MugenMvvmToolkit.Models;
+using MugenMvvmToolkit.ViewModels;
 using Prototype.Core.Models;
 using Prototype.Core.Models.GasPanel;
 using Prototype.Interfaces;
@@ -13,6 +15,28 @@ namespace Prototype.ViewModels.Pipes
         {
             ValveVm1 = new ValveVm("Valve1") {State = ValveState.Closed};
             ValveVm2 = new ValveVm("Valve2") {State = ValveState.Open};
+            InvertValvesCommand = new RelayCommand(InvertValves);
+        }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand InvertValvesCommand { get; }
+
+        private void InvertValves()
+        {
+            foreach (var valve in new[] {ValveVm1, ValveVm2})
+            {
+                if (valve.State == ValveState.Open)
+                {
+                    valve.Close();
+                }
+                else
+                {
+                    valve.Open();
+                }
+            }
         }
 
         #endregion
@@ -36,7 +60,7 @@ namespace Prototype.ViewModels.Pipes
                 {
                     return;
                 }
-                
+
                 ValveVm2.IsPresent = value;
                 OnPropertyChanged();
             }

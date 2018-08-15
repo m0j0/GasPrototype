@@ -12,6 +12,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private readonly FrameworkElement _containerOwner;
         private FlowGraph _scheme;
         private bool _isInvalidateCalled;
+        private bool _isInvalidateFlowCalled;
 
         public SchemeContainer(FrameworkElement containerOwner)
         {
@@ -35,7 +36,19 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public void InvalidateSchemeFlow()
         {
-            _scheme?.InvalidateFlow();
+            if (_scheme == null)
+            {
+                return;
+            }
+
+            if (_isInvalidateFlowCalled)
+            {
+                return;
+            }
+
+            // hack to avoid massive pack of calls to one
+            _isInvalidateFlowCalled = true;
+            Dispatcher.CurrentDispatcher.InvokeAsync(InvalidateSchemeFlowImpl, DispatcherPriority.Send);
         }
 
         private void InvalidateSchemeImpl()
@@ -68,6 +81,12 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
 
             _scheme = new FlowGraph(pipes, valves, FlowSchemeSettings.GetMarkDeadPaths(_containerOwner));
+        }
+
+        private void InvalidateSchemeFlowImpl()
+        {
+            _isInvalidateFlowCalled = false;
+            _scheme.InvalidateFlow();
         }
 
         private void GatherChildrenFlowControls(FrameworkElement containerOwner, List<IFlowControl> flowControls)
