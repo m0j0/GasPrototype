@@ -24,7 +24,7 @@
                     Value="3" Minimum="0" Maximum="10" />
         </Grid>
 
-        <Canvas Grid.Row="1">
+        <Canvas Grid.Row="1" FlowSchemeSettings.MarkDeadPaths="False">
             <Canvas.LayoutTransform>
                 <ScaleTransform ScaleX="{Binding Path=Value, ElementName=ScaleSlider}"
                                 ScaleY="{Binding Path=Value, ElementName=ScaleSlider}" />
@@ -32,12 +32,15 @@
 
             <Pipe Canvas.Left="2" Canvas.Top="111" Width="60" />
             <Pipe Canvas.Left="51" Canvas.Top="61" Width="121" />
-            <Pipe Canvas.Left="41" Canvas.Top="61" Orientation="Vertical" />
             <Pipe Canvas.Left="14" Canvas.Top="90" Width="143" />
             <Pipe Canvas.Left="126" Canvas.Top="39" Orientation="Vertical" />
             <Pipe Canvas.Left="77" Canvas.Top="25" Orientation="Vertical" />
             <Pipe Canvas.Left="2" Canvas.Top="145" Width="60" />
+            <Pipe Canvas.Left="2" Canvas.Top="151" Width="60" />
+            <Pipe Canvas.Left="2" Canvas.Top="157" Width="60" />
+            <Pipe Canvas.Left="2" Canvas.Top="163" Width="60" />
             <Pipe Canvas.Left="106" Canvas.Top="120" Width="50" />
+            <Pipe Canvas.Left="41" Canvas.Top="61" Orientation="Vertical" Height="118" />
         </Canvas>
     </Grid>
 </UserControl>

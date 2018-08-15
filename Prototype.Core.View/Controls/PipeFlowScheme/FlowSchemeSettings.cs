@@ -37,5 +37,22 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         #endregion
+
+        #region MarkDeadPaths
+
+        public static readonly DependencyProperty MarkDeadPathsProperty = DependencyProperty.RegisterAttached(
+            "MarkDeadPaths", typeof(bool), typeof(FlowSchemeSettings), new PropertyMetadata(true));
+
+        public static void SetMarkDeadPaths(DependencyObject element, bool value)
+        {
+            element.SetValue(MarkDeadPathsProperty, value);
+        }
+
+        public static bool GetMarkDeadPaths(DependencyObject element)
+        {
+            return (bool) element.GetValue(MarkDeadPathsProperty);
+        }
+
+        #endregion
     }
 }

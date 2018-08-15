@@ -14,9 +14,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         private IReadOnlyList<GraphPipe> _pipes;
         private IReadOnlyList<GraphValve> _valves;
 
-        public FlowGraph(IEnumerable<IPipe> pipes, IEnumerable<IValve> valves)
+        public FlowGraph(IEnumerable<IPipe> pipes, IEnumerable<IValve> valves, bool markDeadPaths)
         {
-            SplitPipesToSegments(pipes, valves);
+            SplitPipesToSegments(pipes, valves, markDeadPaths);
             
             InvalidateFlow();
         }
@@ -75,7 +75,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             return true;
         }
 
-        private void SplitPipesToSegments(IEnumerable<IPipe> pipeControls, IEnumerable<IValve> valveControls)
+        private void SplitPipesToSegments(IEnumerable<IPipe> pipeControls, IEnumerable<IValve> valveControls, bool markDeadPaths)
         {
             var pipes = new List<GraphPipe>();
             foreach (var pipeControl in pipeControls)
@@ -304,7 +304,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
             }
 
-            //ValidateVerticesAccessibility(pipes, cnnToVertex);
+            if (markDeadPaths)
+            {
+                ValidateVerticesAccessibility(pipes, cnnToVertex);
+            }
 
             foreach (var pipe in pipes)
             {

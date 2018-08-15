@@ -67,7 +67,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
-            _scheme = new FlowGraph(pipes, valves);
+            _scheme = new FlowGraph(pipes, valves, FlowSchemeSettings.GetMarkDeadPaths(_containerOwner));
         }
 
         private void GatherChildrenFlowControls(FrameworkElement containerOwner, List<IFlowControl> flowControls)
