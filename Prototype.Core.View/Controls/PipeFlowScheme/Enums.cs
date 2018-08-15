@@ -47,6 +47,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         WrongSize,
         IntersectionIsNotSupported,
         NotEnoughSpaceForBridgeConnection,
+        NotEnoughSpaceBetweenConnections,
         DeadPath,
         BothSourceDestination
     }

@@ -98,7 +98,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe1 in pipes)
             {
-                if (!pipe1.IsVisible)
+                if (!pipe1.IsVisible ||
+                    pipe1.IsFailed)
                 {
                     continue;
                 }
@@ -146,15 +147,14 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                         if (!Common.IsEnoughSpaceForBridgeConnection(pipe2, intersectionRect))
                         {
+                            pipe1.FailType = FailType.NotEnoughSpaceForBridgeConnection;
                             pipe2.FailType = FailType.NotEnoughSpaceForBridgeConnection;
-                            Common.IsEnoughSpaceForBridgeConnection(pipe2, intersectionRect);
                             continue;
                         }
 
                         var bridgeConnector = new BridgePipeConnector(intersectionRect, pipe2);
                         connectors.Add(bridgeConnector);
                         cnnToVertex[bridgeConnector] = new Vertex(this, bridgeConnector);
-
                         continue;
                     }
                     
@@ -168,7 +168,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         cnnToVertex[connector] = new Vertex(this, connector);
                     }
                 }
-
             }
             
             foreach (var pipe in pipes)
@@ -252,6 +251,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe in pipes)
             {
+                // TODO
                 for (var i = 0; i < pipe.Connectors.Count - 1; i++)
                 {
                     var c1 = pipe.Connectors[i];
@@ -264,6 +264,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         bc1.ExtraLength = spaceLength + Common.PipeWidth;
                         pipe.Connectors.RemoveAt(i + 1);
                         i--;
+                    }
+                    else
+                    {
+                        var spaceBetweenConnectors = Common.GetSpaceBetweenConnectors(pipe, c1, c2);
+
+                        if (spaceBetweenConnectors < Common.GetDesiredSpaceLenghtForConnector(c1) + Common.GetDesiredSpaceLenghtForConnector(c2))
+                        {
+                            pipe.FailType = FailType.NotEnoughSpaceBetweenConnections;
+                            break;
+                        }
                     }
                 }
             }

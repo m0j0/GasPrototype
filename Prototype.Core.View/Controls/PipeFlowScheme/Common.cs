@@ -189,6 +189,34 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
+        // TODO
+        public static double GetSpaceBetweenConnectors(GraphPipe pipe, IPipeConnector c1, IPipeConnector c2)
+        {
+            switch (pipe.Orientation)
+            {
+                case Orientation.Horizontal:
+                    return pipe.Direction == PipeDirection.Backward ? c1.Rect.Right - c2.Rect.Left : c2.Rect.Left - c1.Rect.Right;
+
+                case Orientation.Vertical:
+                    return pipe.Direction == PipeDirection.Backward ? c1.Rect.Bottom - c2.Rect.Top : c2.Rect.Top - c1.Rect.Bottom;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        // TODO
+        public static double GetDesiredSpaceLenghtForConnector(IPipeConnector cnn)
+        {
+            if (cnn is BridgePipeConnector)
+            {
+                return BridgeOffset;
+            }
+
+            return 1;
+        }
+
+        // TODO
         public static bool IsEnoughSpaceBetweenBridgeConnectors(BridgePipeConnector c1, BridgePipeConnector c2, out double spaceLength)
         {
             if (c1.Pipe.Orientation != c2.Pipe.Orientation)
