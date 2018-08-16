@@ -49,7 +49,7 @@ namespace Prototype.Core.MarkupExtensions
                 cm = new ContextMenu
                 {
                     PlacementTarget = element,
-                    Placement = PlacementMode.Bottom,
+                    Placement = PlacementMode.RelativePoint,
                     Style = (Style) element.FindResource("PopupMenuRegularStyle")
                 };
 

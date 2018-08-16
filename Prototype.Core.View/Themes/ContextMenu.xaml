@@ -228,26 +228,31 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border x:Name="Border"
-                            MinWidth="200"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource BorderBrush}"
-                            Background="{StaticResource BackgroundBrush}">
-                        <StackPanel Orientation="Vertical">
-                            <Border Height="36" HorizontalAlignment="Stretch"
-                                    BorderThickness="0 0 0 1"
-                                    BorderBrush="{StaticResource BorderBrush}"
-                                    Background="{StaticResource HeaderBackgroundBrush}">
-                                <TextBlock
-                                    Text="{Binding Path=(markupExtensions:PopupMenu.Menu).Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
-                                    Margin="15,0" VerticalAlignment="Center"
-                                    Foreground="{StaticResource HeaderForegroundBrush}" />
-                            </Border>
+                    <StackPanel>
+                        <Border BorderBrush="Orange" BorderThickness="1" HorizontalAlignment="Left"
+                                Width="{Binding PlacementTarget.Width, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+                                Height="{Binding PlacementTarget.Height, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+                        <Border x:Name="Border"
+                                MinWidth="200"
+                                BorderThickness="1"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                Background="{StaticResource BackgroundBrush}">
+                            <StackPanel Orientation="Vertical">
+                                <Border Height="36" HorizontalAlignment="Stretch"
+                                        BorderThickness="0 0 0 1"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        Background="{StaticResource HeaderBackgroundBrush}">
+                                    <TextBlock
+                                        Text="{Binding Path=(markupExtensions:PopupMenu.Menu).Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+                                        Margin="15,0" VerticalAlignment="Center"
+                                        Foreground="{StaticResource HeaderForegroundBrush}" />
+                                </Border>
 
-                            <StackPanel IsItemsHost="True"
-                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
-                        </StackPanel>
-                    </Border>
+                                <StackPanel IsItemsHost="True"
+                                            KeyboardNavigation.DirectionalNavigation="Cycle" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
