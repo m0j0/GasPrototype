@@ -80,8 +80,6 @@
                                StrokeThickness="1" />
                 </Canvas>
             </DataTemplate>
-
-            <DataTemplate x:Key="InvisibleValveTemplate" />
         </Style.Resources>
 
         <Setter Property="Width" Value="37" />

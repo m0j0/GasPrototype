@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -79,9 +78,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 return;
             }
 
-            CoreViewExtensions.SetOneTimeBinding(valve, StateProperty, nameof(IValveVm.State), model);
-            CoreViewExtensions.SetOneTimeBinding(valve, MenuProperty, nameof(IValveVm.Menu), model);
-            CoreViewExtensions.SetOneTimeBinding(valve, VisibilityProperty, nameof(IValveVm.IsPresent), model, CoreViewExtensions.BooleanToVisibilityConverterInstance);
+            CoreViewExtensions.SetOneWayBinding(valve, StateProperty, nameof(IValveVm.State), model);
+            CoreViewExtensions.SetOneWayBinding(valve, MenuProperty, nameof(IValveVm.Menu), model);
+            CoreViewExtensions.SetOneWayBinding(valve, VisibilityProperty, nameof(IValveVm.IsPresent), model, CoreViewExtensions.BooleanToVisibilityConverterInstance);
         }
 
         #endregion

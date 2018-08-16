@@ -9,10 +9,16 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 {
     internal sealed class SchemeContainer : ISchemeContainer
     {
+        #region Fields
+
         private readonly FrameworkElement _containerOwner;
         private FlowGraph _scheme;
         private bool _isInvalidateCalled;
         private bool _isInvalidateFlowCalled;
+
+        #endregion
+
+        #region Constructors
 
         public SchemeContainer(FrameworkElement containerOwner)
         {
@@ -21,6 +27,10 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             InvalidateSchemeImpl();
         }
+
+        #endregion
+
+        #region Methods
 
         public void InvalidateScheme()
         {
@@ -31,7 +41,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             // hack to avoid massive pack of calls to one
             _isInvalidateCalled = true;
-            Dispatcher.CurrentDispatcher.InvokeAsync(InvalidateSchemeImpl, DispatcherPriority.Send);
+            Dispatcher.CurrentDispatcher.InvokeAsync(InvalidateSchemeImpl, DispatcherPriority.Normal);
         }
 
         public void InvalidateSchemeFlow()
@@ -48,7 +58,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             // hack to avoid massive pack of calls to one
             _isInvalidateFlowCalled = true;
-            Dispatcher.CurrentDispatcher.InvokeAsync(InvalidateSchemeFlowImpl, DispatcherPriority.Send);
+            Dispatcher.CurrentDispatcher.InvokeAsync(InvalidateSchemeFlowImpl, DispatcherPriority.Normal);
         }
 
         private void InvalidateSchemeImpl()
@@ -120,5 +130,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 ProcessChildren(child, offset, flowControls);
             }
         }
+
+        #endregion
     }
 }

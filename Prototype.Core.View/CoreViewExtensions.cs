@@ -8,7 +8,7 @@ namespace Prototype.Core
     {
         public static readonly BooleanToVisibilityConverter BooleanToVisibilityConverterInstance = new BooleanToVisibilityConverter();
 
-        public static void SetOneTimeBinding(DependencyObject target, DependencyProperty property, string path, object source, IValueConverter converter = null)
+        public static void SetOneWayBinding(DependencyObject target, DependencyProperty property, string path, object source, IValueConverter converter = null)
         {
             BindingOperations.SetBinding(target, property, new Binding
             {
