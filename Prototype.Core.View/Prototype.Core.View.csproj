@@ -69,7 +69,7 @@
     <Compile Include="Converters\IsNullConverter.cs" />
     <Compile Include="Converters\EnumEqualityConverter.cs" />
     <Compile Include="CoreViewExtensions.cs" />
-    <Compile Include="MarkupExtensions\ContextMenuEx.cs" />
+    <Compile Include="MarkupExtensions\PopupMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

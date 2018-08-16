@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
-                    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework">
+                    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
+                    xmlns:markupExtensions="clr-namespace:Prototype.Core.MarkupExtensions">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
         <ResourceDictionary Source="ContextMenu.xaml" />
@@ -15,12 +16,7 @@
 
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="43" />
-        <Setter Property="ContextMenu">
-            <Setter.Value>
-                <ContextMenu DataContext="{Binding PlacementTarget.Menu, RelativeSource={x:Static RelativeSource.Self}}"
-                             Style="{StaticResource PopupMenuRegularStyle}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="markupExtensions:PopupMenu.Menu" Value="{Binding Menu, RelativeSource={x:Static RelativeSource.Self}}" />
 
         <Setter Property="Template">
             <Setter.Value>

@@ -7,6 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
+                <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <local:DesignBootstrapper x:Key="DesignBootstrapper" />
