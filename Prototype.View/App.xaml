@@ -6,12 +6,9 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Common.xaml" />
-                <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="/Prototype.Core.View;component/Themes/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <local:DesignBootstrapper x:Key="DesignBootstrapper" />
-            <ViewModelToViewConverter x:Key="ViewModelToViewConverter" />
             <converters:AccessConverter x:Key="AccessConverter" />
         </ResourceDictionary>
     </Application.Resources>

@@ -2,9 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Prototype.Core.Controls"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Common.xaml" />
-    </ResourceDictionary.MergedDictionaries>
 
     <!-- WPF Designer doesn't respect these properties from code-behind, so we set them here -->
     <Style TargetType="controls:Pipe">

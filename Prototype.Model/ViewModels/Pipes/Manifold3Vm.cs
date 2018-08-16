@@ -26,7 +26,6 @@ namespace Prototype.ViewModels.Pipes
             VacChuckShutOffLeftValveVm = new ValveVm("VacChuckShutOffLeftValveVm") {State = ValveState.Closed};
             VacChuckShutOffRightValveVm = new ValveVm("VacChuckShutOffRightValveVm") {State = ValveState.Closed};
             TurboGateValveVm = new ValveVm("TurboGateValveVm") {State = ValveState.Closed};
-            DownStreamInvValveVm = new ValveVm("DownStreamInvValveVm") {State = ValveState.Closed};
             DownStreamValveVm = new ValveVm("DownStreamValveVm") {State = ValveState.Closed};
             VacuumValveVm = new ValveVm("VacuumValveVm") {State = ValveState.Closed};
             ByPassValveVm = new ValveVm("ByPassValveVm") {State = ValveState.Closed};
@@ -64,7 +63,6 @@ namespace Prototype.ViewModels.Pipes
         public ValveVm VacChuckShutOffLeftValveVm { get; }
         public ValveVm VacChuckShutOffRightValveVm { get; }
         public ValveVm TurboGateValveVm { get; }
-        public ValveVm DownStreamInvValveVm { get; } // TODO 3way valve
         public ValveVm DownStreamValveVm { get; }
         public ValveVm VacuumValveVm { get; }
         public ValveVm ByPassValveVm { get; }

@@ -11,11 +11,4 @@
     <FontFamily x:Key="DefaultFontFamily">Segoe UI</FontFamily>
     <system:Double x:Key="DefaultFontSize">14</system:Double>
 
-    <Style x:Key="WindowRegularStyle" TargetType="{x:Type Window}">
-        <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}" />
-        <Setter Property="FontSize" Value="{StaticResource DefaultFontSize}" />
-        <Setter Property="UseLayoutRounding" Value="True" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-    </Style>
-
 </ResourceDictionary>

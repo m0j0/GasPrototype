@@ -5,7 +5,6 @@
                     xmlns:markupExtensions="clr-namespace:Prototype.Core.MarkupExtensions">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Common.xaml" />
-        <ResourceDictionary Source="ContextMenu.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="controls:Valve">

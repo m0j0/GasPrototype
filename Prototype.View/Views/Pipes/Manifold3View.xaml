@@ -72,21 +72,21 @@
         <Pipe Canvas.Left="464" Canvas.Top="439" Width="176" />
 
         <Valve3Way Canvas.Left="127" Canvas.Top="423" Rotation="Rotate90" PathWhenOpen="UpperAuxiliary" PathWhenClosed="LowerAuxiliary" ValveVm="{Binding DownStreamValveVm}" />
-        <Valve Canvas.Left="332" Canvas.Top="422" ValveVm="{Binding VacuumValveVm}" />
-        <Valve Canvas.Left="404" Canvas.Top="422" ValveVm="{Binding ByPassValveVm}" />
-        <Valve Canvas.Left="475" Canvas.Top="422" ValveVm="{Binding ByPassValve2Vm}" />
-        <Valve Canvas.Left="563" Canvas.Top="422" ValveVm="{Binding VacuumValve2Vm}" />
-        <Valve Canvas.Left="378" Canvas.Top="347" Orientation="Vertical" ValveVm="{Binding VacChuckShutOffLeftValveVm}" />
+        <Valve Canvas.Left="332" Canvas.Top="423" ValveVm="{Binding VacuumValveVm}" />
+        <Valve Canvas.Left="404" Canvas.Top="423" ValveVm="{Binding ByPassValveVm}" />
+        <Valve Canvas.Left="475" Canvas.Top="423" ValveVm="{Binding ByPassValve2Vm}" />
+        <Valve Canvas.Left="563" Canvas.Top="423" ValveVm="{Binding VacuumValve2Vm}" />
+        <Valve Canvas.Left="377" Canvas.Top="347" Orientation="Vertical" ValveVm="{Binding VacChuckShutOffLeftValveVm}" />
         <Valve Canvas.Left="524" Canvas.Top="347" Orientation="Vertical" ValveVm="{Binding VacChuckShutOffRightValveVm}" />
         <Valve Canvas.Left="667" Canvas.Top="347" Orientation="Vertical" ValveVm="{Binding TurboGateValveVm}" />
         <Valve Canvas.Left="667" Canvas.Top="469" Orientation="Vertical" ValveVm="{Binding TurboTvValveVm}" />
         <Valve Canvas.Left="667" Canvas.Top="574" Orientation="Vertical" ValveVm="{Binding TurboValveVm}" />
-        <Valve Canvas.Left="450" Canvas.Top="492" Orientation="Vertical" ValveVm="{Binding IsoValveVm}" />
-        <Valve Canvas.Left="450" Canvas.Top="574" Orientation="Vertical" ValveVm="{Binding ThrottleValveVm}" />
+        <Valve Canvas.Left="448" Canvas.Top="492" Orientation="Vertical" ValveVm="{Binding IsoValveVm}" />
+        <Valve Canvas.Left="448" Canvas.Top="574" Orientation="Vertical" ValveVm="{Binding ThrottleValveVm}" />
         <Valve Canvas.Left="563" Canvas.Top="574" Orientation="Vertical" ValveVm="{Binding BallastValveVm}" />
         <Valve Canvas.Left="348" Canvas.Top="574" Orientation="Vertical" ValveVm="{Binding NdirEndpointDownValveVm}" />
-        <Valve Canvas.Left="211" Canvas.Top="629" ValveVm="{Binding DivertValveVm}" />
-        <Valve Canvas.Left="206" Canvas.Top="552" ValveVm="{Binding BksidePurgeValveVm}" />
+        <Valve Canvas.Left="211" Canvas.Top="631" ValveVm="{Binding DivertValveVm}" />
+        <Valve Canvas.Left="206" Canvas.Top="553" ValveVm="{Binding BksidePurgeValveVm}" />
         <Valve Canvas.Left="348" Canvas.Top="492" Orientation="Vertical" ValveVm="{Binding NdirEndpointUpValveVm}" />
 
         <TextBlock Canvas.Left="177" Canvas.Top="347" Text="Bottom purge" />
