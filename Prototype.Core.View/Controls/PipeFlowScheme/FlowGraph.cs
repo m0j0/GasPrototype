@@ -217,18 +217,23 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                         var vertex = cnnToVertex[pipeConnector] as Vertex;
                         if (vertex == null)
                         {
-                            continue; // TODO !! !!
+                            pipe.FailType = FailType.EndConnectorDoesNotSupportValve;
+                            break;
                         }
+
                         if (vertex.Valve != null)
                         {
-                            throw new InvalidOperationException();
+                            pipe.FailType = FailType.TwoValvesIntersection;
+                            break;
                         }
+
                         vertex.Valve = valve.Valve;
                         valve.Connector = pipeConnector;
                         break;
                     }
 
-                    if (valve.Connector != null)
+                    if (valve.Connector != null ||
+                        pipe.IsFailed)
                     {
                         continue;
                     }
@@ -287,7 +292,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                 if (pipe.Connectors.Count < 2)
                 {
-                    throw new Exception("!!!");
+                    pipe.FailType = FailType.UnknownError1;
+                    continue;
                 }
 
                 for (var i = 0; i < pipe.Connectors.Count - 1; i++)
@@ -366,7 +372,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             bool isStartVertex = pipe.StartConnector == connector;
             if (!isStartVertex && pipe.EndConnector != connector)
             {
-                throw new Exception("!! !!");
+                pipe.FailType = FailType.UnknownError2;
             }
 
             if (connectors.Contains(connector))

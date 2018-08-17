@@ -169,7 +169,6 @@ namespace Prototype.Core.Controls
 
         private static void DrawLineSegment(DrawingContext drawingContext, LineSegment segment)
         {
-
             var isFailed = segment.FailType != FailType.None;
             var substanceBrush = isFailed
                 ? new SolidColorBrush(Colors.GreenYellow)
@@ -203,8 +202,9 @@ namespace Prototype.Core.Controls
                 switch (segment.Orientation)
                 {
                     case Orientation.Horizontal:
-                        drawingContext.PushTransform(new TranslateTransform { Y = -15 });
+                        drawingContext.PushTransform(new TranslateTransform {Y = -15});
                         break;
+
                     case Orientation.Vertical:
                         drawingContext.PushTransform(new TransformGroup
                         {
@@ -215,6 +215,7 @@ namespace Prototype.Core.Controls
                             }
                         });
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

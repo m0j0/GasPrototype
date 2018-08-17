@@ -55,6 +55,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         private readonly List<IPipeConnector> _connectors;
         private readonly ConnectorComparer _comparer;
+        private FailType _failType = FailType.None;
 
         #endregion
 
@@ -82,7 +83,19 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
         public PipeType Type { get; }
 
-        public FailType FailType { get; set; }
+        public FailType FailType
+        {
+            get => _failType;
+            set
+            {
+                if (_failType != FailType.None)
+                {
+                    return;
+                }
+
+                _failType = value;
+            }
+        }
 
         public bool IsFailed => FailType != FailType.None;
 
@@ -199,7 +212,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
                 else
                 {
-                    throw new Exception("! ! !");
+                    FailType = FailType.NonRegularPipeHasTooManyEndConnections;
                 }
             }
             else if (Type == PipeType.Destination)
@@ -214,10 +227,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
                 else
                 {
-                    throw new Exception("! ! !");
+                    FailType = FailType.NonRegularPipeHasTooManyEndConnections;
                 }
             }
-            
+
+            if (IsFailed)
+            {
+                return;
+            }
+
             if (Direction == PipeDirection.Backward)
             {
                 var tmp = StartConnector;

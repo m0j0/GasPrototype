@@ -45,10 +45,15 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         None,
         WrongSize,
+        DeadPath,
         IntersectionIsNotSupported,
         NotEnoughSpaceForBridgeConnection,
         NotEnoughSpaceBetweenConnections,
-        DeadPath,
-        BothSourceDestination
+        BothSourceDestination,
+        TwoValvesIntersection,
+        EndConnectorDoesNotSupportValve,
+        NonRegularPipeHasTooManyEndConnections,
+        UnknownError1,
+        UnknownError2,
     }
 }
