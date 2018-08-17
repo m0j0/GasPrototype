@@ -256,29 +256,25 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
             foreach (var pipe in pipes)
             {
-                // TODO
                 for (var i = 0; i < pipe.Connectors.Count - 1; i++)
                 {
                     var c1 = pipe.Connectors[i];
                     var c2 = pipe.Connectors[i + 1];
 
+                    var spaceBetweenConnectors = Common.GetSpaceBetweenConnectors(pipe, c1, c2);
+                    var desiredSpace = c1.DesiredSpace + c2.DesiredSpace;
+
                     if (c1 is BridgePipeConnector bc1 &&
                         c2 is BridgePipeConnector bc2 &&
-                        !Common.IsEnoughSpaceBetweenBridgeConnectors(pipe, bc1, bc2, out double spaceLength))
+                        spaceBetweenConnectors < desiredSpace)
                     {
-                        bc1.ExtraLength = spaceLength + Common.PipeWidth;
+                        bc1.ExtraLength = spaceBetweenConnectors + Common.PipeWidth;
                         pipe.Connectors.RemoveAt(i + 1);
                         i--;
                     }
-                    else
+                    else if (spaceBetweenConnectors < desiredSpace)
                     {
-                        var spaceBetweenConnectors = Common.GetSpaceBetweenConnectors(pipe, c1, c2);
-
-                        if (spaceBetweenConnectors < Common.GetDesiredSpaceLenghtForConnector(c1) + Common.GetDesiredSpaceLenghtForConnector(c2))
-                        {
-                            pipe.FailType = FailType.NotEnoughSpaceBetweenConnections;
-                            break;
-                        }
+                        pipe.FailType = FailType.NotEnoughSpaceBetweenConnections;
                     }
                 }
             }

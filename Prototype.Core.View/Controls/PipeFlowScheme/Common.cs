@@ -210,25 +210,6 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        // TODO
-        public static double GetDesiredSpaceLenghtForConnector(IPipeConnector cnn)
-        {
-            if (cnn is BridgePipeConnector)
-            {
-                return BridgeOffset;
-            }
-
-            return 1;
-        }
-
-        // TODO
-        public static bool IsEnoughSpaceBetweenBridgeConnectors(GraphPipe pipe, BridgePipeConnector c1, BridgePipeConnector c2, out double spaceLength)
-        {
-            spaceLength = GetSpaceBetweenConnectors(pipe, c1, c2);
-
-            return spaceLength > (BridgeOffset * 2 + c1.ExtraLength + c2.ExtraLength);
-        }
-
         #endregion
 
         #region Extensions

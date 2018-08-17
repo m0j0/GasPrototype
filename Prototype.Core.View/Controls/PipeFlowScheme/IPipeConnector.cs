@@ -10,6 +10,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
     {
         Rect Rect { get; }
 
+        double DesiredSpace { get; }
+
         IPipeSegment CreateSegment(GraphPipe pipe);
     }
 
@@ -28,6 +30,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         public Rect Rect { get; }
+
+        public double DesiredSpace => Common.BridgeOffset + ExtraLength;
 
         public GraphPipe Pipe { get; }
 
@@ -72,6 +76,8 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         public Rect Rect { get; }
+
+        public double DesiredSpace => 0;
 
         public void AddPipe(GraphPipe pipe)
         {
