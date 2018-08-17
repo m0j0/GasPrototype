@@ -189,16 +189,21 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
         }
 
-        // TODO
         public static double GetSpaceBetweenConnectors(GraphPipe pipe, IPipeConnector c1, IPipeConnector c2)
         {
             switch (pipe.Orientation)
             {
                 case Orientation.Horizontal:
-                    return pipe.Direction == PipeDirection.Backward ? c1.Rect.Right - c2.Rect.Left : c2.Rect.Left - c1.Rect.Right;
+                    bool isFirstConnectorLeftThanSecond = c1.Rect.Left > c2.Rect.Left;
+                    IPipeConnector leftConnector = isFirstConnectorLeftThanSecond ? c2 : c1;
+                    IPipeConnector rightConnector = isFirstConnectorLeftThanSecond ? c1 : c2;
+                    return rightConnector.Rect.Left - leftConnector.Rect.Right;
 
                 case Orientation.Vertical:
-                    return pipe.Direction == PipeDirection.Backward ? c1.Rect.Top - c2.Rect.Bottom : c2.Rect.Bottom - c1.Rect.Top;
+                    bool isFirstConnectorHigherThanSecond = c1.Rect.Top > c2.Rect.Top;
+                    IPipeConnector topConnector = isFirstConnectorHigherThanSecond ? c2 : c1;
+                    IPipeConnector bottomConnector = isFirstConnectorHigherThanSecond ? c1 : c2;
+                    return bottomConnector.Rect.Top - topConnector.Rect.Bottom;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -217,26 +222,9 @@ namespace Prototype.Core.Controls.PipeFlowScheme
         }
 
         // TODO
-        public static bool IsEnoughSpaceBetweenBridgeConnectors(BridgePipeConnector c1, BridgePipeConnector c2, out double spaceLength)
+        public static bool IsEnoughSpaceBetweenBridgeConnectors(GraphPipe pipe, BridgePipeConnector c1, BridgePipeConnector c2, out double spaceLength)
         {
-            if (c1.Pipe.Orientation != c2.Pipe.Orientation)
-            {
-                throw new ArgumentException("Connectors should have the same orientaion.");
-            }
-
-            switch (c1.Pipe.Orientation)
-            {
-                case Orientation.Horizontal:
-                    spaceLength = Math.Abs(c2.Rect.Left - c1.Rect.Right);
-                    break;
-
-                case Orientation.Vertical:
-                    spaceLength = Math.Abs(c2.Rect.Top - c1.Rect.Bottom);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            spaceLength = GetSpaceBetweenConnectors(pipe, c1, c2);
 
             return spaceLength > (BridgeOffset * 2 + c1.ExtraLength + c2.ExtraLength);
         }

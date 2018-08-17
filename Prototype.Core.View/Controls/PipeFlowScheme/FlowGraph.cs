@@ -264,7 +264,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
 
                     if (c1 is BridgePipeConnector bc1 &&
                         c2 is BridgePipeConnector bc2 &&
-                        !Common.IsEnoughSpaceBetweenBridgeConnectors(bc1, bc2, out double spaceLength))
+                        !Common.IsEnoughSpaceBetweenBridgeConnectors(pipe, bc1, bc2, out double spaceLength))
                     {
                         bc1.ExtraLength = spaceLength + Common.PipeWidth;
                         pipe.Connectors.RemoveAt(i + 1);
