@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -168,9 +169,16 @@ namespace Prototype.Core.Controls
 
         private static void DrawLineSegment(DrawingContext drawingContext, LineSegment segment)
         {
-            var substanceBrush = segment.FailType != FailType.None
+
+            var isFailed = segment.FailType != FailType.None;
+            var substanceBrush = isFailed
                 ? new SolidColorBrush(Colors.GreenYellow)
                 : GetSubstanceBrush(segment.SubstanceType, segment.HasFlow);
+
+            if (isFailed)
+            {
+                DrawFailTypeText();
+            }
 
             switch (segment.Orientation)
             {
@@ -188,6 +196,35 @@ namespace Prototype.Core.Controls
 
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+
+            void DrawFailTypeText()
+            {
+                switch (segment.Orientation)
+                {
+                    case Orientation.Horizontal:
+                        drawingContext.PushTransform(new TranslateTransform { Y = -15 });
+                        break;
+                    case Orientation.Vertical:
+                        drawingContext.PushTransform(new TransformGroup
+                        {
+                            Children =
+                            {
+                                new RotateTransform {Angle = 90},
+                                new TranslateTransform {X = 20}
+                            }
+                        });
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                drawingContext.DrawText(
+                    new FormattedText(segment.FailType.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                        new Typeface(SystemFonts.MessageFontFamily, FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal), 11,
+                        new SolidColorBrush(Colors.Black)), segment.StartPoint);
+
+                drawingContext.Pop();
             }
         }
 

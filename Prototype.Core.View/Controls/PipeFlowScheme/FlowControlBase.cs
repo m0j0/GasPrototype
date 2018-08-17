@@ -85,6 +85,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
             }
             else
             {
+                SchemeContainer?.InvalidateScheme();
                 FindOrCreateSchemeContainer();
             }
         }
@@ -151,6 +152,11 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                 }
 
                 parent = parent.Parent as FrameworkElement;
+            }
+
+            if (containerOwner == null)
+            {
+                return;
             }
 
             var schemeContainer = FlowSchemeSettings.GetContainer(containerOwner);
