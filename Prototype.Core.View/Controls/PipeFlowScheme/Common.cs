@@ -198,7 +198,7 @@ namespace Prototype.Core.Controls.PipeFlowScheme
                     return pipe.Direction == PipeDirection.Backward ? c1.Rect.Right - c2.Rect.Left : c2.Rect.Left - c1.Rect.Right;
 
                 case Orientation.Vertical:
-                    return pipe.Direction == PipeDirection.Backward ? c1.Rect.Bottom - c2.Rect.Top : c2.Rect.Top - c1.Rect.Bottom;
+                    return pipe.Direction == PipeDirection.Backward ? c1.Rect.Top - c2.Rect.Bottom : c2.Rect.Bottom - c1.Rect.Top;
 
                 default:
                     throw new ArgumentOutOfRangeException();
