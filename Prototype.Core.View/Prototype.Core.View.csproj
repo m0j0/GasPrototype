@@ -64,6 +64,7 @@
     <Compile Include="Controls\PipeFlowScheme\SchemeContainer.cs" />
     <Compile Include="Controls\PipeFlowScheme\Valve3WayModel.cs" />
     <Compile Include="Controls\PipeFlowScheme\ValveBase.cs" />
+    <Compile Include="MarkupExtensions\ClickBehaviour.cs" />
     <Compile Include="Controls\Valve.cs" />
     <Compile Include="Controls\Valve3Way.cs" />
     <Compile Include="Converters\IsNullConverter.cs" />
