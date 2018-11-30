@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using MugenMvvmToolkit;
@@ -24,30 +15,7 @@ namespace Prototype.Core.Controls
 
         private static readonly ConditionalWeakTable<FrameworkElement, EventHandler> CommandsHandlers =
             new ConditionalWeakTable<FrameworkElement, EventHandler>();
-
-        private static readonly MethodInfo ReadControlFlagMethod;
-        private static readonly MethodInfo WriteControlFlagMethod;
-        private static readonly object IsSpaceKeyDownFlag = (ushort) 0x0002;
-
-        #endregion
-
-        #region Constructors
-
-        static ClickBehaviour()
-        {
-            ReadControlFlagMethod = typeof(Control).GetMethod("ReadControlFlag", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (ReadControlFlagMethod == null)
-            {
-                throw new NullReferenceException("ReadControlFlagMethod");
-            }
-
-            WriteControlFlagMethod = typeof(Control).GetMethod("WriteControlFlag", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (WriteControlFlagMethod == null)
-            {
-                throw new NullReferenceException("ReadControlFlagMethod");
-            }
-        }
-
+        
         #endregion
 
         #region Attached properties
@@ -59,7 +27,7 @@ namespace Prototype.Core.Controls
 
         private static void SetIsPressed(DependencyObject element, bool value)
         {
-            element.SetValue(IsPressedProperty, value);
+            element.SetValue(IsPressedProperty, Empty.BooleanToObject(value));
         }
 
         private static bool GetIsPressed(DependencyObject element)
@@ -181,6 +149,23 @@ namespace Prototype.Core.Controls
 
         #endregion
 
+        #region IsSpaceKeyDown
+
+        private static readonly DependencyProperty IsSpaceKeyDownProperty = DependencyProperty.RegisterAttached(
+            "IsSpaceKeyDown", typeof(bool), typeof(ClickBehaviour), new PropertyMetadata(false));
+
+        private static void SetIsSpaceKeyDown(DependencyObject element, bool value)
+        {
+            element.SetValue(IsSpaceKeyDownProperty, Empty.BooleanToObject(value));
+        }
+
+        private static bool GetIsSpaceKeyDown(DependencyObject element)
+        {
+            return (bool) element.GetValue(IsSpaceKeyDownProperty);
+        }
+
+        #endregion
+
         private static void VerifyElement(FrameworkElement element)
         {
             if (element == null)
@@ -257,16 +242,6 @@ namespace Prototype.Core.Controls
         private static bool GetMouseLeftButtonReleased()
         {
             return InputManager.Current.PrimaryMouseDevice.LeftButton == MouseButtonState.Released;
-        }
-
-        private static bool GetIsSpaceKeyDown(FrameworkElement element)
-        {
-            return (bool) ReadControlFlagMethod.InvokeEx(element, IsSpaceKeyDownFlag);
-        }
-
-        private static void SetIsSpaceKeyDown(FrameworkElement element, bool value)
-        {
-            WriteControlFlagMethod.InvokeEx(element, IsSpaceKeyDownFlag, value);
         }
 
         private static bool GetIsInMainFocusScope(FrameworkElement element)
