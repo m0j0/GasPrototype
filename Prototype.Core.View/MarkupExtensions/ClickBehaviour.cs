@@ -9,16 +9,53 @@ namespace Prototype.Core.Controls
 {
     // inspired by https://referencesource.microsoft.com/#PresentationFramework/src/Framework/System/Windows/Controls/Primitives/ButtonBase.cs
     // NOTE Access keys aren't supported
-    public static class ClickBehaviour
+    internal class ClickBehaviourCore
     {
+        private readonly Action<ClickBehaviourCore, FrameworkElement> _subscribe;
+        private readonly Action<ClickBehaviourCore, FrameworkElement> _unsubscribe;
+        private readonly Func<DependencyObject, ICommand> _getCommand;
+        private readonly Func<DependencyObject, object> _getCommandParameter;
+        private readonly Func<DependencyObject, Action> _getAction;
+
         #region Fields
 
         private static readonly ConditionalWeakTable<FrameworkElement, EventHandler> CommandsHandlers =
             new ConditionalWeakTable<FrameworkElement, EventHandler>();
-        
+
         #endregion
 
+        public ClickBehaviourCore(Action<ClickBehaviourCore, FrameworkElement> subscribe, 
+            Action<ClickBehaviourCore, FrameworkElement> unsubscribe,
+            Func<DependencyObject, ICommand> getCommand,
+            Func<DependencyObject, object> getCommandParameter,
+            Func<DependencyObject, Action> getAction
+            )
+        {
+            _subscribe = subscribe;
+            _unsubscribe = unsubscribe;
+            _getCommand = getCommand;
+            _getCommandParameter = getCommandParameter;
+            _getAction = getAction;
+        }
+
         #region Attached properties
+
+        #region ClickBehaviourCore
+
+        public static readonly DependencyProperty ClickBehaviourProperty = DependencyProperty.RegisterAttached(
+            "ClickBehaviour", typeof(ClickBehaviourCore), typeof(ClickBehaviourCore), new PropertyMetadata(null));
+
+        public static void SetClickBehaviour(DependencyObject element, ClickBehaviourCore value)
+        {
+            element.SetValue(ClickBehaviourProperty, value);
+        }
+
+        public static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
+        {
+            return (ClickBehaviourCore) element.GetValue(ClickBehaviourProperty);
+        }
+        
+        #endregion
 
         #region IsPressed
 
@@ -38,28 +75,15 @@ namespace Prototype.Core.Controls
         #endregion
 
         #region Command
-
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
-            "Command", typeof(ICommand), typeof(ClickBehaviour), new PropertyMetadata(null, OnCommandChanged));
-
-        public static void SetCommand(DependencyObject element, ICommand value)
-        {
-            element.SetValue(CommandProperty, value);
-        }
-
-        public static ICommand GetCommand(DependencyObject element)
-        {
-            return (ICommand) element.GetValue(CommandProperty);
-        }
-
-        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        
+        public void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var element = (FrameworkElement) d;
             VerifyElement(element);
 
             if (e.OldValue is ICommand oldCommand)
             {
-                Unsubscribe(element);
+                _unsubscribe(this, element);
 
                 if (CommandsHandlers.TryGetValue(element, out var handler))
                 {
@@ -70,7 +94,7 @@ namespace Prototype.Core.Controls
 
             if (e.NewValue is ICommand newCommand)
             {
-                Subscribe(element);
+                _subscribe(this, element);
 
                 var handler = ReflectionExtensions.CreateWeakDelegate<FrameworkElement, EventArgs, EventHandler>(
                     element,
@@ -91,59 +115,29 @@ namespace Prototype.Core.Controls
             UpdateCanExecute(element);
         }
 
-        private static void UpdateCanExecute(FrameworkElement element)
+        private void UpdateCanExecute(FrameworkElement element)
         {
-            var command = GetCommand(element);
-            element.IsEnabled = command == null || command.CanExecute(GetCommandParameter(element));
-        }
-
-        #endregion
-
-        #region CommandParameter
-
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached(
-            "CommandParameter", typeof(object), typeof(ClickBehaviour), new PropertyMetadata(null));
-
-        public static void SetCommandParameter(DependencyObject element, object value)
-        {
-            element.SetValue(CommandParameterProperty, value);
-        }
-
-        public static object GetCommandParameter(DependencyObject element)
-        {
-            return (object) element.GetValue(CommandParameterProperty);
+            var command = _getCommand(element);
+            element.IsEnabled = command == null || command.CanExecute(_getCommandParameter(element));
         }
 
         #endregion
 
         #region Action
 
-        public static readonly DependencyProperty ActionProperty = DependencyProperty.RegisterAttached(
-            "Action", typeof(Action), typeof(ClickBehaviour), new PropertyMetadata(null, OnActionChanged));
-
-        public static void SetAction(DependencyObject element, Action value)
-        {
-            element.SetValue(ActionProperty, value);
-        }
-
-        public static Action GetAction(DependencyObject element)
-        {
-            return (Action) element.GetValue(ActionProperty);
-        }
-
-        private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var element = (FrameworkElement) d;
             VerifyElement(element);
 
             if (e.OldValue != null)
             {
-                Unsubscribe(element);
+                _unsubscribe(this, element);
             }
 
             if (e.NewValue != null)
             {
-                Subscribe(element);
+                _subscribe(this, element);
             }
         }
 
@@ -166,15 +160,15 @@ namespace Prototype.Core.Controls
 
         #endregion
 
-        private static void VerifyElement(FrameworkElement element)
+        private void VerifyElement(FrameworkElement element)
         {
             if (element == null)
             {
                 throw new ArgumentNullException(nameof(element));
             }
 
-            if (GetCommand(element) != null &&
-                GetAction(element) != null)
+            if (_getCommand(element) != null &&
+                _getAction(element) != null)
             {
                 throw new InvalidOperationException("Can't set both Command and Action at the same time!");
             }
@@ -184,49 +178,24 @@ namespace Prototype.Core.Controls
 
         #region Methods
 
-        private static void Subscribe(FrameworkElement element)
-        {
-            element.MouseLeftButtonDown += OnMouseLeftButtonDown;
-            element.MouseLeftButtonUp += OnMouseLeftButtonUp;
-            element.MouseMove += OnMouseMove;
-            element.LostMouseCapture += OnLostMouseCapture;
-            element.KeyDown += OnKeyDown;
-            element.KeyUp += OnKeyUp;
-            element.LostKeyboardFocus += OnLostKeyboardFocus;
-            element.SizeChanged += OnRenderSizeChanged;
 
-            InputMethod.SetIsInputMethodEnabled(element, false);
-            KeyboardNavigation.SetAcceptsReturn(element, true);
-        }
 
-        private static void Unsubscribe(FrameworkElement element)
+        private void OnClick(FrameworkElement element)
         {
-            element.MouseLeftButtonDown -= OnMouseLeftButtonDown;
-            element.MouseLeftButtonUp -= OnMouseLeftButtonUp;
-            element.MouseMove -= OnMouseMove;
-            element.LostMouseCapture -= OnLostMouseCapture;
-            element.KeyDown -= OnKeyDown;
-            element.KeyUp -= OnKeyUp;
-            element.LostKeyboardFocus -= OnLostKeyboardFocus;
-            element.SizeChanged -= OnRenderSizeChanged;
-        }
-
-        private static void OnClick(FrameworkElement element)
-        {
-            var command = GetCommand(element);
+            var command = _getCommand(element);
             if (command != null)
             {
-                if (command.CanExecute(GetCommandParameter(element)))
+                if (command.CanExecute(_getCommandParameter(element)))
                 {
-                    command.Execute(GetCommandParameter(element));
+                    command.Execute(_getCommandParameter(element));
                 }
             }
 
-            var action = GetAction(element);
+            var action = _getAction(element);
             action?.Invoke();
         }
 
-        private static void OnRenderSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
+        public void OnRenderSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -267,7 +236,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -301,7 +270,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -322,7 +291,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void OnMouseMove(object sender, MouseEventArgs e)
+        public void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -337,7 +306,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void OnLostMouseCapture(object sender, MouseEventArgs e)
+        public void OnLostMouseCapture(object sender, MouseEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -357,7 +326,7 @@ namespace Prototype.Core.Controls
             SetIsPressed(element, false);
         }
 
-        private static void OnKeyDown(object sender, KeyEventArgs e)
+        public void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -407,7 +376,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void OnKeyUp(object sender, KeyEventArgs e)
+        public void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -446,7 +415,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private static void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        public void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -467,6 +436,115 @@ namespace Prototype.Core.Controls
 
                 SetIsSpaceKeyDown(element, false);
             }
+        }
+
+        #endregion
+    }
+
+    public static class ClickBehaviour
+    {
+        #region Command
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
+            "Command", typeof(ICommand), typeof(ClickBehaviour), new PropertyMetadata(null, OnCommandChanged));
+
+        public static void SetCommand(DependencyObject element, ICommand value)
+        {
+            element.SetValue(CommandProperty, value);
+        }
+
+        public static ICommand GetCommand(DependencyObject element)
+        {
+            return (ICommand)element.GetValue(CommandProperty);
+        }
+
+        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var clickBehaviour = GetClickBehaviour(d);
+            clickBehaviour.OnCommandChanged(d, e);
+        }
+
+        #endregion
+
+        #region CommandParameter
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached(
+            "CommandParameter", typeof(object), typeof(ClickBehaviour), new PropertyMetadata(null));
+
+        public static void SetCommandParameter(DependencyObject element, object value)
+        {
+            element.SetValue(CommandParameterProperty, value);
+        }
+
+        public static object GetCommandParameter(DependencyObject element)
+        {
+            return (object)element.GetValue(CommandParameterProperty);
+        }
+
+        #endregion
+
+        #region Action
+
+        public static readonly DependencyProperty ActionProperty = DependencyProperty.RegisterAttached(
+            "Action", typeof(Action), typeof(ClickBehaviour), new PropertyMetadata(null, OnActionChanged));
+
+        public static void SetAction(DependencyObject element, Action value)
+        {
+            element.SetValue(ActionProperty, value);
+        }
+
+        public static Action GetAction(DependencyObject element)
+        {
+            return (Action)element.GetValue(ActionProperty);
+        }
+
+        private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var clickBehaviour = GetClickBehaviour(d);
+            clickBehaviour.OnActionChanged(d, e);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
+        {
+            var result = ClickBehaviourCore.GetClickBehaviour(element);
+            if (result == null)
+            {
+                result = new ClickBehaviourCore(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction);
+                ClickBehaviourCore.SetClickBehaviour(element, result);
+            }
+
+            return result;
+        }
+
+        private static void Subscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
+        {
+            element.MouseLeftButtonDown += clickBehaviour.OnMouseLeftButtonDown;
+            element.MouseLeftButtonUp += clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseMove += clickBehaviour.OnMouseMove;
+            element.LostMouseCapture += clickBehaviour.OnLostMouseCapture;
+            element.KeyDown += clickBehaviour.OnKeyDown;
+            element.KeyUp += clickBehaviour.OnKeyUp;
+            element.LostKeyboardFocus += clickBehaviour.OnLostKeyboardFocus;
+            element.SizeChanged += clickBehaviour.OnRenderSizeChanged;
+
+            InputMethod.SetIsInputMethodEnabled(element, false);
+            KeyboardNavigation.SetAcceptsReturn(element, true);
+        }
+
+        private static void Unsubscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
+        {
+            element.MouseLeftButtonDown -= clickBehaviour.OnMouseLeftButtonDown;
+            element.MouseLeftButtonUp -= clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseMove -= clickBehaviour.OnMouseMove;
+            element.LostMouseCapture -= clickBehaviour.OnLostMouseCapture;
+            element.KeyDown -= clickBehaviour.OnKeyDown;
+            element.KeyUp -= clickBehaviour.OnKeyUp;
+            element.LostKeyboardFocus -= clickBehaviour.OnLostKeyboardFocus;
+            element.SizeChanged -= clickBehaviour.OnRenderSizeChanged;
         }
 
         #endregion
