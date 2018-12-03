@@ -16,11 +16,11 @@ namespace Prototype.Core.Controls
         private readonly Func<DependencyObject, ICommand> _getCommand;
         private readonly Func<DependencyObject, object> _getCommandParameter;
         private readonly Func<DependencyObject, Action> _getAction;
+        private readonly Func<MouseButtonState> _getMouseButtonState;
 
         #region Fields
 
-        private static readonly ConditionalWeakTable<FrameworkElement, EventHandler> CommandsHandlers =
-            new ConditionalWeakTable<FrameworkElement, EventHandler>();
+        private EventHandler _handler;
 
         #endregion
 
@@ -28,7 +28,8 @@ namespace Prototype.Core.Controls
             Action<ClickBehaviourCore, FrameworkElement> unsubscribe,
             Func<DependencyObject, ICommand> getCommand,
             Func<DependencyObject, object> getCommandParameter,
-            Func<DependencyObject, Action> getAction
+            Func<DependencyObject, Action> getAction,
+            Func<MouseButtonState> getMouseButtonState
             )
         {
             _subscribe = subscribe;
@@ -36,40 +37,23 @@ namespace Prototype.Core.Controls
             _getCommand = getCommand;
             _getCommandParameter = getCommandParameter;
             _getAction = getAction;
+            _getMouseButtonState = getMouseButtonState;
         }
 
         #region Attached properties
 
-        #region ClickBehaviourCore
-
-        public static readonly DependencyProperty ClickBehaviourProperty = DependencyProperty.RegisterAttached(
-            "ClickBehaviour", typeof(ClickBehaviourCore), typeof(ClickBehaviourCore), new PropertyMetadata(null));
-
-        public static void SetClickBehaviour(DependencyObject element, ClickBehaviourCore value)
-        {
-            element.SetValue(ClickBehaviourProperty, value);
-        }
-
-        public static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
-        {
-            return (ClickBehaviourCore) element.GetValue(ClickBehaviourProperty);
-        }
-        
-        #endregion
-
         #region IsPressed
 
-        private static readonly DependencyProperty IsPressedProperty = DependencyProperty.RegisterAttached(
-            "IsPressed", typeof(bool), typeof(ClickBehaviour), new PropertyMetadata(default(bool)));
+        private bool _isPressed;
 
-        private static void SetIsPressed(DependencyObject element, bool value)
+        private void SetIsPressed(DependencyObject element, bool value)
         {
-            element.SetValue(IsPressedProperty, Empty.BooleanToObject(value));
+            _isPressed = value;
         }
 
-        private static bool GetIsPressed(DependencyObject element)
+        private bool GetIsPressed(DependencyObject element)
         {
-            return (bool) element.GetValue(IsPressedProperty);
+            return _isPressed;
         }
 
         #endregion
@@ -85,10 +69,10 @@ namespace Prototype.Core.Controls
             {
                 _unsubscribe(this, element);
 
-                if (CommandsHandlers.TryGetValue(element, out var handler))
+                if (_handler != null)
                 {
-                    oldCommand.CanExecuteChanged -= handler;
-                    CommandsHandlers.Remove(element);
+                    oldCommand.CanExecuteChanged -= _handler;
+                    _handler = null;
                 }
             }
 
@@ -96,7 +80,7 @@ namespace Prototype.Core.Controls
             {
                 _subscribe(this, element);
 
-                var handler = ReflectionExtensions.CreateWeakDelegate<FrameworkElement, EventArgs, EventHandler>(
+                _handler = ReflectionExtensions.CreateWeakDelegate<FrameworkElement, EventArgs, EventHandler>(
                     element,
                     (el, o, arg3) => UpdateCanExecute(el),
                     (o, eventHandler) =>
@@ -107,9 +91,8 @@ namespace Prototype.Core.Controls
                         }
                     },
                     eventHandler => eventHandler.Handle);
-
-                CommandsHandlers.Add(element, handler);
-                newCommand.CanExecuteChanged += handler;
+                
+                newCommand.CanExecuteChanged += _handler;
             }
 
             UpdateCanExecute(element);
@@ -145,17 +128,16 @@ namespace Prototype.Core.Controls
 
         #region IsSpaceKeyDown
 
-        private static readonly DependencyProperty IsSpaceKeyDownProperty = DependencyProperty.RegisterAttached(
-            "IsSpaceKeyDown", typeof(bool), typeof(ClickBehaviour), new PropertyMetadata(false));
+        private bool _isSpaceKeyDown;
 
-        private static void SetIsSpaceKeyDown(DependencyObject element, bool value)
+        private void SetIsSpaceKeyDown(DependencyObject element, bool value)
         {
-            element.SetValue(IsSpaceKeyDownProperty, Empty.BooleanToObject(value));
+            _isSpaceKeyDown = value;
         }
 
-        private static bool GetIsSpaceKeyDown(DependencyObject element)
+        private bool GetIsSpaceKeyDown(DependencyObject element)
         {
-            return (bool) element.GetValue(IsSpaceKeyDownProperty);
+            return _isSpaceKeyDown;
         }
 
         #endregion
@@ -202,15 +184,15 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (element.IsMouseCaptured && (Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed) && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && (_getMouseButtonState() == MouseButtonState.Pressed) && !GetIsSpaceKeyDown(element))
             {
                 UpdateIsPressed(element);
             }
         }
 
-        private static bool GetMouseLeftButtonReleased()
+        private bool GetMouseLeftButtonReleased()
         {
-            return InputManager.Current.PrimaryMouseDevice.LeftButton == MouseButtonState.Released;
+            return _getMouseButtonState() == MouseButtonState.Released;
         }
 
         private static bool GetIsInMainFocusScope(FrameworkElement element)
@@ -219,7 +201,7 @@ namespace Prototype.Core.Controls
             return focusScope == null || VisualTreeHelper.GetParent(focusScope) == null;
         }
 
-        private static void UpdateIsPressed(FrameworkElement element)
+        private void UpdateIsPressed(FrameworkElement element)
         {
             Point pos = Mouse.PrimaryDevice.GetPosition(element);
 
@@ -298,7 +280,7 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (element.IsMouseCaptured && Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && _getMouseButtonState() == MouseButtonState.Pressed && !GetIsSpaceKeyDown(element))
             {
                 UpdateIsPressed(element);
 
@@ -460,7 +442,7 @@ namespace Prototype.Core.Controls
 
         private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var clickBehaviour = GetClickBehaviour(d);
+            var clickBehaviour = GetClickBehaviourInternal(d);
             clickBehaviour.OnCommandChanged(d, e);
         }
 
@@ -500,21 +482,38 @@ namespace Prototype.Core.Controls
 
         private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var clickBehaviour = GetClickBehaviour(d);
+            var clickBehaviour = GetClickBehaviourInternal(d);
             clickBehaviour.OnActionChanged(d, e);
+        }
+
+        #endregion
+        
+        #region ClickBehaviourCore
+
+        private static readonly DependencyProperty ClickBehaviourProperty = DependencyProperty.RegisterAttached(
+            "ClickBehaviour", typeof(ClickBehaviourCore), typeof(ClickBehaviour), new PropertyMetadata(null));
+
+        private static void SetClickBehaviour(DependencyObject element, ClickBehaviourCore value)
+        {
+            element.SetValue(ClickBehaviourProperty, value);
+        }
+
+        private static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
+        {
+            return (ClickBehaviourCore)element.GetValue(ClickBehaviourProperty);
         }
 
         #endregion
 
         #region Methods
 
-        private static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
+        private static ClickBehaviourCore GetClickBehaviourInternal(DependencyObject element)
         {
-            var result = ClickBehaviourCore.GetClickBehaviour(element);
+            var result = GetClickBehaviour(element);
             if (result == null)
             {
-                result = new ClickBehaviourCore(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction);
-                ClickBehaviourCore.SetClickBehaviour(element, result);
+                result = new ClickBehaviourCore(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
+                SetClickBehaviour(element, result);
             }
 
             return result;
@@ -545,6 +544,133 @@ namespace Prototype.Core.Controls
             element.KeyUp -= clickBehaviour.OnKeyUp;
             element.LostKeyboardFocus -= clickBehaviour.OnLostKeyboardFocus;
             element.SizeChanged -= clickBehaviour.OnRenderSizeChanged;
+        }
+
+        private static MouseButtonState GetMouseButtonState()
+        {
+            return Mouse.PrimaryDevice.LeftButton;
+        }
+
+        #endregion
+    }
+
+    public static class RightClickBehaviour
+    {
+        #region Command
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
+            "Command", typeof(ICommand), typeof(RightClickBehaviour), new PropertyMetadata(null, OnCommandChanged));
+
+        public static void SetCommand(DependencyObject element, ICommand value)
+        {
+            element.SetValue(CommandProperty, value);
+        }
+
+        public static ICommand GetCommand(DependencyObject element)
+        {
+            return (ICommand)element.GetValue(CommandProperty);
+        }
+
+        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var clickBehaviour = GetClickBehaviourInternal(d);
+            clickBehaviour.OnCommandChanged(d, e);
+        }
+
+        #endregion
+
+        #region CommandParameter
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.RegisterAttached(
+            "CommandParameter", typeof(object), typeof(RightClickBehaviour), new PropertyMetadata(null));
+
+        public static void SetCommandParameter(DependencyObject element, object value)
+        {
+            element.SetValue(CommandParameterProperty, value);
+        }
+
+        public static object GetCommandParameter(DependencyObject element)
+        {
+            return (object)element.GetValue(CommandParameterProperty);
+        }
+
+        #endregion
+
+        #region Action
+
+        public static readonly DependencyProperty ActionProperty = DependencyProperty.RegisterAttached(
+            "Action", typeof(Action), typeof(RightClickBehaviour), new PropertyMetadata(null, OnActionChanged));
+
+        public static void SetAction(DependencyObject element, Action value)
+        {
+            element.SetValue(ActionProperty, value);
+        }
+
+        public static Action GetAction(DependencyObject element)
+        {
+            return (Action)element.GetValue(ActionProperty);
+        }
+
+        private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var clickBehaviour = GetClickBehaviourInternal(d);
+            clickBehaviour.OnActionChanged(d, e);
+        }
+
+        #endregion
+
+        #region ClickBehaviourCore
+
+        private static readonly DependencyProperty ClickBehaviourProperty = DependencyProperty.RegisterAttached(
+            "ClickBehaviour", typeof(ClickBehaviourCore), typeof(RightClickBehaviour), new PropertyMetadata(null));
+
+        private static void SetClickBehaviour(DependencyObject element, ClickBehaviourCore value)
+        {
+            element.SetValue(ClickBehaviourProperty, value);
+        }
+
+        private static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
+        {
+            return (ClickBehaviourCore)element.GetValue(ClickBehaviourProperty);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static ClickBehaviourCore GetClickBehaviourInternal(DependencyObject element)
+        {
+            var result = GetClickBehaviour(element);
+            if (result == null)
+            {
+                result = new ClickBehaviourCore(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
+                SetClickBehaviour(element, result);
+            }
+
+            return result;
+        }
+
+        private static void Subscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
+        {
+            element.MouseRightButtonDown += clickBehaviour.OnMouseLeftButtonDown;
+            element.MouseRightButtonUp += clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseMove += clickBehaviour.OnMouseMove;
+            element.LostMouseCapture += clickBehaviour.OnLostMouseCapture;
+            element.SizeChanged += clickBehaviour.OnRenderSizeChanged;
+        }
+
+        private static void Unsubscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
+        {
+            element.MouseRightButtonDown -= clickBehaviour.OnMouseLeftButtonDown;
+            element.MouseRightButtonUp -= clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseMove -= clickBehaviour.OnMouseMove;
+            element.LostMouseCapture -= clickBehaviour.OnLostMouseCapture;
+            element.SizeChanged -= clickBehaviour.OnRenderSizeChanged;
+        }
+
+        private static MouseButtonState GetMouseButtonState()
+        {
+            return Mouse.PrimaryDevice.RightButton;
         }
 
         #endregion
