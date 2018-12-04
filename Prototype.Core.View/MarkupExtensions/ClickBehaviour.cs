@@ -61,15 +61,17 @@ namespace Prototype.Core.Controls
 
         #endregion
 
+        #region Constructors
+
         public ClickBehaviourCore(Owner owner)
         {
             Should.NotBeNull(owner, nameof(owner));
             _owner = owner;
         }
 
-        #region Attached properties
+        #endregion
 
-        #region Command
+        #region Methods
 
         public void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -108,16 +110,6 @@ namespace Prototype.Core.Controls
             UpdateCanExecute(element);
         }
 
-        private void UpdateCanExecute(FrameworkElement element)
-        {
-            var command = _owner.GetCommand(element);
-            element.IsEnabled = command == null || command.CanExecute(_owner.GetCommandParameter(element));
-        }
-
-        #endregion
-
-        #region Action
-
         public void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var element = VerifyElement(d);
@@ -133,49 +125,6 @@ namespace Prototype.Core.Controls
             }
         }
 
-        #endregion
-
-        private FrameworkElement VerifyElement(DependencyObject obj)
-        {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
-
-            var element = obj as FrameworkElement;
-            if (element == null)
-            {
-                throw new NotSupportedException(nameof(element));
-            }
-
-            if (_owner.GetCommand(element) != null &&
-                _owner.GetAction(element) != null)
-            {
-                throw new InvalidOperationException("Can't set both Command and Action at the same time!");
-            }
-
-            return element;
-        }
-
-        #endregion
-
-        #region Methods
-
-        private void OnClick(FrameworkElement element)
-        {
-            var command = _owner.GetCommand(element);
-            if (command != null)
-            {
-                if (command.CanExecute(_owner.GetCommandParameter(element)))
-                {
-                    command.Execute(_owner.GetCommandParameter(element));
-                }
-            }
-
-            var action = _owner.GetAction(element);
-            action?.Invoke();
-        }
-
         public void OnRenderSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
         {
             if (!(sender is FrameworkElement element))
@@ -189,32 +138,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        private bool GetMouseLeftButtonReleased()
-        {
-            return _owner.GetMouseButtonState() == MouseButtonState.Released;
-        }
-
-        private static bool GetIsInMainFocusScope(FrameworkElement element)
-        {
-            Visual focusScope = FocusManager.GetFocusScope(element) as Visual;
-            return focusScope == null || VisualTreeHelper.GetParent(focusScope) == null;
-        }
-
-        private void UpdateIsPressed(FrameworkElement element)
-        {
-            Point pos = Mouse.PrimaryDevice.GetPosition(element);
-
-            if (pos.X >= 0 && pos.X <= element.ActualWidth && pos.Y >= 0 && pos.Y <= element.ActualHeight)
-            {
-                _isPressed = true;
-            }
-            else if (_isPressed)
-            {
-                _isPressed = false;
-            }
-        }
-
-        public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -245,7 +169,7 @@ namespace Prototype.Core.Controls
             }
         }
 
-        public void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public void OnMouseButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {
@@ -410,6 +334,74 @@ namespace Prototype.Core.Controls
             }
         }
 
+        private void UpdateCanExecute(FrameworkElement element)
+        {
+            var command = _owner.GetCommand(element);
+            element.IsEnabled = command == null || command.CanExecute(_owner.GetCommandParameter(element));
+        }
+
+        private void OnClick(FrameworkElement element)
+        {
+            var command = _owner.GetCommand(element);
+            if (command != null)
+            {
+                if (command.CanExecute(_owner.GetCommandParameter(element)))
+                {
+                    command.Execute(_owner.GetCommandParameter(element));
+                }
+            }
+
+            var action = _owner.GetAction(element);
+            action?.Invoke();
+        }
+
+        private FrameworkElement VerifyElement(DependencyObject obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
+            var element = obj as FrameworkElement;
+            if (element == null)
+            {
+                throw new NotSupportedException(nameof(element));
+            }
+
+            if (_owner.GetCommand(element) != null &&
+                _owner.GetAction(element) != null)
+            {
+                throw new InvalidOperationException("Can't set both Command and Action at the same time!");
+            }
+
+            return element;
+        }
+
+        private bool GetMouseLeftButtonReleased()
+        {
+            return _owner.GetMouseButtonState() == MouseButtonState.Released;
+        }
+
+        private static bool GetIsInMainFocusScope(FrameworkElement element)
+        {
+            Visual focusScope = FocusManager.GetFocusScope(element) as Visual;
+            return focusScope == null || VisualTreeHelper.GetParent(focusScope) == null;
+        }
+
+        private void UpdateIsPressed(FrameworkElement element)
+        {
+            Point pos = Mouse.PrimaryDevice.GetPosition(element);
+
+            if (pos.X >= 0 && pos.X <= element.ActualWidth && pos.Y >= 0 && pos.Y <= element.ActualHeight)
+            {
+                _isPressed = true;
+            }
+            else if (_isPressed)
+            {
+                _isPressed = false;
+            }
+        }
+
         #endregion
     }
 
@@ -518,8 +510,8 @@ namespace Prototype.Core.Controls
 
         private static void Subscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
         {
-            element.MouseLeftButtonDown += clickBehaviour.OnMouseLeftButtonDown;
-            element.MouseLeftButtonUp += clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseLeftButtonDown += clickBehaviour.OnMouseButtonDown;
+            element.MouseLeftButtonUp += clickBehaviour.OnMouseButtonUp;
             element.MouseMove += clickBehaviour.OnMouseMove;
             element.LostMouseCapture += clickBehaviour.OnLostMouseCapture;
             element.KeyDown += clickBehaviour.OnKeyDown;
@@ -533,8 +525,8 @@ namespace Prototype.Core.Controls
 
         private static void Unsubscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
         {
-            element.MouseLeftButtonDown -= clickBehaviour.OnMouseLeftButtonDown;
-            element.MouseLeftButtonUp -= clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseLeftButtonDown -= clickBehaviour.OnMouseButtonDown;
+            element.MouseLeftButtonUp -= clickBehaviour.OnMouseButtonUp;
             element.MouseMove -= clickBehaviour.OnMouseMove;
             element.LostMouseCapture -= clickBehaviour.OnLostMouseCapture;
             element.KeyDown -= clickBehaviour.OnKeyDown;
@@ -656,8 +648,8 @@ namespace Prototype.Core.Controls
 
         private static void Subscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
         {
-            element.MouseRightButtonDown += clickBehaviour.OnMouseLeftButtonDown;
-            element.MouseRightButtonUp += clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseRightButtonDown += clickBehaviour.OnMouseButtonDown;
+            element.MouseRightButtonUp += clickBehaviour.OnMouseButtonUp;
             element.MouseMove += clickBehaviour.OnMouseMove;
             element.LostMouseCapture += clickBehaviour.OnLostMouseCapture;
             element.SizeChanged += clickBehaviour.OnRenderSizeChanged;
@@ -665,8 +657,8 @@ namespace Prototype.Core.Controls
 
         private static void Unsubscribe(ClickBehaviourCore clickBehaviour, FrameworkElement element)
         {
-            element.MouseRightButtonDown -= clickBehaviour.OnMouseLeftButtonDown;
-            element.MouseRightButtonUp -= clickBehaviour.OnMouseLeftButtonUp;
+            element.MouseRightButtonDown -= clickBehaviour.OnMouseButtonDown;
+            element.MouseRightButtonUp -= clickBehaviour.OnMouseButtonUp;
             element.MouseMove -= clickBehaviour.OnMouseMove;
             element.LostMouseCapture -= clickBehaviour.OnLostMouseCapture;
             element.SizeChanged -= clickBehaviour.OnRenderSizeChanged;
