@@ -22,6 +22,13 @@ namespace Prototype.Core.Controls
                 Func<DependencyObject, Action> getAction,
                 Func<MouseButtonState> getMouseButtonState)
             {
+                Should.NotBeNull(subscribe, nameof(subscribe));
+                Should.NotBeNull(unsubscribe, nameof(unsubscribe));
+                Should.NotBeNull(getCommand, nameof(getCommand));
+                Should.NotBeNull(getCommandParameter, nameof(getCommandParameter));
+                Should.NotBeNull(getAction, nameof(getAction));
+                Should.NotBeNull(getMouseButtonState, nameof(getMouseButtonState));
+
                 Subscribe = subscribe;
                 Unsubscribe = unsubscribe;
                 GetCommand = getCommand;
@@ -49,6 +56,8 @@ namespace Prototype.Core.Controls
 
         private readonly Owner _owner;
         private EventHandler _handler;
+        private bool _isPressed;
+        private bool _isSpaceKeyDown;
 
         #endregion
 
@@ -60,28 +69,11 @@ namespace Prototype.Core.Controls
 
         #region Attached properties
 
-        #region IsPressed
-
-        private bool _isPressed;
-
-        private void SetIsPressed(DependencyObject element, bool value)
-        {
-            _isPressed = value;
-        }
-
-        private bool GetIsPressed(DependencyObject element)
-        {
-            return _isPressed;
-        }
-
-        #endregion
-
         #region Command
-        
+
         public void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var element = (FrameworkElement) d;
-            VerifyElement(element);
+            var element = VerifyElement(d);
 
             if (e.OldValue is ICommand oldCommand)
             {
@@ -109,7 +101,7 @@ namespace Prototype.Core.Controls
                         }
                     },
                     eventHandler => eventHandler.Handle);
-                
+
                 newCommand.CanExecuteChanged += _handler;
             }
 
@@ -128,8 +120,7 @@ namespace Prototype.Core.Controls
 
         public void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var element = (FrameworkElement) d;
-            VerifyElement(element);
+            var element = VerifyElement(d);
 
             if (e.OldValue != null)
             {
@@ -144,27 +135,17 @@ namespace Prototype.Core.Controls
 
         #endregion
 
-        #region IsSpaceKeyDown
-
-        private bool _isSpaceKeyDown;
-
-        private void SetIsSpaceKeyDown(DependencyObject element, bool value)
+        private FrameworkElement VerifyElement(DependencyObject obj)
         {
-            _isSpaceKeyDown = value;
-        }
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
 
-        private bool GetIsSpaceKeyDown(DependencyObject element)
-        {
-            return _isSpaceKeyDown;
-        }
-
-        #endregion
-
-        private void VerifyElement(FrameworkElement element)
-        {
+            var element = obj as FrameworkElement;
             if (element == null)
             {
-                throw new ArgumentNullException(nameof(element));
+                throw new NotSupportedException(nameof(element));
             }
 
             if (_owner.GetCommand(element) != null &&
@@ -172,13 +153,13 @@ namespace Prototype.Core.Controls
             {
                 throw new InvalidOperationException("Can't set both Command and Action at the same time!");
             }
+
+            return element;
         }
 
         #endregion
 
         #region Methods
-
-
 
         private void OnClick(FrameworkElement element)
         {
@@ -202,7 +183,7 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (element.IsMouseCaptured && (_owner.GetMouseButtonState() == MouseButtonState.Pressed) && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && _owner.GetMouseButtonState() == MouseButtonState.Pressed && !_isSpaceKeyDown)
             {
                 UpdateIsPressed(element);
             }
@@ -223,16 +204,13 @@ namespace Prototype.Core.Controls
         {
             Point pos = Mouse.PrimaryDevice.GetPosition(element);
 
-            if (pos.X >= 0 && (pos.X <= element.ActualWidth) && pos.Y >= 0 && pos.Y <= element.ActualHeight)
+            if (pos.X >= 0 && pos.X <= element.ActualWidth && pos.Y >= 0 && pos.Y <= element.ActualHeight)
             {
-                if (!GetIsPressed(element))
-                {
-                    SetIsPressed(element, true);
-                }
+                _isPressed = true;
             }
-            else if (GetIsPressed(element))
+            else if (_isPressed)
             {
-                SetIsPressed(element, false);
+                _isPressed = false;
             }
         }
 
@@ -259,10 +237,7 @@ namespace Prototype.Core.Controls
 
             if (e.ButtonState == MouseButtonState.Pressed)
             {
-                if (!GetIsPressed(element))
-                {
-                    SetIsPressed(element, true);
-                }
+                _isPressed = true;
             }
             else
             {
@@ -278,9 +253,9 @@ namespace Prototype.Core.Controls
             }
 
             e.Handled = true;
-            bool shouldClick = !GetIsSpaceKeyDown(element) && GetIsPressed(element);
+            bool shouldClick = !_isSpaceKeyDown && _isPressed;
 
-            if (element.IsMouseCaptured && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && !_isSpaceKeyDown)
             {
                 element.ReleaseMouseCapture();
             }
@@ -298,7 +273,7 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (element.IsMouseCaptured && _owner.GetMouseButtonState() == MouseButtonState.Pressed && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && _owner.GetMouseButtonState() == MouseButtonState.Pressed && !_isSpaceKeyDown)
             {
                 UpdateIsPressed(element);
 
@@ -313,7 +288,7 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if ((e.OriginalSource != element) || GetIsSpaceKeyDown(element))
+            if (e.OriginalSource != element || _isSpaceKeyDown)
             {
                 return;
             }
@@ -323,7 +298,7 @@ namespace Prototype.Core.Controls
                 Keyboard.Focus(null);
             }
 
-            SetIsPressed(element, false);
+            _isPressed = false;
         }
 
         public void OnKeyDown(object sender, KeyEventArgs e)
@@ -337,10 +312,10 @@ namespace Prototype.Core.Controls
             {
                 if ((Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) != ModifierKeys.Alt)
                 {
-                    if ((!element.IsMouseCaptured) && (e.OriginalSource == element))
+                    if (!element.IsMouseCaptured && e.OriginalSource == element)
                     {
-                        SetIsSpaceKeyDown(element, true);
-                        SetIsPressed(element, true);
+                        _isSpaceKeyDown = true;
+                        _isPressed = true;
                         element.CaptureMouse();
 
                         e.Handled = true;
@@ -351,8 +326,8 @@ namespace Prototype.Core.Controls
             {
                 if (e.OriginalSource == element)
                 {
-                    SetIsSpaceKeyDown(element, false);
-                    SetIsPressed(element, false);
+                    _isSpaceKeyDown = false;
+                    _isPressed = false;
                     if (element.IsMouseCaptured)
                     {
                         element.ReleaseMouseCapture();
@@ -364,10 +339,10 @@ namespace Prototype.Core.Controls
             }
             else
             {
-                if (GetIsSpaceKeyDown(element))
+                if (_isSpaceKeyDown)
                 {
-                    SetIsPressed(element, false);
-                    SetIsSpaceKeyDown(element, false);
+                    _isPressed = false;
+                    _isSpaceKeyDown = false;
                     if (element.IsMouseCaptured)
                     {
                         element.ReleaseMouseCapture();
@@ -383,14 +358,14 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (e.Key == Key.Space && GetIsSpaceKeyDown(element))
+            if (e.Key == Key.Space && _isSpaceKeyDown)
             {
                 if ((Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) != ModifierKeys.Alt)
                 {
-                    SetIsSpaceKeyDown(element, false);
+                    _isSpaceKeyDown = false;
                     if (GetMouseLeftButtonReleased())
                     {
-                        bool shouldClick = GetIsPressed(element);
+                        bool shouldClick = _isPressed;
 
                         if (element.IsMouseCaptured)
                         {
@@ -424,17 +399,14 @@ namespace Prototype.Core.Controls
 
             if (e.OriginalSource == element)
             {
-                if (GetIsPressed(element))
-                {
-                    SetIsPressed(element, false);
-                }
+                _isPressed = false;
 
                 if (element.IsMouseCaptured)
                 {
                     element.ReleaseMouseCapture();
                 }
 
-                SetIsSpaceKeyDown(element, false);
+                _isSpaceKeyDown = false;
             }
         }
 
@@ -447,8 +419,9 @@ namespace Prototype.Core.Controls
 
         private static readonly ClickBehaviourCore.Owner ClickBehaviourOwner =
             new ClickBehaviourCore.Owner(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
-        
+
         #endregion
+
         #region Command
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
@@ -461,7 +434,7 @@ namespace Prototype.Core.Controls
 
         public static ICommand GetCommand(DependencyObject element)
         {
-            return (ICommand)element.GetValue(CommandProperty);
+            return (ICommand) element.GetValue(CommandProperty);
         }
 
         private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -484,7 +457,7 @@ namespace Prototype.Core.Controls
 
         public static object GetCommandParameter(DependencyObject element)
         {
-            return (object)element.GetValue(CommandParameterProperty);
+            return (object) element.GetValue(CommandParameterProperty);
         }
 
         #endregion
@@ -501,7 +474,7 @@ namespace Prototype.Core.Controls
 
         public static Action GetAction(DependencyObject element)
         {
-            return (Action)element.GetValue(ActionProperty);
+            return (Action) element.GetValue(ActionProperty);
         }
 
         private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -511,7 +484,7 @@ namespace Prototype.Core.Controls
         }
 
         #endregion
-        
+
         #region ClickBehaviourCore
 
         private static readonly DependencyProperty ClickBehaviourProperty = DependencyProperty.RegisterAttached(
@@ -524,7 +497,7 @@ namespace Prototype.Core.Controls
 
         private static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
         {
-            return (ClickBehaviourCore)element.GetValue(ClickBehaviourProperty);
+            return (ClickBehaviourCore) element.GetValue(ClickBehaviourProperty);
         }
 
         #endregion
@@ -599,7 +572,7 @@ namespace Prototype.Core.Controls
 
         public static ICommand GetCommand(DependencyObject element)
         {
-            return (ICommand)element.GetValue(CommandProperty);
+            return (ICommand) element.GetValue(CommandProperty);
         }
 
         private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -622,7 +595,7 @@ namespace Prototype.Core.Controls
 
         public static object GetCommandParameter(DependencyObject element)
         {
-            return (object)element.GetValue(CommandParameterProperty);
+            return (object) element.GetValue(CommandParameterProperty);
         }
 
         #endregion
@@ -639,7 +612,7 @@ namespace Prototype.Core.Controls
 
         public static Action GetAction(DependencyObject element)
         {
-            return (Action)element.GetValue(ActionProperty);
+            return (Action) element.GetValue(ActionProperty);
         }
 
         private static void OnActionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -662,7 +635,7 @@ namespace Prototype.Core.Controls
 
         private static ClickBehaviourCore GetClickBehaviour(DependencyObject element)
         {
-            return (ClickBehaviourCore)element.GetValue(ClickBehaviourProperty);
+            return (ClickBehaviourCore) element.GetValue(ClickBehaviourProperty);
         }
 
         #endregion
