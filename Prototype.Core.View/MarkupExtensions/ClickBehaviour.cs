@@ -11,33 +11,51 @@ namespace Prototype.Core.Controls
     // NOTE Access keys aren't supported
     internal class ClickBehaviourCore
     {
-        private readonly Action<ClickBehaviourCore, FrameworkElement> _subscribe;
-        private readonly Action<ClickBehaviourCore, FrameworkElement> _unsubscribe;
-        private readonly Func<DependencyObject, ICommand> _getCommand;
-        private readonly Func<DependencyObject, object> _getCommandParameter;
-        private readonly Func<DependencyObject, Action> _getAction;
-        private readonly Func<MouseButtonState> _getMouseButtonState;
+        #region Nested types
+
+        public class Owner
+        {
+            public Owner(Action<ClickBehaviourCore, FrameworkElement> subscribe,
+                Action<ClickBehaviourCore, FrameworkElement> unsubscribe,
+                Func<DependencyObject, ICommand> getCommand,
+                Func<DependencyObject, object> getCommandParameter,
+                Func<DependencyObject, Action> getAction,
+                Func<MouseButtonState> getMouseButtonState)
+            {
+                Subscribe = subscribe;
+                Unsubscribe = unsubscribe;
+                GetCommand = getCommand;
+                GetCommandParameter = getCommandParameter;
+                GetAction = getAction;
+                GetMouseButtonState = getMouseButtonState;
+            }
+
+            public Action<ClickBehaviourCore, FrameworkElement> Subscribe { get; }
+
+            public Action<ClickBehaviourCore, FrameworkElement> Unsubscribe { get; }
+
+            public Func<DependencyObject, ICommand> GetCommand { get; }
+
+            public Func<DependencyObject, object> GetCommandParameter { get; }
+
+            public Func<DependencyObject, Action> GetAction { get; }
+
+            public Func<MouseButtonState> GetMouseButtonState { get; }
+        }
+
+        #endregion
 
         #region Fields
 
+        private readonly Owner _owner;
         private EventHandler _handler;
 
         #endregion
 
-        public ClickBehaviourCore(Action<ClickBehaviourCore, FrameworkElement> subscribe, 
-            Action<ClickBehaviourCore, FrameworkElement> unsubscribe,
-            Func<DependencyObject, ICommand> getCommand,
-            Func<DependencyObject, object> getCommandParameter,
-            Func<DependencyObject, Action> getAction,
-            Func<MouseButtonState> getMouseButtonState
-            )
+        public ClickBehaviourCore(Owner owner)
         {
-            _subscribe = subscribe;
-            _unsubscribe = unsubscribe;
-            _getCommand = getCommand;
-            _getCommandParameter = getCommandParameter;
-            _getAction = getAction;
-            _getMouseButtonState = getMouseButtonState;
+            Should.NotBeNull(owner, nameof(owner));
+            _owner = owner;
         }
 
         #region Attached properties
@@ -67,7 +85,7 @@ namespace Prototype.Core.Controls
 
             if (e.OldValue is ICommand oldCommand)
             {
-                _unsubscribe(this, element);
+                _owner.Unsubscribe(this, element);
 
                 if (_handler != null)
                 {
@@ -78,7 +96,7 @@ namespace Prototype.Core.Controls
 
             if (e.NewValue is ICommand newCommand)
             {
-                _subscribe(this, element);
+                _owner.Subscribe(this, element);
 
                 _handler = ReflectionExtensions.CreateWeakDelegate<FrameworkElement, EventArgs, EventHandler>(
                     element,
@@ -100,8 +118,8 @@ namespace Prototype.Core.Controls
 
         private void UpdateCanExecute(FrameworkElement element)
         {
-            var command = _getCommand(element);
-            element.IsEnabled = command == null || command.CanExecute(_getCommandParameter(element));
+            var command = _owner.GetCommand(element);
+            element.IsEnabled = command == null || command.CanExecute(_owner.GetCommandParameter(element));
         }
 
         #endregion
@@ -115,12 +133,12 @@ namespace Prototype.Core.Controls
 
             if (e.OldValue != null)
             {
-                _unsubscribe(this, element);
+                _owner.Unsubscribe(this, element);
             }
 
             if (e.NewValue != null)
             {
-                _subscribe(this, element);
+                _owner.Subscribe(this, element);
             }
         }
 
@@ -149,8 +167,8 @@ namespace Prototype.Core.Controls
                 throw new ArgumentNullException(nameof(element));
             }
 
-            if (_getCommand(element) != null &&
-                _getAction(element) != null)
+            if (_owner.GetCommand(element) != null &&
+                _owner.GetAction(element) != null)
             {
                 throw new InvalidOperationException("Can't set both Command and Action at the same time!");
             }
@@ -164,16 +182,16 @@ namespace Prototype.Core.Controls
 
         private void OnClick(FrameworkElement element)
         {
-            var command = _getCommand(element);
+            var command = _owner.GetCommand(element);
             if (command != null)
             {
-                if (command.CanExecute(_getCommandParameter(element)))
+                if (command.CanExecute(_owner.GetCommandParameter(element)))
                 {
-                    command.Execute(_getCommandParameter(element));
+                    command.Execute(_owner.GetCommandParameter(element));
                 }
             }
 
-            var action = _getAction(element);
+            var action = _owner.GetAction(element);
             action?.Invoke();
         }
 
@@ -184,7 +202,7 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (element.IsMouseCaptured && (_getMouseButtonState() == MouseButtonState.Pressed) && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && (_owner.GetMouseButtonState() == MouseButtonState.Pressed) && !GetIsSpaceKeyDown(element))
             {
                 UpdateIsPressed(element);
             }
@@ -192,7 +210,7 @@ namespace Prototype.Core.Controls
 
         private bool GetMouseLeftButtonReleased()
         {
-            return _getMouseButtonState() == MouseButtonState.Released;
+            return _owner.GetMouseButtonState() == MouseButtonState.Released;
         }
 
         private static bool GetIsInMainFocusScope(FrameworkElement element)
@@ -280,7 +298,7 @@ namespace Prototype.Core.Controls
                 return;
             }
 
-            if (element.IsMouseCaptured && _getMouseButtonState() == MouseButtonState.Pressed && !GetIsSpaceKeyDown(element))
+            if (element.IsMouseCaptured && _owner.GetMouseButtonState() == MouseButtonState.Pressed && !GetIsSpaceKeyDown(element))
             {
                 UpdateIsPressed(element);
 
@@ -425,6 +443,12 @@ namespace Prototype.Core.Controls
 
     public static class ClickBehaviour
     {
+        #region Fields
+
+        private static readonly ClickBehaviourCore.Owner ClickBehaviourOwner =
+            new ClickBehaviourCore.Owner(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
+        
+        #endregion
         #region Command
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
@@ -512,7 +536,7 @@ namespace Prototype.Core.Controls
             var result = GetClickBehaviour(element);
             if (result == null)
             {
-                result = new ClickBehaviourCore(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
+                result = new ClickBehaviourCore(ClickBehaviourOwner);
                 SetClickBehaviour(element, result);
             }
 
@@ -556,6 +580,13 @@ namespace Prototype.Core.Controls
 
     public static class RightClickBehaviour
     {
+        #region Fields
+
+        private static readonly ClickBehaviourCore.Owner ClickBehaviourOwner =
+            new ClickBehaviourCore.Owner(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
+
+        #endregion
+
         #region Command
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached(
@@ -643,7 +674,7 @@ namespace Prototype.Core.Controls
             var result = GetClickBehaviour(element);
             if (result == null)
             {
-                result = new ClickBehaviourCore(Subscribe, Unsubscribe, GetCommand, GetCommandParameter, GetAction, GetMouseButtonState);
+                result = new ClickBehaviourCore(ClickBehaviourOwner);
                 SetClickBehaviour(element, result);
             }
 
