@@ -1,129 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{30D7D8BD-1946-485B-8CC1-9A68B4CF7B6F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Prototype.Core</RootNamespace>
-    <AssemblyName>Prototype.Core.View</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MugenMvvmToolkit, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MugenMvvmToolkit.6.5.0\lib\net45\MugenMvvmToolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="MugenMvvmToolkit.WPF, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MugenMvvmToolkit.WPF.6.5.0\lib\net45\MugenMvvmToolkit.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <PackageReference Include="MugenMvvmToolkit" Version="6.5.0" />
+    <PackageReference Include="MugenMvvmToolkit.WPF" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\PipeFlowScheme\Common.cs" />
-    <Compile Include="Controls\PipeFlowScheme\DepthFirstDirectedPaths.cs" />
-    <Compile Include="Controls\PipeFlowScheme\Enums.cs" />
-    <Compile Include="Controls\PipeFlowScheme\FlowControlBase.cs" />
-    <Compile Include="Controls\PipeFlowScheme\FlowSchemeSettings.cs" />
-    <Compile Include="Controls\PipeFlowScheme\GraphPipe.cs" />
-    <Compile Include="Controls\PipeFlowScheme\GraphValve.cs" />
-    <Compile Include="Controls\PipeFlowScheme\IVertex.cs" />
-    <Compile Include="Controls\PipeFlowScheme\IPipe.cs" />
-    <Compile Include="Controls\PipeFlowScheme\IPipeConnector.cs" />
-    <Compile Include="Controls\Pipe.cs" />
-    <Compile Include="Controls\PipeFlowScheme\SchemeContainer.cs" />
-    <Compile Include="Controls\PipeFlowScheme\Valve3WayModel.cs" />
-    <Compile Include="Controls\PipeFlowScheme\ValveBase.cs" />
-    <Compile Include="MarkupExtensions\ClickBehaviour.cs" />
-    <Compile Include="Controls\Valve.cs" />
-    <Compile Include="Controls\Valve3Way.cs" />
-    <Compile Include="Converters\IsNullConverter.cs" />
-    <Compile Include="Converters\EnumEqualityConverter.cs" />
-    <Compile Include="CoreViewExtensions.cs" />
-    <Compile Include="MarkupExtensions\PopupMenu.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj">
-      <Project>{5cb69e89-a0c4-492d-92b2-8ec56bd0622a}</Project>
-      <Name>Prototype.Core.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Themes\Colors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Common.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Styles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Pipe.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ContextMenu.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Valve3Way.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Valve.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Controls\PipeFlowScheme\IPipeSegment.cs" />
-    <Compile Include="Controls\PipeFlowScheme\FlowGraph.cs" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

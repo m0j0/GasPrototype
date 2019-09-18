@@ -1,98 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{34D6B7F1-551B-46D8-8F99-618CDEBBB30B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Prototype</RootNamespace>
-    <AssemblyName>Prototype.Model</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MugenMvvmToolkit, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MugenMvvmToolkit.6.5.0\lib\net45\MugenMvvmToolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="MugenMvvmToolkit" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\Enums.cs" />
-    <Compile Include="Infrastructure\NavigationTypeEx.cs" />
-    <Compile Include="Infrastructure\ScreenManager.cs" />
-    <Compile Include="Interfaces\IAccessProvider.cs" />
-    <Compile Include="Interfaces\IDisplayWrapperVm.cs" />
-    <Compile Include="Interfaces\IParameterProvider.cs" />
-    <Compile Include="Interfaces\IScreenManager.cs" />
-    <Compile Include="Interfaces\IScreenViewModel.cs" />
-    <Compile Include="ModelExtensions.cs" />
-    <Compile Include="Modules\ModelModule.cs" />
-    <Compile Include="Modules\ViewModelWrapperRegistrationModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Infrastructure\AccessProvider.cs" />
-    <Compile Include="ViewModels\CfmApplicationVm.cs" />
-    <Compile Include="ViewModels\CompositeNestedVm.cs" />
-    <Compile Include="ViewModels\CompositeParentVm.cs" />
-    <Compile Include="ViewModels\DisplayWrapperVm.cs" />
-    <Compile Include="ViewModels\MainVm.cs" />
-    <Compile Include="ViewModels\NavigationLogVm.cs" />
-    <Compile Include="ViewModels\Pipes\Manifold2Vm.cs" />
-    <Compile Include="ViewModels\Pipes\Manifold3Vm.cs" />
-    <Compile Include="ViewModels\Pipes\Manifold4Vm.cs" />
-    <Compile Include="ViewModels\Pipes\ManifoldVm.cs" />
-    <Compile Include="ViewModels\Pipes\NestedChildVm.cs" />
-    <Compile Include="ViewModels\Pipes\NestedParentVm.cs" />
-    <Compile Include="ViewModels\Pipes\PipesConnectionsVm.cs" />
-    <Compile Include="ViewModels\Pipes\PipesPerformanceVm.cs" />
-    <Compile Include="ViewModels\Pipes\PipesExampleVm.cs" />
-    <Compile Include="ViewModels\Pipes\PipesScalingVm.cs" />
-    <Compile Include="ViewModels\Pipes\Valve3WayExampleVm.cs" />
-    <Compile Include="ViewModels\RestrictedVm.cs" />
-    <Compile Include="ViewModels\SelectorVm.cs" />
-    <Compile Include="ViewModels\SettingsVm.cs" />
+    <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Prototype.Core.Model\Prototype.Core.Model.csproj">
-      <Project>{5cb69e89-a0c4-492d-92b2-8ec56bd0622a}</Project>
-      <Name>Prototype.Core.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
