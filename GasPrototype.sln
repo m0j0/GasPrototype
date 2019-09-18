@@ -1,19 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29311.281
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype.View", "Prototype.View\Prototype.View.csproj", "{2F0D7C04-8559-4056-A73D-6AF594CF1CDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototype.View", "Prototype.View\Prototype.View.csproj", "{2F0D7C04-8559-4056-A73D-6AF594CF1CDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype.Model", "Prototype.Model\Prototype.Model.csproj", "{34D6B7F1-551B-46D8-8F99-618CDEBBB30B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototype.Model", "Prototype.Model\Prototype.Model.csproj", "{34D6B7F1-551B-46D8-8F99-618CDEBBB30B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype.Core.Model", "Prototype.Core.Model\Prototype.Core.Model.csproj", "{5CB69E89-A0C4-492D-92B2-8EC56BD0622A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototype.Core.Model", "Prototype.Core.Model\Prototype.Core.Model.csproj", "{5CB69E89-A0C4-492D-92B2-8EC56BD0622A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype.Core.View", "Prototype.Core.View\Prototype.Core.View.csproj", "{30D7D8BD-1946-485B-8CC1-9A68B4CF7B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototype.Core.View", "Prototype.Core.View\Prototype.Core.View.csproj", "{30D7D8BD-1946-485B-8CC1-9A68B4CF7B6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype.Test", "Prototype.Test\Prototype.Test.csproj", "{32F157B9-B4A8-4955-A82B-CCB96C404884}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prototype.Core.View.Design", "Prototype.Core.View.Design\Prototype.Core.View.Design.csproj", "{25FC193D-A209-4284-9202-C669EF8416AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prototype.Test", "Prototype.Test\Prototype.Test.csproj", "{32F157B9-B4A8-4955-A82B-CCB96C404884}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{32F157B9-B4A8-4955-A82B-CCB96C404884}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F157B9-B4A8-4955-A82B-CCB96C404884}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F157B9-B4A8-4955-A82B-CCB96C404884}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25FC193D-A209-4284-9202-C669EF8416AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25FC193D-A209-4284-9202-C669EF8416AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25FC193D-A209-4284-9202-C669EF8416AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25FC193D-A209-4284-9202-C669EF8416AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
